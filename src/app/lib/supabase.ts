@@ -1,9 +1,18 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const SUPABASE_ENABLED = !!supabaseUrl && !!supabaseAnonKey
+
+// Keep client creation safe for preview/visual deploys where env vars are not set yet.
+const fallbackUrl = "https://placeholder.supabase.co"
+const fallbackAnonKey = "placeholder-anon-key"
+
+export const supabase = createClient(
+  supabaseUrl || fallbackUrl,
+  supabaseAnonKey || fallbackAnonKey,
+)
 
 // Types
 export type Project = {

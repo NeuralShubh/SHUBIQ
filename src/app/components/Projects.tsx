@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { PROJECTS } from "../data"
-import { supabase } from "../lib/supabase"
+import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 
 const SCRAMBLE_CHARS = "!<>-_\\/[]{}=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -175,6 +175,7 @@ export default function Projects() {
 
   useEffect(() => {
     const load = async () => {
+      if (!SUPABASE_ENABLED) return
       try {
         const { data, error } = await supabase.from("projects").select("*").order("order_index", { ascending: true })
         if (error || !data?.length) return

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import { AppWindow, Boxes, Building2, Lightbulb, Rocket, Wrench } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { ECOSYSTEM_ITEMS } from "../data"
-import { supabase } from "../lib/supabase"
+import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 
 const TYPE_COLORS: Record<string, string> = {
   project: "rgb(var(--gold-light-rgb))",
@@ -334,6 +334,7 @@ export default function Ecosystem() {
 
   useEffect(() => {
     const load = async () => {
+      if (!SUPABASE_ENABLED) return
       try {
         const { data, error } = await supabase.from("ecosystem").select("*").order("order_index", { ascending: true })
         if (error || !data?.length) return
