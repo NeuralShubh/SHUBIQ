@@ -5,7 +5,7 @@ export default function ThemeInit() {
   useEffect(() => {
     const saved = localStorage.getItem("shubiq-theme")
     const migrated = saved === "cyan" ? "cobalt" : saved
-    const valid = ["gold", "cobalt", "emerald", "violet", "crimson", "silver", "amber", "shubh-blue"]
+    const valid = ["gold", "cobalt", "emerald", "violet", "crimson", "silver", "amber"]
     if (migrated && valid.includes(migrated)) {
       if (migrated === "gold") document.documentElement.removeAttribute("data-theme")
       else document.documentElement.setAttribute("data-theme", migrated)

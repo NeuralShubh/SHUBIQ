@@ -262,24 +262,10 @@
 
   ::selection { background: rgb(var(--gold-rgb) / 0.2); color: rgb(var(--gold-rgb)); }
 
-  @media (min-width: 769px) {
-    html {
-      cursor: none;
-    }
-
-    *, *:before, *:after {
-      cursor: none !important;
-    }
-  }
+  /* Keep native cursor; custom cursor behavior is disabled. */
 
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9997;
-    opacity: 0.35;
+    content: none;
   }
 
   @media (max-width: 768px) {

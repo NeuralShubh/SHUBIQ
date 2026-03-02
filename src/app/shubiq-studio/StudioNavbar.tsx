@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import ThemeToggle from "../components/ThemeToggle"
 
 const STUDIO_LINKS = [
@@ -8,7 +10,7 @@ const STUDIO_LINKS = [
   { label: "Services", id: "studio-services-anchor" },
   { label: "Portfolio", id: "studio-portfolio-anchor" },
   { label: "Pricing", id: "studio-pricing-anchor" },
-  { label: "Contact", id: "studio-contact" },
+  { label: "Contact", id: "studio-contact-anchor" },
 ]
 
 export default function StudioNavbar() {
@@ -121,46 +123,61 @@ export default function StudioNavbar() {
     <>
       <nav
         ref={navRef}
-        className="site-navbar fixed top-0 left-0 right-0 z-[900] transition-all duration-700"
+        className="site-navbar fixed top-0 left-0 right-0 z-[900] transition-all duration-500"
         style={{
           background: scrolled
-            ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.95), rgb(var(--surface-1-rgb) / 0.9))"
-            : "linear-gradient(to bottom, rgb(var(--surface-1-rgb) / 0.78), rgb(var(--ink-rgb) / 0.42))",
+            ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.96), rgb(var(--surface-1-rgb) / 0.92))"
+            : "linear-gradient(to bottom, rgb(var(--surface-1-rgb) / 0.84), rgb(var(--ink-rgb) / 0.46))",
           backdropFilter: scrolled ? "blur(12px)" : "blur(6px)",
           borderBottom: scrolled
             ? "1px solid rgb(var(--gold-rgb) / 0.18)"
             : "1px solid rgb(var(--gold-rgb) / 0.1)",
+          boxShadow: scrolled ? "0 8px 26px rgb(0 0 0 / 0.22)" : "none",
           opacity: 0,
         }}
       >
         <div
-          className="absolute left-0 top-0 h-[2.5px] bg-gold/90 transition-[width] duration-200"
+          className="absolute left-0 top-0 h-[2px] bg-gold/85 transition-[width] duration-200"
           style={{ width: `${scrollProgress}%` }}
         />
         <div className={`max-w-7xl mx-auto px-5 max-[768px]:px-4 sm:px-6 lg:px-12 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-[3.15rem] max-[768px]:h-[3.05rem]" : "h-[3.36rem] max-[768px]:h-[3.15rem]"}`}>
-          <button onClick={() => scrollTo("studio-hero")} className="group flex items-center h-full gap-[3px]">
-            <img
-              src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772211091/SHUBIQ_jpldrw.png"
-              alt="SHUBIQ"
-              className={`w-auto object-contain transition-opacity duration-200 group-hover:opacity-95 ${scrolled ? "h-8 max-[768px]:h-[1.82rem] sm:h-[2.1rem] md:h-[2.2rem]" : "h-8 max-[768px]:h-[1.9rem] sm:h-[2.2rem] md:h-[2.35rem]"}`}
-              style={{ filter: "drop-shadow(0 0 12px rgb(var(--gold-rgb) / 0.2))" }}
-            />
-            <span className="hidden sm:inline-block font-cinzel font-bold text-[20px] leading-none tracking-[1px] text-cream/92 group-hover:text-gold transition-colors duration-200">
-              SHUBIQ Studio
-            </span>
-          </button>
+          <div className="flex items-center h-full gap-2.5 -ml-4 sm:-ml-6">
+            <Link
+              href="/"
+              aria-label="Back to Home"
+              title="Back to Home"
+              className="flex items-center justify-center min-h-[40px] min-w-[40px] h-10 w-10 border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--surface-1-rgb)/0.42)] text-gold/88 hover:text-gold hover:border-gold/45 hover:bg-[rgb(var(--surface-2-rgb)/0.62)] rounded-lg transition-colors duration-200"
+            >
+              <ArrowLeft size={18} />
+            </Link>
+            <button onClick={() => scrollTo("studio-hero")} className="group flex items-center h-full gap-[3px]">
+              <img
+                src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772211091/SHUBIQ_jpldrw.png"
+                alt="SHUBIQ"
+                className={`w-auto object-contain transition-opacity duration-200 group-hover:opacity-95 ${scrolled ? "h-8 max-[768px]:h-[1.82rem] sm:h-[2.1rem] md:h-[2.2rem]" : "h-8 max-[768px]:h-[1.9rem] sm:h-[2.2rem] md:h-[2.35rem]"}`}
+                style={{ filter: "drop-shadow(0 0 12px rgb(var(--gold-rgb) / 0.2))" }}
+              />
+              <span className="hidden sm:inline-block font-cinzel font-bold text-[19px] leading-none tracking-[1px] text-cream/92 group-hover:text-gold transition-colors duration-200">
+                SHUBIQ Studio
+              </span>
+            </button>
+          </div>
 
-          <div className="hidden md:flex items-center gap-[1.38rem] lg:gap-[1.84rem]">
+          <div className="hidden md:flex items-center gap-2 lg:gap-3">
             {STUDIO_LINKS.map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
-                className="site-nav-link relative font-rajdhani font-semibold text-[12px] tracking-[0.72px] uppercase transition-colors duration-200 hover:text-gold/90"
-                style={{ color: active === link.id ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.8)" }}
+                aria-current={active === link.id ? "page" : undefined}
+                className={`site-nav-link relative font-rajdhani font-semibold text-[12px] tracking-[1px] uppercase transition-all duration-200 px-2.5 py-1.5 ${
+                  active === link.id
+                    ? "text-[rgb(var(--gold-light-rgb))]"
+                    : "text-[rgb(var(--cream-rgb)/0.8)] hover:text-gold/90"
+                }`}
               >
                 {link.label}
                 <span
-                  className="absolute -bottom-[2px] left-0 h-[4px] bg-gold/95 transition-all duration-200"
+                  className="absolute -bottom-[1px] left-1/2 -translate-x-1/2 h-[2px] bg-gold/95 transition-all duration-200"
                   style={{ width: active === link.id ? "100%" : "0%" }}
                 />
               </button>
@@ -170,8 +187,8 @@ export default function StudioNavbar() {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             <button
-              onClick={() => scrollTo("studio-contact")}
-              className="site-nav-cta font-rajdhani text-[12px] font-semibold tracking-[1.7px] uppercase border border-[rgb(var(--gold-rgb)/0.45)] bg-[linear-gradient(180deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)))] text-ink px-[18px] py-[7px] transition-colors duration-200 hover:bg-[linear-gradient(180deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)/0.95))]"
+              onClick={() => scrollTo("studio-contact-anchor")}
+              className="site-nav-cta font-rajdhani text-[12px] font-semibold tracking-[1.7px] uppercase border border-gold/70 bg-gold text-ink px-[18px] py-[7px] transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]"
             >
               Start Project
             </button>
@@ -236,12 +253,20 @@ export default function StudioNavbar() {
               ))}
             </div>
 
-            <button
-              onClick={() => scrollTo("studio-contact")}
-              className="mt-5 w-full font-rajdhani text-[12px] font-semibold tracking-[2px] uppercase border border-[rgb(var(--gold-rgb)/0.45)] bg-[linear-gradient(180deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)))] text-ink px-4 py-3 transition-colors duration-200 hover:bg-[linear-gradient(180deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)/0.95))]"
-            >
-              Start Project
-            </button>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <Link
+                href="/"
+                className="w-full text-center font-rajdhani text-[12px] font-semibold tracking-[2px] uppercase border border-[rgb(var(--cream-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.42)] text-cream px-4 py-3 transition-colors duration-200 hover:border-gold/40 hover:text-gold"
+              >
+                Back Home
+              </Link>
+              <button
+                onClick={() => scrollTo("studio-contact-anchor")}
+                className="w-full font-rajdhani text-[12px] font-semibold tracking-[2px] uppercase border border-gold/70 bg-gold text-ink px-4 py-3 transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]"
+              >
+                Start Project
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 
-export type Theme = "gold" | "cobalt" | "emerald" | "violet" | "crimson" | "silver" | "amber" | "shubh-blue"
+export type Theme = "gold" | "cobalt" | "emerald" | "violet" | "crimson" | "silver" | "amber"
 
 export const STORAGE_KEY = "shubiq-theme"
 
@@ -13,7 +13,6 @@ export const THEMES: { id: Theme; label: string }[] = [
   { id: "crimson", label: "Crimson Noir" },
   { id: "silver", label: "Silver Alloy" },
   { id: "amber", label: "Amber Smoke" },
-  { id: "shubh-blue", label: "Studio Blue" },
 ]
 
 export function applyTheme(theme: Theme) {

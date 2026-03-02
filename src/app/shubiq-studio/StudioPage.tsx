@@ -1,5 +1,6 @@
 ﻿"use client"
 import { useEffect, useRef, useState } from "react"
+import { motion } from "framer-motion"
 import StudioNavbar from "./StudioNavbar"
 import Footer from "../components/Footer"
 import GoldLine from "../components/GoldLine"
@@ -99,64 +100,57 @@ const PORTFOLIO = [
 
 const PRICING = [
   {
-    tier: "Starter",
-    tag: "For Individuals",
-    price: { monthly: 299, yearly: 249 },
-    currency: "USD",
-    desc: "Perfect for solopreneurs and small businesses who need a solid digital presence fast.",
+    tier: "BASIC",
+    tag: "BASIC",
+    bestFor: "Best for first-phase businesses",
+    price: 19999,
+    currency: "INR",
+    meta: "One-time • Ready in 5-7 days",
     features: [
-      "Up to 5-page website",
-      "Mobile responsive design",
-      "Basic SEO setup",
-      "Contact form integration",
-      "1 round of revisions",
-      "14-day delivery",
-      "30-day post-launch support",
+      "3 custom-designed pages",
+      "Mobile-responsive layout",
+      "Contact form",
+      "Google Maps integration",
+      "1 month free support",
     ],
-    cta: "Start Project",
+    cta: "Get Started",
     highlighted: false,
     icon: Zap,
   },
   {
-    tier: "Growth",
-    tag: "Most Popular",
-    price: { monthly: 799, yearly: 649 },
-    currency: "USD",
-    desc: "For growing brands that need a powerful, custom web presence with advanced features.",
+    tier: "STANDARD",
+    tag: "STANDARD",
+    bestFor: "Best for growing local businesses",
+    price: 39999,
+    currency: "INR",
+    meta: "One-time • Ready in 10-14 days",
     features: [
-      "Up to 15-page website or web app",
-      "Custom UI/UX design",
-      "Advanced animations (GSAP/Framer)",
-      "CMS or Supabase integration",
-      "3 rounds of revisions",
-      "21-day delivery",
-      "60-day post-launch support",
-      "Performance optimization",
-      "Analytics integration",
+      "5 custom-designed pages",
+      "Speed optimization",
+      "Google Search Console setup",
+      "WhatsApp chat button",
+      "3 months free support",
     ],
     cta: "Get Started",
     highlighted: true,
     icon: TrendingUp,
   },
   {
-    tier: "Professional",
-    tag: "For Serious Brands",
-    price: { monthly: 1999, yearly: 1649 },
-    currency: "USD",
-    desc: "Full-scale digital engineering for brands ready to invest in long-term performance and sophistication.",
+    tier: "PREMIUM",
+    tag: "PREMIUM",
+    bestFor: "Best for scale-focused businesses",
+    price: 59999,
+    priceSuffix: "+",
+    currency: "INR",
+    meta: "One-time • Ready in 14-21 days",
     features: [
-      "Unlimited pages / full web app",
-      "Custom software & dashboards",
-      "AI / automation integration",
-      "Full-stack development",
-      "Unlimited revisions",
-      "Priority 14-day sprints",
-      "90-day support & maintenance",
-      "Design system included",
-      "SEO & performance audit",
-      "Dedicated communication channel",
+      "Fully custom design",
+      "Google Analytics setup",
+      "Performance optimization",
+      "Blog / CMS setup",
+      "6 months free support",
     ],
-    cta: "Let's Build",
+    cta: "Get Started",
     highlighted: false,
     icon: Shield,
   },
@@ -164,12 +158,11 @@ const PRICING = [
 
 // â”€â”€â”€ Section Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function SectionLabel({ label }: { label: string }) {
+function SectionLabel({ label, centered = false }: { label: string; centered?: boolean }) {
   return (
-    <div className="flex items-center gap-2.5 sm:gap-3 mb-5">
+    <div className={`flex items-center gap-2.5 sm:gap-3 mb-5 ${centered ? "justify-center" : ""}`}>
       <span className="w-1 h-1 rounded-full bg-gold/80" />
       <div className="font-rajdhani text-[14px] tracking-[7px] text-gold/85 uppercase">{label}</div>
-      <span className="hidden sm:block w-14 h-px bg-gradient-to-r from-gold/60 to-transparent" />
     </div>
   )
 }
@@ -316,12 +309,12 @@ function StudioHero() {
         <div ref={ctaRef} className="flex gap-4.5 sm:gap-5 justify-center flex-wrap mb-12">
           <button
             onClick={() => scrollTo("studio-pricing")}
-            className="font-rajdhani text-[13px] sm:text-[14px] tracking-[3px] uppercase px-10 sm:px-11 py-[10px] font-semibold bg-gold/90 text-ink border border-gold/60 hover:bg-gold/85 transition-all duration-300"
+            className="font-rajdhani text-[13px] sm:text-[14px] tracking-[3px] uppercase px-10 sm:px-11 py-[10px] font-semibold bg-gold text-ink border border-gold/70 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] transition-all duration-300"
           >
             View Pricing
           </button>
           <button
-            onClick={() => scrollTo("studio-contact")}
+            onClick={() => scrollTo("studio-contact-anchor")}
             className="font-rajdhani text-[13px] sm:text-[14px] tracking-[3px] uppercase px-10 sm:px-11 py-[10px] font-semibold border border-gold/24 text-cream hover:border-gold/72 hover:bg-gold/[0.04] transition-all duration-300"
           >
             Start a Project
@@ -703,166 +696,141 @@ function ProjectCard({ project, index }: { project: (typeof PORTFOLIO)[0]; index
 // â”€â”€â”€ Pricing Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StudioPricing() {
-  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly")
-  const sectionRef = useRef<HTMLElement>(null)
-  const headingRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-        const isMobile = window.innerWidth <= 768
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: sectionRef.current, start: isMobile ? "top 82%" : "top 72%", once: true },
-        })
-        tl.fromTo(headingRef.current, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" })
-          .fromTo(
-            cardsRef.current?.children ?? [],
-            { y: 32, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.65, ease: "power3.out", stagger: 0.12 },
-            "-=0.3",
-          )
-      } catch { /* no-op */ }
-    }
-    init()
-  }, [])
-
-  const scrollToContact = () => document.getElementById("studio-contact")?.scrollIntoView({ behavior: "smooth" })
+  const scrollToContact = () => document.getElementById("studio-contact-anchor")?.scrollIntoView({ behavior: "smooth" })
 
   return (
-    <section id="studio-pricing" ref={sectionRef} className="py-[96px] px-5 sm:px-6 relative overflow-hidden">
+    <section id="studio-pricing" className="py-[96px] px-5 sm:px-6 relative overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 50%, rgb(var(--gold-rgb) / 0.04) 0%, transparent 65%)" }}
       />
-      <div className="max-w-6xl mx-auto">
-        <div ref={headingRef} style={{ opacity: 0 }}>
-          <SectionLabel label="Pricing" />
-          <div className="text-center mb-10 sm:mb-12">
+      <div className="max-w-[1180px] mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <SectionLabel label="Pricing" centered />
+          <div className="text-center mb-11 sm:mb-12">
             <h2
               className="font-cinzel font-black leading-[0.92] tracking-[0.5px] mb-4"
               style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}
             >
-              <span className="text-cream/90">Transparent </span>
-              <span className="text-gold">Pricing</span>
+              <span className="text-cream/90">PROJECT </span>
+              <span className="text-gold">INVESTMENT</span>
             </h2>
-            <p className="font-cormorant text-cream/65 leading-[1.65] max-w-[500px] mx-auto mb-8" style={{ fontSize: "clamp(16px, 1.3vw, 19px)" }}>
-              Simple, honest pricing. No hidden fees. Pay for what you need, get more than you expect.
+            <p className="font-cormorant text-cream/88 leading-[1.62] max-w-[700px] mx-auto mb-5" style={{ fontSize: "clamp(16px, 1.1vw, 18px)" }}>
+              Structured project investment tiers designed for measurable outcomes, faster delivery, and dependable execution quality.
             </p>
-
-            {/* Billing toggle */}
-            <div className="inline-flex items-center border border-gold/25 bg-[rgb(var(--surface-1-rgb)/0.7)] p-1">
-              {(["monthly", "yearly"] as const).map((b) => (
-                <button
-                  key={b}
-                  onClick={() => setBilling(b)}
-                  className={`font-rajdhani text-[12px] tracking-[2.5px] uppercase px-5 py-2 transition-all duration-300 ${
-                    billing === b
-                      ? "bg-gold text-ink font-semibold"
-                      : "text-cream/65 hover:text-cream/90"
-                  }`}
-                >
-                  {b === "yearly" ? "Yearly (Save ~18%)" : "Monthly"}
-                </button>
-              ))}
+            <div className="font-rajdhani text-[11px] tracking-[3.6px] uppercase text-gold/55">
+              Structured Project Investment
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div ref={cardsRef} className="grid sm:grid-cols-3 gap-5 sm:gap-6 items-stretch">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } },
+          }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 items-center"
+        >
           {PRICING.map((plan) => {
             const Icon = plan.icon
-            const price = billing === "yearly" ? plan.price.yearly : plan.price.monthly
             return (
-              <div
+              <motion.article
                 key={plan.tier}
-                className={`relative flex flex-col p-6 sm:p-8 border transition-all duration-300 ${
+                variants={{
+                  hidden: { opacity: 0, y: 40 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className={`group relative flex flex-col rounded-[28px] p-7 sm:px-9 sm:py-9 border opacity-95 overflow-visible duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] transition-[transform,border-color,box-shadow,color] hover:border-gold/65 hover:shadow-[0_20px_50px_rgba(40,90,255,0.12)] ${
                   plan.highlighted
-                    ? "border-gold/55 bg-card-soft-hover shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.2),0_24px_50px_rgb(0_0_0/0.36)]"
-                    : "border-[rgb(var(--cream-rgb)/0.12)] bg-card-soft hover:border-gold/30 hover:bg-card-soft-hover"
+                    ? "md:scale-[1.03] md:min-h-[690px] pt-10 sm:pt-[54px] sm:pb-[44px] opacity-100 border-gold/32 bg-gradient-to-b from-[rgb(var(--surface-2-rgb)/0.98)] to-[rgb(var(--surface-1-rgb)/0.95)] shadow-[0_14px_34px_rgb(var(--gold-rgb)/0.10)]"
+                    : plan.tier === "ENTERPRISE"
+                      ? "border-gold/30 sm:py-12 bg-[linear-gradient(180deg,#0c1325_0%,#0a1120_100%)]"
+                      : "border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,#11192d_0%,#0c1425_100%)]"
                 }`}
               >
                 {plan.highlighted && (
-                  <>
-                    <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-ink font-rajdhani text-[11px] tracking-[2.5px] uppercase px-3 py-1 font-semibold whitespace-nowrap">
-                      {plan.tag}
-                    </div>
-                  </>
-                )}
-
-                <div className="flex items-start justify-between mb-5">
-                  <div>
-                    <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-1">
-                      {plan.highlighted ? "Most Popular" : plan.tag}
-                    </div>
-                    <h3 className="font-cinzel font-bold text-cream/93 tracking-[0.4px]" style={{ fontSize: "clamp(20px, 1.8vw, 26px)" }}>
-                      {plan.tier}
-                    </h3>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gold text-ink font-rajdhani text-[11px] tracking-[2px] uppercase font-semibold">
+                    Most Popular
                   </div>
-                  <span className="w-9 h-9 border border-gold/35 bg-gold/[0.07] flex items-center justify-center text-gold/80">
+                )}
+                <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <div className="font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/76 mb-2">{plan.tag}</div>
+                    <p className={`font-cormorant ${plan.highlighted ? "text-cream/92" : "text-cream/80"}`} style={{ fontSize: "clamp(15px, 0.95vw, 16.5px)" }}>
+                      {plan.bestFor}
+                    </p>
+                  </div>
+                  <span className={`w-10 h-10 border flex items-center justify-center ${plan.highlighted ? "border-gold/45 bg-gold/[0.12] text-gold" : "border-gold/35 bg-gold/[0.08] text-gold/85"}`}>
                     <Icon size={17} strokeWidth={1.8} />
                   </span>
                 </div>
 
-                <div className="mb-2">
-                  <div className="flex items-end gap-1">
-                    <span className="font-cinzel font-black text-gold" style={{ fontSize: "clamp(28px, 3vw, 40px)" }}>
-                      ${price}
-                    </span>
-                    <span className="font-rajdhani text-[12px] tracking-[2px] uppercase text-cream/50 mb-1.5">
-                      / project
+                <div className="mb-4">
+                  <div className="flex items-end gap-1.5 min-h-[80px]">
+                    <span className="font-cinzel font-bold text-5xl leading-[0.94] text-gold">
+                      <span className="inline-block align-top text-[0.8em]">₹</span>
+                      {plan.price.toLocaleString("en-IN")}{plan.priceSuffix ?? ""}
                     </span>
                   </div>
-                  {billing === "yearly" && (
-                    <div className="font-rajdhani text-[11px] tracking-[1.5px] uppercase text-gold/60">
-                      Billed annually Â· Save ~${plan.price.monthly - plan.price.yearly}
-                    </div>
-                  )}
+                  <div className={`font-rajdhani text-[13px] tracking-[0.7px] mt-1 ${plan.highlighted ? "text-cream/84" : "text-cream/76"}`}>{plan.meta}</div>
                 </div>
 
-                <p className="font-cormorant text-cream/65 leading-[1.65] mb-6 border-b border-gold/12 pb-6" style={{ fontSize: "clamp(14px, 1.1vw, 16px)" }}>
-                  {plan.desc}
-                </p>
+                <div className={`mb-7 border-b pb-6 ${plan.highlighted ? "border-gold/28" : "border-gold/20"}`} />
 
-                <ul className="space-y-2.5 flex-1 mb-8">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5">
-                      <CheckCircle2 size={14} className="text-gold/65 shrink-0 mt-[2px]" strokeWidth={2} />
-                      <span className="font-cormorant text-cream/78 leading-[1.5]" style={{ fontSize: "clamp(14px, 1vw, 16px)" }}>
+                <ul className="space-y-5 flex-1 mb-6">
+                  {plan.features.map((f, index) => (
+                    <motion.li
+                      key={f}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.05, duration: 0.35 }}
+                      className="flex items-start gap-3"
+                    >
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-[3px] ${plan.highlighted ? "bg-gold/16 text-gold" : "bg-gold/12 text-gold/85"}`}>
+                        <CheckCircle2 size={14} strokeWidth={2} />
+                      </span>
+                      <span className={`font-cormorant leading-[1.5] ${plan.highlighted ? "text-cream/94" : "text-cream/90"}`} style={{ fontSize: "clamp(15px, 0.92vw, 16px)" }}>
                         {f}
                       </span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
 
-                <button
+                <motion.button
                   onClick={scrollToContact}
-                  className={`w-full font-rajdhani text-[13px] tracking-[2.5px] uppercase py-3.5 font-semibold transition-all duration-300 flex items-center justify-center gap-2 group ${
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ duration: 0.12 }}
+                  className={`w-full font-rajdhani text-[13px] tracking-[1.8px] uppercase py-3.5 font-semibold transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center justify-center gap-2 group border rounded-2xl ${
                     plan.highlighted
-                      ? "bg-gold text-ink border border-gold/70 hover:bg-gold-light hover:shadow-[0_0_22px_rgb(var(--gold-rgb)/0.3)]"
-                      : "border border-gold/30 text-cream hover:border-gold hover:text-gold hover:bg-gold/6"
+                      ? "text-ink border-gold/70 bg-[linear-gradient(90deg,rgb(var(--gold-rgb))_0%,rgb(255_220_132)_50%,rgb(var(--gold-rgb))_100%)] bg-[length:200%_100%] bg-left hover:bg-right hover:brightness-105"
+                      : "text-cream border-gold/30 bg-[rgb(var(--surface-2-rgb)/0.75)] hover:bg-[rgb(var(--surface-2-rgb)/0.95)] hover:border-gold/50"
                   }`}
                 >
                   {plan.cta}
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-200" />
-                </button>
-              </div>
+                  <ArrowRight size={14} className="translate-x-0 group-hover:translate-x-1 transition-transform duration-200" />
+                </motion.button>
+              </motion.article>
             )
           })}
-        </div>
+        </motion.div>
 
-        {/* Custom note */}
-        <div className="mt-10 text-center border border-gold/15 bg-gold/[0.03] py-5 px-6">
-          <p className="font-cormorant text-cream/65 leading-[1.6]" style={{ fontSize: "clamp(15px, 1.1vw, 17px)" }}>
-            Need something custom or enterprise-scale?{" "}
-            <button onClick={scrollToContact} className="text-gold hover:text-gold-light underline underline-offset-2 transition-colors duration-200">
-              Let's talk
-            </button>{" "}
-            â€” we'll scope it together with no obligation.
+        <div className="mt-10 text-center">
+          <p className="font-cormorant text-cream/78 leading-[1.55]" style={{ fontSize: "clamp(16px, 1vw, 18px)" }}>
+            Need a custom scope?{" "}
+            <button onClick={scrollToContact} className="text-gold hover:text-gold-light font-semibold transition-colors duration-200">
+              Request a custom quote.
+            </button>
           </p>
         </div>
       </div>
@@ -924,10 +892,10 @@ function StudioContactCTA() {
   }
 
   const inputClass =
-    "w-full bg-[rgb(var(--surface-1-rgb)/0.7)] border border-[rgb(var(--cream-rgb)/0.14)] text-cream/92 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/50 focus:bg-[rgb(var(--surface-2-rgb)/0.88)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.16),0_0_20px_rgb(var(--gold-rgb)/0.12)] transition-all duration-300 placeholder:text-cream/38"
+    "w-full bg-[rgb(var(--surface-1-rgb)/0.7)] border border-[rgb(var(--cream-rgb)/0.14)] text-cream/92 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/50 focus:bg-[rgb(var(--surface-2-rgb)/0.88)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.16),0_0_20px_rgb(var(--gold-rgb)/0.12)] transition-all duration-300 placeholder:text-cream/26 placeholder:text-[15px] placeholder:italic"
 
   return (
-    <section id="studio-contact" ref={sectionRef} className="py-24 sm:py-32 px-5 sm:px-6 relative overflow-hidden">
+    <section id="studio-contact" ref={sectionRef} className="py-[96px] px-5 sm:px-6 relative overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 70%, rgb(var(--gold-rgb) / 0.05) 0%, transparent 60%)" }}
@@ -935,8 +903,8 @@ function StudioContactCTA() {
 
       <div className="max-w-4xl mx-auto">
         <div ref={contentRef} style={{ opacity: 0 }}>
-          <div className="text-center mb-12">
-            <SectionLabel label="Start a Project" />
+          <div id="studio-contact-anchor" className="text-center mb-12 scroll-mt-24 sm:scroll-mt-28">
+            <SectionLabel label="Start a Project" centered />
             <h2
               className="font-cinzel font-black leading-[0.92] tracking-[0.5px] mb-4"
               style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}
@@ -967,7 +935,7 @@ function StudioContactCTA() {
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="border border-[rgb(var(--cream-rgb)/0.12)] bg-card-soft p-7 sm:p-10">
+            <form onSubmit={handleSubmit} className="relative border border-[rgb(var(--cream-rgb)/0.12)] bg-card-soft p-7 sm:p-10">
               <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
 
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
@@ -1007,7 +975,7 @@ function StudioContactCTA() {
                   rows={4}
                   value={form.project}
                   onChange={(e) => setForm((f) => ({ ...f, project: e.target.value }))}
-                  placeholder="Tell us what you need built â€” website, web app, AI integration, dashboard, etc."
+                  placeholder="Tell us what you need built - website, web app, AI integration, dashboard, etc."
                   className={`${inputClass} resize-none`}
                 />
               </div>
@@ -1016,19 +984,13 @@ function StudioContactCTA() {
                 <label className="block font-rajdhani text-[11px] tracking-[2.5px] uppercase text-gold/70 mb-2">
                   Estimated Budget
                 </label>
-                <select
+                <input
+                  type="text"
                   value={form.budget}
                   onChange={(e) => setForm((f) => ({ ...f, budget: e.target.value }))}
-                  className={`${inputClass} appearance-none`}
-                >
-                  <option value="" className="bg-[rgb(var(--surface-1-rgb))]">Select a rangeâ€¦</option>
-                  <option value="Under $500" className="bg-[rgb(var(--surface-1-rgb))]">Under $500</option>
-                  <option value="$500â€“$1,000" className="bg-[rgb(var(--surface-1-rgb))]">$500 â€“ $1,000</option>
-                  <option value="$1,000â€“$3,000" className="bg-[rgb(var(--surface-1-rgb))]">$1,000 â€“ $3,000</option>
-                  <option value="$3,000â€“$10,000" className="bg-[rgb(var(--surface-1-rgb))]">$3,000 â€“ $10,000</option>
-                  <option value="$10,000+" className="bg-[rgb(var(--surface-1-rgb))]">$10,000+</option>
-                  <option value="Not sure yet" className="bg-[rgb(var(--surface-1-rgb))]">Not sure yet</option>
-                </select>
+                  placeholder="e.g., ₹50,000 - ₹1,20,000"
+                  className={inputClass}
+                />
               </div>
 
               {error && (
