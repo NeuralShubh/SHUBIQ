@@ -66,18 +66,20 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[0]; index: n
       <div className="absolute left-0 top-0 w-px h-9 bg-gold/45 pointer-events-none" />
       <div className="absolute right-0 bottom-0 w-9 h-px bg-gold/45 pointer-events-none" />
       <div className="absolute right-0 bottom-0 w-px h-9 bg-gold/45 pointer-events-none" />
-      <div className="absolute top-8 right-8 font-cinzel text-[22px] sm:text-[24px] leading-none text-cream/35 tracking-[0.01em] transition-all duration-300 group-hover:text-cream/55 group-hover:scale-[1.03]">
-        {String(index + 1).padStart(2, "0")}
-      </div>
-
       {project.featured && <div className="absolute -top-px left-8 h-px w-16 bg-gold" />}
 
-      <div className="font-rajdhani text-[14px] sm:text-[16px] tracking-[3.8px] uppercase text-gold/75 mb-4">
-        {project.tag}
+      <div className="flex items-center justify-between mb-4">
+        <div className="font-cinzel text-[14px] sm:text-[16px] leading-none text-cream/35 tracking-[0.01em] transition-all duration-300 group-hover:text-cream/55 group-hover:scale-[1.03]">
+          {String(index + 1).padStart(2, "0")}
+        </div>
+        <div className="font-rajdhani text-[14px] sm:text-[16px] tracking-[3.8px] uppercase text-gold/75 text-right">
+          {project.tag}
+        </div>
       </div>
+      <div className="h-px w-full bg-gradient-to-r from-gold/20 via-gold/8 to-transparent mb-5 sm:mb-6" />
 
       <h3
-        className="font-cinzel text-[34px] sm:text-[44px] leading-[1.02] text-cream mb-5 transition-colors duration-300 group-hover:text-gradient-gold"
+        className="font-cinzel text-[28px] sm:text-[34px] leading-[1.06] sm:leading-[1.05] text-cream mb-5 transition-colors duration-300 group-hover:text-gradient-gold"
         style={{ fontFeatureSettings: "'liga' 0, 'calt' 0" }}
       >
         <span>{titleMain}</span>
@@ -218,7 +220,7 @@ export default function Projects() {
             </div>
             <h2
               ref={titleRef}
-              className="font-cinzel font-black text-gradient-gold leading-[1.02] tracking-[-0.01em] text-[clamp(30px,8.8vw,46px)] sm:text-[clamp(36px,5vw,64px)]"
+              className="font-cinzel font-black text-gradient-gold leading-[1.02] tracking-[-0.01em] text-[clamp(29px,9vw,44px)] sm:text-[clamp(34px,5vw,68px)]"
               style={{ opacity: 0 }}
             >
               Digital Portfolio

@@ -1,79 +1,32 @@
-# SHUBIQ — Intelligence That Wins
+# SHUBIQ
 
-Personal brand website of **Shubham Patil (NeuralShubh)**.
+**Intelligence That Wins**
 
-Built with **Next.js 14**, **TypeScript**, **Tailwind CSS**.
+SHUBIQ is a digital engineering brand focused on building high-performance digital systems for ambitious brands and founders.
 
-## 🚀 Quick Start
+## What We Build
 
-```bash
-# 1. Install dependencies
-npm install
+- Conversion-focused websites
+- Custom web apps and software systems
+- AI-integrated product experiences
+- Scalable digital infrastructure
 
-# 2. Run development server
-npm run dev
+## Brand Direction
 
-# 3. Open in browser
-http://localhost:3000
-```
+- Precision-led execution
+- Premium, performance-first design
+- Clean architecture and long-term scalability
 
-## 📦 Build for Production
+## Ecosystem
 
-```bash
-npm run build
-npm start
-```
+- **SHUBIQ Studio**: Client services and delivery
+- **SHUBIQ Labs**: In-house product development
 
-## 🌐 Deploy to Vercel (Recommended)
+## Connect
 
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel --prod
-```
-
-Or simply push to GitHub and connect the repo to [vercel.com](https://vercel.com) — it auto-deploys.
-
-## 🗂️ Project Structure
-
-```
-src/
-  app/
-    components/
-      Cursor.tsx       # Custom gold cursor
-      Navbar.tsx       # Sticky nav with scroll detection
-      Hero.tsx         # Full-screen landing section
-      About.tsx        # About + skills section
-      Services.tsx     # 4-column services grid
-      Projects.tsx     # GitHub projects portfolio
-      Products.tsx     # Upcoming products showcase
-      Marquee.tsx      # Scrolling ticker
-      Contact.tsx      # Contact + social links
-      Footer.tsx       # Footer with navigation
-      GoldLine.tsx     # Section divider
-      Reveal.tsx       # Scroll-triggered animation wrapper
-    data.ts            # All content/data in one place
-    globals.css        # Base styles + Tailwind
-    layout.tsx         # Root layout + fonts + metadata
-    page.tsx           # Main page assembly
-```
-
-## ✏️ Customizing Content
-
-All content lives in **`src/app/data.ts`**:
-- Update `PROJECTS` when you ship new work
-- Add to `UPCOMING` for new product launches
-- Modify `SERVICES` as your offerings evolve
-- Edit `SOCIAL_LINKS` if handles change
-
-## 🎨 Design System
-
-- **Brand**: SHUBIQ · `#C9A84C` Gold on `#080808` Black
-- **Fonts**: Cinzel (headings) · Cormorant Garamond (body) · Rajdhani (labels)
-- **Theme**: Dark Premium · Luxury · Intelligence
-
----
-
-© 2025 SHUBIQ · Shubham Patil
+- Website: `https://shubiq.vercel.app/`
+- Email: `shubham95792@gmail.com`
+- GitHub: `https://github.com/NeuralShubh`
+- X: `https://x.com/NeuralShubh`
+- LinkedIn: `https://linkedin.com/in/neuralshubh/`
+- Instagram: `https://instagram.com/neuralshubh`

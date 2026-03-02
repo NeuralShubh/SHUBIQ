@@ -35,11 +35,25 @@ type EcoItem = {
   image_url?: string | null
 }
 
+type StudioPortfolioItem = {
+  id: string
+  name: string
+  tag: string
+  desc: string
+  impact: string
+  tech: string[]
+  link: string | null
+  status: "live" | "wip" | "concept"
+  metric: string
+  order_index: number
+}
+
 // --- Helpers ---
 const generateId = () => Date.now().toString(36) + Math.random().toString(36).slice(2)
 
 const STORAGE_KEY_PROJECTS = "shubiq_projects"
 const STORAGE_KEY_ECO = "shubiq_ecosystem"
+const STORAGE_KEY_STUDIO_PORTFOLIO = "shubiq_studio_portfolio"
 const SUPABASE_ENABLED =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
@@ -51,6 +65,32 @@ const DEFAULT_PROJECTS: Project[] = [
 const DEFAULT_ECO: EcoItem[] = [
   { id: "1", type: "app", title: "SHUBIQ Studio", subtitle: "Full-service digital agency", desc: "End-to-end web & software solutions.", icon: "⬡", color: "rgb(var(--gold-rgb))", status: "coming_soon", link: null, tags: ["Agency", "AI"], featured: true, order_index: 0 },
   { id: "2", type: "tool", title: "AI Webapp Platform", subtitle: "Intelligence as a service", desc: "A no-code platform for AI capabilities.", icon: "⬟", color: "rgb(var(--gold-dark-rgb))", status: "concept", link: null, tags: ["AI", "No-code"], featured: false, order_index: 1 },
+]
+const DEFAULT_STUDIO_PORTFOLIO: StudioPortfolioItem[] = [
+  {
+    id: "s1",
+    name: "SHUBIQ",
+    tag: "Personal Brand Ecosystem",
+    desc: "A structured digital ecosystem integrating brand presence, engineered systems, and scalable product layers under a unified architecture.",
+    impact: "Unified multiple digital systems into one cohesive brand infrastructure.",
+    tech: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
+    link: "https://buildwithshubh.vercel.app",
+    status: "live",
+    metric: "97 Perf Score",
+    order_index: 0,
+  },
+  {
+    id: "s2",
+    name: "SHUBHLEDGER",
+    tag: "Financial Intelligence System",
+    desc: "Architected for real-time portfolio intelligence with low-latency market data flows and a unified decision-support dashboard.",
+    impact: "Continuous live market intelligence across digital assets.",
+    tech: ["JavaScript", "CSS", "GSAP", "APIs"],
+    link: "https://shubhledger.infinityfreeapp.com/",
+    status: "live",
+    metric: "Real-time Data",
+    order_index: 1,
+  },
 ]
 
 function loadProjects(): Project[] {
@@ -74,6 +114,16 @@ function saveProjects(projects: Project[]) {
 }
 function saveEco(items: EcoItem[]) {
   localStorage.setItem(STORAGE_KEY_ECO, JSON.stringify(items))
+}
+function loadStudioPortfolio(): StudioPortfolioItem[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_STUDIO_PORTFOLIO)
+    if (raw) return JSON.parse(raw)
+  } catch {}
+  return DEFAULT_STUDIO_PORTFOLIO
+}
+function saveStudioPortfolio(items: StudioPortfolioItem[]) {
+  localStorage.setItem(STORAGE_KEY_STUDIO_PORTFOLIO, JSON.stringify(items))
 }
 
 const mapProjectRow = (row: any): Project => ({
@@ -108,8 +158,10 @@ const mapEcoRow = (row: any): EcoItem => ({
 })
 
 // --- Components ---
-const inputClass = "w-full bg-[#080808] border border-transparent border-b-[rgb(var(--cream-rgb)/0.22)] text-cream font-cormorant px-3 py-2.5 text-base focus:outline-none focus:border-[rgb(var(--gold-rgb)/0.55)] focus:bg-[rgb(var(--surface-2-rgb)/0.82)] transition-colors duration-200 placeholder:text-cream/46"
-const labelClass = "font-rajdhani text-[10px] tracking-[3px] uppercase text-gold/62 block mb-1"
+const inputClass = "w-full rounded-sm bg-[rgb(var(--surface-1-rgb)/0.76)] border border-[rgb(var(--cream-rgb)/0.16)] text-cream/95 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/56 focus:bg-[rgb(var(--surface-2-rgb)/0.92)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.18),0_0_24px_rgb(var(--gold-rgb)_/_0.16),inset_0_1px_8px_rgb(var(--gold-rgb)_/_0.06)] transition-all duration-[360ms] ease-out placeholder:text-cream/45"
+const labelClass = "font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 block mb-2"
+const primaryButtonClass = "flex-1 rounded-sm font-rajdhani text-[13px] tracking-[3.2px] uppercase bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3.5 font-semibold transition-all duration-300 hover:tracking-[3.6px] hover:shadow-[0_10px_30px_rgb(var(--gold-rgb)_/_0.28),inset_0_0_16px_rgb(var(--cream-rgb)_/_0.14)] hover:bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_42%,rgb(var(--gold-light-rgb)))]"
+const secondaryButtonClass = "rounded-sm font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.22)] bg-[rgb(var(--surface-1-rgb)/0.4)] text-cream/78 px-6 py-3.5 transition-all duration-300 hover:border-gold/38 hover:text-gold/90 hover:bg-[rgb(var(--surface-2-rgb)/0.66)]"
 
 function Badge({ status }: { status: string }) {
   const colors: Record<string, string> = {
@@ -198,10 +250,10 @@ function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: 
       </label>
 
       <div className="flex flex-col sm:flex-row gap-3 pt-4">
-        <button type="submit" className="flex-1 font-rajdhani text-[11px] tracking-[3px] uppercase bg-gold text-ink py-3 font-semibold hover:bg-gold-light transition-colors duration-200">
+        <button type="submit" className={primaryButtonClass}>
           {initial ? "Save Changes" : "Create Project"}
         </button>
-        <button type="button" onClick={onClose} className="font-rajdhani text-[11px] tracking-[3px] uppercase border border-gold/20 text-[#555] px-6 py-3 hover:border-gold/40 transition-colors duration-200">
+        <button type="button" onClick={onClose} className={secondaryButtonClass}>
           Cancel
         </button>
       </div>
@@ -211,6 +263,7 @@ function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: 
 
 // --- Ecosystem Form ---
 function EcoForm({ initial, onSave, onClose }: { initial?: EcoItem; onSave: (e: EcoItem) => void; onClose: () => void }) {
+  const ICON_OPTIONS = ["◈", "◎", "◉", "◌", "◆", "◇", "◍", "⬡", "⬢", "✦", "✧", "✶"]
   const blank: EcoItem = { id: generateId(), type: "app", title: "", subtitle: "", desc: "", icon: "◈", color: "#C9A84C", status: "concept", link: null, tags: [], featured: false, order_index: 0 }
   const [form, setForm] = useState<EcoItem>(initial || blank)
   const [tagInput, setTagInput] = useState(initial?.tags.join(", ") || "")
@@ -260,7 +313,29 @@ function EcoForm({ initial, onSave, onClose }: { initial?: EcoItem; onSave: (e: 
         </div>
         <div>
           <label className={labelClass}>Icon</label>
-          <input value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} className={inputClass} placeholder="⬡" />
+          <select value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} className={`${inputClass} cursor-pointer`}>
+            {ICON_OPTIONS.map((icon) => <option key={icon} value={icon}>{icon}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className={labelClass}>Quick Icon Pick</label>
+        <div className="grid grid-cols-6 sm:grid-cols-12 gap-2">
+          {ICON_OPTIONS.map((icon) => (
+            <button
+              type="button"
+              key={`pick-${icon}`}
+              onClick={() => setForm({ ...form, icon })}
+              className={`h-10 rounded-sm border text-lg transition-colors duration-200 ${
+                form.icon === icon
+                  ? "border-gold/55 bg-gold/[0.12] text-gold"
+                  : "border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-1-rgb)/0.65)] text-cream/78 hover:border-gold/35 hover:text-gold/90"
+              }`}
+            >
+              {icon}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -276,10 +351,10 @@ function EcoForm({ initial, onSave, onClose }: { initial?: EcoItem; onSave: (e: 
 
 
       <div className="flex flex-col sm:flex-row gap-3 pt-4">
-        <button type="submit" className="flex-1 font-rajdhani text-[11px] tracking-[3px] uppercase bg-gold text-ink py-3 font-semibold hover:bg-gold-light transition-colors duration-200">
+        <button type="submit" className={primaryButtonClass}>
           {initial ? "Save Changes" : "Create Item"}
         </button>
-        <button type="button" onClick={onClose} className="font-rajdhani text-[11px] tracking-[3px] uppercase border border-gold/20 text-[#555] px-6 py-3 hover:border-gold/40 transition-colors duration-200">
+        <button type="button" onClick={onClose} className={secondaryButtonClass}>
           Cancel
         </button>
       </div>
@@ -287,15 +362,110 @@ function EcoForm({ initial, onSave, onClose }: { initial?: EcoItem; onSave: (e: 
   )
 }
 
-// --- Main Dashboard ---
+function StudioPortfolioForm({
+  initial,
+  onSave,
+  onClose,
+}: {
+  initial?: StudioPortfolioItem
+  onSave: (item: StudioPortfolioItem) => void
+  onClose: () => void
+}) {
+  const blank: StudioPortfolioItem = {
+    id: generateId(),
+    name: "",
+    tag: "",
+    desc: "",
+    impact: "",
+    tech: [],
+    link: null,
+    status: "live",
+    metric: "",
+    order_index: 0,
+  }
+  const [form, setForm] = useState<StudioPortfolioItem>(initial || blank)
+  const [techInput, setTechInput] = useState((initial?.tech || []).join(", "))
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSave({
+      ...form,
+      tech: techInput.split(",").map((t) => t.trim()).filter(Boolean),
+      order_index: initial?.order_index ?? 0,
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>Name *</label>
+          <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputClass} required />
+        </div>
+        <div>
+          <label className={labelClass}>Tag *</label>
+          <input value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })} className={inputClass} required />
+        </div>
+      </div>
+
+      <div>
+        <label className={labelClass}>Description *</label>
+        <textarea rows={3} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} className={`${inputClass} resize-none`} required />
+      </div>
+
+      <div>
+        <label className={labelClass}>Impact *</label>
+        <textarea rows={2} value={form.impact} onChange={(e) => setForm({ ...form, impact: e.target.value })} className={`${inputClass} resize-none`} required />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className={labelClass}>Status</label>
+          <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as StudioPortfolioItem["status"] })} className={`${inputClass} cursor-pointer`}>
+            {["live", "wip", "concept"].map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+        <div className="sm:col-span-2">
+          <label className={labelClass}>Metric</label>
+          <input value={form.metric} onChange={(e) => setForm({ ...form, metric: e.target.value })} className={inputClass} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>Tech (comma separated)</label>
+          <input value={techInput} onChange={(e) => setTechInput(e.target.value)} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Link</label>
+          <input value={form.link || ""} onChange={(e) => setForm({ ...form, link: e.target.value || null })} className={inputClass} />
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+        <button type="submit" className={primaryButtonClass}>
+          {initial ? "Save Changes" : "Create Card"}
+        </button>
+        <button type="button" onClick={onClose} className={secondaryButtonClass}>
+          Cancel
+        </button>
+      </div>
+    </form>
+  )
+}
+
 export default function AdminDashboard() {
   const router = useRouter()
   const [authed, setAuthed] = useState(false)
-  const [tab, setTab] = useState<"projects" | "ecosystem" | "settings">("projects")
+  const [pageScope, setPageScope] = useState<"main" | "studio">("main")
+  const [mainSection, setMainSection] = useState<"projects" | "ecosystem">("projects")
+  const [studioSection, setStudioSection] = useState<"portfolio">("portfolio")
   const [projects, setProjects] = useState<Project[]>([])
   const [eco, setEco] = useState<EcoItem[]>([])
-  const [modal, setModal] = useState<null | "add_project" | "edit_project" | "add_eco" | "edit_eco">(null)
-  const [editTarget, setEditTarget] = useState<Project | EcoItem | null>(null)
+  const [studioPortfolio, setStudioPortfolio] = useState<StudioPortfolioItem[]>([])
+  const [modal, setModal] = useState<null | "add_project" | "edit_project" | "add_eco" | "edit_eco" | "add_studio_portfolio" | "edit_studio_portfolio">(null)
+  const [editTarget, setEditTarget] = useState<Project | EcoItem | StudioPortfolioItem | null>(null)
+  const [deleteTargetType, setDeleteTargetType] = useState<"project" | "eco" | "studio_portfolio">("project")
   const [toast, setToast] = useState("")
   const [search, setSearch] = useState("")
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
@@ -326,16 +496,19 @@ export default function AdminDashboard() {
       if (!SUPABASE_ENABLED) {
         setProjects(loadProjects())
         setEco(loadEco())
+        setStudioPortfolio(loadStudioPortfolio())
         return
       }
 
       try {
         await refreshFromSupabase()
         setUsingSupabase(true)
+        setStudioPortfolio(loadStudioPortfolio())
       } catch {
         setUsingSupabase(false)
         setProjects(loadProjects())
         setEco(loadEco())
+        setStudioPortfolio(loadStudioPortfolio())
         showToast("Supabase unavailable. Using local fallback.")
       }
     }
@@ -523,6 +696,25 @@ export default function AdminDashboard() {
     showToast("Item deleted.")
   }
 
+  const saveStudioPortfolioItem = (item: StudioPortfolioItem) => {
+    const updated = editTarget
+      ? studioPortfolio.map((x) => x.id === item.id ? item : x)
+      : [...studioPortfolio, { ...item, order_index: studioPortfolio.length }]
+    setStudioPortfolio(updated)
+    saveStudioPortfolio(updated)
+    setModal(null)
+    setEditTarget(null)
+    showToast(editTarget ? "Studio card updated!" : "Studio card created!")
+  }
+
+  const deleteStudioPortfolioItem = (id: string) => {
+    const updated = studioPortfolio.filter((item) => item.id !== id)
+    setStudioPortfolio(updated)
+    saveStudioPortfolio(updated)
+    setDeleteConfirm(null)
+    showToast("Studio card deleted.")
+  }
+
   const filteredProjects = projects.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     p.tag.toLowerCase().includes(search.toLowerCase())
@@ -532,6 +724,13 @@ export default function AdminDashboard() {
     e.title.toLowerCase().includes(search.toLowerCase()) ||
     e.type.toLowerCase().includes(search.toLowerCase())
   )
+
+  const filteredStudioPortfolio = studioPortfolio.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase()) ||
+    item.tag.toLowerCase().includes(search.toLowerCase())
+  )
+
+  const headerTitle = pageScope === "main" ? "main page" : "studio page"
 
   if (!authed) return null
 
@@ -554,8 +753,9 @@ export default function AdminDashboard() {
             <p className="font-cormorant text-[#555] mb-6">This action cannot be undone.</p>
             <div className="flex gap-3">
               <button onClick={() => {
-                const isProject = projects.some(p => p.id === deleteConfirm)
-                isProject ? deleteProject(deleteConfirm) : deleteEcoItem(deleteConfirm)
+                if (deleteTargetType === "project") deleteProject(deleteConfirm)
+                else if (deleteTargetType === "eco") deleteEcoItem(deleteConfirm)
+                else deleteStudioPortfolioItem(deleteConfirm)
               }} className="flex-1 font-rajdhani text-[10px] tracking-[3px] uppercase bg-red-500/20 border border-red-500/40 text-red-400 py-3 hover:bg-red-500/30 transition-colors duration-200">
                 Delete
               </button>
@@ -588,6 +788,16 @@ export default function AdminDashboard() {
           <EcoForm initial={editTarget as EcoItem} onSave={saveEcoItem} onClose={() => { setModal(null); setEditTarget(null) }} />
         </Modal>
       )}
+      {modal === "add_studio_portfolio" && (
+        <Modal title="Add Studio Portfolio Card" onClose={() => setModal(null)}>
+          <StudioPortfolioForm onSave={saveStudioPortfolioItem} onClose={() => setModal(null)} />
+        </Modal>
+      )}
+      {modal === "edit_studio_portfolio" && editTarget && (
+        <Modal title="Edit Studio Portfolio Card" onClose={() => { setModal(null); setEditTarget(null) }}>
+          <StudioPortfolioForm initial={editTarget as StudioPortfolioItem} onSave={saveStudioPortfolioItem} onClose={() => { setModal(null); setEditTarget(null) }} />
+        </Modal>
+      )}
 
       {/* Sidebar + Main */}
       <div className="flex min-h-screen">
@@ -595,30 +805,30 @@ export default function AdminDashboard() {
         <aside className="w-64 border-r border-gold/10 bg-[#070707] flex flex-col fixed h-full z-10">
           <div className="p-6 border-b border-gold/10">
             <div className="font-cinzel font-black text-xl tracking-[6px] text-gradient-gold mb-1">SHUBIQ</div>
-            <div className="font-rajdhani text-[9px] tracking-[4px] uppercase text-gold/30">Admin Panel v2</div>
+            <div className="font-rajdhani text-[9px] tracking-[4px] uppercase text-gold/30">Admin Panel</div>
           </div>
 
-          <nav className="flex-1 p-4 space-y-1">
-            {[
-              { id: "projects", label: "Projects", icon: "◈", count: projects.length },
-              { id: "ecosystem", label: "Ecosystem", icon: "◎", count: eco.length },
-              { id: "settings", label: "Settings", icon: "◐", count: null },
-            ].map(item => (
-              <button key={item.id} onClick={() => setTab(item.id as any)}
-                className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 ${
-                  tab === item.id ? "bg-gold/10 border border-gold/30" : "border border-transparent hover:border-gold/10"
-                }`}>
-                <div className="flex items-center gap-3">
-                  <span className={tab === item.id ? "text-gold" : "text-[#333]"}>{item.icon}</span>
-                  <span className={`font-rajdhani text-[11px] tracking-[3px] uppercase ${tab === item.id ? "text-gold" : "text-[#555]"}`}>
-                    {item.label}
-                  </span>
-                </div>
-                {item.count !== null && (
-                  <span className="font-cinzel text-xs text-[#333]">{item.count}</span>
-                )}
-              </button>
-            ))}
+          <nav className="flex-1 p-4 space-y-2">
+            <button
+              onClick={() => setPageScope("main")}
+              className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 border ${
+                pageScope === "main" ? "bg-gold/10 border-gold/30" : "border-gold/10 hover:border-gold/20"
+              }`}
+            >
+              <span className={`font-rajdhani text-[11px] tracking-[3px] uppercase ${pageScope === "main" ? "text-gold" : "text-[#666]"}`}>
+                Main Page
+              </span>
+            </button>
+            <button
+              onClick={() => setPageScope("studio")}
+              className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 border ${
+                pageScope === "studio" ? "bg-gold/10 border-gold/30" : "border-gold/10 hover:border-gold/20"
+              }`}
+            >
+              <span className={`font-rajdhani text-[11px] tracking-[3px] uppercase ${pageScope === "studio" ? "text-gold" : "text-[#666]"}`}>
+                Studio Page
+              </span>
+            </button>
           </nav>
 
           <div className="p-4 border-t border-gold/10 space-y-3">
@@ -638,44 +848,85 @@ export default function AdminDashboard() {
           {/* Header */}
           <div className="sticky top-0 bg-[#070707]/90 backdrop-blur-sm border-b border-gold/10 px-8 py-4 flex items-center justify-between z-10">
             <div>
-              <h1 className="font-cinzel text-xl text-cream font-bold capitalize">{tab}</h1>
-              <div className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#333]">
-                {tab === "projects" ? `${projects.length} items` : tab === "ecosystem" ? `${eco.length} items` : "Configuration"}
+              <h1 className="font-cinzel text-xl text-cream font-bold capitalize">{headerTitle}</h1>
+              <div className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#333]">Manage selected section cards</div>
+              <div className="flex items-center gap-2 mt-3">
+                {pageScope === "main" ? (
+                  <>
+                    <button
+                      onClick={() => setMainSection("projects")}
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 border transition-colors duration-200 ${
+                        mainSection === "projects" ? "border-gold/40 text-gold bg-gold/10" : "border-gold/12 text-[#666] hover:border-gold/30"
+                      }`}
+                    >
+                      Projects
+                    </button>
+                    <button
+                      onClick={() => setMainSection("ecosystem")}
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 border transition-colors duration-200 ${
+                        mainSection === "ecosystem" ? "border-gold/40 text-gold bg-gold/10" : "border-gold/12 text-[#666] hover:border-gold/30"
+                      }`}
+                    >
+                      Ecosystem
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setStudioSection("portfolio")}
+                    className="font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/40 text-gold bg-gold/10"
+                  >
+                    Portfolio
+                  </button>
+                )}
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              {(tab === "projects" || tab === "ecosystem") && (
-                <>
-                  <input
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    placeholder="Search..."
-                    className="bg-[#0a0a0a] border border-gold/25 text-cream font-cormorant px-3 py-2.5 text-base focus:outline-none focus:border-gold/50 transition-colors duration-200 placeholder:text-cream/46 w-52"
-                  />
-                  <button
-                    onClick={() => {
-                      setEditTarget(null)
-                      setModal(tab === "projects" ? "add_project" : "add_eco")
-                    }}
-                    className="font-rajdhani text-[10px] tracking-[3px] uppercase bg-gold text-ink px-5 py-2.5 font-semibold hover:bg-gold-light transition-colors duration-200 flex items-center gap-2"
-                  >
-                    <span>+ Add</span>
-                  </button>
-                </>
-              )}
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search..."
+                className="bg-[#0a0a0a] border border-gold/25 text-cream font-cormorant px-3 py-2.5 text-base focus:outline-none focus:border-gold/50 transition-colors duration-200 placeholder:text-cream/46 w-52"
+              />
+              <button
+                onClick={() => {
+                  setEditTarget(null)
+                  if (pageScope === "main") {
+                    setModal(mainSection === "projects" ? "add_project" : "add_eco")
+                  } else {
+                    setModal("add_studio_portfolio")
+                  }
+                }}
+                className="font-rajdhani text-[10px] tracking-[3px] uppercase bg-gold text-ink px-5 py-2.5 font-semibold hover:bg-gold-light transition-colors duration-200 flex items-center gap-2"
+              >
+                <span>+ Add</span>
+              </button>
             </div>
           </div>
 
           <div className="p-8">
             {/* Stats row */}
             <div className="grid grid-cols-4 gap-4 mb-8">
-              {[
-                { label: "Total Projects", val: projects.length },
-                { label: "Featured", val: projects.filter(p => p.featured).length + eco.filter(e => e.featured).length },
-                { label: "Eco Items", val: eco.length },
-                { label: "Live", val: [...projects, ...eco].filter((i: any) => i.status === "live").length },
-              ].map(stat => (
+              {(pageScope === "main"
+                ? (mainSection === "projects"
+                    ? [
+                        { label: "Total Projects", val: projects.length },
+                        { label: "Featured", val: projects.filter(p => p.featured).length },
+                        { label: "Live", val: projects.filter((p: any) => p.status === "live").length },
+                        { label: "Other", val: projects.filter((p: any) => p.status !== "live").length },
+                      ]
+                    : [
+                        { label: "Total Ecosystem", val: eco.length },
+                        { label: "Featured", val: eco.filter((e) => e.featured).length },
+                        { label: "Live", val: eco.filter((e) => e.status === "live").length },
+                        { label: "Other", val: eco.filter((e) => e.status !== "live").length },
+                      ])
+                : [
+                    { label: "Studio Cards", val: studioPortfolio.length },
+                    { label: "Live", val: studioPortfolio.filter((p) => p.status === "live").length },
+                    { label: "WIP", val: studioPortfolio.filter((p) => p.status === "wip").length },
+                    { label: "Concept", val: studioPortfolio.filter((p) => p.status === "concept").length },
+                  ]).map(stat => (
                 <div key={stat.label} className="border border-gold/10 bg-[#0a0a0a] p-5">
                   <div className="font-cinzel text-2xl text-gold font-black">{stat.val}</div>
                   <div className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#333] mt-1">{stat.label}</div>
@@ -683,8 +934,8 @@ export default function AdminDashboard() {
               ))}
             </div>
 
-            {/* Projects Tab */}
-            {tab === "projects" && (
+            {/* Main: Projects */}
+            {pageScope === "main" && mainSection === "projects" && (
               <div className="space-y-3">
                 {filteredProjects.length === 0 && (
                   <div className="border border-gold/10 p-12 text-center">
@@ -711,12 +962,6 @@ export default function AdminDashboard() {
                       </div>
 
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        <button onClick={() => toggleFeaturedProject(project.id)}
-                          className={`font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border transition-colors duration-200 ${
-                            project.featured ? "border-gold/40 text-gold" : "border-gold/10 text-[#444] hover:border-gold/30 hover:text-gold/60"
-                          }`}>
-                          {project.featured ? "★" : "☆"}
-                        </button>
                         {project.link && (
                           <a href={project.link} target="_blank" rel="noreferrer"
                             className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/10 text-[#444] hover:border-gold/30 hover:text-gold/60 transition-colors duration-200">
@@ -727,7 +972,7 @@ export default function AdminDashboard() {
                           className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/20 text-[#555] hover:border-gold hover:text-gold transition-colors duration-200">
                           Edit
                         </button>
-                        <button onClick={() => setDeleteConfirm(project.id)}
+                        <button onClick={() => { setDeleteTargetType("project"); setDeleteConfirm(project.id) }}
                           className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-red-500/20 text-[#444] hover:border-red-500/50 hover:text-red-400 transition-colors duration-200">
                           Del
                         </button>
@@ -738,8 +983,8 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* Ecosystem Tab */}
-            {tab === "ecosystem" && (
+            {/* Main: Ecosystem */}
+            {pageScope === "main" && mainSection === "ecosystem" && (
               <div className="space-y-3">
                 {filteredEco.length === 0 && (
                   <div className="border border-gold/10 p-12 text-center">
@@ -757,25 +1002,16 @@ export default function AdminDashboard() {
                             {item.type}
                           </span>
                           <Badge status={item.status} />
-                          {item.featured && (
-                            <span className="font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-0.5 border border-gold/40 text-gold">Featured</span>
-                          )}
                         </div>
                         <p className="font-cormorant text-[#444] text-sm mb-2">{item.subtitle}</p>
                         <p className="font-cormorant text-[#333] text-sm line-clamp-2">{item.desc}</p>
-                        <div className="flex flex-wrap gap-1.5 mt-2">
-                          {item.tags.map(t => (
-                            <span key={t} className="font-rajdhani text-[8px] tracking-[1px] uppercase text-[#333] border border-[#1a1a1a] px-2 py-0.5">{t}</span>
-                          ))}
-                        </div>
                       </div>
-
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <button onClick={() => { setEditTarget(item); setModal("edit_eco") }}
                           className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/20 text-[#555] hover:border-gold hover:text-gold transition-colors duration-200">
                           Edit
                         </button>
-                        <button onClick={() => setDeleteConfirm(item.id)}
+                        <button onClick={() => { setDeleteTargetType("eco"); setDeleteConfirm(item.id) }}
                           className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-red-500/20 text-[#444] hover:border-red-500/50 hover:text-red-400 transition-colors duration-200">
                           Del
                         </button>
@@ -786,132 +1022,44 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* Settings Tab */}
-            {tab === "settings" && (
-              <div className="space-y-6">
-                <div className="border border-gold/10 bg-[#0a0a0a] p-6">
-                  <h3 className="font-cinzel text-lg text-cream mb-2 font-bold">Supabase Integration</h3>
-                  <p className="font-cormorant text-[#555] mb-4">
-                    {usingSupabase
-                      ? "Connected to Supabase. Changes are synced live."
-                      : "Currently using local fallback. Add valid Supabase environment variables to enable live sync."}
-                  </p>
-                  <div className="bg-[#080808] border border-gold/10 p-4 font-mono text-xs text-[#555] space-y-1">
-                    <div><span className="text-gold/40">NEXT_PUBLIC_SUPABASE_URL</span>=your_supabase_url</div>
-                    <div><span className="text-gold/40">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>=your_anon_key</div>
-                    <div><span className="text-gold/40">NEXT_PUBLIC_ADMIN_PASSWORD</span>=your_admin_password</div>
+            {/* Studio: Portfolio */}
+            {pageScope === "studio" && studioSection === "portfolio" && (
+              <div className="space-y-3">
+                {filteredStudioPortfolio.length === 0 && (
+                  <div className="border border-gold/10 p-12 text-center">
+                    <p className="font-cormorant text-[#333] text-lg">No studio portfolio cards found.</p>
                   </div>
-                </div>
-
-                <div className="border border-gold/10 bg-[#0a0a0a] p-6">
-                  <h3 className="font-cinzel text-lg text-cream mb-4 font-bold">Danger Zone</h3>
-                  <div className="space-y-3">
-                    <button onClick={async () => {
-                      if (!confirm("Reset all projects to defaults?")) return
-                      if (usingSupabase) {
-                        await supabase.from("projects").delete().neq("id", "")
-                        await supabase.from("projects").insert(DEFAULT_PROJECTS.map((p, i) => ({
-                          name: p.name,
-                          tag: p.tag,
-                          desc: p.desc,
-                          tech: p.tech,
-                          stars: p.stars,
-                          link: p.link,
-                          live: p.live,
-                          featured: p.featured,
-                          status: p.status,
-                          order_index: i,
-                        })))
-                        await refreshFromSupabase()
-                        showToast("Projects reset!")
-                        return
-                      }
-                      localStorage.removeItem(STORAGE_KEY_PROJECTS)
-                      setProjects(loadProjects())
-                      showToast("Projects reset!")
-                    }} className="font-rajdhani text-[10px] tracking-[3px] uppercase border border-red-500/30 text-red-400/60 px-5 py-2.5 hover:border-red-500/60 hover:text-red-400 transition-colors duration-200">
-                      Reset Projects to Defaults
-                    </button>
-                    <button onClick={async () => {
-                      if (!confirm("Reset all ecosystem items to defaults?")) return
-                      if (usingSupabase) {
-                        await supabase.from("ecosystem").delete().neq("id", "")
-                        await supabase.from("ecosystem").insert(DEFAULT_ECO.map((e, i) => ({
-                          type: e.type,
-                          title: e.title,
-                          subtitle: e.subtitle,
-                          desc: e.desc,
-                          icon: e.icon,
-                          color: e.color,
-                          status: e.status,
-                          link: e.link,
-                          tags: e.tags,
-                          featured: e.featured,
-                          order_index: i,
-                        })))
-                        await refreshFromSupabase()
-                        showToast("Ecosystem reset!")
-                        return
-                      }
-                      localStorage.removeItem(STORAGE_KEY_ECO)
-                      setEco(loadEco())
-                      showToast("Ecosystem reset!")
-                    }} className="font-rajdhani text-[10px] tracking-[3px] uppercase border border-red-500/30 text-red-400/60 px-5 py-2.5 hover:border-red-500/60 hover:text-red-400 transition-colors duration-200 block">
-                      Reset Ecosystem to Defaults
-                    </button>
+                )}
+                {filteredStudioPortfolio.map((item) => (
+                  <div key={item.id} className="border border-gold/10 bg-[#0a0a0a] p-5 hover:border-gold/20 transition-colors duration-200">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-2 flex-wrap">
+                          <span className="font-cinzel text-base text-cream font-bold">{item.name}</span>
+                          <Badge status={item.status} />
+                          <span className="font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-0.5 border border-gold/20 text-gold/50">
+                            {item.tag}
+                          </span>
+                        </div>
+                        <p className="font-cormorant text-[#444] text-sm mb-2 line-clamp-2">{item.desc}</p>
+                        <p className="font-cormorant text-[#333] text-sm">{item.metric}</p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button onClick={() => { setEditTarget(item); setModal("edit_studio_portfolio") }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/20 text-[#555] hover:border-gold hover:text-gold transition-colors duration-200">
+                          Edit
+                        </button>
+                        <button onClick={() => { setDeleteTargetType("studio_portfolio"); setDeleteConfirm(item.id) }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-red-500/20 text-[#444] hover:border-red-500/50 hover:text-red-400 transition-colors duration-200">
+                          Del
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                <div className="border border-gold/10 bg-[#0a0a0a] p-6">
-                  <h3 className="font-cinzel text-lg text-cream mb-2 font-bold">Supabase SQL Schema</h3>
-                  <p className="font-cormorant text-[#555] mb-4 text-sm">Run this in your Supabase SQL editor to create the tables:</p>
-                  <pre className="bg-[#080808] border border-gold/10 p-4 text-xs text-[#555] overflow-auto font-mono leading-relaxed whitespace-pre">{`-- Projects table
-create table projects (
-  id uuid default gen_random_uuid() primary key,
-  name text not null,
-  tag text,
-  desc text,
-  tech text[] default '{}',
-  stars int default 0,
-  link text,
-  live text,
-  featured boolean default false,
-  status text default 'live',
-  order_index int default 0,
-  image_url text,
-  created_at timestamptz default now()
-);
-
--- Ecosystem table
-create table ecosystem (
-  id uuid default gen_random_uuid() primary key,
-  type text not null,
-  title text not null,
-  subtitle text,
-  desc text,
-  icon text default '◈',
-  color text default '#C9A84C',
-  status text default 'concept',
-  link text,
-  tags text[] default '{}',
-  featured boolean default false,
-  order_index int default 0,
-  image_url text,
-  created_at timestamptz default now()
-);
-
--- Enable RLS
-alter table projects enable row level security;
-alter table ecosystem enable row level security;
-
--- Public read
-create policy "Public read projects"
-  on projects for select to anon using (true);
-create policy "Public read ecosystem"
-  on ecosystem for select to anon using (true);`}</pre>
-                </div>
+                ))}
               </div>
             )}
+
           </div>
         </main>
       </div>

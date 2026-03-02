@@ -45,7 +45,7 @@ export default function About() {
   }
 
   return (
-    <section id="about" ref={sectionRef} className="min-h-screen flex items-center py-[96px] relative overflow-hidden">
+    <section id="about" ref={sectionRef} className="min-h-screen py-[96px] px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute right-0 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.03) 0%, transparent 70%)" }}
@@ -76,7 +76,7 @@ export default function About() {
 
             <div className="w-16 sm:w-24 h-px bg-gradient-to-r from-gold/90 via-gold/45 to-transparent mb-6 sm:mb-7 md:mb-9" />
 
-            <div className="md:hidden about-mobile-photo-wrap mb-8 sm:mb-10">
+            <div className="md:hidden about-mobile-photo-wrap mb-12 sm:mb-14">
               <div className="about-mobile-photo-card relative corner-gold p-3 pb-6 bg-[rgb(var(--surface-1-rgb)/0.88)] border border-[rgb(var(--cream-rgb)/0.14)] w-[82%] max-w-[310px] mx-auto">
                 <div
                   className="pointer-events-none absolute inset-0 -z-10 rounded-[6px]"
@@ -95,7 +95,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="about-mobile-copy-wrap space-y-7 sm:space-y-8 md:space-y-9 max-w-[530px]">
+            <div className="about-mobile-copy-wrap mt-7 sm:mt-8 md:mt-0 space-y-5 sm:space-y-6 md:space-y-6 max-w-[530px]">
               <p
                 ref={(el) => addTextRef(el, 0)}
                 className="about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left"
@@ -119,8 +119,8 @@ export default function About() {
               <div className="about-mobile-quote mt-9 border-l-[4px] border-gold/38 pl-8 py-1">
                 <p
                   ref={(el) => addTextRef(el, 2)}
-                  className="about-mobile-quote-text font-cormorant text-gold/66 italic leading-[1.42]"
-                  style={{ fontSize: "clamp(18.3px, 6vw, 30.8px)", opacity: 0, textShadow: "0 0 14px rgb(var(--gold-rgb) / 0.07)" }}
+                  className="about-mobile-quote-text font-cormorant text-gold italic leading-[1.4]"
+                  style={{ fontSize: "clamp(20px, 6.6vw, 34px)", opacity: 0, textShadow: "0 0 16px rgb(var(--gold-rgb) / 0.1)" }}
                 >
                   <span className="about-mobile-quote-mark text-gold/95 mr-1">"</span>
                   The future belongs to those who build intelligent tools, not just consume them.

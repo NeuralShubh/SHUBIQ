@@ -185,7 +185,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={sending}
-                    className="w-full rounded-sm font-rajdhani text-[13px] tracking-[3.2px] uppercase bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3.5 font-semibold transition-all duration-300 hover:tracking-[3.6px] hover:shadow-[0_10px_30px_rgb(var(--gold-rgb)_/_0.28),inset_0_0_16px_rgb(var(--cream-rgb)_/_0.14)] hover:bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_42%,rgb(var(--gold-light-rgb)))] hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full rounded-sm font-rajdhani text-[13px] tracking-[3.2px] uppercase border border-gold/70 bg-gold text-ink py-3.5 font-semibold transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {sending ? "Sending..." : "Send Message"}
                   </button>

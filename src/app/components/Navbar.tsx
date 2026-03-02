@@ -204,7 +204,7 @@ export default function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => scrollTo("Contact")}
-              className="site-nav-cta font-rajdhani text-[12px] font-semibold tracking-[1.7px] uppercase border border-[rgb(var(--gold-rgb)/0.45)] bg-[linear-gradient(180deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)))] text-ink px-[18px] py-[7px] transition-colors duration-200 hover:bg-[linear-gradient(180deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)/0.95))]"
+              className="site-nav-cta font-rajdhani text-[12px] font-semibold tracking-[1.7px] uppercase border border-gold/70 bg-gold text-ink px-[18px] py-[7px] transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]"
             >
               Hire Us
             </button>

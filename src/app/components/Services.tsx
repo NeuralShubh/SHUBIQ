@@ -66,15 +66,14 @@ function TiltCard({ service, index }: { service: typeof SERVICES[0]; index: numb
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
 
       <div className="relative z-10 h-full flex flex-col">
-        <div className="flex items-start justify-between mb-5 sm:mb-6">
-          <div className="flex items-center gap-3">
-            <span className="font-rajdhani text-[12px] sm:text-[11px] tracking-[2px] uppercase text-gold/75">{`0${index + 1}`}</span>
+        <div className="flex items-center justify-between mb-5 sm:mb-6">
+          <div className="flex items-center">
             <span className="w-10 h-10 sm:w-9 sm:h-9 border border-gold/45 bg-gold/[0.07] flex items-center justify-center text-gold/95">
               <Icon size={18} strokeWidth={1.9} />
             </span>
           </div>
           <span
-            className="font-rajdhani text-[12px] sm:text-[11px] tracking-[2px] uppercase text-gold/85 border px-2.5 py-1 bg-gold/[0.05]"
+            className="font-rajdhani text-[13px] sm:text-[12px] leading-none tracking-[2.2px] uppercase text-gold/85 border px-3 py-1.5 bg-gold/[0.05]"
             style={{ borderColor: "rgb(var(--gold-rgb) / 0.45)" }}
           >
             {service.tag}
