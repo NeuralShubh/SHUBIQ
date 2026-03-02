@@ -892,7 +892,7 @@ function StudioContactCTA() {
   }
 
   const inputClass =
-    "w-full bg-[rgb(var(--surface-1-rgb)/0.7)] border border-[rgb(var(--cream-rgb)/0.14)] text-cream/92 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/50 focus:bg-[rgb(var(--surface-2-rgb)/0.88)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.16),0_0_20px_rgb(var(--gold-rgb)/0.12)] transition-all duration-300 placeholder:text-cream/26 placeholder:text-[15px] placeholder:italic"
+    "w-full rounded-sm bg-[rgb(var(--surface-1-rgb)/0.76)] border border-[rgb(var(--cream-rgb)/0.16)] text-cream/95 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/56 focus:bg-[rgb(var(--surface-2-rgb)/0.92)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.18),0_0_24px_rgb(var(--gold-rgb)_/_0.16),inset_0_1px_8px_rgb(var(--gold-rgb)_/_0.06)] transition-all duration-[360ms] ease-out placeholder:text-cream/45"
 
   return (
     <section id="studio-contact" ref={sectionRef} className="py-[96px] px-5 sm:px-6 relative overflow-hidden">
@@ -940,19 +940,19 @@ function StudioContactCTA() {
 
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block font-rajdhani text-[11px] tracking-[2.5px] uppercase text-gold/70 mb-2">
+                  <label className="block font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 mb-2">
                     Your Name *
                   </label>
                   <input
                     required
                     value={form.name}
                     onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    placeholder="Shubham Patil"
+                    placeholder="Your name"
                     className={inputClass}
                   />
                 </div>
                 <div>
-                  <label className="block font-rajdhani text-[11px] tracking-[2.5px] uppercase text-gold/70 mb-2">
+                  <label className="block font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 mb-2">
                     Email Address *
                   </label>
                   <input
@@ -960,14 +960,14 @@ function StudioContactCTA() {
                     type="email"
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                    placeholder="hello@brand.com"
+                    placeholder="your@email.com"
                     className={inputClass}
                   />
                 </div>
               </div>
 
               <div className="mb-4">
-                <label className="block font-rajdhani text-[11px] tracking-[2.5px] uppercase text-gold/70 mb-2">
+                <label className="block font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 mb-2">
                   Project Description *
                 </label>
                 <textarea
@@ -975,13 +975,13 @@ function StudioContactCTA() {
                   rows={4}
                   value={form.project}
                   onChange={(e) => setForm((f) => ({ ...f, project: e.target.value }))}
-                  placeholder="Tell us what you need built - website, web app, AI integration, dashboard, etc."
+                  placeholder="Tell us about your project..."
                   className={`${inputClass} resize-none`}
                 />
               </div>
 
               <div className="mb-6">
-                <label className="block font-rajdhani text-[11px] tracking-[2.5px] uppercase text-gold/70 mb-2">
+                <label className="block font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 mb-2">
                   Estimated Budget
                 </label>
                 <input
@@ -1000,13 +1000,13 @@ function StudioContactCTA() {
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full font-rajdhani text-[14px] tracking-[3px] uppercase py-4 font-semibold bg-gold text-ink border border-gold/70 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                className="w-full rounded-sm font-rajdhani text-[13px] tracking-[3.2px] uppercase bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3.5 font-semibold transition-all duration-300 hover:tracking-[3.6px] hover:shadow-[0_10px_30px_rgb(var(--gold-rgb)_/_0.28),inset_0_0_16px_rgb(var(--cream-rgb)_/_0.14)] hover:bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_42%,rgb(var(--gold-light-rgb)))] hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
               >
-                {sending ? "Sendingâ€¦" : "Send Project Brief"}
+                {sending ? "Sending..." : "Send Project Brief"}
                 {!sending && <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform duration-200" />}
               </button>
 
-              <p className="font-cormorant text-cream/42 text-center mt-4 leading-[1.5]" style={{ fontSize: "clamp(13px, 1vw, 15px)" }}>
+              <p className="font-rajdhani text-[10px] tracking-[2.5px] uppercase text-cream/70 text-center mt-4">
                 No commitment required. We'll reply within 24 hours.
               </p>
             </form>
