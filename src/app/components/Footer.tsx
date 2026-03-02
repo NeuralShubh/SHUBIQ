@@ -26,7 +26,7 @@ export default function Footer() {
           &copy; {year} Shubham. All rights reserved.
         </div>
 
-        <div className="flex items-center justify-center md:justify-end gap-3 sm:gap-3.5">
+        <div className="flex items-center justify-center md:justify-end gap-3 sm:gap-4">
           {SOCIAL_LINKS.map((social) => {
             const Icon = iconMap[social.label]
             if (!Icon) return null
@@ -39,9 +39,12 @@ export default function Footer() {
                 rel="noreferrer"
                 aria-label={social.label}
                 title={social.label}
-                className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg border border-gold/24 bg-[rgb(var(--surface-2-rgb)/0.45)] text-cream/76 hover:text-gold hover:border-gold/48 hover:bg-[rgb(var(--surface-2-rgb)/0.75)] hover:shadow-[0_0_18px_rgb(var(--gold-rgb)/0.16)] transition-all duration-250"
+                className="group relative w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-lg text-cream/74 hover:text-gold hover:bg-[rgb(var(--surface-2-rgb)/0.6)] transition-all duration-250"
               >
-                <Icon size={17} />
+                <Icon size={19} />
+                <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-sm border border-gold/30 bg-[rgb(var(--surface-2-rgb)/0.96)] px-2 py-1 font-rajdhani text-[9px] tracking-[1.8px] uppercase text-gold/90 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+                  {social.label}
+                </span>
               </a>
             )
           })}

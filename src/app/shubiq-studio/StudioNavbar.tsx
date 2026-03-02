@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
 import ThemeToggle from "../components/ThemeToggle"
 
 const STUDIO_LINKS = [
@@ -141,15 +140,7 @@ export default function StudioNavbar() {
           style={{ width: `${scrollProgress}%` }}
         />
         <div className={`max-w-7xl mx-auto px-5 max-[768px]:px-4 sm:px-6 lg:px-12 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-[3.15rem] max-[768px]:h-[3.05rem]" : "h-[3.36rem] max-[768px]:h-[3.15rem]"}`}>
-          <div className="flex items-center h-full gap-2.5 -ml-4 sm:-ml-6">
-            <Link
-              href="/"
-              aria-label="Back to Home"
-              title="Back to Home"
-              className="flex items-center justify-center min-h-[40px] min-w-[40px] h-10 w-10 border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--surface-1-rgb)/0.42)] text-gold/88 hover:text-gold hover:border-gold/45 hover:bg-[rgb(var(--surface-2-rgb)/0.62)] rounded-lg transition-colors duration-200"
-            >
-              <ArrowLeft size={18} />
-            </Link>
+          <div className="flex items-center h-full gap-2.5">
             <button onClick={() => scrollTo("studio-hero")} className="group flex items-center h-full gap-[3px]">
               <img
                 src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772211091/SHUBIQ_jpldrw.png"
@@ -164,6 +155,12 @@ export default function StudioNavbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-2 lg:gap-3">
+            <Link
+              href="/"
+              className="site-nav-link relative font-rajdhani font-semibold text-[12px] tracking-[1px] uppercase transition-all duration-200 px-2.5 py-1.5 text-[rgb(var(--cream-rgb)/0.8)] hover:text-gold/90"
+            >
+              SHUBIQ
+            </Link>
             {STUDIO_LINKS.map((link) => (
               <button
                 key={link.id}

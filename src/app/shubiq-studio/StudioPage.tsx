@@ -147,7 +147,7 @@ const PRICING = [
       "Fully custom design",
       "Google Analytics setup",
       "Performance optimization",
-      "Blog / CMS setup",
+      "3D Animation",
       "6 months free support",
     ],
     cta: "Get Started",
@@ -737,7 +737,7 @@ function StudioPricing() {
             hidden: {},
             visible: { transition: { staggerChildren: 0.15 } },
           }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 items-center"
+          className="grid grid-cols-1 md:[grid-template-columns:1.03fr_1.08fr_1.03fr] gap-6 sm:gap-7 items-center"
         >
           {PRICING.map((plan) => {
             const Icon = plan.icon
@@ -765,7 +765,7 @@ function StudioPricing() {
                 <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <div className="font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/76 mb-2">{plan.tag}</div>
+                    <div className="font-cormorant text-[12px] tracking-[3px] uppercase text-gold/76 mb-2">{plan.tag}</div>
                     <p className={`font-cormorant ${plan.highlighted ? "text-cream/92" : "text-cream/80"}`} style={{ fontSize: "clamp(15px, 0.95vw, 16.5px)" }}>
                       {plan.bestFor}
                     </p>
@@ -782,7 +782,7 @@ function StudioPricing() {
                       {plan.price.toLocaleString("en-IN")}{plan.priceSuffix ?? ""}
                     </span>
                   </div>
-                  <div className={`font-rajdhani text-[13px] tracking-[0.7px] mt-1 ${plan.highlighted ? "text-cream/84" : "text-cream/76"}`}>{plan.meta}</div>
+                  <div className={`font-cormorant text-[13px] tracking-[0.7px] mt-1 ${plan.highlighted ? "text-cream/84" : "text-cream/76"}`}>{plan.meta}</div>
                 </div>
 
                 <div className={`mb-7 border-b pb-6 ${plan.highlighted ? "border-gold/28" : "border-gold/20"}`} />

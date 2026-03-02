@@ -89,7 +89,7 @@ export default function Contact() {
   const inputClass =
     "w-full rounded-sm bg-[rgb(var(--surface-1-rgb)/0.76)] border border-[rgb(var(--cream-rgb)/0.16)] text-cream/95 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/56 focus:bg-[rgb(var(--surface-2-rgb)/0.92)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.18),0_0_24px_rgb(var(--gold-rgb)_/_0.16),inset_0_1px_8px_rgb(var(--gold-rgb)_/_0.06)] transition-all duration-[360ms] ease-out placeholder:text-cream/45"
   const panelClass =
-    "rounded-sm border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 transition-all duration-[380ms] ease-out hover:border-gold/26 relative overflow-hidden hover:-translate-y-0.5 hover:bg-card-soft-hover hover:shadow-[0_16px_36px_rgb(var(--ink-rgb)_/_0.36),0_0_0_1px_rgb(var(--gold-rgb)_/_0.18)]"
+    "rounded-sm border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 transition-all duration-[380ms] ease-out hover:border-gold/26 relative overflow-hidden hover:bg-card-soft-hover hover:shadow-[0_16px_36px_rgb(var(--ink-rgb)_/_0.36),0_0_0_1px_rgb(var(--gold-rgb)_/_0.18)]"
 
   return (
     <section id="contact" ref={sectionRef} className="min-h-screen flex items-center py-[104px] px-4 sm:px-6 relative overflow-hidden">
