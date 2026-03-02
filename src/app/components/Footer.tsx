@@ -1,10 +1,10 @@
 "use client"
-import { Github, Instagram, Linkedin, Twitter } from "lucide-react"
+import { Github, Instagram, Linkedin, Twitter, type LucideIcon } from "lucide-react"
 import { SOCIAL_LINKS } from "../data"
 
 export default function Footer() {
   const year = new Date().getFullYear()
-  const iconMap: Record<string, (props: { size?: number }) => JSX.Element> = {
+  const iconMap: Record<string, LucideIcon> = {
     "GitHub": Github,
     "Twitter / X": Twitter,
     "LinkedIn": Linkedin,

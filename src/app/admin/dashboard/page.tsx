@@ -514,7 +514,7 @@ export default function AdminDashboard() {
     }
 
     init()
-  }, [])
+  }, [router])
 
   const logout = () => {
     sessionStorage.removeItem("shubiq_admin")
