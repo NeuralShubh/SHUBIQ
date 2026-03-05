@@ -10,8 +10,8 @@ export function useSplitText(text: string) {
 }
 
 // Hook: Magnetic effect
-export function useMagnetic<T extends HTMLElement>(strength = 0.4): RefObject<T> {
-  const ref = useRef<T>(null)
+export function useMagnetic<T extends HTMLElement>(strength = 0.4): RefObject<T | null> {
+  const ref = useRef<T | null>(null)
 
   useEffect(() => {
     const el = ref.current

@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {},
+  devIndicators: false,
   images: {
-    domains: ["*"],
     remotePatterns: [
       { protocol: "https", hostname: "**" }
     ],

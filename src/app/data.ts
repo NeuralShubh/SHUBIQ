@@ -113,7 +113,7 @@ export const SOCIAL_LINKS = [
   { label: "GitHub", url: "https://github.com/NeuralShubh", handle: "NeuralShubh" },
   { label: "Twitter / X", url: "https://x.com/NeuralShubh", handle: "@NeuralShubh" },
   { label: "LinkedIn", url: "https://linkedin.com/in/neuralshubh/", handle: "in/neuralshubh" },
-  { label: "Instagram", url: "https://instagram.com/neuralshubh", handle: "@neuralshubh" },
+  { label: "Instagram", url: "https://instagram.com/shubham.bnb", handle: "@shubham.bnb" },
 ];
 
 export const NAV_LINKS = ["Home", "About", "Services", "Projects", "Ecosystem", "Studio", "Contact"];

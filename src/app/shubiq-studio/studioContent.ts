@@ -1,5 +1,5 @@
 export type StudioPlan = {
-  id: "basic" | "standard" | "premium"
+  id: string
   tier: string
   tag: string
   bestFor: string

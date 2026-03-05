@@ -2,6 +2,8 @@
 import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "../../lib/supabase"
+import { SERVICES as DEFAULT_MAIN_SERVICES } from "../../data"
+import { DEFAULT_STUDIO_CONTENT, STUDIO_CONTENT_STORAGE_KEY, type StudioContent } from "../../shubiq-studio/studioContent"
 
 // Types
 type Project = {
@@ -48,12 +50,42 @@ type StudioPortfolioItem = {
   order_index: number
 }
 
+type ContactSubmission = {
+  id: string
+  name: string
+  email: string
+  phone?: string | null
+  message: string
+  source: string
+  created_at: string | null
+  read: boolean
+}
+
+type MainServiceItem = {
+  id: string
+  icon: string
+  title: string
+  desc: string
+  tag: string
+}
+
+type StudioServiceItem = {
+  id: string
+  iconKey: "code" | "layout" | "bot" | "phone" | "globe" | "layers"
+  title: string
+  tag: string
+  desc: string
+  features: string[]
+}
+
 // --- Helpers ---
 const generateId = () => Date.now().toString(36) + Math.random().toString(36).slice(2)
 
 const STORAGE_KEY_PROJECTS = "shubiq_projects"
 const STORAGE_KEY_ECO = "shubiq_ecosystem"
 const STORAGE_KEY_STUDIO_PORTFOLIO = "shubiq_studio_portfolio"
+const STORAGE_KEY_SERVICES = "shubiq_services"
+const STORAGE_KEY_STUDIO_SERVICES = "shubiq_studio_services"
 const SUPABASE_ENABLED =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
@@ -92,6 +124,63 @@ const DEFAULT_STUDIO_PORTFOLIO: StudioPortfolioItem[] = [
     order_index: 1,
   },
 ]
+const DEFAULT_SERVICES: MainServiceItem[] = DEFAULT_MAIN_SERVICES.map((item, index) => ({
+  id: `svc-${index + 1}`,
+  icon: item.icon,
+  title: item.title,
+  desc: item.desc,
+  tag: item.tag,
+}))
+const DEFAULT_STUDIO_SERVICES: StudioServiceItem[] = [
+  {
+    id: "ss-1",
+    iconKey: "code",
+    title: "High-Performance Web Platforms",
+    tag: "Core",
+    desc: "Engineered for speed and scale, high-performance platforms built to convert, scale, and dominate competitive markets.",
+    features: ["Modern frontend architecture", "Secure backend infrastructure", "Performance-first engineering"],
+  },
+  {
+    id: "ss-2",
+    iconKey: "layout",
+    title: "Custom Software Architecture",
+    tag: "Agency",
+    desc: "Designed to solve complex operational challenges with scalable, data-driven architecture aligned to business execution.",
+    features: ["Scalable system design", "Data-driven infrastructure", "Secure access control"],
+  },
+  {
+    id: "ss-3",
+    iconKey: "bot",
+    title: "Applied AI Systems",
+    tag: "Intelligence",
+    desc: "Integrated AI systems and intelligent automation unlock measurable efficiency and strategic advantage.",
+    features: ["AI workflow integration", "Smart data pipelines", "Intelligent automation systems"],
+  },
+  {
+    id: "ss-4",
+    iconKey: "phone",
+    title: "Scalable Application Systems",
+    tag: "Product",
+    desc: "Production-grade application systems engineered for long-term scalability and performance resilience.",
+    features: ["Web & mobile platforms", "Optimized performance", "Deployment & lifecycle support"],
+  },
+  {
+    id: "ss-5",
+    iconKey: "globe",
+    title: "Digital Brand Infrastructure",
+    tag: "Growth",
+    desc: "Structured digital ecosystems convert attention into authority, trust, and sustainable growth.",
+    features: ["Conversion-focused landing systems", "Portfolio & brand platforms", "Analytics & optimization"],
+  },
+  {
+    id: "ss-6",
+    iconKey: "layers",
+    title: "Design & Component Architecture",
+    tag: "Foundation",
+    desc: "Structured design systems and component architecture ensuring speed, consistency, and scalable product growth.",
+    features: ["Component libraries", "Design token systems", "Documentation & governance"],
+  },
+]
 
 function loadProjects(): Project[] {
   try {
@@ -125,6 +214,46 @@ function loadStudioPortfolio(): StudioPortfolioItem[] {
 function saveStudioPortfolio(items: StudioPortfolioItem[]) {
   localStorage.setItem(STORAGE_KEY_STUDIO_PORTFOLIO, JSON.stringify(items))
 }
+function loadServices(): MainServiceItem[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_SERVICES)
+    if (raw) return JSON.parse(raw)
+  } catch {}
+  return DEFAULT_SERVICES
+}
+function saveServices(items: MainServiceItem[]) {
+  localStorage.setItem(STORAGE_KEY_SERVICES, JSON.stringify(items))
+}
+function loadStudioServices(): StudioServiceItem[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_STUDIO_SERVICES)
+    if (raw) return JSON.parse(raw)
+  } catch {}
+  return DEFAULT_STUDIO_SERVICES
+}
+function saveStudioServices(items: StudioServiceItem[]) {
+  localStorage.setItem(STORAGE_KEY_STUDIO_SERVICES, JSON.stringify(items))
+}
+function loadStudioContent(): StudioContent {
+  try {
+    const raw = localStorage.getItem(STUDIO_CONTENT_STORAGE_KEY)
+    if (!raw) return DEFAULT_STUDIO_CONTENT
+    const parsed = JSON.parse(raw) as Partial<StudioContent>
+    if (!parsed || !Array.isArray(parsed.plans)) return DEFAULT_STUDIO_CONTENT
+    return {
+      ...DEFAULT_STUDIO_CONTENT,
+      ...parsed,
+      plans: parsed.plans.map((plan, index) => ({
+        ...DEFAULT_STUDIO_CONTENT.plans[index],
+        ...plan,
+      })),
+    }
+  } catch {}
+  return DEFAULT_STUDIO_CONTENT
+}
+function saveStudioContent(content: StudioContent) {
+  localStorage.setItem(STUDIO_CONTENT_STORAGE_KEY, JSON.stringify(content))
+}
 
 const mapProjectRow = (row: any): Project => ({
   id: String(row.id),
@@ -157,11 +286,55 @@ const mapEcoRow = (row: any): EcoItem => ({
   image_url: row.image_url ?? null,
 })
 
+const mapServiceRow = (row: any): MainServiceItem => ({
+  id: String(row.id),
+  icon: row.icon ?? "?",
+  title: row.title ?? "",
+  desc: row.desc ?? "",
+  tag: row.tag ?? "",
+})
+
+const mapStudioPortfolioRow = (row: any): StudioPortfolioItem => ({
+  id: String(row.id),
+  name: row.name ?? "",
+  tag: row.tag ?? "",
+  desc: row.desc ?? "",
+  impact: row.impact ?? "",
+  tech: Array.isArray(row.tech) ? row.tech : [],
+  link: row.link ?? null,
+  status: (row.status ?? "live") as StudioPortfolioItem["status"],
+  metric: row.metric ?? "",
+  order_index: Number(row.order_index ?? 0),
+})
+
+const mapStudioServiceRow = (row: any): StudioServiceItem => ({
+  id: String(row.id),
+  iconKey: (row.icon_key ?? "code") as StudioServiceItem["iconKey"],
+  title: row.title ?? "",
+  tag: row.tag ?? "",
+  desc: row.desc ?? "",
+  features: Array.isArray(row.features) ? row.features : [],
+})
+
+const mapStudioPricingRow = (row: any): StudioContent["plans"][number] => ({
+  id: String(row.id),
+  tier: row.tier ?? "",
+  tag: row.tag ?? "",
+  bestFor: row.best_for ?? "",
+  price: Number(row.price ?? 0),
+  priceSuffix: row.price_suffix ?? "",
+  meta: row.meta ?? "",
+  features: Array.isArray(row.features) ? row.features : [],
+  cta: row.cta ?? "Get Started",
+  highlighted: !!row.highlighted,
+  icon: (row.icon ?? "trending") as "zap" | "trending" | "shield",
+})
+
 // --- Components ---
 const inputClass = "w-full rounded-sm bg-[rgb(var(--surface-1-rgb)/0.76)] border border-[rgb(var(--cream-rgb)/0.16)] text-cream/95 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/56 focus:bg-[rgb(var(--surface-2-rgb)/0.92)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.18),0_0_24px_rgb(var(--gold-rgb)_/_0.16),inset_0_1px_8px_rgb(var(--gold-rgb)_/_0.06)] transition-all duration-[360ms] ease-out placeholder:text-cream/45"
 const labelClass = "font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 block mb-2"
 const primaryButtonClass = "flex-1 rounded-sm font-rajdhani text-[13px] tracking-[3.2px] uppercase bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3.5 font-semibold transition-all duration-300 hover:tracking-[3.6px] hover:shadow-[0_10px_30px_rgb(var(--gold-rgb)_/_0.28),inset_0_0_16px_rgb(var(--cream-rgb)_/_0.14)] hover:bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_42%,rgb(var(--gold-light-rgb)))]"
-const secondaryButtonClass = "rounded-sm font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.22)] bg-[rgb(var(--surface-1-rgb)/0.4)] text-cream/78 px-6 py-3.5 transition-all duration-300 hover:border-gold/38 hover:text-gold/90 hover:bg-[rgb(var(--surface-2-rgb)/0.66)]"
+const secondaryButtonClass = "rounded-sm font-rajdhani text-[12px] tracking-[3px] uppercase bg-[rgb(var(--surface-2-rgb)/0.78)] text-cream/88 px-6 py-3.5 transition-all duration-300 hover:text-gold/95 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] shadow-[inset_0_0_0_1px_rgb(var(--cream-rgb)/0.04)]"
 
 function Badge({ status }: { status: string }) {
   const colors: Record<string, string> = {
@@ -263,16 +436,15 @@ function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: 
 
 // --- Ecosystem Form ---
 function EcoForm({ initial, onSave, onClose }: { initial?: EcoItem; onSave: (e: EcoItem) => void; onClose: () => void }) {
-  const ICON_OPTIONS = ["◈", "◎", "◉", "◌", "◆", "◇", "◍", "⬡", "⬢", "✦", "✧", "✶"]
-  const blank: EcoItem = { id: generateId(), type: "app", title: "", subtitle: "", desc: "", icon: "◈", color: "#C9A84C", status: "concept", link: null, tags: [], featured: false, order_index: 0 }
+  const blank: EcoItem = { id: generateId(), type: "app", title: "", subtitle: "", desc: "", icon: "*", color: "#C9A84C", status: "concept", link: null, tags: [], featured: false, order_index: 0 }
   const [form, setForm] = useState<EcoItem>(initial || blank)
-  const [tagInput, setTagInput] = useState(initial?.tags.join(", ") || "")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSave({
       ...form,
-      tags: tagInput.split(",").map(t => t.trim()).filter(Boolean),
+      tags: initial?.tags ?? form.tags ?? [],
+      icon: initial?.icon ?? form.icon ?? "*",
       color: initial?.color ?? "rgb(var(--gold-rgb))",
       featured: initial?.featured ?? false,
       order_index: initial?.order_index ?? 0,
@@ -298,11 +470,11 @@ function EcoForm({ initial, onSave, onClose }: { initial?: EcoItem; onSave: (e: 
         <textarea value={form.desc} onChange={e => setForm({ ...form, desc: e.target.value })} className={`${inputClass} resize-none`} rows={3} required />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Type</label>
           <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value as any })} className={`${inputClass} cursor-pointer`}>
-            {["project", "app", "tool", "service", "blog", "case_study"].map(t => <option key={t} value={t}>{t}</option>)}
+            {["agency", "app", "project", "tool", "service", "blog", "case_study"].map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
         <div>
@@ -311,44 +483,12 @@ function EcoForm({ initial, onSave, onClose }: { initial?: EcoItem; onSave: (e: 
             {["live", "coming_soon", "in_dev", "concept"].map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
-        <div>
-          <label className={labelClass}>Icon</label>
-          <select value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} className={`${inputClass} cursor-pointer`}>
-            {ICON_OPTIONS.map((icon) => <option key={icon} value={icon}>{icon}</option>)}
-          </select>
-        </div>
       </div>
 
       <div>
-        <label className={labelClass}>Quick Icon Pick</label>
-        <div className="grid grid-cols-6 sm:grid-cols-12 gap-2">
-          {ICON_OPTIONS.map((icon) => (
-            <button
-              type="button"
-              key={`pick-${icon}`}
-              onClick={() => setForm({ ...form, icon })}
-              className={`h-10 rounded-sm border text-lg transition-colors duration-200 ${
-                form.icon === icon
-                  ? "border-gold/55 bg-gold/[0.12] text-gold"
-                  : "border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-1-rgb)/0.65)] text-cream/78 hover:border-gold/35 hover:text-gold/90"
-              }`}
-            >
-              {icon}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className={labelClass}>Live URL</label>
+        <label className={labelClass}>Button URL</label>
         <input value={form.link || ""} onChange={e => setForm({ ...form, link: e.target.value || null })} className={inputClass} placeholder="https://..." />
       </div>
-
-      <div>
-        <label className={labelClass}>Tags (comma separated)</label>
-        <input value={tagInput} onChange={e => setTagInput(e.target.value)} className={inputClass} placeholder="AI, Web Dev, SaaS" />
-      </div>
-
 
       <div className="flex flex-col sm:flex-row gap-3 pt-4">
         <button type="submit" className={primaryButtonClass}>
@@ -425,20 +565,12 @@ function StudioPortfolioForm({
             {["live", "wip", "concept"].map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
-        <div className="sm:col-span-2">
-          <label className={labelClass}>Metric</label>
-          <input value={form.metric} onChange={(e) => setForm({ ...form, metric: e.target.value })} className={inputClass} />
-        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
         <div>
           <label className={labelClass}>Tech (comma separated)</label>
           <input value={techInput} onChange={(e) => setTechInput(e.target.value)} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Link</label>
-          <input value={form.link || ""} onChange={(e) => setForm({ ...form, link: e.target.value || null })} className={inputClass} />
         </div>
       </div>
 
@@ -454,22 +586,287 @@ function StudioPortfolioForm({
   )
 }
 
+function MainServiceForm({
+  initial,
+  onSave,
+  onClose,
+}: {
+  initial?: MainServiceItem
+  onSave: (item: MainServiceItem) => void
+  onClose: () => void
+}) {
+  const MAIN_SERVICE_ICON_OPTIONS = [
+    { value: "code", label: "Code", preview: "</>" },
+    { value: "layout", label: "Dashboard", preview: "▦" },
+    { value: "bot", label: "AI", preview: "◎" },
+    { value: "phone", label: "App", preview: "◫" },
+    { value: "globe", label: "Global", preview: "◍" },
+    { value: "layers", label: "Design System", preview: "◩" },
+    { value: "tools", label: "Tools", preview: "⌁" },
+    { value: "cpu", label: "Architecture", preview: "◈" },
+  ] as const
+
+  const blank: MainServiceItem = {
+    id: generateId(),
+    icon: "code",
+    title: "",
+    desc: "",
+    tag: "",
+  }
+  const [form, setForm] = useState<MainServiceItem>(initial || blank)
+  const iconOptions = MAIN_SERVICE_ICON_OPTIONS.some((option) => option.value === form.icon)
+    ? MAIN_SERVICE_ICON_OPTIONS
+    : [...MAIN_SERVICE_ICON_OPTIONS, { value: form.icon, label: "Custom", preview: "?" } as const]
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSave(form)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>Title *</label>
+          <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputClass} required />
+        </div>
+        <div>
+          <label className={labelClass}>Tag</label>
+          <input value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })} className={inputClass} />
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Description *</label>
+        <textarea rows={4} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} className={`${inputClass} resize-none`} required />
+      </div>
+      <div>
+        <label className={labelClass}>Icon</label>
+        <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} className={`${inputClass} cursor-pointer`}>
+          {iconOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.preview}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label className={labelClass}>Quick Icon Pick</label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {MAIN_SERVICE_ICON_OPTIONS.map((option) => (
+            <button
+              type="button"
+              key={option.value}
+              onClick={() => setForm({ ...form, icon: option.value })}
+              className={`flex items-center gap-2 rounded-sm px-3 py-2.5 text-left transition-colors duration-200 ${
+                form.icon === option.value
+                  ? "bg-gold/[0.18] text-gold shadow-[0_0_16px_rgb(var(--gold-rgb)/0.18)]"
+                  : "bg-[rgb(var(--surface-1-rgb)/0.65)] text-cream/78 hover:bg-[rgb(var(--surface-2-rgb)/0.82)] hover:text-gold/90"
+              }`}
+            >
+              <span className="font-cinzel text-base leading-none">{option.preview}</span>
+              <span className="font-rajdhani text-[9px] tracking-[2px] uppercase">{option.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+        <button type="submit" className={primaryButtonClass}>{initial ? "Save Changes" : "Create Service"}</button>
+        <button type="button" onClick={onClose} className={secondaryButtonClass}>Cancel</button>
+      </div>
+    </form>
+  )
+}
+
+function StudioServiceForm({
+  initial,
+  onSave,
+  onClose,
+}: {
+  initial?: StudioServiceItem
+  onSave: (item: StudioServiceItem) => void
+  onClose: () => void
+}) {
+  const STUDIO_SERVICE_ICON_OPTIONS = [
+    { value: "code", preview: "</>" },
+    { value: "layout", preview: "▦" },
+    { value: "bot", preview: "◎" },
+    { value: "phone", preview: "◫" },
+    { value: "globe", preview: "◍" },
+    { value: "layers", preview: "◩" },
+  ] as const
+
+  const blank: StudioServiceItem = {
+    id: generateId(),
+    iconKey: "code",
+    title: "",
+    tag: "",
+    desc: "",
+    features: [],
+  }
+  const [form, setForm] = useState<StudioServiceItem>(initial || blank)
+  const [featureInput, setFeatureInput] = useState((initial?.features || []).join(", "))
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSave({
+      ...form,
+      features: featureInput.split(",").map((f) => f.trim()).filter(Boolean),
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>Title *</label>
+          <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputClass} required />
+        </div>
+        <div>
+          <label className={labelClass}>Tag</label>
+          <input value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })} className={inputClass} />
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Description *</label>
+        <textarea rows={3} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} className={`${inputClass} resize-none`} required />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>Icon</label>
+          <select value={form.iconKey} onChange={(e) => setForm({ ...form, iconKey: e.target.value as StudioServiceItem["iconKey"] })} className={`${inputClass} cursor-pointer`}>
+            {STUDIO_SERVICE_ICON_OPTIONS.map((icon) => (
+              <option key={icon.value} value={icon.value}>{icon.preview}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className={labelClass}>Features (comma separated)</label>
+          <input value={featureInput} onChange={(e) => setFeatureInput(e.target.value)} className={inputClass} />
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+        <button type="submit" className={primaryButtonClass}>{initial ? "Save Changes" : "Create Service"}</button>
+        <button type="button" onClick={onClose} className={secondaryButtonClass}>Cancel</button>
+      </div>
+    </form>
+  )
+}
+
+function StudioPricingPlanForm({
+  initial,
+  onSave,
+  onClose,
+}: {
+  initial?: StudioContent["plans"][number]
+  onSave: (item: StudioContent["plans"][number]) => void
+  onClose: () => void
+}) {
+  const blank: StudioContent["plans"][number] = {
+    id: generateId(),
+    tier: "",
+    tag: "",
+    bestFor: "",
+    price: 0,
+    priceSuffix: "",
+    meta: "",
+    features: [],
+    cta: "Get Started",
+    highlighted: false,
+    icon: "trending",
+  }
+  const [form, setForm] = useState(initial || blank)
+  const [featureInput, setFeatureInput] = useState((initial?.features || []).join(", "))
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSave({
+      ...form,
+      price: Number(form.price || 0),
+      features: featureInput.split(",").map((f) => f.trim()).filter(Boolean),
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>Tier *</label>
+          <input value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })} className={inputClass} required />
+        </div>
+        <div>
+          <label className={labelClass}>Tag</label>
+          <input value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })} className={inputClass} />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className={labelClass}>Price *</label>
+          <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} className={inputClass} required />
+        </div>
+        <div>
+          <label className={labelClass}>Suffix</label>
+          <input value={form.priceSuffix || ""} onChange={(e) => setForm({ ...form, priceSuffix: e.target.value })} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Icon</label>
+          <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value as "zap" | "trending" | "shield" })} className={`${inputClass} cursor-pointer`}>
+            {["zap", "trending", "shield"].map((icon) => (
+              <option key={icon} value={icon}>{icon}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Best for *</label>
+        <input value={form.bestFor} onChange={(e) => setForm({ ...form, bestFor: e.target.value })} className={inputClass} required />
+      </div>
+      <div>
+        <label className={labelClass}>Meta</label>
+        <input value={form.meta} onChange={(e) => setForm({ ...form, meta: e.target.value })} className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Features (comma separated)</label>
+        <input value={featureInput} onChange={(e) => setFeatureInput(e.target.value)} className={inputClass} />
+      </div>
+      <label className="flex items-center gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={form.highlighted}
+          onChange={(e) => setForm({ ...form, highlighted: e.target.checked })}
+          className="w-4 h-4 accent-[rgb(var(--gold-rgb))]"
+        />
+        <span className="font-rajdhani text-[10px] tracking-[3px] uppercase text-[#555]">Highlighted</span>
+      </label>
+      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+        <button type="submit" className={primaryButtonClass}>{initial ? "Save Changes" : "Create Pricing Card"}</button>
+        <button type="button" onClick={onClose} className={secondaryButtonClass}>Cancel</button>
+      </div>
+    </form>
+  )
+}
+
 export default function AdminDashboard() {
   const router = useRouter()
   const [authed, setAuthed] = useState(false)
   const [pageScope, setPageScope] = useState<"main" | "studio">("main")
-  const [mainSection, setMainSection] = useState<"projects" | "ecosystem">("projects")
-  const [studioSection, setStudioSection] = useState<"portfolio">("portfolio")
+  const [mainSection, setMainSection] = useState<"projects" | "services" | "ecosystem" | "form_data">("projects")
+  const [studioSection, setStudioSection] = useState<"portfolio" | "services" | "pricing">("portfolio")
   const [projects, setProjects] = useState<Project[]>([])
+  const [services, setServices] = useState<MainServiceItem[]>([])
   const [eco, setEco] = useState<EcoItem[]>([])
   const [studioPortfolio, setStudioPortfolio] = useState<StudioPortfolioItem[]>([])
-  const [modal, setModal] = useState<null | "add_project" | "edit_project" | "add_eco" | "edit_eco" | "add_studio_portfolio" | "edit_studio_portfolio">(null)
-  const [editTarget, setEditTarget] = useState<Project | EcoItem | StudioPortfolioItem | null>(null)
-  const [deleteTargetType, setDeleteTargetType] = useState<"project" | "eco" | "studio_portfolio">("project")
+  const [studioServices, setStudioServices] = useState<StudioServiceItem[]>([])
+  const [studioContent, setStudioContent] = useState<StudioContent>(DEFAULT_STUDIO_CONTENT)
+  const [modal, setModal] = useState<null | "add_project" | "edit_project" | "add_service" | "edit_service" | "add_eco" | "edit_eco" | "add_studio_portfolio" | "edit_studio_portfolio" | "add_studio_service" | "edit_studio_service" | "add_studio_pricing" | "edit_studio_pricing">(null)
+  const [editTarget, setEditTarget] = useState<Project | MainServiceItem | EcoItem | StudioPortfolioItem | StudioServiceItem | StudioContent["plans"][number] | null>(null)
+  const [deleteTargetType, setDeleteTargetType] = useState<"project" | "service" | "eco" | "studio_portfolio" | "studio_service" | "studio_pricing" | "contact_submission">("project")
   const [toast, setToast] = useState("")
   const [search, setSearch] = useState("")
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const [usingSupabase, setUsingSupabase] = useState(false)
+  const [dbIssue, setDbIssue] = useState<string | null>(null)
+  const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([])
+  const [contactLoading, setContactLoading] = useState(false)
 
   const showToast = (msg: string) => {
     setToast(msg)
@@ -477,14 +874,98 @@ export default function AdminDashboard() {
   }
 
   const refreshFromSupabase = async () => {
-    const [{ data: pData, error: pErr }, { data: eData, error: eErr }] = await Promise.all([
+    const [
+      { data: pData, error: pErr },
+      { data: eData, error: eErr },
+      { data: sData, error: sErr },
+      { data: spData, error: spErr },
+      { data: ssData, error: ssErr },
+      { data: pricingData, error: pricingErr },
+    ] = await Promise.all([
       supabase.from("projects").select("*").order("order_index", { ascending: true }),
       supabase.from("ecosystem").select("*").order("order_index", { ascending: true }),
+      supabase.from("services").select("*").order("order_index", { ascending: true }),
+      supabase.from("studio_portfolio").select("*").order("order_index", { ascending: true }),
+      supabase.from("studio_services").select("*").order("order_index", { ascending: true }),
+      supabase.from("studio_pricing_plans").select("*").order("order_index", { ascending: true }),
     ])
     if (pErr) throw pErr
     if (eErr) throw eErr
+    if (sErr) throw sErr
+    if (spErr) throw spErr
+    if (ssErr) throw ssErr
+    if (pricingErr) throw pricingErr
     setProjects((pData ?? []).map(mapProjectRow))
     setEco((eData ?? []).map(mapEcoRow))
+    setServices((sData ?? []).map(mapServiceRow))
+    setStudioPortfolio((spData ?? []).map(mapStudioPortfolioRow))
+    setStudioServices((ssData ?? []).map(mapStudioServiceRow))
+    setStudioContent((prev) => ({ ...prev, plans: (pricingData ?? []).map(mapStudioPricingRow) }))
+  }
+
+  const getErrorMessage = (error: unknown, fallback: string) => {
+    if (error && typeof error === "object" && "message" in error && typeof (error as { message?: unknown }).message === "string") {
+      return (error as { message: string }).message
+    }
+    return fallback
+  }
+
+  const formatSubmissionDate = (iso: string | null) => {
+    if (!iso) return "Unknown"
+    const d = new Date(iso)
+    if (Number.isNaN(d.getTime())) return "Unknown"
+    return d.toLocaleString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+  }
+
+  const fetchContactSubmissions = async () => {
+    setContactLoading(true)
+    try {
+      const response = await fetch("/api/admin/contact-submissions", { cache: "no-store" })
+      const json = (await response.json()) as { ok?: boolean; submissions?: ContactSubmission[]; error?: string }
+      if (!response.ok || !json.ok) throw new Error(json.error || "Failed to load contact submissions")
+      setContactSubmissions(Array.isArray(json.submissions) ? json.submissions : [])
+    } catch {
+      showToast("Unable to load form submissions.")
+    } finally {
+      setContactLoading(false)
+    }
+  }
+
+  const toggleReadSubmission = async (id: string, read: boolean) => {
+    try {
+      const response = await fetch("/api/admin/contact-submissions", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, read }),
+      })
+      const json = (await response.json()) as { ok?: boolean; error?: string }
+      if (!response.ok || !json.ok) throw new Error(json.error || "Failed to update submission")
+      setContactSubmissions((prev) => prev.map((item) => (item.id === id ? { ...item, read } : item)))
+      showToast(read ? "Marked as read." : "Marked as unread.")
+    } catch {
+      showToast("Unable to update submission state.")
+    }
+  }
+
+  const deleteSubmission = async (id: string) => {
+    try {
+      const response = await fetch(`/api/admin/contact-submissions?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      })
+      const json = (await response.json()) as { ok?: boolean; error?: string }
+      if (!response.ok || !json.ok) throw new Error(json.error || "Failed to delete submission")
+      setContactSubmissions((prev) => prev.filter((item) => item.id !== id))
+      setDeleteConfirm(null)
+      showToast("Submission deleted.")
+    } catch {
+      showToast("Unable to delete submission.")
+    }
   }
 
   useEffect(() => {
@@ -492,29 +973,23 @@ export default function AdminDashboard() {
       const ok = sessionStorage.getItem("shubiq_admin")
       if (!ok) { router.push("/admin"); return }
       setAuthed(true)
-
-      if (!SUPABASE_ENABLED) {
-        setProjects(loadProjects())
-        setEco(loadEco())
-        setStudioPortfolio(loadStudioPortfolio())
-        return
-      }
-
-      try {
-        await refreshFromSupabase()
-        setUsingSupabase(true)
-        setStudioPortfolio(loadStudioPortfolio())
-      } catch {
-        setUsingSupabase(false)
-        setProjects(loadProjects())
-        setEco(loadEco())
-        setStudioPortfolio(loadStudioPortfolio())
-        showToast("Supabase unavailable. Using local fallback.")
-      }
+      setUsingSupabase(false)
+      setDbIssue(null)
+      setProjects(loadProjects())
+      setServices(loadServices())
+      setEco(loadEco())
+      setStudioPortfolio(loadStudioPortfolio())
+      setStudioServices(loadStudioServices())
+      setStudioContent(loadStudioContent())
+      await fetchContactSubmissions()
     }
 
     init()
   }, [router])
+
+  const ensureDatabaseReady = () => {
+    return true
+  }
 
   const logout = () => {
     sessionStorage.removeItem("shubiq_admin")
@@ -523,52 +998,9 @@ export default function AdminDashboard() {
 
   // Project CRUD
   const saveProject = async (p: Project) => {
-    if (usingSupabase) {
-      try {
-        if (editTarget) {
-          const { error } = await supabase
-            .from("projects")
-            .update({
-              name: p.name,
-              tag: p.tag,
-              desc: p.desc,
-              link: p.link,
-              live: p.live,
-              featured: p.featured,
-            })
-            .eq("id", p.id)
-          if (error) throw error
-        } else {
-          const { error } = await supabase
-            .from("projects")
-            .insert({
-              name: p.name,
-              tag: p.tag,
-              desc: p.desc,
-              tech: [],
-              stars: 0,
-              link: p.link,
-              live: p.live,
-              featured: p.featured,
-              status: "live",
-              order_index: projects.length,
-            })
-          if (error) throw error
-        }
-
-        await refreshFromSupabase()
-        setModal(null)
-        setEditTarget(null)
-        showToast(editTarget ? "Project updated!" : "Project created!")
-        return
-      } catch {
-        showToast("Supabase write failed. Saved locally.")
-      }
-    }
-
     const updated = editTarget
-      ? projects.map(x => x.id === p.id ? p : x)
-      : [...projects, p]
+      ? projects.map((x) => (x.id === p.id ? p : x))
+      : [...projects, { ...p, order_index: projects.length }]
     setProjects(updated)
     saveProjects(updated)
     setModal(null)
@@ -577,20 +1009,7 @@ export default function AdminDashboard() {
   }
 
   const deleteProject = async (id: string) => {
-    if (usingSupabase) {
-      try {
-        const { error } = await supabase.from("projects").delete().eq("id", id)
-        if (error) throw error
-        await refreshFromSupabase()
-        setDeleteConfirm(null)
-        showToast("Project deleted.")
-        return
-      } catch {
-        showToast("Supabase delete failed. Deleted locally.")
-      }
-    }
-
-    const updated = projects.filter(p => p.id !== id)
+    const updated = projects.filter((p) => p.id !== id)
     setProjects(updated)
     saveProjects(updated)
     setDeleteConfirm(null)
@@ -601,72 +1020,35 @@ export default function AdminDashboard() {
     const current = projects.find((p) => p.id === id)
     if (!current) return
 
-    if (usingSupabase) {
-      try {
-        const { error } = await supabase.from("projects").update({ featured: !current.featured }).eq("id", id)
-        if (error) throw error
-        await refreshFromSupabase()
-        return
-      } catch {
-        showToast("Supabase update failed. Updated locally.")
-      }
-    }
-
-    const updated = projects.map(p => p.id === id ? { ...p, featured: !p.featured } : p)
+    const updated = projects.map((p) => (p.id === id ? { ...p, featured: !p.featured } : p))
     setProjects(updated)
     saveProjects(updated)
   }
 
+  // Main Services CRUD
+  const saveServiceItem = async (item: MainServiceItem) => {
+    const updated = editTarget
+      ? services.map((x) => (x.id === item.id ? item : x))
+      : [...services, item]
+    setServices(updated)
+    saveServices(updated)
+    setModal(null)
+    setEditTarget(null)
+    showToast(editTarget ? "Service updated!" : "Service created!")
+  }
+
+  const deleteServiceItem = async (id: string) => {
+    const updated = services.filter((item) => item.id !== id)
+    setServices(updated)
+    saveServices(updated)
+    setDeleteConfirm(null)
+    showToast("Service deleted.")
+  }
+
   // Eco CRUD
   const saveEcoItem = async (item: EcoItem) => {
-    if (usingSupabase) {
-      try {
-        if (editTarget) {
-          const { error } = await supabase
-            .from("ecosystem")
-            .update({
-              type: item.type,
-              title: item.title,
-              subtitle: item.subtitle,
-              desc: item.desc,
-              icon: item.icon,
-              status: item.status,
-              link: item.link,
-              tags: item.tags,
-            })
-            .eq("id", item.id)
-          if (error) throw error
-        } else {
-          const { error } = await supabase
-            .from("ecosystem")
-            .insert({
-              type: item.type,
-              title: item.title,
-              subtitle: item.subtitle,
-              desc: item.desc,
-              icon: item.icon,
-              color: "rgb(var(--gold-rgb))",
-              status: item.status,
-              link: item.link,
-              tags: item.tags,
-              featured: false,
-              order_index: eco.length,
-            })
-          if (error) throw error
-        }
-
-        await refreshFromSupabase()
-        setModal(null)
-        setEditTarget(null)
-        showToast(editTarget ? "Item updated!" : "Item created!")
-        return
-      } catch {
-        showToast("Supabase write failed. Saved locally.")
-      }
-    }
-
     const updated = editTarget
-      ? eco.map(x => x.id === item.id ? item : x)
+      ? eco.map((x) => (x.id === item.id ? item : x))
       : [...eco, item]
     setEco(updated)
     saveEco(updated)
@@ -676,29 +1058,16 @@ export default function AdminDashboard() {
   }
 
   const deleteEcoItem = async (id: string) => {
-    if (usingSupabase) {
-      try {
-        const { error } = await supabase.from("ecosystem").delete().eq("id", id)
-        if (error) throw error
-        await refreshFromSupabase()
-        setDeleteConfirm(null)
-        showToast("Item deleted.")
-        return
-      } catch {
-        showToast("Supabase delete failed. Deleted locally.")
-      }
-    }
-
-    const updated = eco.filter(e => e.id !== id)
+    const updated = eco.filter((e) => e.id !== id)
     setEco(updated)
     saveEco(updated)
     setDeleteConfirm(null)
     showToast("Item deleted.")
   }
 
-  const saveStudioPortfolioItem = (item: StudioPortfolioItem) => {
+  const saveStudioPortfolioItem = async (item: StudioPortfolioItem) => {
     const updated = editTarget
-      ? studioPortfolio.map((x) => x.id === item.id ? item : x)
+      ? studioPortfolio.map((x) => (x.id === item.id ? item : x))
       : [...studioPortfolio, { ...item, order_index: studioPortfolio.length }]
     setStudioPortfolio(updated)
     saveStudioPortfolio(updated)
@@ -707,12 +1076,51 @@ export default function AdminDashboard() {
     showToast(editTarget ? "Studio card updated!" : "Studio card created!")
   }
 
-  const deleteStudioPortfolioItem = (id: string) => {
+  const deleteStudioPortfolioItem = async (id: string) => {
     const updated = studioPortfolio.filter((item) => item.id !== id)
     setStudioPortfolio(updated)
     saveStudioPortfolio(updated)
     setDeleteConfirm(null)
     showToast("Studio card deleted.")
+  }
+
+  const saveStudioServiceItem = async (item: StudioServiceItem) => {
+    const updated = editTarget
+      ? studioServices.map((x) => (x.id === item.id ? item : x))
+      : [...studioServices, item]
+    setStudioServices(updated)
+    saveStudioServices(updated)
+    setModal(null)
+    setEditTarget(null)
+    showToast(editTarget ? "Studio service updated!" : "Studio service created!")
+  }
+
+  const deleteStudioServiceItem = async (id: string) => {
+    const updated = studioServices.filter((item) => item.id !== id)
+    setStudioServices(updated)
+    saveStudioServices(updated)
+    setDeleteConfirm(null)
+    showToast("Studio service deleted.")
+  }
+
+  const saveStudioPricingPlan = async (item: StudioContent["plans"][number]) => {
+    const updatedPlans = editTarget
+      ? studioContent.plans.map((x) => (x.id === item.id ? item : x))
+      : [...studioContent.plans, item]
+    const updatedContent = { ...studioContent, plans: updatedPlans }
+    setStudioContent(updatedContent)
+    saveStudioContent(updatedContent)
+    setModal(null)
+    setEditTarget(null)
+    showToast(editTarget ? "Pricing card updated!" : "Pricing card created!")
+  }
+
+  const deleteStudioPricingPlan = async (id: string) => {
+    const updatedContent = { ...studioContent, plans: studioContent.plans.filter((plan) => plan.id !== id) }
+    setStudioContent(updatedContent)
+    saveStudioContent(updatedContent)
+    setDeleteConfirm(null)
+    showToast("Pricing card deleted.")
   }
 
   const filteredProjects = projects.filter(p =>
@@ -724,13 +1132,37 @@ export default function AdminDashboard() {
     e.title.toLowerCase().includes(search.toLowerCase()) ||
     e.type.toLowerCase().includes(search.toLowerCase())
   )
+  const filteredServices = services.filter((s) =>
+    s.title.toLowerCase().includes(search.toLowerCase()) ||
+    s.tag.toLowerCase().includes(search.toLowerCase())
+  )
 
   const filteredStudioPortfolio = studioPortfolio.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase()) ||
     item.tag.toLowerCase().includes(search.toLowerCase())
   )
+  const filteredStudioServices = studioServices.filter((item) =>
+    item.title.toLowerCase().includes(search.toLowerCase()) ||
+    item.tag.toLowerCase().includes(search.toLowerCase())
+  )
+  const filteredStudioPricing = studioContent.plans.filter((plan) =>
+    plan.tier.toLowerCase().includes(search.toLowerCase()) ||
+    plan.tag.toLowerCase().includes(search.toLowerCase()) ||
+    plan.bestFor.toLowerCase().includes(search.toLowerCase())
+  )
 
-  const headerTitle = pageScope === "main" ? "main page" : "studio page"
+  const filteredContactSubmissions = contactSubmissions.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase()) ||
+    item.email.toLowerCase().includes(search.toLowerCase()) ||
+    (item.phone || "").toLowerCase().includes(search.toLowerCase()) ||
+    item.message.toLowerCase().includes(search.toLowerCase()) ||
+    item.source.toLowerCase().includes(search.toLowerCase())
+  )
+
+  const headerTitle =
+    pageScope === "main"
+      ? (mainSection === "form_data" ? "form data" : "main page")
+      : "studio page"
 
   if (!authed) return null
 
@@ -738,7 +1170,7 @@ export default function AdminDashboard() {
     <div className="admin-readable min-h-screen bg-ink text-cream">
       {/* Toast */}
       {toast && (
-        <div className="fixed top-6 right-6 z-[9999] border border-gold/40 bg-[#0a0a0a] px-6 py-3 font-rajdhani text-[11px] tracking-[3px] uppercase text-gold animate-fade-in">
+        <div className="fixed top-3 right-3 md:top-6 md:right-6 z-[9999] border border-gold/40 bg-[#0a0a0a] px-4 md:px-6 py-2.5 md:py-3 font-rajdhani text-[10px] md:text-[11px] tracking-[2.4px] md:tracking-[3px] uppercase text-gold animate-fade-in max-w-[calc(100vw-1.5rem)] md:max-w-none">
           {toast}
         </div>
       )}
@@ -754,12 +1186,16 @@ export default function AdminDashboard() {
             <div className="flex gap-3">
               <button onClick={() => {
                 if (deleteTargetType === "project") deleteProject(deleteConfirm)
+                else if (deleteTargetType === "service") deleteServiceItem(deleteConfirm)
                 else if (deleteTargetType === "eco") deleteEcoItem(deleteConfirm)
+                else if (deleteTargetType === "studio_service") deleteStudioServiceItem(deleteConfirm)
+                else if (deleteTargetType === "studio_pricing") deleteStudioPricingPlan(deleteConfirm)
+                else if (deleteTargetType === "contact_submission") deleteSubmission(deleteConfirm)
                 else deleteStudioPortfolioItem(deleteConfirm)
-              }} className="flex-1 font-rajdhani text-[10px] tracking-[3px] uppercase bg-red-500/20 border border-red-500/40 text-red-400 py-3 hover:bg-red-500/30 transition-colors duration-200">
+              }} className="flex-1 font-rajdhani text-[10px] tracking-[3px] uppercase bg-[rgb(127_29_29/0.38)] text-red-300 py-3 hover:bg-[rgb(127_29_29/0.52)] transition-colors duration-200">
                 Delete
               </button>
-              <button onClick={() => setDeleteConfirm(null)} className="flex-1 font-rajdhani text-[10px] tracking-[3px] uppercase border border-gold/20 text-[#555] py-3 hover:border-gold/40 transition-colors duration-200">
+              <button onClick={() => setDeleteConfirm(null)} className="flex-1 font-rajdhani text-[10px] tracking-[3px] uppercase bg-[rgb(var(--surface-2-rgb)/0.7)] text-cream/78 py-3 hover:bg-[rgb(var(--surface-3-rgb)/0.9)] transition-colors duration-200">
                 Cancel
               </button>
             </div>
@@ -776,6 +1212,16 @@ export default function AdminDashboard() {
       {modal === "edit_project" && editTarget && (
         <Modal title="Edit Project" onClose={() => { setModal(null); setEditTarget(null) }}>
           <ProjectForm initial={editTarget as Project} onSave={saveProject} onClose={() => { setModal(null); setEditTarget(null) }} />
+        </Modal>
+      )}
+      {modal === "add_service" && (
+        <Modal title="Add Main Service" onClose={() => setModal(null)}>
+          <MainServiceForm onSave={saveServiceItem} onClose={() => setModal(null)} />
+        </Modal>
+      )}
+      {modal === "edit_service" && editTarget && (
+        <Modal title="Edit Main Service" onClose={() => { setModal(null); setEditTarget(null) }}>
+          <MainServiceForm initial={editTarget as MainServiceItem} onSave={saveServiceItem} onClose={() => { setModal(null); setEditTarget(null) }} />
         </Modal>
       )}
       {modal === "add_eco" && (
@@ -798,11 +1244,31 @@ export default function AdminDashboard() {
           <StudioPortfolioForm initial={editTarget as StudioPortfolioItem} onSave={saveStudioPortfolioItem} onClose={() => { setModal(null); setEditTarget(null) }} />
         </Modal>
       )}
+      {modal === "add_studio_service" && (
+        <Modal title="Add Studio Service" onClose={() => setModal(null)}>
+          <StudioServiceForm onSave={saveStudioServiceItem} onClose={() => setModal(null)} />
+        </Modal>
+      )}
+      {modal === "edit_studio_service" && editTarget && (
+        <Modal title="Edit Studio Service" onClose={() => { setModal(null); setEditTarget(null) }}>
+          <StudioServiceForm initial={editTarget as StudioServiceItem} onSave={saveStudioServiceItem} onClose={() => { setModal(null); setEditTarget(null) }} />
+        </Modal>
+      )}
+      {modal === "add_studio_pricing" && (
+        <Modal title="Add Studio Pricing Card" onClose={() => setModal(null)}>
+          <StudioPricingPlanForm onSave={saveStudioPricingPlan} onClose={() => setModal(null)} />
+        </Modal>
+      )}
+      {modal === "edit_studio_pricing" && editTarget && (
+        <Modal title="Edit Studio Pricing Card" onClose={() => { setModal(null); setEditTarget(null) }}>
+          <StudioPricingPlanForm initial={editTarget as StudioContent["plans"][number]} onSave={saveStudioPricingPlan} onClose={() => { setModal(null); setEditTarget(null) }} />
+        </Modal>
+      )}
 
       {/* Sidebar + Main */}
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen flex-col md:flex-row">
         {/* Sidebar */}
-        <aside className="w-64 border-r border-gold/10 bg-[#070707] flex flex-col fixed h-full z-10">
+        <aside className="hidden md:flex w-64 border-r border-gold/10 bg-[#070707] flex-col fixed h-full z-10">
           <div className="p-6 border-b border-gold/10">
             <div className="font-cinzel font-black text-xl tracking-[6px] text-gradient-gold mb-1">SHUBIQ</div>
             <div className="font-rajdhani text-[9px] tracking-[4px] uppercase text-gold/30">Admin Panel</div>
@@ -811,8 +1277,10 @@ export default function AdminDashboard() {
           <nav className="flex-1 p-4 space-y-2">
             <button
               onClick={() => setPageScope("main")}
-              className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 border ${
-                pageScope === "main" ? "bg-gold/10 border-gold/30" : "border-gold/10 hover:border-gold/20"
+              className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 ${
+                pageScope === "main"
+                  ? "bg-[linear-gradient(160deg,rgb(var(--gold-rgb)/0.24),rgb(var(--gold-dark-rgb)/0.16))] shadow-[0_0_24px_rgb(var(--gold-rgb)/0.16)]"
+                  : "bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
               }`}
             >
               <span className={`font-rajdhani text-[11px] tracking-[3px] uppercase ${pageScope === "main" ? "text-gold" : "text-[#666]"}`}>
@@ -821,8 +1289,10 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={() => setPageScope("studio")}
-              className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 border ${
-                pageScope === "studio" ? "bg-gold/10 border-gold/30" : "border-gold/10 hover:border-gold/20"
+              className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 ${
+                pageScope === "studio"
+                  ? "bg-[linear-gradient(160deg,rgb(var(--gold-rgb)/0.24),rgb(var(--gold-dark-rgb)/0.16))] shadow-[0_0_24px_rgb(var(--gold-rgb)/0.16)]"
+                  : "bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
               }`}
             >
               <span className={`font-rajdhani text-[11px] tracking-[3px] uppercase ${pageScope === "studio" ? "text-gold" : "text-[#666]"}`}>
@@ -833,80 +1303,193 @@ export default function AdminDashboard() {
 
           <div className="p-4 border-t border-gold/10 space-y-3">
             <a href="/" target="_blank" rel="noreferrer"
-              className="w-full flex items-center gap-3 px-4 py-2 border border-gold/10 hover:border-gold/30 transition-colors duration-200">
+              className="w-full flex items-center gap-3 px-4 py-2 bg-[rgb(var(--surface-2-rgb)/0.7)] hover:bg-[rgb(var(--surface-3-rgb)/0.88)] transition-colors duration-200">
               <span className="font-rajdhani text-[10px] tracking-[3px] uppercase text-[#444] hover:text-gold/60">View Site →</span>
             </a>
             <button onClick={logout}
-              className="w-full font-rajdhani text-[10px] tracking-[3px] uppercase border border-red-500/20 text-[#444] hover:text-red-400 hover:border-red-500/40 px-4 py-2 transition-colors duration-200">
+              className="w-full font-rajdhani text-[10px] tracking-[3px] uppercase bg-[rgb(127_29_29/0.36)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] px-4 py-2 transition-colors duration-200">
               Logout
             </button>
           </div>
         </aside>
 
-        {/* Main content */}
-        <main className="flex-1 ml-64 min-h-screen">
-          {/* Header */}
-          <div className="sticky top-0 bg-[#070707]/90 backdrop-blur-sm border-b border-gold/10 px-8 py-4 flex items-center justify-between z-10">
+        {/* Mobile Top Bar */}
+        <div className="md:hidden sticky top-0 z-20 bg-[#070707]/95 backdrop-blur border-b border-gold/10 px-4 py-3 space-y-3">
+          <div className="flex items-center justify-between gap-3">
             <div>
+              <div className="font-cinzel font-black text-lg tracking-[4px] text-gradient-gold">SHUBIQ</div>
+              <div className="font-rajdhani text-[8px] tracking-[3px] uppercase text-gold/40">Admin Panel</div>
+            </div>
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              className="font-rajdhani text-[9px] tracking-[2.2px] uppercase bg-[rgb(var(--surface-2-rgb)/0.76)] text-cream/80 px-3 py-2"
+            >
+              View Site
+            </a>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setPageScope("main")}
+              className={`font-rajdhani text-[10px] tracking-[2.6px] uppercase px-3 py-2.5 transition-colors duration-200 ${
+                pageScope === "main"
+                  ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                  : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)]"
+              }`}
+            >
+              Main Page
+            </button>
+            <button
+              onClick={() => setPageScope("studio")}
+              className={`font-rajdhani text-[10px] tracking-[2.6px] uppercase px-3 py-2.5 transition-colors duration-200 ${
+                pageScope === "studio"
+                  ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                  : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)]"
+              }`}
+            >
+              Studio Page
+            </button>
+          </div>
+          <button
+            onClick={logout}
+            className="w-full font-rajdhani text-[9px] tracking-[2.2px] uppercase bg-[rgb(127_29_29/0.36)] text-red-300 px-3 py-2.5"
+          >
+            Logout
+          </button>
+        </div>
+
+        {/* Main content */}
+        <main className="flex-1 min-h-screen md:ml-64">
+          {/* Header */}
+          <div className="sticky top-[86px] md:top-0 bg-[#070707]/90 backdrop-blur-sm border-b border-gold/10 px-4 md:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 z-10">
+            <div className="min-w-0">
               <h1 className="font-cinzel text-xl text-cream font-bold capitalize">{headerTitle}</h1>
-              <div className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#333]">Manage selected section cards</div>
-              <div className="flex items-center gap-2 mt-3">
+              <div className="font-rajdhani text-[8px] md:text-[9px] tracking-[2.4px] md:tracking-[3px] uppercase text-[#333]">Manage selected section cards</div>
+              <div className="mt-2 inline-flex items-center gap-2 px-2.5 py-1 text-[8px] md:text-[9px] font-rajdhani tracking-[2px] md:tracking-[2.5px] uppercase bg-emerald-900/25 text-emerald-300">
+                <span>Cards: Local Storage</span>
+                <span className="text-emerald-200/80">Forms: Supabase</span>
+              </div>
+              <div className="flex items-center gap-2 mt-3 overflow-x-auto pb-1">
                 {pageScope === "main" ? (
                   <>
                     <button
                       onClick={() => setMainSection("projects")}
-                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 border transition-colors duration-200 ${
-                        mainSection === "projects" ? "border-gold/40 text-gold bg-gold/10" : "border-gold/12 text-[#666] hover:border-gold/30"
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 transition-colors duration-200 ${
+                        mainSection === "projects"
+                          ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                          : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
                       }`}
                     >
                       Projects
                     </button>
                     <button
+                      onClick={() => setMainSection("services")}
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 transition-colors duration-200 ${
+                        mainSection === "services"
+                          ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                          : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
+                      }`}
+                    >
+                      Services
+                    </button>
+                    <button
                       onClick={() => setMainSection("ecosystem")}
-                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 border transition-colors duration-200 ${
-                        mainSection === "ecosystem" ? "border-gold/40 text-gold bg-gold/10" : "border-gold/12 text-[#666] hover:border-gold/30"
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 transition-colors duration-200 ${
+                        mainSection === "ecosystem"
+                          ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                          : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
                       }`}
                     >
                       Ecosystem
                     </button>
+                    <button
+                      onClick={() => setMainSection("form_data")}
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 transition-colors duration-200 ${
+                        mainSection === "form_data"
+                          ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                          : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
+                      }`}
+                    >
+                      Form Data
+                    </button>
                   </>
                 ) : (
-                  <button
-                    onClick={() => setStudioSection("portfolio")}
-                    className="font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/40 text-gold bg-gold/10"
-                  >
-                    Portfolio
-                  </button>
+                  <>
+                    <button
+                      onClick={() => setStudioSection("portfolio")}
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 transition-colors duration-200 ${
+                        studioSection === "portfolio"
+                          ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                          : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
+                      }`}
+                    >
+                      Portfolio
+                    </button>
+                    <button
+                      onClick={() => setStudioSection("services")}
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 transition-colors duration-200 ${
+                        studioSection === "services"
+                          ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                          : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
+                      }`}
+                    >
+                      Services
+                    </button>
+                    <button
+                      onClick={() => setStudioSection("pricing")}
+                      className={`font-rajdhani text-[10px] tracking-[2px] uppercase px-3 py-1.5 transition-colors duration-200 ${
+                        studioSection === "pricing"
+                          ? "text-gold bg-[rgb(var(--gold-rgb)/0.2)] shadow-[0_0_18px_rgb(var(--gold-rgb)/0.12)]"
+                          : "text-[#666] bg-[rgb(var(--surface-2-rgb)/0.62)] hover:bg-[rgb(var(--surface-3-rgb)/0.82)]"
+                      }`}
+                    >
+                      Pricing
+                    </button>
+                  </>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search..."
-                className="bg-[#0a0a0a] border border-gold/25 text-cream font-cormorant px-3 py-2.5 text-base focus:outline-none focus:border-gold/50 transition-colors duration-200 placeholder:text-cream/46 w-52"
+                className="bg-[#0a0a0a] border border-gold/25 text-cream font-cormorant px-3 py-2.5 text-base focus:outline-none focus:border-gold/50 transition-colors duration-200 placeholder:text-cream/46 w-full md:w-52"
               />
-              <button
-                onClick={() => {
+              {pageScope === "main" && mainSection === "form_data" ? (
+                <button
+                  onClick={fetchContactSubmissions}
+                  className="shrink-0 min-w-[108px] whitespace-nowrap justify-start font-rajdhani text-[10px] tracking-[2.2px] md:tracking-[3px] uppercase bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink px-4 md:px-5 py-2.5 font-semibold hover:brightness-110 transition-all duration-200 flex items-center gap-2 shadow-[0_8px_24px_rgb(var(--gold-rgb)/0.22)]"
+                >
+                  <span>{contactLoading ? "Refreshing..." : "Refresh"}</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
                   setEditTarget(null)
                   if (pageScope === "main") {
-                    setModal(mainSection === "projects" ? "add_project" : "add_eco")
+                    if (mainSection === "projects") setModal("add_project")
+                    else if (mainSection === "services") setModal("add_service")
+                    else if (mainSection === "ecosystem") setModal("add_eco")
                   } else {
-                    setModal("add_studio_portfolio")
+                    if (studioSection === "portfolio") setModal("add_studio_portfolio")
+                    else if (studioSection === "services") setModal("add_studio_service")
+                    else setModal("add_studio_pricing")
                   }
                 }}
-                className="font-rajdhani text-[10px] tracking-[3px] uppercase bg-gold text-ink px-5 py-2.5 font-semibold hover:bg-gold-light transition-colors duration-200 flex items-center gap-2"
-              >
-                <span>+ Add</span>
-              </button>
+                className="shrink-0 min-w-[108px] whitespace-nowrap justify-start font-rajdhani text-[10px] tracking-[2.2px] md:tracking-[3px] uppercase px-4 md:px-5 py-2.5 font-semibold transition-all duration-200 flex items-center gap-2 shadow-[0_8px_24px_rgb(var(--gold-rgb)/0.22)] bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink hover:brightness-110"
+                >
+                  <span>+ Add</span>
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="p-8">
+          <div className="p-4 md:p-8">
             {/* Stats row */}
-            <div className="grid grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
               {(pageScope === "main"
                 ? (mainSection === "projects"
                     ? [
@@ -915,24 +1498,159 @@ export default function AdminDashboard() {
                         { label: "Live", val: projects.filter((p: any) => p.status === "live").length },
                         { label: "Other", val: projects.filter((p: any) => p.status !== "live").length },
                       ]
-                    : [
-                        { label: "Total Ecosystem", val: eco.length },
-                        { label: "Featured", val: eco.filter((e) => e.featured).length },
-                        { label: "Live", val: eco.filter((e) => e.status === "live").length },
-                        { label: "Other", val: eco.filter((e) => e.status !== "live").length },
-                      ])
-                : [
-                    { label: "Studio Cards", val: studioPortfolio.length },
-                    { label: "Live", val: studioPortfolio.filter((p) => p.status === "live").length },
-                    { label: "WIP", val: studioPortfolio.filter((p) => p.status === "wip").length },
-                    { label: "Concept", val: studioPortfolio.filter((p) => p.status === "concept").length },
-                  ]).map(stat => (
+                    : mainSection === "services"
+                      ? [
+                          { label: "Total Services", val: services.length },
+                          { label: "Core", val: services.filter((s) => s.tag.toLowerCase().includes("core")).length },
+                          { label: "Filtered", val: filteredServices.length },
+                          { label: "Search", val: search ? 1 : 0 },
+                        ]
+                    : mainSection === "ecosystem"
+                      ? [
+                          { label: "Total Ecosystem", val: eco.length },
+                          { label: "Featured", val: eco.filter((e) => e.featured).length },
+                          { label: "Live", val: eco.filter((e) => e.status === "live").length },
+                          { label: "Other", val: eco.filter((e) => e.status !== "live").length },
+                        ]
+                      : [
+                          { label: "Total Leads", val: contactSubmissions.length },
+                          { label: "Unread", val: contactSubmissions.filter((s) => !s.read).length },
+                          { label: "Read", val: contactSubmissions.filter((s) => s.read).length },
+                          { label: "Filtered", val: filteredContactSubmissions.length },
+                        ])
+                : (studioSection === "portfolio"
+                    ? [
+                        { label: "Studio Cards", val: studioPortfolio.length },
+                        { label: "Live", val: studioPortfolio.filter((p) => p.status === "live").length },
+                        { label: "WIP", val: studioPortfolio.filter((p) => p.status === "wip").length },
+                        { label: "Concept", val: studioPortfolio.filter((p) => p.status === "concept").length },
+                      ]
+                    : studioSection === "services"
+                      ? [
+                          { label: "Studio Services", val: studioServices.length },
+                          { label: "Filtered", val: filteredStudioServices.length },
+                          { label: "With Features", val: studioServices.filter((s) => s.features.length > 0).length },
+                          { label: "Search", val: search ? 1 : 0 },
+                        ]
+                      : [
+                          { label: "Pricing Cards", val: studioContent.plans.length },
+                          { label: "Highlighted", val: studioContent.plans.filter((p) => p.highlighted).length },
+                          { label: "Filtered", val: filteredStudioPricing.length },
+                          { label: "Search", val: search ? 1 : 0 },
+                        ])).map(stat => (
                 <div key={stat.label} className="border border-gold/10 bg-[#0a0a0a] p-5">
                   <div className="font-cinzel text-2xl text-gold font-black">{stat.val}</div>
                   <div className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#333] mt-1">{stat.label}</div>
                 </div>
               ))}
             </div>
+
+            {/* Main: Form Data */}
+            {pageScope === "main" && mainSection === "form_data" && (
+              <div className="space-y-4">
+                {contactLoading && (
+                  <div className="border border-gold/10 bg-[#0a0a0a] p-6">
+                    <p className="font-rajdhani text-[10px] tracking-[3px] uppercase text-gold/70">Loading submissions...</p>
+                  </div>
+                )}
+
+                {!contactLoading && filteredContactSubmissions.length === 0 && (
+                  <div className="border border-gold/10 p-12 text-center">
+                    <p className="font-cormorant text-[#333] text-lg">No form submissions found.</p>
+                  </div>
+                )}
+
+                {!contactLoading && filteredContactSubmissions.length > 0 && (
+                  <>
+                    <div className="hidden md:block border border-gold/10 bg-[#0a0a0a] overflow-hidden">
+                      <div className="grid grid-cols-[1.1fr_1.1fr_1fr_1.9fr_0.8fr_1.1fr_1.2fr] gap-3 px-5 py-3 border-b border-gold/10">
+                        <span className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#555]">Name</span>
+                        <span className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#555]">Email</span>
+                        <span className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#555]">Phone</span>
+                        <span className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#555]">Message</span>
+                        <span className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#555]">State</span>
+                        <span className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#555]">Received</span>
+                        <span className="font-rajdhani text-[9px] tracking-[3px] uppercase text-[#555]">Actions</span>
+                      </div>
+                      {filteredContactSubmissions.map((item) => (
+                        <div key={item.id} className="grid grid-cols-[1.1fr_1.1fr_1fr_1.9fr_0.8fr_1.1fr_1.2fr] gap-3 px-5 py-4 border-b border-gold/10 last:border-b-0 hover:bg-[rgb(var(--surface-1-rgb)/0.25)] transition-colors duration-200">
+                          <div className="min-w-0">
+                            <p className="font-cinzel text-sm text-cream truncate">{item.name}</p>
+                            <p className="font-rajdhani text-[8px] tracking-[2px] uppercase text-[#444] mt-1">{item.source}</p>
+                          </div>
+                          <a href={`mailto:${item.email}`} className="font-cormorant text-sm text-cream/80 hover:text-gold transition-colors duration-200 truncate">
+                            {item.email}
+                          </a>
+                          <a href={item.phone ? `tel:${item.phone}` : undefined} className="font-cormorant text-sm text-cream/80 hover:text-gold transition-colors duration-200 truncate pointer-events-auto">
+                            {item.phone || "-"}
+                          </a>
+                          <p className="font-cormorant text-sm text-[#555] line-clamp-2">{item.message}</p>
+                          <div>
+                            <span className={`font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-1 border ${item.read ? "border-emerald-400/35 text-emerald-300" : "border-amber-400/35 text-amber-300"}`}>
+                              {item.read ? "Read" : "Unread"}
+                            </span>
+                          </div>
+                          <p className="font-cormorant text-sm text-[#444]">{formatSubmissionDate(item.created_at)}</p>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => toggleReadSubmission(item.id, !item.read)}
+                              className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200"
+                            >
+                              {item.read ? "Unread" : "Read"}
+                            </button>
+                            <button
+                              onClick={() => { setDeleteTargetType("contact_submission"); setDeleteConfirm(item.id) }}
+                              className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200"
+                            >
+                              Del
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="md:hidden space-y-3">
+                      {filteredContactSubmissions.map((item) => (
+                        <div key={item.id} className="border border-gold/10 bg-[#0a0a0a] p-4">
+                          <div className="flex items-center justify-between gap-3 mb-3">
+                            <p className="font-cinzel text-base text-cream">{item.name}</p>
+                            <span className={`font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-1 border ${item.read ? "border-emerald-400/35 text-emerald-300" : "border-amber-400/35 text-amber-300"}`}>
+                              {item.read ? "Read" : "Unread"}
+                            </span>
+                          </div>
+                          <a href={`mailto:${item.email}`} className="block font-cormorant text-sm text-gold/80 mb-2">
+                            {item.email}
+                          </a>
+                          <a href={item.phone ? `tel:${item.phone}` : undefined} className="block font-cormorant text-sm text-gold/80 mb-2">
+                            {item.phone || "-"}
+                          </a>
+                          <p className="font-cormorant text-sm text-[#555] mb-3">{item.message}</p>
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="font-rajdhani text-[8px] tracking-[2px] uppercase text-[#444]">
+                              {formatSubmissionDate(item.created_at)}
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => toggleReadSubmission(item.id, !item.read)}
+                                className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200"
+                              >
+                                {item.read ? "Unread" : "Read"}
+                              </button>
+                              <button
+                                onClick={() => { setDeleteTargetType("contact_submission"); setDeleteConfirm(item.id) }}
+                                className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200"
+                              >
+                                Del
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Main: Projects */}
             {pageScope === "main" && mainSection === "projects" && (
@@ -964,16 +1682,52 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {project.link && (
                           <a href={project.link} target="_blank" rel="noreferrer"
-                            className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/10 text-[#444] hover:border-gold/30 hover:text-gold/60 transition-colors duration-200">
+                            className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.7)] text-cream/72 hover:bg-[rgb(var(--surface-3-rgb)/0.9)] hover:text-gold/80 transition-colors duration-200">
                             GH
                           </a>
                         )}
                         <button onClick={() => { setEditTarget(project); setModal("edit_project") }}
-                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/20 text-[#555] hover:border-gold hover:text-gold transition-colors duration-200">
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200">
                           Edit
                         </button>
                         <button onClick={() => { setDeleteTargetType("project"); setDeleteConfirm(project.id) }}
-                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-red-500/20 text-[#444] hover:border-red-500/50 hover:text-red-400 transition-colors duration-200">
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200">
+                          Del
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Main: Services */}
+            {pageScope === "main" && mainSection === "services" && (
+              <div className="space-y-3">
+                {filteredServices.length === 0 && (
+                  <div className="border border-gold/10 p-12 text-center">
+                    <p className="font-cormorant text-[#333] text-lg">No services found.</p>
+                  </div>
+                )}
+                {filteredServices.map((service) => (
+                  <div key={service.id} className="border border-gold/10 bg-[#0a0a0a] p-5 hover:border-gold/20 transition-colors duration-200">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-2 flex-wrap">
+                          <span className="font-cinzel text-base text-cream font-bold">{service.title}</span>
+                          <span className="font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-0.5 border border-gold/20 text-gold/50">
+                            {service.tag || "service"}
+                          </span>
+                        </div>
+                        <p className="font-cormorant text-[#444] text-sm line-clamp-2">{service.desc}</p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button onClick={() => { setEditTarget(service); setModal("edit_service") }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200">
+                          Edit
+                        </button>
+                        <button onClick={() => { setDeleteTargetType("service"); setDeleteConfirm(service.id) }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200">
                           Del
                         </button>
                       </div>
@@ -1008,11 +1762,11 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <button onClick={() => { setEditTarget(item); setModal("edit_eco") }}
-                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/20 text-[#555] hover:border-gold hover:text-gold transition-colors duration-200">
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200">
                           Edit
                         </button>
                         <button onClick={() => { setDeleteTargetType("eco"); setDeleteConfirm(item.id) }}
-                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-red-500/20 text-[#444] hover:border-red-500/50 hover:text-red-400 transition-colors duration-200">
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200">
                           Del
                         </button>
                       </div>
@@ -1042,15 +1796,102 @@ export default function AdminDashboard() {
                           </span>
                         </div>
                         <p className="font-cormorant text-[#444] text-sm mb-2 line-clamp-2">{item.desc}</p>
-                        <p className="font-cormorant text-[#333] text-sm">{item.metric}</p>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <button onClick={() => { setEditTarget(item); setModal("edit_studio_portfolio") }}
-                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-gold/20 text-[#555] hover:border-gold hover:text-gold transition-colors duration-200">
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200">
                           Edit
                         </button>
                         <button onClick={() => { setDeleteTargetType("studio_portfolio"); setDeleteConfirm(item.id) }}
-                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 border border-red-500/20 text-[#444] hover:border-red-500/50 hover:text-red-400 transition-colors duration-200">
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200">
+                          Del
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Studio: Services */}
+            {pageScope === "studio" && studioSection === "services" && (
+              <div className="space-y-3">
+                {filteredStudioServices.length === 0 && (
+                  <div className="border border-gold/10 p-12 text-center">
+                    <p className="font-cormorant text-[#333] text-lg">No studio service cards found.</p>
+                  </div>
+                )}
+                {filteredStudioServices.map((item) => (
+                  <div key={item.id} className="border border-gold/10 bg-[#0a0a0a] p-5 hover:border-gold/20 transition-colors duration-200">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-2 flex-wrap">
+                          <span className="font-cinzel text-base text-cream font-bold">{item.title}</span>
+                          <span className="font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-0.5 border border-gold/20 text-gold/50">
+                            {item.tag}
+                          </span>
+                        </div>
+                        <p className="font-cormorant text-[#444] text-sm mb-2 line-clamp-2">{item.desc}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {item.features.map((f) => (
+                            <span key={f} className="font-rajdhani text-[8px] tracking-[1px] uppercase text-[#333] border border-[#1a1a1a] px-2 py-0.5">{f}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button onClick={() => { setEditTarget(item); setModal("edit_studio_service") }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200">
+                          Edit
+                        </button>
+                        <button onClick={() => { setDeleteTargetType("studio_service"); setDeleteConfirm(item.id) }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200">
+                          Del
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Studio: Pricing */}
+            {pageScope === "studio" && studioSection === "pricing" && (
+              <div className="space-y-3">
+                {filteredStudioPricing.length === 0 && (
+                  <div className="border border-gold/10 p-12 text-center">
+                    <p className="font-cormorant text-[#333] text-lg">No pricing cards found.</p>
+                  </div>
+                )}
+                {filteredStudioPricing.map((plan) => (
+                  <div key={plan.id} className="border border-gold/10 bg-[#0a0a0a] p-5 hover:border-gold/20 transition-colors duration-200">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-2 flex-wrap">
+                          <span className="font-cinzel text-base text-cream font-bold">{plan.tier}</span>
+                          <span className="font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-0.5 border border-gold/20 text-gold/50">
+                            {plan.tag}
+                          </span>
+                          {plan.highlighted && (
+                            <span className="font-rajdhani text-[8px] tracking-[2px] uppercase px-2 py-0.5 border border-gold/40 text-gold">
+                              Highlighted
+                            </span>
+                          )}
+                        </div>
+                        <p className="font-cormorant text-[#444] text-sm mb-2">{plan.bestFor}</p>
+                        <p className="font-cormorant text-[#333] text-sm mb-2">₹{Number(plan.price || 0).toLocaleString("en-IN")}{plan.priceSuffix || ""} - {plan.meta}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {plan.features.map((f) => (
+                            <span key={f} className="font-rajdhani text-[8px] tracking-[1px] uppercase text-[#333] border border-[#1a1a1a] px-2 py-0.5">{f}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button onClick={() => { setEditTarget(plan); setModal("edit_studio_pricing") }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(var(--surface-2-rgb)/0.8)] text-cream/82 hover:bg-[rgb(var(--surface-3-rgb)/0.92)] hover:text-gold transition-colors duration-200">
+                          Edit
+                        </button>
+                        <button onClick={() => { setDeleteTargetType("studio_pricing"); setDeleteConfirm(plan.id) }}
+                          className="font-rajdhani text-[9px] tracking-[2px] uppercase px-3 py-1.5 bg-[rgb(127_29_29/0.35)] text-red-300 hover:bg-[rgb(127_29_29/0.5)] transition-colors duration-200">
                           Del
                         </button>
                       </div>
@@ -1066,4 +1907,6 @@ export default function AdminDashboard() {
     </div>
   )
 }
+
+
 

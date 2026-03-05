@@ -7,7 +7,7 @@ const SCRAMBLE_CHARS = "!<>-_\\/[]{}=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 function useScramble(text: string) {
   const [display, setDisplay] = useState(text)
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number | null>(null)
 
   const scramble = () => {
     let frame = 0
@@ -34,7 +34,7 @@ function useScramble(text: string) {
   }
 
   const reset = () => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
     setDisplay(text)
   }
 

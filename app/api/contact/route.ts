@@ -23,6 +23,7 @@ export async function POST(req: Request) {
     const email = body.email?.trim() ?? ""
     const phone = body.phone?.trim() ?? ""
     const message = body.message?.trim() ?? ""
+    const source = body.source?.trim() || "shubiq"
 
     if (!name || !email || !message) {
       return NextResponse.json({ ok: false, error: "Missing required fields" }, { status: 400 })
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
       email,
       phone: phone || null,
       message,
-      source: body.source?.trim() || "shubiq",
+      source,
       business_type: "General Inquiry",
       status: "New",
     }

@@ -260,7 +260,7 @@ function MagneticButton({ children, onClick, primary }: { children: React.ReactN
       onMouseLeave={isDesktopInteractions ? handleMouseLeave : undefined}
       className={`w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 ${
         primary
-          ? `bg-gold text-ink border border-gold/70 ${isDesktopInteractions ? "hover:bg-gold-light hover:shadow-[0_0_26px_rgb(var(--gold-rgb)_/_0.25)]" : ""}`
+          ? `max-[768px]:rounded-sm max-[768px]:text-[13px] max-[768px]:tracking-[3.2px] max-[768px]:border-gold/70 max-[768px]:bg-gold max-[768px]:text-ink max-[768px]:py-3.5 bg-gold text-ink border border-gold/70 ${isDesktopInteractions ? "hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]" : ""}`
           : `border border-gold/30 text-cream ${isDesktopInteractions ? "hover:border-gold hover:text-gold hover:bg-gold/6" : ""}`
       }`}
     >

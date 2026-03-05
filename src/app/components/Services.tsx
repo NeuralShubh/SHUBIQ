@@ -1,14 +1,45 @@
 "use client"
-import { useEffect, useRef } from "react"
-import { ArrowRight, Bot, Code2, LayoutDashboard, Smartphone } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone, Wrench } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
+import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 
 const SERVICE_ICONS = [Code2, LayoutDashboard, Bot, Smartphone]
+const MAIN_SERVICE_ICON_MAP: Record<string, LucideIcon> = {
+  code: Code2,
+  web: Code2,
+  development: Code2,
+  layout: LayoutDashboard,
+  dashboard: LayoutDashboard,
+  bot: Bot,
+  ai: Bot,
+  phone: Smartphone,
+  app: Smartphone,
+  globe: Globe,
+  layers: Layers,
+  tools: Wrench,
+  cpu: Cpu,
+  "?": Code2,
+}
 
-function TiltCard({ service, index }: { service: typeof SERVICES[0]; index: number }) {
+const resolveServiceIcon = (icon: string, index: number) => {
+  const key = (icon || "").trim().toLowerCase()
+  return MAIN_SERVICE_ICON_MAP[key] || SERVICE_ICONS[index % SERVICE_ICONS.length] || Code2
+}
+type MainService = {
+  id?: string
+  icon: string
+  title: string
+  desc: string
+  tag: string
+  order_index?: number
+}
+
+function TiltCard({ service, index }: { service: MainService; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
-  const Icon = SERVICE_ICONS[index] ?? Code2
+  const Icon = resolveServiceIcon(service.icon, index)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const glow = glowRef.current
@@ -103,6 +134,28 @@ export default function Services() {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
+  const [items, setItems] = useState<MainService[]>(SERVICES)
+
+  useEffect(() => {
+    const load = async () => {
+      if (!SUPABASE_ENABLED) return
+      try {
+        const { data, error } = await supabase.from("services").select("*").order("order_index", { ascending: true })
+        if (error || !data?.length) return
+        setItems(data.map((row: any) => ({
+          id: String(row.id),
+          icon: row.icon ?? "?",
+          title: row.title ?? "",
+          desc: row.desc ?? "",
+          tag: row.tag ?? "",
+          order_index: Number(row.order_index ?? 0),
+        })))
+      } catch {
+        // no-op fallback to static data
+      }
+    }
+    load()
+  }, [])
 
   useEffect(() => {
     const init = async () => {
@@ -182,7 +235,7 @@ export default function Services() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">
-          {SERVICES.map((service, i) => (
+          {items.map((service, i) => (
             <TiltCard key={service.title} service={service} index={i} />
           ))}
         </div>

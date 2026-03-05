@@ -10,13 +10,15 @@ export default function MagneticCursor() {
   const [isClicking, setIsClicking] = useState(false)
   const pos = useRef({ x: -100, y: -100 })
   const ring = useRef({ x: -100, y: -100 })
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number | null>(null)
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
     if (typeof window === "undefined") return
-    const hasTouch = "ontouchstart" in window
-    const shouldEnable = window.innerWidth >= 768 && !hasTouch
+    const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0
+    const hasFinePointer = window.matchMedia("(pointer: fine)").matches
+    const canHover = window.matchMedia("(hover: hover)").matches
+    const shouldEnable = window.innerWidth >= 1024 && !hasTouch && hasFinePointer && canHover
     setEnabled(shouldEnable)
   }, [pathname])
 
@@ -72,7 +74,7 @@ export default function MagneticCursor() {
       window.removeEventListener("mousemove", onMove)
       window.removeEventListener("mousedown", onDown)
       window.removeEventListener("mouseup", onUp)
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
     }
   }, [enabled, isHovering])
 

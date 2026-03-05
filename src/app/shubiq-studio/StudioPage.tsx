@@ -4,7 +4,8 @@ import { motion } from "framer-motion"
 import StudioNavbar from "./StudioNavbar"
 import Footer from "../components/Footer"
 import GoldLine from "../components/GoldLine"
-import { DEFAULT_STUDIO_CONTENT, STUDIO_CONTENT_STORAGE_KEY, type StudioContent } from "./studioContent"
+import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
+import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 import {
   Code2,
   LayoutDashboard,
@@ -78,7 +79,6 @@ type StudioPortfolioProject = {
   metric: string
 }
 
-const STUDIO_PORTFOLIO_STORAGE_KEY = "shubiq_studio_portfolio"
 
 const PORTFOLIO: StudioPortfolioProject[] = [
   {
@@ -112,45 +112,73 @@ const PORTFOLIO: StudioPortfolioProject[] = [
     metric: "Coming Soon",
   },
 ]
+const STUDIO_SERVICE_ICON_MAP = {
+  code: Code2,
+  layout: LayoutDashboard,
+  bot: Bot,
+  phone: Smartphone,
+  globe: Globe,
+  layers: Layers,
+} as const
 
-function loadStudioPortfolioProjects(): StudioPortfolioProject[] {
-  if (typeof window === "undefined") return PORTFOLIO
-  try {
-    const raw = window.localStorage.getItem(STUDIO_PORTFOLIO_STORAGE_KEY)
-    if (!raw) return PORTFOLIO
-    const parsed = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return PORTFOLIO
-    return parsed
-  } catch {
-    return PORTFOLIO
-  }
+type StudioService = {
+  iconKey: keyof typeof STUDIO_SERVICE_ICON_MAP
+  title: string
+  tag: string
+  desc: string
+  features: string[]
 }
+
+const DEFAULT_STUDIO_SERVICES: StudioService[] = [
+  {
+    iconKey: "code",
+    title: "High-Performance Web Platforms",
+    tag: "Core",
+    desc: "Engineered for speed and scale, high-performance platforms built to convert, scale, and dominate competitive markets.",
+    features: ["Modern frontend architecture", "Secure backend infrastructure", "Performance-first engineering"],
+  },
+  {
+    iconKey: "layout",
+    title: "Custom Software Architecture",
+    tag: "Agency",
+    desc: "Designed to solve complex operational challenges with scalable, data-driven architecture aligned to business execution.",
+    features: ["Scalable system design", "Data-driven infrastructure", "Secure access control"],
+  },
+  {
+    iconKey: "bot",
+    title: "Applied AI Systems",
+    tag: "Intelligence",
+    desc: "Integrated AI systems and intelligent automation unlock measurable efficiency and strategic advantage.",
+    features: ["AI workflow integration", "Smart data pipelines", "Intelligent automation systems"],
+  },
+  {
+    iconKey: "phone",
+    title: "Scalable Application Systems",
+    tag: "Product",
+    desc: "Production-grade application systems engineered for long-term scalability and performance resilience.",
+    features: ["Web & mobile platforms", "Optimized performance", "Deployment & lifecycle support"],
+  },
+  {
+    iconKey: "globe",
+    title: "Digital Brand Infrastructure",
+    tag: "Growth",
+    desc: "Structured digital ecosystems convert attention into authority, trust, and sustainable growth.",
+    features: ["Conversion-focused landing systems", "Portfolio & brand platforms", "Analytics & optimization"],
+  },
+  {
+    iconKey: "layers",
+    title: "Design & Component Architecture",
+    tag: "Foundation",
+    desc: "Structured design systems and component architecture ensuring speed, consistency, and scalable product growth.",
+    features: ["Component libraries", "Design token systems", "Documentation & governance"],
+  },
+]
 
 const PRICING_ICON_MAP = {
   zap: Zap,
   trending: TrendingUp,
   shield: Shield,
 } as const
-
-function loadStudioContent(): StudioContent {
-  if (typeof window === "undefined") return DEFAULT_STUDIO_CONTENT
-  try {
-    const raw = window.localStorage.getItem(STUDIO_CONTENT_STORAGE_KEY)
-    if (!raw) return DEFAULT_STUDIO_CONTENT
-    const parsed = JSON.parse(raw) as Partial<StudioContent>
-    if (!parsed || !Array.isArray(parsed.plans)) return DEFAULT_STUDIO_CONTENT
-    return {
-      ...DEFAULT_STUDIO_CONTENT,
-      ...parsed,
-      plans: parsed.plans.map((plan, index) => ({
-        ...DEFAULT_STUDIO_CONTENT.plans[index],
-        ...plan,
-      })),
-    }
-  } catch {
-    return DEFAULT_STUDIO_CONTENT
-  }
-}
 
 // â”€â”€â”€ Section Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -362,6 +390,27 @@ function StudioServices() {
   const headingRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const [services, setServices] = useState<StudioService[]>(DEFAULT_STUDIO_SERVICES)
+
+  useEffect(() => {
+    const load = async () => {
+      if (!SUPABASE_ENABLED) return
+      try {
+        const { data, error } = await supabase.from("studio_services").select("*").order("order_index", { ascending: true })
+        if (error || !data?.length) return
+        setServices(data.map((row: any) => ({
+          iconKey: (row.icon_key ?? "code") as StudioService["iconKey"],
+          title: row.title ?? "",
+          tag: row.tag ?? "",
+          desc: row.desc ?? "",
+          features: Array.isArray(row.features) ? row.features : [],
+        })))
+      } catch {
+        // no-op fallback to defaults
+      }
+    }
+    load()
+  }, [])
 
   useEffect(() => {
     const init = async () => {
@@ -413,8 +462,8 @@ function StudioServices() {
         </div>
 
         <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4.5 max-sm:gap-4 sm:gap-6">
-          {STUDIO_SERVICES.map((service, index) => {
-            const Icon = service.icon
+          {services.map((service, index) => {
+            const Icon = STUDIO_SERVICE_ICON_MAP[service.iconKey] ?? Code2
             return (
               <ServiceCard
                 key={service.title}
@@ -439,7 +488,7 @@ function ServiceCard({
   isDimmed,
   onHoverChange,
 }: {
-  service: (typeof STUDIO_SERVICES)[0]
+  service: StudioService
   index: number
   Icon: React.ElementType
   isDimmed: boolean
@@ -534,7 +583,27 @@ function StudioPortfolio() {
   const [portfolioProjects, setPortfolioProjects] = useState<StudioPortfolioProject[]>(PORTFOLIO)
 
   useEffect(() => {
-    setPortfolioProjects(loadStudioPortfolioProjects())
+    const load = async () => {
+      if (!SUPABASE_ENABLED) return
+      try {
+        const { data, error } = await supabase.from("studio_portfolio").select("*").order("order_index", { ascending: true })
+        if (error || !data?.length) return
+        setPortfolioProjects(data.map((row: any) => ({
+          id: String(row.id),
+          name: row.name ?? "",
+          tag: row.tag ?? "",
+          desc: row.desc ?? "",
+          impact: row.impact ?? "",
+          tech: Array.isArray(row.tech) ? row.tech : [],
+          link: row.link ?? "",
+          status: (row.status ?? "live") as StudioPortfolioProject["status"],
+          metric: row.metric ?? "",
+        })))
+      } catch {
+        // no-op fallback to defaults
+      }
+    }
+    load()
   }, [])
 
   useEffect(() => {
@@ -703,6 +772,7 @@ function ProjectCard({ project, index }: { project: StudioPortfolioProject; inde
 
 function StudioPricing({ content }: { content: StudioContent }) {
   const scrollToContact = () => document.getElementById("studio-contact-anchor")?.scrollIntoView({ behavior: "smooth" })
+  const pricingPlans = content.plans?.length ? content.plans : DEFAULT_STUDIO_CONTENT.plans
 
   return (
     <section id="studio-pricing" className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden">
@@ -736,16 +806,15 @@ function StudioPricing({ content }: { content: StudioContent }) {
         </motion.div>
 
         <motion.div
-          initial="hidden"
+          initial="visible"
           whileInView="visible"
           viewport={{ once: true }}
           variants={{
-            hidden: {},
             visible: { transition: { staggerChildren: 0.15 } },
           }}
           className="grid grid-cols-1 md:[grid-template-columns:1.03fr_1.08fr_1.03fr] gap-5 max-sm:gap-4.5 sm:gap-7 items-center"
         >
-          {content.plans.map((plan) => {
+          {pricingPlans.map((plan) => {
             const Icon = PRICING_ICON_MAP[plan.icon] ?? TrendingUp
             return (
               <motion.article
@@ -847,7 +916,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
 function StudioContactCTA({ content }: { content: StudioContent }) {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
-  const [form, setForm] = useState({ name: "", email: "", project: "", budget: "" })
+  const [form, setForm] = useState({ name: "", email: "", phone: "", project: "", budget: "" })
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState("")
@@ -881,13 +950,14 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
         body: JSON.stringify({
           name: form.name.trim(),
           email: form.email.trim(),
+          phone: form.phone.trim(),
           message: `[SHUBIQ Studio Inquiry]\nProject: ${form.project}\nBudget: ${form.budget}`,
-          source: "shubiq-studio",
+          source: "studio",
         }),
       })
       if (!res.ok) throw new Error("Failed")
       setSent(true)
-      setForm({ name: "", email: "", project: "", budget: "" })
+      setForm({ name: "", email: "", phone: "", project: "", budget: "" })
     } catch {
       setError("Unable to submit right now. Please try again or email us directly.")
     } finally {
@@ -896,7 +966,7 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
   }
 
   const inputClass =
-    "w-full rounded-[10px] sm:rounded-[6px] bg-[rgb(var(--surface-2-rgb)/0.56)] sm:bg-[rgb(var(--surface-1-rgb)/0.82)] border border-[rgb(var(--cream-rgb)/0.16)] sm:border-[rgb(var(--cream-rgb)/0.12)] text-cream/94 font-cormorant text-[16px] sm:text-[17px] px-4 py-3 sm:py-3.5 focus:outline-none focus:border-gold/50 focus:bg-[rgb(var(--surface-2-rgb)/0.9)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.12),0_0_10px_rgb(var(--gold-rgb)_/_0.08)] transition-all duration-300 ease-out placeholder:text-cream/44 sm:placeholder:text-cream/32"
+    "w-full rounded-[10px] sm:rounded-[6px] bg-[rgb(var(--surface-2-rgb)/0.56)] sm:bg-[rgb(var(--surface-1-rgb)/0.82)] border border-[rgb(var(--cream-rgb)/0.16)] sm:border-[rgb(var(--cream-rgb)/0.12)] text-cream/94 font-cormorant text-[16px] sm:text-[17px] px-5 py-3 sm:py-3.5 focus:outline-none focus:border-gold/50 focus:bg-[rgb(var(--surface-2-rgb)/0.9)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.12),0_0_10px_rgb(var(--gold-rgb)_/_0.08)] transition-all duration-300 ease-out placeholder:text-cream/44 sm:placeholder:text-cream/32"
 
   return (
     <section id="studio-contact" ref={sectionRef} className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-4 sm:px-6 relative overflow-hidden">
@@ -944,19 +1014,19 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
 
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-3.5 sm:mb-4">
                 <div>
-                  <label className="block font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
+                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
                     Your Name *
                   </label>
                   <input
                     required
                     value={form.name}
                     onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    placeholder="Your name"
+                    placeholder="Enter your name"
                     className={inputClass}
                   />
                 </div>
                 <div>
-                  <label className="block font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
+                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
                     Email Address *
                   </label>
                   <input
@@ -970,8 +1040,36 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
                 </div>
               </div>
 
-              <div className="mb-3.5 sm:mb-4">
-                <label className="block font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-3.5 sm:mb-4">
+                <div>
+                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    required
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                    placeholder="+91 98765 43210"
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
+                    Estimated Cost
+                  </label>
+                  <input
+                    type="text"
+                    value={form.budget}
+                    onChange={(e) => setForm((f) => ({ ...f, budget: e.target.value }))}
+                    placeholder="Enter your estimated budget"
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6 sm:mb-6">
+                <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
                   Project Description *
                 </label>
                 <textarea
@@ -984,19 +1082,6 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
                 />
               </div>
 
-              <div className="mb-6 sm:mb-6">
-                <label className="block font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
-                  Estimated Budget
-                </label>
-                <input
-                  type="text"
-                  value={form.budget}
-                  onChange={(e) => setForm((f) => ({ ...f, budget: e.target.value }))}
-                  placeholder="e.g., ₹50,000 - ₹1,20,000"
-                  className={inputClass}
-                />
-              </div>
-
               {error && (
                 <p className="font-rajdhani text-[12px] tracking-[1.5px] text-red-400/80 mb-4">{error}</p>
               )}
@@ -1004,7 +1089,7 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full mt-1 rounded-[10px] sm:rounded-[6px] font-rajdhani text-[12px] sm:text-[13px] tracking-[1.4px] sm:tracking-[3.2px] uppercase bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3 sm:py-3.5 font-semibold transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full mt-1 rounded-[10px] sm:rounded-[6px] font-rajdhani text-[12px] sm:text-[13px] tracking-[1.4px] sm:tracking-[3.2px] uppercase border border-gold/70 bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3 sm:py-3.5 font-semibold transition-all duration-300 md:hover:bg-gold-light md:hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] md:hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {sending ? "Sending..." : content.contactSubmitText}
                 {!sending && <ArrowRight size={15} />}
@@ -1027,7 +1112,32 @@ export default function StudioPage() {
   const [studioContent, setStudioContent] = useState<StudioContent>(DEFAULT_STUDIO_CONTENT)
 
   useEffect(() => {
-    setStudioContent(loadStudioContent())
+    const load = async () => {
+      if (!SUPABASE_ENABLED) return
+      try {
+        const { data, error } = await supabase.from("studio_pricing_plans").select("*").order("order_index", { ascending: true })
+        if (error || !data?.length) return
+        setStudioContent((prev) => ({
+          ...prev,
+          plans: data.map((row: any) => ({
+            id: String(row.id),
+            tier: row.tier ?? "",
+            tag: row.tag ?? "",
+            bestFor: row.best_for ?? "",
+            price: Number(row.price ?? 0),
+            priceSuffix: row.price_suffix ?? "",
+            meta: row.meta ?? "",
+            features: Array.isArray(row.features) ? row.features : [],
+            cta: row.cta ?? "Get Started",
+            highlighted: !!row.highlighted,
+            icon: (row.icon ?? "trending") as "zap" | "trending" | "shield",
+          })),
+        }))
+      } catch {
+        // no-op fallback to defaults
+      }
+    }
+    load()
   }, [])
 
   return (
