@@ -1,5 +1,5 @@
 # SHUBIQ
-
+ 
 **Intelligence That Wins**
 
 SHUBIQ is a digital engineering brand focused on building high-performance digital systems for ambitious brands and founders.
