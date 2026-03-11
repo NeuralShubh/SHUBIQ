@@ -1,1 +1,1 @@
-export { default, metadata } from "../../src/app/shubiq-labs/page"
+export { default } from "../../src/app/shubiq-labs/page"
