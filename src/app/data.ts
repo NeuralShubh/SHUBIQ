@@ -102,7 +102,7 @@ export const ECOSYSTEM_ITEMS = [
     icon: "?",
     color: "rgb(var(--gold-dark-rgb))",
     status: "in_dev",
-    link: "/#projects",
+    link: "/shubiq-labs",
     tags: [],
     featured: false,
     order_index: 1,
