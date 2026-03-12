@@ -17,5 +17,30 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <ShubiqStudioPage />
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "SHUBIQ Studio - Digital Engineering",
+    provider: {
+      "@type": "Organization",
+      name: "SHUBIQ",
+      url: siteUrl,
+    },
+    areaServed: "Worldwide",
+    serviceType: [
+      "Web Development",
+      "Custom Software",
+      "AI Integration",
+      "App Development",
+      "Digital Brand Infrastructure",
+    ],
+    url: `${siteUrl}/shubiq-studio`,
+  }
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
+      <ShubiqStudioPage />
+    </>
+  )
 }

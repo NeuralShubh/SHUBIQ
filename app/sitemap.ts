@@ -9,5 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/shubiq-studio`, lastModified },
     { url: `${siteUrl}/shubiq-labs`, lastModified },
     { url: `${siteUrl}/shubiq-labs/shubiq-flow`, lastModified },
+    { url: `${siteUrl}/founder`, lastModified },
   ]
 }

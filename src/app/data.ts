@@ -110,10 +110,10 @@ export const ECOSYSTEM_ITEMS = [
 ];
 
 export const SOCIAL_LINKS = [
-  { label: "GitHub", url: "https://github.com/NeuralShubh", handle: "NeuralShubh" },
-  { label: "Twitter / X", url: "https://x.com/NeuralShubh", handle: "@NeuralShubh" },
-  { label: "LinkedIn", url: "https://linkedin.com/in/neuralshubh/", handle: "in/neuralshubh" },
-  { label: "Instagram", url: "https://instagram.com/shubham.bnb", handle: "@shubham.bnb" },
+  { label: "GitHub", url: "https://github.com/shubiqofficial", handle: "shubiqofficial" },
+  { label: "Twitter / X", url: "https://x.com/shubiqofficial", handle: "@shubiqofficial" },
+  { label: "LinkedIn", url: "https://linkedin.com/company/shubiqofficial", handle: "shubiqofficial" },
+  { label: "Instagram", url: "https://instagram.com/shubiqofficial", handle: "@shubiqofficial" },
 ];
 
 export const NAV_LINKS = ["Home", "About", "Services", "Projects", "Ecosystem", "Studio", "Contact"];

@@ -70,10 +70,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       name: "Shubham",
     },
     sameAs: [
-      "https://github.com/NeuralShubh",
-      "https://x.com/NeuralShubh",
-      "https://instagram.com/neuralshubh",
-      "https://linkedin.com/in/neuralshubh/",
+      "https://github.com/shubiqofficial",
+      "https://x.com/shubiqofficial",
+      "https://instagram.com/shubiqofficial",
+      "https://linkedin.com/company/shubiqofficial",
     ],
   }
 

@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link"
 import { Github, Instagram, Linkedin, Twitter, type LucideIcon } from "lucide-react"
 import { SOCIAL_LINKS } from "../data"
 
@@ -15,15 +16,28 @@ export default function Footer() {
     <footer className="relative border-t border-gold/10 py-10 sm:py-12 px-4 sm:px-6 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgb(var(--gold-rgb)/0.04),transparent_45%)]" />
 
-      <div className="max-w-7xl mx-auto relative grid gap-5 md:grid-cols-3 md:items-center">
-        <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4">
+      <div className="max-w-7xl mx-auto relative grid gap-6 md:grid-cols-3 md:items-center">
+        <div className="flex flex-col items-center md:items-start gap-3 sm:gap-4">
+          <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4">
           <span className="font-cinzel font-black tracking-[6.5px] text-gold text-sm footer-brand-glow">SHUBIQ</span>
           <span className="text-cream/55 text-sm">&middot;</span>
           <span className="font-rajdhani text-[11px] sm:text-[12px] tracking-[3.3px] uppercase text-cream/78">Intelligence That Wins</span>
         </div>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 text-[10px] sm:text-[11px] font-rajdhani tracking-[2.5px] uppercase text-cream/60">
+            {[
+              { label: "Studio", href: "/shubiq-studio" },
+              { label: "Labs", href: "/shubiq-labs" },
+              { label: "Founder", href: "/founder" },
+            ].map((item) => (
+              <Link key={item.label} href={item.href} className="hover:text-gold transition-colors duration-200">
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <div className="text-center font-rajdhani text-[11px] sm:text-[12px] tracking-[3px] uppercase text-cream/68">
-          &copy; {year} Shubham. All rights reserved.
+          &copy; {year} SHUBIQ. All rights reserved.
         </div>
 
         <div className="flex items-center justify-center md:justify-end gap-3 sm:gap-4">
