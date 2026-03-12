@@ -10,16 +10,85 @@ const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cor
 const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", weight: ["300", "400", "500", "600", "700"] })
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", weight: ["500", "700", "900"] })
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
+
 export const metadata: Metadata = {
-  title: "SHUBIQ: Intelligence That Wins",
-  description: "SHUBIQ is a digital product and intelligence studio delivering web platforms, apps, AI systems, and scalable solutions for modern businesses.",
-  keywords: ["web development", "mobile apps", "AI solutions", "digital product studio", "SHUBIQ"],
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "SHUBIQ: Intelligence That Wins",
+    template: "%s | SHUBIQ",
+  },
+  description: "SHUBIQ builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
+  applicationName: "SHUBIQ",
+  creator: "Shubham",
+  publisher: "SHUBIQ",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "SHUBIQ",
+    title: "SHUBIQ: Intelligence That Wins",
+    description: "SHUBIQ builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "SHUBIQ",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SHUBIQ: Intelligence That Wins",
+    description: "SHUBIQ builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
+    images: ["/opengraph-image"],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const orgJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "SHUBIQ",
+    url: siteUrl,
+    founder: {
+      "@type": "Person",
+      name: "Shubham",
+    },
+    sameAs: [
+      "https://github.com/NeuralShubh",
+      "https://x.com/NeuralShubh",
+      "https://instagram.com/neuralshubh",
+      "https://linkedin.com/in/neuralshubh/",
+    ],
+  }
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "SHUBIQ",
+    url: siteUrl,
+  }
+
   return (
     <html lang="en">
       <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable} ${orbitron.variable}`}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <ThemeInit />
         <MagneticCursor />
         <SmoothScroll>{children}</SmoothScroll>
