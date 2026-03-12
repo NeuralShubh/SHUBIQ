@@ -24,9 +24,9 @@ SHUBIQ is a digital engineering brand focused on building high-performance digit
 
 ## Connect
 
-- Website: `https://shubiq.vercel.app/`
-- Email: `shubham95792@gmail.com`
-- GitHub: `https://github.com/NeuralShubh`
-- X: `https://x.com/NeuralShubh`
-- LinkedIn: `https://linkedin.com/in/neuralshubh/`
-- Instagram: `https://instagram.com/neuralshubh`
+- Website: `https://shubiq.com/`
+- Email: `shubiqofficial@gmail.com`
+- GitHub: `https://github.com/shubiqofficial`
+- X: `https://x.com/shubiqofficial`
+- LinkedIn: `https://www.linkedin.com/in/shubiq/`
+- Instagram: `https://www.instagram.com/shubiqofficial/`
