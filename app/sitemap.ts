@@ -10,5 +10,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/shubiq-labs`, lastModified },
     { url: `${siteUrl}/shubiq-labs/shubiq-flow`, lastModified },
     { url: `${siteUrl}/founder`, lastModified },
+    { url: `${siteUrl}/blog`, lastModified },
+    { url: `${siteUrl}/blog/productivity-system-2026`, lastModified },
+    { url: `${siteUrl}/blog/deep-focus-stack`, lastModified },
+    { url: `${siteUrl}/blog/ai-workflows-for-teams`, lastModified },
+    { url: `${siteUrl}/services/web-development`, lastModified },
+    { url: `${siteUrl}/services/software-solutions`, lastModified },
+    { url: `${siteUrl}/services/ai-integration`, lastModified },
+    { url: `${siteUrl}/services/app-building`, lastModified },
   ]
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
@@ -18,10 +19,10 @@ export default function FounderPage() {
     },
     url: `${siteUrl}/founder`,
     sameAs: [
-      "https://github.com/shubiqofficial",
-      "https://x.com/shubiqofficial",
-      "https://instagram.com/shubiqofficial",
-      "https://linkedin.com/company/shubiqofficial",
+      "https://github.com/NeuralShubh",
+      "https://x.com/NeuralShubh",
+      "https://www.instagram.com/shubham.bnb/",
+      "https://www.linkedin.com/in/neuralshubh/",
     ],
   }
 
@@ -37,31 +38,46 @@ export default function FounderPage() {
                 "radial-gradient(ellipse at 35% 18%, rgb(var(--gold-rgb) / 0.1) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgb(var(--gold-light-rgb) / 0.08) 0%, transparent 55%)",
             }}
           />
-          <div className="max-w-5xl mx-auto relative">
-            <div className="inline-flex items-center gap-2 border border-gold/20 bg-gold/[0.04] px-3.5 py-2 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold/80" />
-              <span className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/80">Founder</span>
+          <div className="max-w-5xl mx-auto relative grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 border border-gold/20 bg-gold/[0.04] px-3.5 py-2 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold/80" />
+                <span className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/80">Founder</span>
+              </div>
+              <h1 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6vw,68px)] mb-4">
+                Shubham
+                <span className="text-gold"> - Founder of SHUBIQ</span>
+              </h1>
+              <p className="font-cormorant text-cream/78 leading-[1.7] max-w-[680px]" style={{ fontSize: "clamp(16px,1.4vw,20px)" }}>
+                Shubham leads SHUBIQ Studio and SHUBIQ Labs, building high-performance digital platforms and productivity systems that help teams execute with clarity and speed.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/shubiq-studio"
+                  className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/70 bg-gold text-ink px-5 py-3 hover:bg-gold-light transition-all duration-300"
+                >
+                  Explore Studio
+                </Link>
+                <Link
+                  href="/shubiq-labs"
+                  className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.25)] px-5 py-3 text-cream/80 hover:text-gold hover:border-gold transition-all duration-300"
+                >
+                  Explore Labs
+                </Link>
+              </div>
             </div>
-            <h1 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6vw,68px)] mb-4">
-              Shubham
-              <span className="text-gold"> - Founder of SHUBIQ</span>
-            </h1>
-            <p className="font-cormorant text-cream/78 leading-[1.7] max-w-[680px]" style={{ fontSize: "clamp(16px,1.4vw,20px)" }}>
-              Shubham leads SHUBIQ Studio and SHUBIQ Labs, building high-performance digital platforms and productivity systems that help teams execute with clarity and speed.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/shubiq-studio"
-                className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/70 bg-gold text-ink px-5 py-3 hover:bg-gold-light transition-all duration-300"
-              >
-                Explore Studio
-              </Link>
-              <Link
-                href="/shubiq-labs"
-                className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.25)] px-5 py-3 text-cream/80 hover:text-gold hover:border-gold transition-all duration-300"
-              >
-                Explore Labs
-              </Link>
+            <div className="border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.65)] p-4 sm:p-5 rounded-sm">
+              <div className="aspect-[3/4] w-full overflow-hidden border border-gold/20">
+                <img
+                  src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772213832/Image_ky1fkg.png"
+                  alt="Shubham - Founder of SHUBIQ"
+                  className="w-full h-full object-cover object-center"
+                />
+              </div>
+              <div className="mt-4 text-center">
+                <div className="font-cinzel text-[20px] text-gold">Shubham</div>
+                <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-cream/60">Founder | SHUBIQ</div>
+              </div>
             </div>
           </div>
         </section>
@@ -112,13 +128,13 @@ export default function FounderPage() {
 
         <section className="py-14 sm:py-16 px-5 sm:px-8">
           <div className="max-w-5xl mx-auto border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.6)] p-6 sm:p-8 rounded-sm">
-            <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/75 mb-4">Brand Links</div>
+            <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/75 mb-4">Founder Links</div>
             <div className="flex flex-wrap gap-3 text-[12px] font-rajdhani tracking-[2.5px] uppercase">
               {[
-                { label: "X / Twitter", href: "https://x.com/shubiqofficial" },
-                { label: "LinkedIn", href: "https://linkedin.com/company/shubiqofficial" },
-                { label: "GitHub", href: "https://github.com/shubiqofficial" },
-                { label: "Instagram", href: "https://instagram.com/shubiqofficial" },
+                { label: "X / Twitter", href: "https://x.com/NeuralShubh" },
+                { label: "LinkedIn", href: "https://www.linkedin.com/in/neuralshubh/" },
+                { label: "GitHub", href: "https://github.com/NeuralShubh" },
+                { label: "Instagram", href: "https://www.instagram.com/shubham.bnb/" },
               ].map((item) => (
                 <a
                   key={item.label}

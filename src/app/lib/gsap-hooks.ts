@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, RefObject } from 'react'
+import { useEffect, useRef, useState, RefObject } from 'react'
 
 // Hook: Split text into chars for GSAP animation
 export function useSplitText(text: string) {
@@ -45,7 +45,7 @@ export function useMagnetic<T extends HTMLElement>(strength = 0.4): RefObject<T 
 
 // Hook: Text scramble effect
 export function useTextScramble() {
-  const chars = '!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  const chars = '!<>-_\\/[]{}-=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   
   const scramble = (el: HTMLElement, finalText: string, duration = 1000) => {
     let frame = 0
@@ -73,4 +73,34 @@ export function useTextScramble() {
   }
 
   return scramble
+}
+
+// Hook: Run an effect once when element first enters view.
+export function useInViewOnce<T extends HTMLElement>(rootMargin = "200px 0px") {
+  const ref = useRef<T | null>(null)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    if (inView) return
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setInView(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin },
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [inView, rootMargin])
+
+  return [ref, inView] as const
 }

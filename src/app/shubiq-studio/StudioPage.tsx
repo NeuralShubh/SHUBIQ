@@ -464,6 +464,11 @@ function StudioServices() {
         <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4.5 max-sm:gap-4 sm:gap-6">
           {services.map((service, index) => {
             const Icon = STUDIO_SERVICE_ICON_MAP[service.iconKey] ?? Code2
+            const slug = service.title
+              .toLowerCase()
+              .replace(/&/g, "and")
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "")
             return (
               <ServiceCard
                 key={service.title}
@@ -472,6 +477,7 @@ function StudioServices() {
                 Icon={Icon}
                 isDimmed={hoveredCard !== null && hoveredCard !== index}
                 onHoverChange={(active) => setHoveredCard(active ? index : null)}
+                anchorId={`service-${slug}`}
               />
             )
           })}
@@ -487,12 +493,14 @@ function ServiceCard({
   Icon,
   isDimmed,
   onHoverChange,
+  anchorId,
 }: {
   service: StudioService
   index: number
   Icon: React.ElementType
   isDimmed: boolean
   onHoverChange: (active: boolean) => void
+  anchorId: string
 }) {
   const glowRef = useRef<HTMLDivElement>(null)
 
@@ -518,6 +526,7 @@ function ServiceCard({
 
   return (
     <article
+      id={anchorId}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}

@@ -1,9 +1,11 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone, Wrench } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
-import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
+import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
+import { useInViewOnce } from "../lib/gsap-hooks"
 
 const SERVICE_ICONS = [Code2, LayoutDashboard, Bot, Smartphone]
 const MAIN_SERVICE_ICON_MAP: Record<string, LucideIcon> = {
@@ -40,6 +42,12 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
   const Icon = resolveServiceIcon(service.icon, index)
+  const slug = service.title
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+  const href = `/services/${slug}`
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const glow = glowRef.current
@@ -120,18 +128,21 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
           {service.desc}
         </p>
 
-        <div className="mt-7 sm:mt-8 pt-2 flex items-center justify-end gap-2 text-gold/78 group-hover:text-gold transition-colors duration-300">
+        <Link
+          href={href}
+          className="mt-7 sm:mt-8 pt-2 flex items-center justify-end gap-2 text-gold/78 group-hover:text-gold transition-colors duration-300"
+        >
           <span className="w-8 h-px bg-current/70 transition-all duration-300 group-hover:w-10" />
           <span className="font-rajdhani text-[13px] sm:text-[12px] tracking-[3px] uppercase">Learn More</span>
           <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1.5" />
-        </div>
+        </Link>
       </div>
     </article>
   )
 }
 
 export default function Services() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
   const [items, setItems] = useState<MainService[]>(SERVICES)
@@ -140,6 +151,8 @@ export default function Services() {
     const load = async () => {
       if (!SUPABASE_ENABLED) return
       try {
+        const supabase = await getSupabaseClient()
+        if (!supabase) return
         const { data, error } = await supabase.from("services").select("*").order("order_index", { ascending: true })
         if (error || !data?.length) return
         setItems(data.map((row: any) => ({
@@ -157,61 +170,8 @@ export default function Services() {
     load()
   }, [])
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-
-        gsap.fromTo(
-          headingRef.current,
-          { y: 28, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.95,
-            ease: "power3.out",
-            scrollTrigger: { trigger: headingRef.current, start: "top 80%", once: true },
-          },
-        )
-
-        gsap.fromTo(
-          dividerRef.current,
-          { scaleX: 0, transformOrigin: "left center", opacity: 0.7 },
-          {
-            scaleX: 1,
-            opacity: 1,
-            duration: 0.85,
-            ease: "power2.out",
-            scrollTrigger: { trigger: headingRef.current, start: "top 80%", once: true },
-          },
-        )
-
-        const cards = sectionRef.current?.querySelectorAll(".service-card")
-        if (cards) {
-          gsap.fromTo(
-            cards,
-            { y: 42, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.95,
-              ease: "power3.out",
-              stagger: 0.14,
-              scrollTrigger: { trigger: sectionRef.current, start: "top 74%", once: true },
-            },
-          )
-        }
-      } catch {
-        // no-op
-      }
-    }
-    init()
-  }, [])
-
   return (
-    <section id="services" ref={sectionRef} className="min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
+    <section id="services" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute -right-20 top-12 w-[380px] h-[380px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.05) 0%, transparent 70%)" }}
@@ -222,7 +182,7 @@ export default function Services() {
       />
 
       <div className="max-w-7xl mx-auto w-full">
-        <div ref={headingRef} className="mb-8 sm:mb-10 md:mb-12 opacity-0 max-w-3xl">
+        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-8 sm:mb-10 md:mb-12 max-w-3xl`} style={{ animationDelay: "0.1s" }}>
           <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
             <span className="w-1 h-1 rounded-full bg-gold/80" />
             <div className="font-rajdhani text-[12px] sm:text-[13px] tracking-[4px] sm:tracking-[6px] text-gold/70 uppercase">Services</div>
@@ -231,12 +191,18 @@ export default function Services() {
           <h2 className="font-cinzel font-black text-gradient-gold leading-tight text-[clamp(29px,9vw,44px)] sm:text-[clamp(34px,5vw,68px)]">
             What We Do
           </h2>
-          <div ref={dividerRef} className="w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent mt-3 sm:mt-4" />
+          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent mt-3 sm:mt-4`} style={{ animationDelay: "0.22s" }} />
         </div>
 
         <div className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">
           {items.map((service, i) => (
-            <TiltCard key={service.title} service={service} index={i} />
+            <div
+              key={service.title}
+              className={`reveal ${isInView ? "in-view" : ""}`}
+              style={{ animationDelay: `${0.2 + i * 0.08}s` }}
+            >
+              <TiltCard service={service} index={i} />
+            </div>
           ))}
         </div>
       </div>

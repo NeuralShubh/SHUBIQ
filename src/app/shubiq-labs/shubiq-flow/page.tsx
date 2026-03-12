@@ -54,10 +54,10 @@ export default function ShubiqFlowDownloadPage() {
               </div>
               <h1 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6vw,62px)] mb-3">
                 SHUBIQ Flow
-                <span className="text-gold"> — Tasks, Habits & Focus</span>
+                <span className="text-gold"> - Tasks, Habits & Focus</span>
               </h1>
               <p className="font-cormorant text-cream/75 leading-[1.7] max-w-[680px]" style={{ fontSize: "clamp(16px,1.4vw,20px)" }}>
-                A premium dark-mode productivity app engineered for execution. Track tasks, build habits, and go deep with focus sessions —
+                A premium dark-mode productivity app engineered for execution. Track tasks, build habits, and go deep with focus sessions -
                 all in one unified system.
               </p>
             </div>

@@ -112,7 +112,7 @@ export default function ShubiqLabsPage() {
                   <ArrowRight size={14} />
                 </Link>
                 <a
-                  href="mailto:shubham95792@gmail.com?subject=SHUBIQ%20Labs%20Early%20Access"
+                  href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Early%20Access"
                   className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.25)] px-5 py-3 text-cream/80 hover:text-gold hover:border-gold transition-all duration-300"
                 >
                   Request Early Access

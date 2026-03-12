@@ -1,7 +1,7 @@
 "use client"
-/* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
+import Image from "next/image"
 import { NAV_LINKS } from "../data"
 import ThemeToggle, { STORAGE_KEY, THEMES, Theme, applyTheme } from "./ThemeToggle"
 
@@ -112,6 +112,12 @@ export default function Navbar() {
       setMobileThemeOpen(false)
       return
     }
+    if (section === "Labs") {
+      router.push("/shubiq-labs")
+      setMenuOpen(false)
+      setMobileThemeOpen(false)
+      return
+    }
     const id = section.toLowerCase().replace(/\s/g, "-")
     const target = document.getElementById(id)
     if (!target) {
@@ -173,9 +179,12 @@ export default function Navbar() {
         />
         <div className={`max-w-7xl mx-auto px-5 max-[768px]:px-4 sm:px-6 lg:px-12 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-[3.15rem] max-[768px]:h-[3.05rem]" : "h-[3.36rem] max-[768px]:h-[3.15rem]"}`}>
           <button onClick={() => scrollTo("Home")} className="group flex items-center h-full gap-[3px]">
-            <img
+            <Image
               src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772211091/SHUBIQ_jpldrw.png"
               alt="SHUBIQ"
+              width={160}
+              height={64}
+              priority
               className={`w-auto object-contain transition-opacity duration-200 group-hover:opacity-95 ${scrolled ? "h-8 max-[768px]:h-[1.82rem] sm:h-[2.1rem] md:h-[2.2rem]" : "h-8 max-[768px]:h-[1.9rem] sm:h-[2.2rem] md:h-[2.35rem]"}`}
               style={{ filter: "drop-shadow(0 0 12px rgb(var(--gold-rgb) / 0.2))" }}
             />
@@ -262,9 +271,11 @@ export default function Navbar() {
         >
           <div className="sticky top-0 z-10 h-[76px] border-b border-gold/16 px-5 backdrop-blur-md bg-[rgb(var(--surface-2-rgb)/0.72)] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <img
+              <Image
                 src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772211091/SHUBIQ_jpldrw.png"
                 alt="SHUBIQ"
+                width={160}
+                height={64}
                 className="h-9 w-auto object-contain"
                 style={{ filter: "drop-shadow(0 0 10px rgb(var(--gold-rgb) / 0.2))" }}
               />

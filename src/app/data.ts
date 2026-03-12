@@ -33,7 +33,7 @@ export const SERVICES = [
 
 export const PROJECTS = [
   {
-    name: "SHUBIQ Studio",
+    name: "BuildWithShubh",
     tag: "Agency | Live",
     desc: "A modern business platform built with Next.js, Tailwind CSS, and Supabase, delivering fast, conversion-focused digital experiences for growing brands.",
     tech: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
@@ -50,7 +50,7 @@ export const PROJECTS = [
     tech: ["HTML", "CSS", "JavaScript"],
     stars: 11,
     link: "https://github.com/NeuralShubh/Portfolio",
-    live: "https://shubham95792.github.io/Portfolio/",
+    live: "https://neuralshubh.github.io/Portfolio/",
     featured: false,
     status: "live",
   },
@@ -66,15 +66,15 @@ export const PROJECTS = [
     status: "wip",
   },
   {
-    name: "TejamOS",
-    tag: "App | In Development",
+    name: "SHUBIQ Flow",
+    tag: "App | Live",
     desc: "A unified personal productivity system designed to run your day in one place: tasks, habits, focus blocks, health routines, study, and goals.",
     tech: ["Productivity", "Life OS", "Focus"],
     stars: 0,
-    link: "https://github.com/NeuralShubh/TejamOS",
-    live: null,
+    link: "https://github.com/NeuralShubh/SHUBIQ-Flow",
+    live: "/shubiq-labs/shubiq-flow",
     featured: false,
-    status: "wip",
+    status: "live",
   },
 ];
 
@@ -101,7 +101,7 @@ export const ECOSYSTEM_ITEMS = [
     desc: "SHUBIQ Labs is where we design, build, and launch our own web and mobile applications under the SHUBIQ ecosystem. Every product is created in-house, driven by our vision, and engineered for clarity, performance, and long-term growth.",
     icon: "?",
     color: "rgb(var(--gold-dark-rgb))",
-    status: "in_dev",
+    status: "live",
     link: "/shubiq-labs",
     tags: [],
     featured: false,
@@ -116,7 +116,7 @@ export const SOCIAL_LINKS = [
   { label: "Instagram", url: "https://instagram.com/shubiqofficial", handle: "@shubiqofficial" },
 ];
 
-export const NAV_LINKS = ["Home", "About", "Services", "Projects", "Ecosystem", "Studio", "Contact"];
+export const NAV_LINKS = ["Home", "About", "Services", "Projects", "Ecosystem", "Studio", "Labs", "Contact"];
 
 
 

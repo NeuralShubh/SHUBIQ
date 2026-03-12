@@ -1,52 +1,11 @@
 "use client"
-/* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef } from "react"
+import { useInViewOnce } from "../lib/gsap-hooks"
 
 export default function About() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const headingRef = useRef<HTMLHeadingElement>(null)
-  const textRefs = useRef<HTMLParagraphElement[]>([])
-  const photoRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-        const isMobile = window.innerWidth <= 768
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: sectionRef.current, start: isMobile ? "top 82%" : "top 72%", once: isMobile },
-        })
-
-        tl.fromTo(
-          headingRef.current,
-          { y: isMobile ? 18 : 26, opacity: 0 },
-          { y: 0, opacity: 1, duration: isMobile ? 0.72 : 0.6, ease: "power2.out", force3D: true },
-        ).fromTo(
-          textRefs.current,
-          { y: isMobile ? 14 : 24, opacity: 0 },
-          { y: 0, opacity: 1, duration: isMobile ? 0.66 : 0.6, ease: "power2.out", stagger: isMobile ? 0.12 : 0.08, force3D: true },
-          0.15,
-        ).fromTo(
-          photoRef.current,
-          { y: isMobile ? 16 : 28, opacity: 0 },
-          { y: 0, opacity: 1, duration: isMobile ? 0.68 : 0.6, ease: "power2.out", force3D: true },
-          0.2,
-        )
-      } catch {
-        // no-op
-      }
-    }
-    init()
-  }, [])
-
-  const addTextRef = (el: HTMLParagraphElement | null, i: number) => {
-    if (el) textRefs.current[i] = el
-  }
+  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("120px 0px")
 
   return (
-    <section id="about" ref={sectionRef} className="min-h-screen py-[96px] px-4 sm:px-6 relative overflow-hidden">
+    <section id="about" ref={sectionRef} className="cv-auto pt-[96px] pb-[120px] px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute right-0 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.03) 0%, transparent 70%)" }}
@@ -63,93 +22,76 @@ export default function About() {
           <span className="hidden sm:block w-14 h-px bg-gradient-to-r from-gold/60 to-transparent" />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-32 xl:gap-36 items-center">
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 sm:gap-16 lg:gap-28 xl:gap-32 items-start">
           <div>
             <h2
-              ref={headingRef}
-              className="about-mobile-heading font-cinzel font-black mb-4 sm:mb-6 md:mb-8 leading-[0.92] md:leading-[0.89] tracking-[0.35px] md:tracking-[0.5px]"
-              style={{ fontSize: "clamp(32px, 10vw, 78px)", opacity: 0 }}
+              className={`reveal ${isInView ? "in-view" : ""} about-mobile-heading font-cinzel font-black mb-4 sm:mb-6 md:mb-8 leading-[0.92] md:leading-[0.89] tracking-[0.35px] md:tracking-[0.5px]`}
+              style={{ fontSize: "clamp(32px, 10vw, 78px)", animationDelay: "0.1s" }}
             >
-              <span className="text-cream/92 font-semibold text-[0.9em]">The Mind</span>
+              <span className="text-cream/92 font-semibold text-[0.9em]">About</span>
               <br />
-              <span className="text-gold font-black tracking-[1.4px] md:tracking-[1.8px] -mt-[5px] block">Behind SHUBIQ</span>
+              <span className="text-gold font-black tracking-[1.4px] md:tracking-[1.8px] -mt-[5px] block">SHUBIQ</span>
             </h2>
 
             <div className="w-16 sm:w-24 h-px bg-gradient-to-r from-gold/90 via-gold/45 to-transparent mb-6 sm:mb-7 md:mb-9" />
 
-            <div className="md:hidden about-mobile-photo-wrap mb-12 sm:mb-14">
-              <div className="about-mobile-photo-card relative corner-gold p-3 pb-6 bg-[rgb(var(--surface-1-rgb)/0.88)] border border-[rgb(var(--cream-rgb)/0.14)] w-[82%] max-w-[310px] mx-auto">
-                <div
-                  className="pointer-events-none absolute inset-0 -z-10 rounded-[6px]"
-                  style={{ background: "radial-gradient(circle at 50% 35%, rgb(var(--gold-rgb) / 0.08), transparent 68%)" }}
-                />
-                <div className="aspect-[3/4] w-full overflow-hidden border border-gold/15">
-                  <img
-                    src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772213832/Image_ky1fkg.png"
-                    alt="Shubham Patil"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="about-mobile-nameplate absolute -bottom-3 left-1/2 -translate-x-1/2 border border-gold/25 bg-[rgb(var(--surface-2-rgb)/0.95)] px-3 py-1.5">
-                  <div className="font-cinzel text-[15px] leading-none text-gold">Shubham Patil</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="about-mobile-copy-wrap mt-7 sm:mt-8 md:mt-0 space-y-5 sm:space-y-6 md:space-y-6 max-w-[530px]">
+            <div className="about-mobile-copy-wrap mt-6 sm:mt-7 md:mt-0 space-y-4 sm:space-y-5 md:space-y-5 max-w-[580px]">
               <p
-                ref={(el) => addTextRef(el, 0)}
-                className="about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left"
-                style={{ fontSize: "clamp(17px, 4.6vw, 22px)", opacity: 0 }}
+                className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left`}
+                style={{ fontSize: "clamp(17px, 4.6vw, 22px)", animationDelay: "0.25s" }}
               >
-                SHUBIQ is led by <span className="font-semibold text-cream">Shubham Patil</span>, a technology builder focused on designing{" "}
-                <span className="text-gold/80 italic">intelligent systems</span> and future-ready digital products. Every solution is engineered for long-term
-                impact, not short-term trends.
+                <span className="font-semibold text-cream">SHUBIQ</span> is a premium digital engineering brand crafting high-performance web platforms, productivity
+                apps, and intelligent systems for ambitious founders and teams.
               </p>
 
               <p
-                ref={(el) => addTextRef(el, 1)}
-                className="about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left"
-                style={{ fontSize: "clamp(17px, 4.6vw, 22px)", opacity: 0 }}
+                className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left`}
+                style={{ fontSize: "clamp(17px, 4.6vw, 22px)", animationDelay: "0.38s" }}
               >
-                As a brand, <span className="font-semibold text-cream">SHUBIQ</span> creates platforms that combine{" "}
-                <span className="font-semibold text-cream">artificial intelligence, productivity, and scalable software</span> to solve real-world business
-                problems and turn bold ideas into products people actually use.
+                We deliver conversion-first websites and AI-integrated product systems built for clarity, speed, and long-term scale, not just a good launch.
               </p>
 
-              <div className="about-mobile-quote mt-9 border-l-[4px] border-gold/38 pl-8 py-1">
-                <p
-                  ref={(el) => addTextRef(el, 2)}
-                  className="about-mobile-quote-text font-cormorant text-gold italic leading-[1.4]"
-                  style={{ fontSize: "clamp(20px, 6.6vw, 34px)", opacity: 0, textShadow: "0 0 16px rgb(var(--gold-rgb) / 0.1)" }}
+              <p
+                className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/82 leading-[1.75] tracking-[0.1px] text-left`}
+                style={{ fontSize: "clamp(15.5px, 4.2vw, 20px)", animationDelay: "0.5s" }}
+              >
+                The SHUBIQ system blends strategy, engineering, and premium design to turn ambitious ideas into durable platforms that earn trust and compound value.
+              </p>
+
+              <div className="mt-[104px]">
+                <a
+                  href="/founder"
+                  className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/60 px-5 py-3 text-cream hover:text-gold hover:border-gold transition-all duration-300"
                 >
-                  <span className="about-mobile-quote-mark text-gold/95 mr-1">"</span>
-                  The future belongs to those who build intelligent tools, not just consume them.
-                  <span className="about-mobile-quote-mark text-gold/95 ml-1">"</span>
-                </p>
+                  Meet the Founder
+                </a>
               </div>
             </div>
           </div>
 
-          <div ref={photoRef} style={{ opacity: 0 }} className="hidden md:block w-full max-w-[400px] lg:max-w-[440px] ml-auto">
-            <div
-              className="relative corner-gold group p-[14px] lg:p-4 bg-[rgb(var(--surface-1-rgb)/0.9)] border border-[rgb(var(--cream-rgb)/0.14)]"
-              style={{ boxShadow: "0 22px 34px rgb(0 0 0 / 0.46), 0 0 0 1px rgb(var(--gold-rgb) / 0.07) inset" }}
-            >
-              <div className="absolute -inset-[4px] border border-[0.8px] border-gold/12 pointer-events-none" />
-              <div className="aspect-[3/4] w-full overflow-hidden border border-[0.8px] border-[rgb(var(--cream-rgb)/0.1)]">
-                <img
-                  src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772213832/Image_ky1fkg.png"
-                  alt="Shubham Patil"
-                  className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.01]"
-                />
+          <div className="w-full max-w-[520px] ml-auto">
+            <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft rounded-sm p-5 sm:p-6">
+              <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Brand Foundations</div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { title: "Precision Engineering", desc: "High-performance systems designed for speed, stability, and scale." },
+                  { title: "Product Intelligence", desc: "AI-integrated workflows that elevate outcomes, not noise." },
+                  { title: "Premium UX", desc: "Design systems built to convert attention into action." },
+                  { title: "Long-Term Architecture", desc: "Durable infrastructure that grows with your business." },
+                ].map((item) => (
+                  <div key={item.title} className="border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-4">
+                    <div className="font-cinzel text-[16px] text-cream/90">{item.title}</div>
+                    <div className="font-cormorant text-cream/70 mt-2 text-[15px] leading-[1.55]">{item.desc}</div>
+                  </div>
+                ))}
               </div>
-              <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, transparent 70%, rgb(var(--ink-rgb) / 0.12) 100%)" }} />
-              <div className="absolute left-5 right-5 top-5 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[76%] border border-gold/22 bg-[rgb(var(--surface-1-rgb)/0.99)] backdrop-blur-sm px-4 py-3 text-center">
-                <div className="h-px w-full mb-2 bg-gradient-to-r from-transparent via-gold/28 to-transparent" />
-                <div className="font-cinzel font-bold text-[23px] leading-none text-gold">Shubham Patil</div>
-                <div className="font-rajdhani text-[9px] tracking-[4.1px] uppercase text-cream/56 mt-1">Creative Director | SHUBIQ</div>
+              <div className="mt-6 border-t border-[rgb(var(--cream-rgb)/0.12)] pt-5">
+                <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-cream/50 mb-2">Execution Stack</div>
+                <div className="flex flex-wrap gap-2 text-[10px] font-rajdhani tracking-[2.2px] uppercase text-gold/70">
+                  {["Next.js", "TypeScript", "Supabase", "GSAP", "AI Systems", "Performance UX"].map((tag) => (
+                    <span key={tag} className="border border-gold/25 px-3 py-1">{tag}</span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

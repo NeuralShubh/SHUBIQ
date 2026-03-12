@@ -1,7 +1,8 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { PROJECTS } from "../data"
-import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
+import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
+import { useInViewOnce } from "../lib/gsap-hooks"
 
 const SCRAMBLE_CHARS = "!<>-_\\/[]{}=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -116,7 +117,7 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[0]; index: n
 }
 
 export default function Projects() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
@@ -124,61 +125,11 @@ export default function Projects() {
   const [items, setItems] = useState(PROJECTS)
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: headingRef.current, start: "top 80%", once: true },
-        })
-
-        tl.fromTo(
-          titleRef.current,
-          { y: 26, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.85, ease: "power3.out" },
-        )
-          .fromTo(
-            dividerRef.current,
-            { scaleX: 0, transformOrigin: "left center", opacity: 0.72 },
-            { scaleX: 1, opacity: 1, duration: 0.8, ease: "power2.out" },
-            "-=0.44",
-          )
-          .fromTo(
-            subheadingRef.current,
-            { y: 14, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.72, ease: "power2.out" },
-            "-=0.35",
-          )
-
-        const cards = sectionRef.current?.querySelectorAll(".project-card")
-        if (cards) {
-          gsap.fromTo(
-            cards,
-            { y: 44, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.92,
-              ease: "power3.out",
-              stagger: 0.14,
-              scrollTrigger: { trigger: sectionRef.current, start: "top 72%", once: true },
-            },
-          )
-        }
-      } catch {
-        // no-op
-      }
-    }
-
-    init()
-  }, [])
-
-  useEffect(() => {
     const load = async () => {
       if (!SUPABASE_ENABLED) return
       try {
+        const supabase = await getSupabaseClient()
+        if (!supabase) return
         const { data, error } = await supabase.from("projects").select("*").order("order_index", { ascending: true })
         if (error || !data?.length) return
         const mapped = data.map((row: any) => ({
@@ -201,7 +152,7 @@ export default function Projects() {
   }, [])
 
   return (
-    <section id="projects" ref={sectionRef} className="min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
+    <section id="projects" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute -right-20 top-16 w-[420px] h-[420px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.05) 0%, transparent 70%)" }}
@@ -220,16 +171,16 @@ export default function Projects() {
             </div>
             <h2
               ref={titleRef}
-              className="font-cinzel font-black text-gradient-gold leading-[1.02] tracking-[-0.01em] text-[clamp(29px,9vw,44px)] sm:text-[clamp(34px,5vw,68px)]"
-              style={{ opacity: 0 }}
+              className={`reveal ${isInView ? "in-view" : ""} font-cinzel font-black text-gradient-gold leading-[1.02] tracking-[-0.01em] text-[clamp(29px,9vw,44px)] sm:text-[clamp(34px,5vw,68px)]`}
+              style={{ animationDelay: "0.1s" }}
             >
               Digital Portfolio
             </h2>
-            <div ref={dividerRef} className="w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent mt-3 sm:mt-4" />
+            <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent mt-3 sm:mt-4`} style={{ animationDelay: "0.22s" }} />
             <p
               ref={subheadingRef}
-              className="mt-3 sm:mt-4 font-cormorant text-[18px] sm:text-[20px] text-cream/74 max-w-2xl leading-[1.5]"
-              style={{ opacity: 0 }}
+              className={`reveal ${isInView ? "in-view" : ""} mt-3 sm:mt-4 font-cormorant text-[18px] sm:text-[20px] text-cream/74 max-w-2xl leading-[1.5]`}
+              style={{ animationDelay: "0.32s" }}
             >
               Strategic product builds across web platforms, AI systems, and scalable business software.
             </p>
@@ -256,7 +207,9 @@ export default function Projects() {
 
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
           {items.map((project, i) => (
-            <ProjectCard key={project.name} project={project} index={i} />
+            <div key={project.name} className={`reveal ${isInView ? "in-view" : ""}`} style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
+              <ProjectCard project={project} index={i} />
+            </div>
           ))}
         </div>
       </div>

@@ -5,7 +5,7 @@ export default function Marquee() {
   const items = [...SKILLS, ...SKILLS]
 
   return (
-    <div className="my-10 sm:my-12 py-6 sm:py-8 overflow-hidden relative border-y border-[rgb(var(--gold-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--surface-2-rgb)_/_0.92),rgb(var(--surface-1-rgb)_/_0.96))]">
+    <div className="cv-auto my-10 sm:my-12 py-6 sm:py-8 overflow-hidden relative border-y border-[rgb(var(--gold-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--surface-2-rgb)_/_0.92),rgb(var(--surface-1-rgb)_/_0.96))]">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at center, rgb(var(--gold-rgb) / 0.045) 0%, transparent 70%)" }}

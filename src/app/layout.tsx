@@ -1,13 +1,18 @@
 import type { Metadata } from "next"
-import { Cinzel, Cormorant_Garamond, Orbitron, Rajdhani } from "next/font/google"
+import { Cinzel, Cormorant_Garamond, Rajdhani } from "next/font/google"
 import "./globals.css"
 import SmoothScroll from "./components/SmoothScroll"
 import ThemeInit from "./components/ThemeInit"
 
-const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"] })
-const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cormorant", weight: ["300", "400", "500", "600"], style: ["normal", "italic"] })
-const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", weight: ["300", "400", "500", "600", "700"] })
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", weight: ["500", "700", "900"] })
+const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"], display: "swap" })
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+})
+const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", weight: ["500", "600", "700"], display: "swap" })
 
 export const metadata: Metadata = {
   title: "SHUBIQ: Intelligence That Wins",
@@ -18,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable} ${orbitron.variable}`}>
+      <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable}`}>
         <ThemeInit />
         <SmoothScroll>
           {children}

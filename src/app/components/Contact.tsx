@@ -1,9 +1,10 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { SOCIAL_LINKS } from "../data"
+import { useInViewOnce } from "../lib/gsap-hooks"
 
 export default function Contact() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("200px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
   const badgeRef = useRef<HTMLDivElement>(null)
@@ -12,50 +13,6 @@ export default function Contact() {
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 72%",
-            once: true,
-          },
-        })
-
-        tl.fromTo(
-          headingRef.current,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.76, ease: "power3.out" },
-        )
-          .fromTo(
-            dividerRef.current,
-            { scaleX: 0, opacity: 0.35, transformOrigin: "left center" },
-            { scaleX: 1, opacity: 1, duration: 0.72, ease: "power2.out" },
-            "-=0.48",
-          )
-          .fromTo(
-            badgeRef.current,
-            { opacity: 0, y: 10 },
-            { opacity: 1, y: 0, duration: 0.56, ease: "power2.out" },
-            "-=0.46",
-          )
-          .fromTo(
-            contentRef.current,
-            { opacity: 0, y: 18 },
-            { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
-            "-=0.36",
-          )
-      } catch {
-        // no-op
-      }
-    }
-    init()
-  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -92,7 +49,7 @@ export default function Contact() {
     "rounded-sm border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 transition-all duration-[380ms] ease-out hover:border-gold/26 relative overflow-hidden hover:bg-card-soft-hover hover:shadow-[0_16px_36px_rgb(var(--ink-rgb)_/_0.36),0_0_0_1px_rgb(var(--gold-rgb)_/_0.18)]"
 
   return (
-    <section id="contact" ref={sectionRef} className="min-h-screen flex items-center py-[104px] px-4 sm:px-6 relative overflow-hidden">
+    <section id="contact" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[104px] px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 60%, rgb(var(--gold-rgb) / 0.05) 0%, transparent 65%)" }}
@@ -101,7 +58,7 @@ export default function Contact() {
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.06) 0%, transparent 70%)" }} />
 
       <div className="max-w-7xl mx-auto w-full">
-        <div ref={headingRef} className="mb-2 sm:mb-4 md:mb-6 max-w-4xl">
+        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-2 sm:mb-4 md:mb-6 max-w-4xl`} style={{ animationDelay: "0.1s" }}>
           <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
             <span className="w-1 h-1 rounded-full bg-gold/85" />
             <div className="font-rajdhani text-[12px] sm:text-[13px] tracking-[4px] sm:tracking-[6px] text-gold/78 uppercase">Contact</div>
@@ -121,15 +78,16 @@ export default function Contact() {
           </h2>
           <div
             ref={badgeRef}
-            className="inline-flex items-center gap-2.5 mb-4 rounded-sm border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-1.5 hover:border-gold/34 hover:shadow-[0_0_18px_rgb(var(--gold-rgb)_/_0.14)] transition-all duration-300"
+            className={`reveal ${isInView ? "in-view" : ""} inline-flex items-center gap-2.5 mb-4 rounded-sm border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-1.5 hover:border-gold/34 hover:shadow-[0_0_18px_rgb(var(--gold-rgb)_/_0.14)] transition-all duration-300`}
+            style={{ animationDelay: "0.26s" }}
           >
             <span className="contact-status-dot w-1.5 h-1.5 rounded-full bg-emerald-400" />
             <span className="font-rajdhani text-[11px] tracking-[3.3px] uppercase text-cream/80">Available for select projects</span>
           </div>
-          <div ref={dividerRef} className="h-px w-28 sm:w-36 bg-gradient-to-r from-gold/45 to-transparent" />
+          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} h-px w-28 sm:w-36 bg-gradient-to-r from-gold/45 to-transparent`} style={{ animationDelay: "0.18s" }} />
         </div>
 
-        <div ref={contentRef} className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-14 items-stretch">
+        <div ref={contentRef} className={`reveal ${isInView ? "in-view" : ""} grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-14 items-stretch`} style={{ animationDelay: "0.34s" }}>
           <div className="h-full">
             {sent ? (
               <div className={`${panelClass} text-center`}>
@@ -203,8 +161,8 @@ export default function Contact() {
                 style={{ background: "linear-gradient(160deg, rgb(var(--gold-rgb) / 0.06), transparent 35%, transparent 78%, rgb(var(--gold-rgb) / 0.06))" }}
               />
               <div className="font-rajdhani text-[12px] tracking-[4px] uppercase text-gold/85 mb-3">Email</div>
-              <a href="mailto:shubham95792@gmail.com" className="font-cormorant text-xl text-cream hover:text-gold transition-colors duration-300">
-                shubham95792@gmail.com
+              <a href="mailto:shubiqofficial@gmail.com" className="font-cormorant text-xl text-cream hover:text-gold transition-colors duration-300">
+                shubiqofficial@gmail.com
               </a>
             </div>
 

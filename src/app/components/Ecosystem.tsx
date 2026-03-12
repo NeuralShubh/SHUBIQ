@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react"
 import { AppWindow, Boxes, Building2, Lightbulb, Rocket, Wrench } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { ECOSYSTEM_ITEMS } from "../data"
-import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
+import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
+import { useInViewOnce } from "../lib/gsap-hooks"
 
 const TYPE_COLORS: Record<string, string> = {
   project: "rgb(var(--gold-light-rgb))",
@@ -218,7 +219,7 @@ function EcoCard({ item }: { item: typeof ECOSYSTEM_ITEMS[0] }) {
 }
 
 export default function Ecosystem() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("200px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
   const orbitRef = useRef<HTMLDivElement>(null)
@@ -237,105 +238,30 @@ export default function Ecosystem() {
   ]
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-
-        gsap.fromTo(
-          headingRef.current,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.95,
-            ease: "power3.out",
-            scrollTrigger: { trigger: headingRef.current, start: "top 80%", once: true },
-          },
-        )
-
-        gsap.fromTo(
-          dividerRef.current,
-          { scaleX: 0, transformOrigin: "left center", opacity: 0.7 },
-          {
-            scaleX: 1,
-            opacity: 1,
-            duration: 0.85,
-            ease: "power2.out",
-            scrollTrigger: { trigger: headingRef.current, start: "top 80%", once: true },
-          },
-        )
-
-        const filters = sectionRef.current?.querySelectorAll(".eco-filter")
-        if (filters) {
-          gsap.fromTo(
-            filters,
-            { y: 14, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.75,
-              ease: "power2.out",
-              stagger: 0.08,
-              scrollTrigger: { trigger: headingRef.current, start: "top 78%", once: true },
-            },
-          )
+    if (!isInView) return
+    const statsVals = sectionRef.current?.querySelectorAll<HTMLElement>(".eco-stat-val")
+    if (statsVals) {
+      statsVals.forEach((el) => {
+        const end = Number(el.dataset.value ?? "0")
+        const duration = 800
+        const start = performance.now()
+        const animate = (now: number) => {
+          const progress = Math.min(1, (now - start) / duration)
+          const value = Math.round(end * progress)
+          el.textContent = String(value)
+          if (progress < 1) requestAnimationFrame(animate)
         }
-
-        const cards = sectionRef.current?.querySelectorAll(".eco-card")
-        if (cards) {
-          gsap.fromTo(
-            cards,
-            { y: 42, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.9,
-              ease: "power3.out",
-              stagger: 0.12,
-              scrollTrigger: { trigger: sectionRef.current, start: "top 68%", once: true },
-            },
-          )
-        }
-
-        const statsVals = sectionRef.current?.querySelectorAll<HTMLElement>(".eco-stat-val")
-        if (statsVals) {
-          statsVals.forEach((el) => {
-            const end = Number(el.dataset.value ?? "0")
-            const counter = { value: 0 }
-            gsap.to(counter, {
-              value: end,
-              duration: 1,
-              ease: "power2.out",
-              snap: { value: 1 },
-              onUpdate: () => {
-                el.textContent = String(counter.value)
-              },
-              scrollTrigger: { trigger: sectionRef.current, start: "top 68%", once: true },
-            })
-          })
-        }
-
-        if (orbitRef.current) {
-          gsap.to(orbitRef.current, {
-            rotation: 360,
-            duration: 40,
-            ease: "none",
-            repeat: -1,
-          })
-        }
-      } catch {
-        // no-op
-      }
+        requestAnimationFrame(animate)
+      })
     }
-    init()
-  }, [])
+  }, [isInView])
 
   useEffect(() => {
     const load = async () => {
       if (!SUPABASE_ENABLED) return
       try {
+        const supabase = await getSupabaseClient()
+        if (!supabase) return
         const { data, error } = await supabase.from("ecosystem").select("*").order("order_index", { ascending: true })
         if (error || !data?.length) return
         const mapped = data.map((row: any) => ({
@@ -361,20 +287,20 @@ export default function Ecosystem() {
   }, [])
 
   return (
-    <section id="ecosystem" ref={sectionRef} className="min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
+    <section id="ecosystem" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,rgb(var(--gold-rgb)/0.04),transparent_45%)]" />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 52% 36% at 50% 48%, rgb(var(--gold-rgb) / 0.03) 0%, transparent 72%)" }}
       />
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none opacity-[0.012] -translate-x-1/4">
-        <div ref={orbitRef} className="absolute inset-0 rounded-full" style={{ boxShadow: "inset 0 0 0 1px rgb(var(--gold-rgb) / 0.2)" }} />
+        <div ref={orbitRef} className="absolute inset-0 rounded-full orbit-spin" style={{ boxShadow: "inset 0 0 0 1px rgb(var(--gold-rgb) / 0.2)" }} />
         <div className="absolute inset-[15%] rounded-full" style={{ boxShadow: "inset 0 0 0 1px rgb(var(--gold-rgb) / 0.14)" }} />
         <div className="absolute inset-[30%] rounded-full" style={{ boxShadow: "inset 0 0 0 1px rgb(var(--gold-rgb) / 0.18)" }} />
       </div>
 
       <div className="max-w-7xl mx-auto w-full relative">
-        <div ref={headingRef} className="mb-5 sm:mb-6 md:mb-8 opacity-0">
+        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-5 sm:mb-6 md:mb-8`} style={{ animationDelay: "0.1s" }}>
           <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
             <span className="w-1 h-1 rounded-full bg-gold/85" />
             <div className="font-rajdhani text-[12px] sm:text-[13px] tracking-[4px] sm:tracking-[6px] text-gold/78 uppercase">Ecosystem</div>
@@ -384,22 +310,23 @@ export default function Ecosystem() {
             <span className="text-cream">The</span>{" "}
             <span className="bg-[linear-gradient(135deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)))] bg-clip-text text-transparent">Universe</span>
           </h2>
-          <div ref={dividerRef} className="w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent" />
+          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent`} style={{ animationDelay: "0.22s" }} />
         </div>
 
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10">
-          {types.map((type) => (
+          {types.map((type, idx) => (
             <button
               key={type}
               onClick={() => setFilter(type)}
               aria-pressed={filter === type}
               aria-label={`Filter ${type.replace("_", " ")}`}
-              className="eco-filter font-rajdhani text-[11px] sm:text-[12px] tracking-[2.8px] uppercase px-3.5 sm:px-4 py-2 rounded-sm transition-all duration-300 border hover:text-cream/88 hover:border-[rgb(var(--cream-rgb)/0.3)] hover:bg-[rgb(var(--cream-rgb)/0.04)]"
+              className={`eco-filter reveal ${isInView ? "in-view" : ""} font-rajdhani text-[11px] sm:text-[12px] tracking-[2.8px] uppercase px-3.5 sm:px-4 py-2 rounded-sm transition-all duration-300 border hover:text-cream/88 hover:border-[rgb(var(--cream-rgb)/0.3)] hover:bg-[rgb(var(--cream-rgb)/0.04)]`}
               style={{
                 color: filter === type ? "rgb(var(--cream-rgb) / 0.92)" : "rgb(var(--cream-rgb) / 0.5)",
                 background: filter === type ? "rgb(var(--cream-rgb) / 0.05)" : "rgb(var(--cream-rgb) / 0.015)",
                 borderColor: filter === type ? "rgb(var(--cream-rgb) / 0.34)" : "rgb(var(--cream-rgb) / 0.16)",
                 boxShadow: filter === type ? "0 0 0 1px rgb(var(--gold-rgb) / 0.16) inset, 0 0 18px rgb(var(--gold-rgb) / 0.12)" : "none",
+                animationDelay: `${0.2 + idx * 0.06}s`,
               }}
             >
               {type === "all" ? "All" : type.replace("_", " ")}
@@ -408,8 +335,10 @@ export default function Ecosystem() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-          {filtered.map((item) => (
-            <EcoCard key={item.id} item={item} />
+          {filtered.map((item, i) => (
+            <div key={item.id} className={`reveal ${isInView ? "in-view" : ""}`} style={{ animationDelay: `${0.28 + i * 0.08}s` }}>
+              <EcoCard item={item} />
+            </div>
           ))}
         </div>
 
@@ -417,9 +346,10 @@ export default function Ecosystem() {
           {stats.map((stat, idx) => (
             <div
               key={stat.label}
-              className={`border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-2.5 text-center md:border md:border-[rgb(var(--cream-rgb)/0.1)] md:bg-[rgb(var(--cream-rgb)/0.01)] md:px-4 md:py-5 md:transition-all md:duration-300 md:hover:border-gold/20 md:hover:bg-gold/[0.03] md:hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.1)] ${
+              className={`reveal ${isInView ? "in-view" : ""} border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-2.5 text-center md:border md:border-[rgb(var(--cream-rgb)/0.1)] md:bg-[rgb(var(--cream-rgb)/0.01)] md:px-4 md:py-5 md:transition-all md:duration-300 md:hover:border-gold/20 md:hover:bg-gold/[0.03] md:hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.1)] ${
                 idx > 0 ? "md:border-l-[rgb(var(--cream-rgb)/0.16)]" : ""
               }`}
+              style={{ animationDelay: `${0.4 + idx * 0.08}s` }}
             >
               <div className="eco-stat-val font-cinzel text-[30px] md:text-[36px] leading-none text-gold font-black" data-value={stat.val}>
                 0

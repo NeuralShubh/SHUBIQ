@@ -28,6 +28,7 @@ export default function Footer() {
               { label: "Studio", href: "/shubiq-studio" },
               { label: "Labs", href: "/shubiq-labs" },
               { label: "Founder", href: "/founder" },
+              { label: "Blog", href: "/blog" },
             ].map((item) => (
               <Link key={item.label} href={item.href} className="hover:text-gold transition-colors duration-200">
                 {item.label}

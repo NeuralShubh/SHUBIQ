@@ -2,6 +2,9 @@
 const nextConfig = {
   turbopack: {},
   devIndicators: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**" }

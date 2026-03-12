@@ -1,9 +1,10 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { SOCIAL_LINKS } from "../data"
+import { useInViewOnce } from "../lib/gsap-hooks"
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("120px 0px")
   const titleRef = useRef<HTMLHeadingElement>(null)
   const taglineRef = useRef<HTMLParagraphElement>(null)
   const bioRef = useRef<HTMLParagraphElement>(null)
@@ -14,72 +15,6 @@ export default function Hero() {
   const ring3Ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-
-        const tl = gsap.timeline({ delay: 0.2 })
-
-        tl.fromTo(
-          [ring1Ref.current, ring2Ref.current, ring3Ref.current],
-          { scale: 0.5, opacity: 0 },
-          { scale: 1, opacity: 0.8, duration: 2, ease: "power3.out", stagger: 0.2 },
-          0,
-        )
-
-        tl.fromTo(
-          titleRef.current,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: "power4.out" },
-          0.3,
-        )
-
-        tl.fromTo(
-          taglineRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
-          0.9,
-        )
-
-        tl.fromTo(
-          bioRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-          1.1,
-        )
-
-        tl.fromTo(
-          ctaRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-          1.3,
-        )
-
-        tl.fromTo(
-          socialRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-          1.5,
-        )
-
-        gsap.to(ring1Ref.current, {
-          y: "-30%",
-          ease: "none",
-          scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom top", scrub: 1 },
-        })
-        gsap.to(ring2Ref.current, {
-          y: "-20%",
-          ease: "none",
-          scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom top", scrub: 1.5 },
-        })
-      } catch {
-        // no-op
-      }
-    }
-    init()
-
     let a1 = 0
     let a2 = 0
     let a3 = 0
@@ -98,6 +33,26 @@ export default function Hero() {
     rafId = requestAnimationFrame(rotate)
     return () => cancelAnimationFrame(rafId)
   }, [])
+
+  useEffect(() => {
+    if (!sectionRef.current) return
+    const handleScroll = () => {
+      const rect = sectionRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)))
+      const ring1 = ring1Ref.current
+      const ring2 = ring2Ref.current
+      if (ring1) ring1.style.transform = `translateY(${-30 * progress}%)`
+      if (ring2) ring2.style.transform = `translateY(${-20 * progress}%)`
+    }
+    handleScroll()
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("resize", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleScroll)
+    }
+  }, [sectionRef])
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
@@ -121,8 +76,8 @@ export default function Hero() {
 
         <div
           ref={ring1Ref}
-          className="absolute top-1/2 left-1/2 pointer-events-none"
-          style={{ width: 600, height: 600, marginLeft: -300, marginTop: -300, opacity: 0 }}
+          className={`hero-ring absolute top-1/2 left-1/2 pointer-events-none ${isInView ? "in-view" : ""}`}
+          style={{ width: 600, height: 600, marginLeft: -300, marginTop: -300, opacity: 0, animationDelay: "0.1s" }}
         >
         <div className="hero-ring-1-border absolute inset-0 rounded-full border border-[rgb(var(--gold-rgb)/0.14)]" />
         <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-gold/80 -translate-x-1/2 -translate-y-1/2" />
@@ -132,8 +87,8 @@ export default function Hero() {
 
         <div
           ref={ring2Ref}
-          className="absolute top-1/2 left-1/2 pointer-events-none"
-          style={{ width: 380, height: 380, marginLeft: -190, marginTop: -190, opacity: 0 }}
+          className={`hero-ring absolute top-1/2 left-1/2 pointer-events-none ${isInView ? "in-view" : ""}`}
+          style={{ width: 380, height: 380, marginLeft: -190, marginTop: -190, opacity: 0, animationDelay: "0.28s" }}
         >
         <div className="hero-ring-2-border absolute inset-0 rounded-full" style={{ border: "1px dashed rgb(var(--gold-rgb) / 0.12)" }} />
         <div className="absolute top-0 left-1/2 w-1 h-1 rounded-full bg-gold/30 -translate-x-1/2" />
@@ -141,8 +96,8 @@ export default function Hero() {
 
       <div
         ref={ring3Ref}
-        className="absolute top-1/2 left-1/2 pointer-events-none"
-        style={{ width: 220, height: 220, marginLeft: -110, marginTop: -110, opacity: 0 }}
+        className={`hero-ring absolute top-1/2 left-1/2 pointer-events-none ${isInView ? "in-view" : ""}`}
+        style={{ width: 220, height: 220, marginLeft: -110, marginTop: -110, opacity: 0, animationDelay: "0.46s" }}
       >
         <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
       </div>
@@ -151,8 +106,8 @@ export default function Hero() {
         <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em]">
           <h1
             ref={titleRef}
-            className="font-cinzel font-black text-[clamp(32px,6.8vw,69px)] max-[768px]:text-[clamp(25.5px,8.5vw,38px)] md:text-[clamp(37px,4.2vw,67px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.3px] max-[768px]:tracking-[1px] md:tracking-[1.4px] mb-3 max-[768px]:mb-[8px] md:mb-4 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal"
-            style={{ perspective: "800px" }}
+            className={`hero-reveal ${isInView ? "in-view" : ""} font-cinzel font-black text-[clamp(32px,6.8vw,69px)] max-[768px]:text-[clamp(25.5px,8.5vw,38px)] md:text-[clamp(37px,4.2vw,67px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.3px] max-[768px]:tracking-[1px] md:tracking-[1.4px] mb-3 max-[768px]:mb-[8px] md:mb-4 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal`}
+            style={{ perspective: "800px", animationDelay: "0.3s" }}
           >
             SHUBIQ
           </h1>
@@ -160,8 +115,8 @@ export default function Hero() {
 
         <p
           ref={taglineRef}
-          className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase mb-7 max-[768px]:mb-4 md:mb-8 tracking-[3px] md:tracking-[6px]"
-          style={{ fontSize: "clamp(18px, 2.5vw, 30px)" }}
+          className={`hero-reveal ${isInView ? "in-view" : ""} site-hero-tagline font-cormorant font-medium italic text-gold uppercase mb-7 max-[768px]:mb-4 md:mb-8 tracking-[3px] md:tracking-[6px]`}
+          style={{ fontSize: "clamp(18px, 2.5vw, 30px)", animationDelay: "0.75s" }}
         >
           Intelligence That Wins
         </p>
@@ -174,8 +129,8 @@ export default function Hero() {
 
         <p
           ref={bioRef}
-          className="site-hero-copy font-cormorant text-cream/84 leading-[1.62] max-[768px]:leading-[1.58] max-w-[860px] mx-auto mb-7 md:mb-8 px-2 max-[768px]:px-5 max-[768px]:text-[15.5px]"
-          style={{ fontSize: "clamp(16px, 1.38vw, 20px)" }}
+          className={`hero-reveal ${isInView ? "in-view" : ""} site-hero-copy font-cormorant text-cream/84 leading-[1.62] max-[768px]:leading-[1.58] max-w-[860px] mx-auto mb-7 md:mb-8 px-2 max-[768px]:px-5 max-[768px]:text-[15.5px]`}
+          style={{ fontSize: "clamp(16px, 1.38vw, 20px)", animationDelay: "0.9s" }}
         >
           <span
             className="block font-cinzel text-cream mb-6 max-[768px]:mb-4 md:mb-7 leading-[1.15] max-[768px]:text-[clamp(22px,8vw,32px)]"
@@ -190,14 +145,22 @@ export default function Hero() {
           </span>
         </p>
 
-        <div ref={ctaRef} className="flex gap-3.5 max-[768px]:gap-2.5 sm:gap-4 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-9 sm:mb-10">
+        <div
+          ref={ctaRef}
+          className={`hero-reveal ${isInView ? "in-view" : ""} flex gap-3.5 max-[768px]:gap-2.5 sm:gap-4 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-9 sm:mb-10`}
+          style={{ animationDelay: "1.05s" }}
+        >
           <MagneticButton onClick={() => scrollTo("projects")} primary>
             Explore Work
           </MagneticButton>
           <MagneticButton onClick={() => scrollTo("contact")}>Hire Us</MagneticButton>
         </div>
 
-        <div ref={socialRef} className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-5 sm:pt-6 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-10">
+        <div
+          ref={socialRef}
+          className={`hero-reveal ${isInView ? "in-view" : ""} mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-5 sm:pt-6 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-10`}
+          style={{ animationDelay: "1.2s" }}
+        >
           {SOCIAL_LINKS.map((s) => (
             <div key={s.label} className="flex items-center justify-center">
               <a

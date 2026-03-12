@@ -92,7 +92,7 @@ const SUPABASE_ENABLED =
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project.supabase.co")
 const DEFAULT_PROJECTS: Project[] = [
   { id: "1", name: "SHUBIQ Studio", tag: "Agency | Live", desc: "A modern freelance business platform.", tech: ["Next.js", "Supabase"], stars: 16, link: "https://github.com/NeuralShubh/BuildWithShubh", live: "https://buildwithshubh.vercel.app", featured: true, status: "live", order_index: 0 },
-  { id: "2", name: "Portfolio", tag: "Personal | Live", desc: "Personal portfolio showcasing projects.", tech: ["HTML", "CSS", "JS"], stars: 11, link: "https://github.com/NeuralShubh/Portfolio", live: "https://shubham95792.github.io/Portfolio/", featured: false, status: "live", order_index: 1 },
+  { id: "2", name: "Portfolio", tag: "Personal | Live", desc: "Personal portfolio showcasing projects.", tech: ["HTML", "CSS", "JS"], stars: 11, link: "https://github.com/NeuralShubh/Portfolio", live: "https://neuralshubh.github.io/Portfolio/", featured: false, status: "live", order_index: 1 },
 ]
 const DEFAULT_ECO: EcoItem[] = [
   { id: "1", type: "app", title: "SHUBIQ Studio", subtitle: "Full-service digital agency", desc: "End-to-end web & software solutions.", icon: "⬡", color: "rgb(var(--gold-rgb))", status: "coming_soon", link: null, tags: ["Agency", "AI"], featured: true, order_index: 0 },

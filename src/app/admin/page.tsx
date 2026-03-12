@@ -13,7 +13,7 @@ export default function AdminLogin() {
     setLoading(true)
     setError("")
 
-    // Check against env var — NEXT_PUBLIC_ADMIN_PASSWORD
+    // Check against env var - NEXT_PUBLIC_ADMIN_PASSWORD
     const correctPw = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "shubiq_admin_2024"
     if (password === correctPw) {
       sessionStorage.setItem("shubiq_admin", "true")
