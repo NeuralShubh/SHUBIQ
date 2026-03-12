@@ -82,7 +82,7 @@ type StudioPortfolioProject = {
 
 const PORTFOLIO: StudioPortfolioProject[] = [
   {
-    name: "SHUBIQ",
+    name: "BUILDWITHSHUBH",
     tag: "Personal Brand Ecosystem",
     desc: "A structured digital ecosystem integrating brand presence, engineered systems, and scalable product layers under a unified architecture.",
     impact: "Unified multiple digital systems into one cohesive brand infrastructure.",
@@ -102,14 +102,14 @@ const PORTFOLIO: StudioPortfolioProject[] = [
     metric: "Real-time Data",
   },
   {
-    name: "TEJAMOS",
-    tag: "Personal Operating System",
-    desc: "An integrated execution architecture unifying tasks, habits, focus systems, and planning into a single performance layer.",
-    impact: "Unified fragmented workflows into one execution layer.",
-    tech: ["React", "TypeScript", "Supabase", "AI"],
-    link: "https://github.com/NeuralShubh/TejamOS",
-    status: "wip",
-    metric: "Coming Soon",
+    name: "SHUBIQ Flow",
+    tag: "App | Live",
+    desc: "A unified personal productivity system designed to run your day in one place: tasks, habits, focus blocks, health routines, study, and goals.",
+    impact: "Unified daily productivity systems into one focused execution layer.",
+    tech: ["Productivity", "Life OS", "Focus"],
+    link: "/shubiq-labs/shubiq-flow",
+    status: "live",
+    metric: "Android Beta",
   },
 ]
 const STUDIO_SERVICE_ICON_MAP = {
@@ -1098,7 +1098,7 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full mt-1 rounded-[10px] sm:rounded-[6px] font-rajdhani text-[12px] sm:text-[13px] tracking-[1.4px] sm:tracking-[3.2px] uppercase border border-gold/70 bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3 sm:py-3.5 font-semibold transition-all duration-300 md:hover:bg-gold-light md:hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] md:hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full mt-1 rounded-[10px] sm:rounded-[6px] font-rajdhani text-[12px] sm:text-[13px] tracking-[1.4px] sm:tracking-[3.2px] uppercase border border-gold/70 bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3 sm:py-3.5 font-semibold transition-all duration-300 md:hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {sending ? "Sending..." : content.contactSubmitText}
                 {!sending && <ArrowRight size={15} />}
