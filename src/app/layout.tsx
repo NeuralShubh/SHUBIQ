@@ -18,6 +18,14 @@ export const metadata: Metadata = {
   title: "SHUBIQ: Intelligence That Wins",
   description: "SHUBIQ is a digital product and intelligence studio delivering web platforms, apps, AI systems, and scalable solutions for modern businesses.",
   keywords: ["web development", "mobile apps", "AI solutions", "digital product studio", "SHUBIQ"],
+  icons: {
+    icon: [
+      {
+        url: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Logo/SHUBIQ.png",
+        type: "image/png",
+      },
+    ],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
