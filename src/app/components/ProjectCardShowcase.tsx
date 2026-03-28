@@ -46,7 +46,7 @@ export default function ProjectCardShowcase({ project, index }: { project: Proje
   const [titleMain, ...titleRest] = display.split(" ")
   const titleSecondary = titleRest.join(" ")
   const actions = [
-    { href: `/projects/${project.slug}`, label: "View Project →", primary: false, external: false },
+    { href: `/projects/${project.slug}`, label: "View Project", primary: false, external: false },
     project.liveUrl ? { href: project.liveUrl, label: "Live", primary: true, external: true } : null,
   ].filter(Boolean) as Array<{ href: string; label: string; primary: boolean; external: boolean }>
   const tag = `${project.category} | ${project.status}`
