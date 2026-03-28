@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link"
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
 import GoldLine from "../components/GoldLine"
+import ScrollReveal from "../components/ScrollReveal"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
 
@@ -28,7 +27,6 @@ export default function FounderPage() {
 
   return (
     <>
-      <Navbar />
       <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
         <section className="relative pt-[120px] sm:pt-[140px] pb-16 px-5 sm:px-8 overflow-hidden">
           <div
@@ -39,6 +37,7 @@ export default function FounderPage() {
             }}
           />
           <div className="max-w-5xl mx-auto relative grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+            <ScrollReveal direction="right">
             <div>
               <div className="inline-flex items-center gap-2 border border-gold/20 bg-gold/[0.04] px-3.5 py-2 mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-gold/80" />
@@ -66,6 +65,8 @@ export default function FounderPage() {
                 </Link>
               </div>
             </div>
+            </ScrollReveal>
+            <ScrollReveal direction="left" delay={0.15}>
             <div className="border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.65)] p-4 sm:p-5 rounded-sm">
               <div className="aspect-[3/4] w-full overflow-hidden border border-gold/20">
                 <img
@@ -79,11 +80,13 @@ export default function FounderPage() {
                 <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-cream/60">Founder | SHUBIQ</div>
               </div>
             </div>
+            </ScrollReveal>
           </div>
         </section>
 
         <GoldLine />
 
+        <ScrollReveal delay={0.1}>
         <section className="py-14 sm:py-16 px-5 sm:px-8">
           <div className="max-w-5xl mx-auto grid md:grid-cols-[1.2fr_0.8fr] gap-6">
             <div className="border border-[rgb(var(--cream-rgb)/0.16)] bg-card-soft p-6 sm:p-8 rounded-sm">
@@ -123,9 +126,11 @@ export default function FounderPage() {
             </div>
           </div>
         </section>
+        </ScrollReveal>
 
         <GoldLine />
 
+        <ScrollReveal delay={0.1}>
         <section className="py-14 sm:py-16 px-5 sm:px-8">
           <div className="max-w-5xl mx-auto border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.6)] p-6 sm:p-8 rounded-sm">
             <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/75 mb-4">Founder Links</div>
@@ -149,8 +154,8 @@ export default function FounderPage() {
             </div>
           </div>
         </section>
+        </ScrollReveal>
       </main>
-      <Footer />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
     </>
   )

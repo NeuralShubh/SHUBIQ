@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone, Wrench } from "lucide-react"
+import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
 import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
@@ -194,17 +195,13 @@ export default function Services() {
           <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent mt-3 sm:mt-4`} style={{ animationDelay: "0.22s" }} />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">
+        <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">
           {items.map((service, i) => (
-            <div
-              key={service.title}
-              className={`reveal ${isInView ? "in-view" : ""}`}
-              style={{ animationDelay: `${0.2 + i * 0.08}s` }}
-            >
+            <StaggerItem key={service.title}>
               <TiltCard service={service} index={i} />
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   )

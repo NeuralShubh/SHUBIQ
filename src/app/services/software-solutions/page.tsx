@@ -1,12 +1,13 @@
 import Link from "next/link"
-import Navbar from "../../components/Navbar"
-import Footer from "../../components/Footer"
+
+
 import GoldLine from "../../components/GoldLine"
+import ScrollReveal from "../../components/ScrollReveal"
 
 export default function SoftwareSolutionsServicePage() {
   return (
     <>
-      <Navbar />
+
       <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
         <section className="relative pt-[120px] sm:pt-[140px] pb-12 px-5 sm:px-8 overflow-hidden">
           <div className="max-w-5xl mx-auto relative">
@@ -22,6 +23,7 @@ export default function SoftwareSolutionsServicePage() {
 
         <GoldLine />
 
+        <ScrollReveal>
         <section className="py-12 sm:py-14 px-5 sm:px-8">
           <div className="max-w-5xl mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-6">
             <div className="space-y-5 font-cormorant text-cream/80 leading-[1.75] text-[18px]">
@@ -51,8 +53,9 @@ export default function SoftwareSolutionsServicePage() {
             </Link>
           </div>
         </section>
+        </ScrollReveal>
       </main>
-      <Footer />
+
     </>
   )
 }

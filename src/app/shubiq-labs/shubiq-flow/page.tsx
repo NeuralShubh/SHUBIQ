@@ -2,9 +2,10 @@
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ArrowDownCircle, ArrowRight, ShieldCheck, Sparkles, Smartphone, Package } from "lucide-react"
-import Navbar from "../../components/Navbar"
-import Footer from "../../components/Footer"
+
+
 import GoldLine from "../../components/GoldLine"
+import ScrollReveal from "../../components/ScrollReveal"
 
 const APK_URL = "https://flow.shubiq.com/downloads/SHUBIQ-Flow.apk"
 const BUILD_VERSION = "0.9.0-beta"
@@ -34,7 +35,7 @@ export default function ShubiqFlowDownloadPage() {
 
   return (
     <>
-      <Navbar />
+
       <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
         <section className="relative pt-[110px] sm:pt-[130px] pb-12 px-5 sm:px-8 overflow-hidden">
           <div
@@ -66,6 +67,7 @@ export default function ShubiqFlowDownloadPage() {
 
         <GoldLine />
 
+        <ScrollReveal>
         <section className="py-12 sm:py-14 px-5 sm:px-8">
           <div className="max-w-5xl mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-6 items-start">
             <div
@@ -143,9 +145,11 @@ export default function ShubiqFlowDownloadPage() {
             </div>
           </div>
         </section>
+        </ScrollReveal>
 
         <GoldLine />
 
+        <ScrollReveal delay={0.1}>
         <section className="py-12 sm:py-14 px-5 sm:px-8">
           <div className="max-w-5xl mx-auto grid md:grid-cols-[1.05fr_0.95fr] gap-6">
             <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 rounded-sm">
@@ -179,8 +183,9 @@ export default function ShubiqFlowDownloadPage() {
             </div>
           </div>
         </section>
+        </ScrollReveal>
       </main>
-      <Footer />
+
     </>
   )
 }

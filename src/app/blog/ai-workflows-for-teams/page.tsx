@@ -1,6 +1,6 @@
 import Link from "next/link"
-import Navbar from "../../components/Navbar"
-import Footer from "../../components/Footer"
+
+
 import GoldLine from "../../components/GoldLine"
 
 export default function AiWorkflowsForTeamsPage() {
@@ -23,7 +23,7 @@ export default function AiWorkflowsForTeamsPage() {
 
   return (
     <>
-      <Navbar />
+
       <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
         <section className="relative pt-[120px] sm:pt-[140px] pb-10 px-5 sm:px-8 overflow-hidden">
           <div className="max-w-4xl mx-auto relative">
@@ -61,7 +61,7 @@ export default function AiWorkflowsForTeamsPage() {
           </div>
         </section>
       </main>
-      <Footer />
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
     </>
   )

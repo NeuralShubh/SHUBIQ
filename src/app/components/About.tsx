@@ -1,5 +1,6 @@
 "use client"
 import { useInViewOnce } from "../lib/gsap-hooks"
+import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 
 export default function About() {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("120px 0px")
@@ -72,19 +73,21 @@ export default function About() {
           <div className="w-full max-w-[520px] ml-auto">
             <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft rounded-sm p-5 sm:p-6">
               <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Brand Foundations</div>
-              <div className="grid sm:grid-cols-2 gap-4">
+              <StaggerContainer staggerDelay={0.1} className="grid sm:grid-cols-2 gap-4">
                 {[
                   { title: "Precision Engineering", desc: "High-performance systems designed for speed, stability, and scale." },
                   { title: "Product Intelligence", desc: "AI-integrated workflows that elevate outcomes, not noise." },
                   { title: "Premium UX", desc: "Design systems built to convert attention into action." },
                   { title: "Long-Term Architecture", desc: "Durable infrastructure that grows with your business." },
                 ].map((item) => (
-                  <div key={item.title} className="border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-4">
-                    <div className="font-cinzel text-[16px] text-cream/90">{item.title}</div>
-                    <div className="font-cormorant text-cream/70 mt-2 text-[15px] leading-[1.55]">{item.desc}</div>
-                  </div>
+                  <StaggerItem key={item.title}>
+                    <div className="border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-4">
+                      <div className="font-cinzel text-[16px] text-cream/90">{item.title}</div>
+                      <div className="font-cormorant text-cream/70 mt-2 text-[15px] leading-[1.55]">{item.desc}</div>
+                    </div>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
               <div className="mt-6 border-t border-[rgb(var(--cream-rgb)/0.12)] pt-5">
                 <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-cream/50 mb-2">Execution Stack</div>
                 <div className="flex flex-wrap gap-2 text-[10px] font-rajdhani tracking-[2.2px] uppercase text-gold/70">

@@ -1,8 +1,7 @@
 "use client"
 import Link from "next/link"
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
 import GoldLine from "../components/GoldLine"
+import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 
 const POSTS = [
   {
@@ -28,7 +27,6 @@ const POSTS = [
 export default function BlogIndexPage() {
   return (
     <>
-      <Navbar />
       <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
         <section className="relative pt-[120px] sm:pt-[140px] pb-14 px-5 sm:px-8 overflow-hidden">
           <div
@@ -56,24 +54,25 @@ export default function BlogIndexPage() {
         <GoldLine />
 
         <section className="py-14 sm:py-16 px-5 sm:px-8">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
+          <StaggerContainer staggerDelay={0.12} className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
             {POSTS.map((post) => (
-              <article key={post.slug} className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 rounded-sm">
-                <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-gold/70">{post.tag}</div>
-                <h2 className="font-cinzel text-[22px] text-cream/90 mt-3 mb-3">{post.title}</h2>
-                <p className="font-cormorant text-cream/72 leading-[1.6] mb-5">{post.desc}</p>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/60 px-5 py-3 text-cream hover:text-gold hover:border-gold transition-all duration-300"
-                >
-                  Read Article
-                </Link>
-              </article>
+              <StaggerItem key={post.slug}>
+                <article className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 rounded-sm hover:border-gold/28 hover:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.12)_inset] transition-all duration-300">
+                  <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-gold/70">{post.tag}</div>
+                  <h2 className="font-cinzel text-[22px] text-cream/90 mt-3 mb-3">{post.title}</h2>
+                  <p className="font-cormorant text-cream/72 leading-[1.6] mb-5">{post.desc}</p>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/60 px-5 py-3 text-cream hover:text-gold hover:border-gold transition-all duration-300"
+                  >
+                    Read Article
+                  </Link>
+                </article>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </section>
       </main>
-      <Footer />
     </>
   )
 }

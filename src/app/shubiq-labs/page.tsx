@@ -2,9 +2,10 @@
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ArrowRight, Sparkles, Smartphone, Globe, MonitorSmartphone, ArrowUpRight } from "lucide-react"
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
+
+
 import GoldLine from "../components/GoldLine"
+import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 
 const PRODUCTS = [
   {
@@ -77,7 +78,7 @@ export default function ShubiqLabsPage() {
 
   return (
     <>
-      <Navbar />
+
       <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
         <section className="relative pt-[110px] sm:pt-[130px] pb-14 px-5 sm:px-8 overflow-hidden">
           <div
@@ -128,10 +129,10 @@ export default function ShubiqLabsPage() {
         <section className="py-14 sm:py-16 px-5 sm:px-8">
           <div className="max-w-6xl mx-auto">
             <SectionLabel label="Products" />
-            <div ref={gridRef} className="grid md:grid-cols-2 gap-6">
+            <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 gap-6">
               {PRODUCTS.map((product) => (
+                <StaggerItem key={product.id}>
                 <div
-                  key={product.id}
                   className="relative border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft rounded-sm p-6 sm:p-7 overflow-hidden"
                   style={{
                     boxShadow: "0 24px 48px rgb(0 0 0 / 0.24), 0 0 0 1px rgb(var(--cream-rgb) / 0.06) inset",
@@ -178,12 +179,13 @@ export default function ShubiqLabsPage() {
                     </Link>
                   )}
                 </div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
           </div>
         </section>
       </main>
-      <Footer />
+
     </>
   )
 }

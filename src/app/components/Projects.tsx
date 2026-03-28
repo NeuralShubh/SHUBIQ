@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import { PROJECTS } from "../data"
 import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
 import { useInViewOnce } from "../lib/gsap-hooks"
+import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 
 const SCRAMBLE_CHARS = "!<>-_\\/[]{}=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -205,13 +206,13 @@ export default function Projects() {
           <span className="absolute left-4 right-4 bottom-1 h-px bg-gold/55 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
         </a>
 
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+        <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 sm:gap-8">
           {items.map((project, i) => (
-            <div key={project.name} className={`reveal ${isInView ? "in-view" : ""}`} style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
+            <StaggerItem key={project.name}>
               <ProjectCard project={project} index={i} />
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   )

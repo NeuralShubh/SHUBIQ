@@ -3,6 +3,7 @@ import { Cinzel, Cormorant_Garamond, Rajdhani } from "next/font/google"
 import "./globals.css"
 import SmoothScroll from "./components/SmoothScroll"
 import ThemeInit from "./components/ThemeInit"
+import LayoutShell from "./components/LayoutShell"
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"], display: "swap" })
 const cormorant = Cormorant_Garamond({
@@ -71,7 +72,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable}`}>
         <ThemeInit />
         <SmoothScroll>
-          {children}
+          <LayoutShell>
+            {children}
+          </LayoutShell>
         </SmoothScroll>
       </body>
     </html>

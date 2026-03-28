@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { AppWindow, Boxes, Building2, Lightbulb, Rocket, Wrench } from "lucide-react"
+import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { ECOSYSTEM_ITEMS } from "../data"
 import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
@@ -334,13 +335,13 @@ export default function Ecosystem() {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-          {filtered.map((item, i) => (
-            <div key={item.id} className={`reveal ${isInView ? "in-view" : ""}`} style={{ animationDelay: `${0.28 + i * 0.08}s` }}>
+        <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 gap-4 sm:gap-6">
+          {filtered.map((item) => (
+            <StaggerItem key={item.id}>
               <EcoCard item={item} />
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-[rgb(var(--cream-rgb)/0.1)] grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
           {stats.map((stat, idx) => (
