@@ -1,12 +1,11 @@
 ﻿"use client"
 
 import { useMemo, useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
 import TextReveal from "../components/TextReveal"
 import { projects } from "../data-projects"
+import ProjectCard from "../components/ProjectCard"
 
 export default function ProjectsIndexClient() {
   const [filter, setFilter] = useState("All")
@@ -69,54 +68,7 @@ export default function ProjectsIndexClient() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.08 }}
               >
-                <Link
-                  href={`/projects/${project.slug}`}
-                  className="group block h-full border border-[rgb(var(--cream-rgb)/0.16)] bg-card-soft rounded-sm overflow-hidden hover:border-gold/40 transition-all"
-                  data-cursor="Open"
-                >
-                  <div className="relative w-full aspect-[16/9] bg-[rgb(var(--surface-2-rgb)/0.8)]">
-                    {project.videoPoster ? (
-                      <Image
-                        src={project.videoPoster}
-                        alt={project.title}
-                        width={1200}
-                        height={675}
-                        className="w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-black via-[rgb(var(--surface-2-rgb))] to-black" />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 text-cream/70 font-rajdhani text-[12px] tracking-[3px] uppercase">
-                      {project.number} - {project.category}
-                    </div>
-                  </div>
-
-                  <div className="p-5 sm:p-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-cinzel text-[24px] text-cream group-hover:text-gradient-gold transition-colors">
-                        {project.title}
-                      </h3>
-                      <span className="text-cream/50 text-xs tracking-[2px] uppercase">{project.status}</span>
-                    </div>
-                    <p className="mt-3 font-cormorant text-[17px] text-cream/70 leading-[1.6]">
-                      {project.subtitle}
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {project.techStack.slice(0, 4).map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-1 text-[11px] tracking-[2px] uppercase text-cream/70 border border-[rgb(var(--cream-rgb)/0.18)]"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="mt-5 text-gold/80 text-[12px] tracking-[3px] uppercase font-rajdhani">
-                      Watch Video
-                    </div>
-                  </div>
-                </Link>
+                <ProjectCard project={project} index={index} />
               </motion.div>
             ))}
           </motion.div>

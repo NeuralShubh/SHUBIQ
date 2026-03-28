@@ -13,6 +13,8 @@ import MagneticButton from "../components/MagneticButton"
 import NumberTicker from "../components/NumberTicker"
 import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
 import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
+import { projects, type Project } from "../data-projects"
+import ProjectCard from "../components/ProjectCard"
 import {
   Code2,
   LayoutDashboard,
@@ -74,51 +76,7 @@ const STUDIO_SERVICES = [
   },
 ]
 
-type StudioPortfolioProject = {
-  id?: string
-  name: string
-  tag: string
-  desc: string
-  impact: string
-  tech: string[]
-  link: string
-  status: "live" | "wip" | "concept"
-  metric: string
-}
-
-
-const PORTFOLIO: StudioPortfolioProject[] = [
-  {
-    name: "BUILDWITHSHUBH",
-    tag: "Personal Brand Ecosystem",
-    desc: "A structured digital ecosystem integrating brand presence, engineered systems, and scalable product layers under a unified architecture.",
-    impact: "Unified multiple digital systems into one cohesive brand infrastructure.",
-    tech: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
-    link: "https://buildwithshubh.vercel.app",
-    status: "live",
-    metric: "97 Perf Score",
-  },
-  {
-    name: "SHUBHLEDGER",
-    tag: "Financial Intelligence System",
-    desc: "Architected for real-time portfolio intelligence with low-latency market data flows and a unified decision-support dashboard.",
-    impact: "Continuous live market intelligence across digital assets.",
-    tech: ["JavaScript", "CSS", "GSAP", "APIs"],
-    link: "https://shubhledger.infinityfreeapp.com/",
-    status: "live",
-    metric: "Real-time Data",
-  },
-  {
-    name: "SHUBIQ Flow",
-    tag: "App | Live",
-    desc: "A unified personal productivity system designed to run your day in one place: tasks, habits, focus blocks, health routines, study, and goals.",
-    impact: "Unified daily productivity systems into one focused execution layer.",
-    tech: ["Productivity", "Life OS", "Focus"],
-    link: "/shubiq-labs/shubiq-flow",
-    status: "live",
-    metric: "Android Beta",
-  },
-]
+type StudioPortfolioProject = Project
 const STUDIO_SERVICE_ICON_MAP = {
   code: Code2,
   layout: LayoutDashboard,
@@ -621,31 +579,7 @@ function StudioPortfolio() {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
-  const [portfolioProjects, setPortfolioProjects] = useState<StudioPortfolioProject[]>(PORTFOLIO)
-
-  useEffect(() => {
-    const load = async () => {
-      if (!SUPABASE_ENABLED) return
-      try {
-        const { data, error } = await supabase.from("studio_portfolio").select("*").order("order_index", { ascending: true })
-        if (error || !data?.length) return
-        setPortfolioProjects(data.map((row: any) => ({
-          id: String(row.id),
-          name: row.name ?? "",
-          tag: row.tag ?? "",
-          desc: row.desc ?? "",
-          impact: row.impact ?? "",
-          tech: Array.isArray(row.tech) ? row.tech : [],
-          link: row.link ?? "",
-          status: (row.status ?? "live") as StudioPortfolioProject["status"],
-          metric: row.metric ?? "",
-        })))
-      } catch {
-        // no-op fallback to defaults
-      }
-    }
-    load()
-  }, [])
+  const portfolioProjects = projects
 
   useEffect(() => {
     const init = async () => {
@@ -695,7 +629,7 @@ function StudioPortfolio() {
 
         <div ref={cardsRef} className="grid sm:grid-cols-2 gap-6 sm:gap-6">
           {portfolioProjects.map((project, index) => (
-            <ProjectCard key={`${project.name}-${index}`} project={project} index={index} />
+            <ProjectCard key={`${project.slug}-${index}`} project={project} index={index} />
           ))}
         </div>
         <div className="mt-8 flex justify-center">
@@ -712,143 +646,7 @@ function StudioPortfolio() {
   )
 }
 
-function ProjectCard({ project, index }: { project: StudioPortfolioProject; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const glowRef = useRef<HTMLDivElement>(null)
-  const caseStudySlug =
-    project.name.toLowerCase().includes("buildwithshubh")
-      ? "buildwithshubh"
-      : project.name.toLowerCase().includes("ledger")
-        ? "shubhledger"
-        : project.name.toLowerCase().includes("flow")
-          ? "shubiq-flow"
-          : project.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current
-    const glow = glowRef.current
-    if (!card || !glow) return
-    const rect = card.getBoundingClientRect()
-    const cx = rect.left + rect.width / 2
-    const cy = rect.top + rect.height / 2
-    const dx = (e.clientX - cx) / (rect.width / 2)
-    const dy = (e.clientY - cy) / (rect.height / 2)
-    card.style.transform = `perspective(980px) rotateX(${-dy * 4.4}deg) rotateY(${dx * 4.4}deg) translateY(-4px)`
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    glow.style.background = `radial-gradient(circle at ${x}% ${y}%, rgb(var(--gold-rgb) / 0.08) 0%, transparent 62%)`
-    glow.style.opacity = "1"
-  }
-
-  const handleMouseLeave = () => {
-    if (cardRef.current) {
-      cardRef.current.style.transform = "perspective(980px) rotateX(0deg) rotateY(0deg) translateY(0px)"
-      cardRef.current.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)"
-    }
-    if (glowRef.current) glowRef.current.style.opacity = "0"
-  }
-
-  const handleMouseEnter = () => {
-    if (cardRef.current) cardRef.current.style.transition = "transform 0.14s ease"
-  }
-
-  const openLive = () => {
-    if (project.link) window.open(project.link, "_blank", "noopener")
-  }
-
-  return (
-    <div
-      ref={cardRef}
-      role="link"
-      tabIndex={0}
-      onClick={openLive}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault()
-          openLive()
-        }
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
-      className="project-card group relative block p-5 max-sm:p-5 sm:p-9 border border-[rgb(var(--cream-rgb)/0.12)] bg-card-soft hover:bg-card-soft-hover hover:border-gold/35 transition-[transform,border-color,background-color,box-shadow] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] max-md:rounded-[20px] max-md:hover:translate-y-0 max-md:hover:scale-100 max-md:cursor-default hover:shadow-[0_22px_44px_rgb(0_0_0_/_0.28)]"
-      style={{ willChange: "transform", boxShadow: "0 12px 28px rgb(0 0 0 / 0.2), 0 0 0 1px rgb(var(--cream-rgb) / 0.05) inset" }}
-    >
-      <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300" />
-      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-
-      <div className="flex items-center justify-between mb-5 sm:mb-5">
-        <span className="font-rajdhani text-[10px] sm:text-[11px] tracking-[2px] sm:tracking-[2.5px] uppercase text-cream/55">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <span
-          className="font-rajdhani text-[9.5px] sm:text-[11px] tracking-[1.5px] sm:tracking-[2.5px] uppercase border px-2 max-sm:px-1.5 py-[3px] sm:px-2.5 sm:py-1 group-hover:animate-pulse"
-          style={{
-            color: project.status === "live" ? "rgb(var(--gold-rgb) / 0.86)" : "rgb(var(--gold-rgb) / 0.75)",
-            borderColor: project.status === "live" ? "rgb(var(--gold-rgb) / 0.45)" : "rgb(var(--gold-rgb) / 0.3)",
-            background: project.status === "live" ? "rgb(var(--gold-rgb) / 0.08)" : "rgb(var(--gold-rgb) / 0.04)",
-          }}
-        >
-          {project.status === "live"
-            ? "LIVE"
-            : project.status === "wip"
-              ? "IN DEVELOPMENT"
-              : "COMING SOON"}
-        </span>
-      </div>
-
-      <div className="h-px w-full bg-[rgb(var(--gold-rgb)/0.22)] shadow-[0_0_8px_rgb(var(--gold-rgb)_/_0.08)] mb-5 sm:mb-6" />
-
-      <div className="mb-2.5 sm:mb-2">
-        <h3
-          className="font-cinzel font-bold text-cream/93 tracking-[0.4px] group-hover:text-gold transition-colors duration-300"
-          style={{ fontSize: "clamp(18px, 1.6vw, 23px)" }}
-        >
-          {project.name}
-        </h3>
-      </div>
-
-      <div className="font-rajdhani text-[10px] sm:text-[11px] tracking-[1.4px] sm:tracking-[2px] uppercase text-gold/60 mb-3.5 sm:mb-3">{project.tag}</div>
-
-      <p className="font-cormorant text-cream/76 leading-[1.56] sm:leading-[1.7] mb-5 sm:mb-6" style={{ fontSize: "clamp(15px, 1.1vw, 17px)" }}>
-        {project.desc}
-      </p>
-
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/14 to-transparent mb-4 sm:mb-0" />
-      <div className="mb-5 border-l border-gold/28 pl-3 max-sm:border-l-0 max-sm:pl-0 transition-opacity duration-300 group-hover:opacity-100">
-        <div className="font-rajdhani text-[10px] sm:text-[11px] font-semibold tracking-[1.8px] sm:tracking-[2.4px] uppercase text-gold/88 mb-1">Impact</div>
-        <p className="font-cormorant text-cream/80 group-hover:text-cream/95 leading-[1.52] transition-colors duration-300" style={{ fontSize: "clamp(14.5px, 1.05vw, 15.5px)" }}>
-          {project.impact}
-        </p>
-      </div>
-
-      <div className="flex flex-wrap gap-2 sm:gap-2 pt-4 border-t border-gold/12">
-        {project.tech.map((t, idx) => (
-          <span
-            key={t}
-            className="font-rajdhani text-[10px] sm:text-[10px] tracking-[1.1px] sm:tracking-[1.5px] uppercase text-cream/72 border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-2-rgb)/0.6)] px-2.5 sm:px-2.5 py-1 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-            style={{ transitionDelay: `${idx * 60}ms` }}
-          >
-            {t}
-          </span>
-        ))}
-      </div>
-      <div className="mt-4 flex items-center justify-between text-gold/80 font-rajdhani text-[11px] tracking-[2.4px] uppercase">
-        <span>Live Project</span>
-        <Link
-          href={`/projects/${caseStudySlug}`}
-          onClick={(event) => {
-            event.stopPropagation()
-          }}
-          className="inline-flex items-center gap-1 hover:text-gold-light transition-colors"
-        >
-          View Case Study
-          <span className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
-        </Link>
-      </div>
-    </div>
-  )
-}
+// Project cards now use the shared component from src/app/components/ProjectCard.tsx
 
 // â”€â”€â”€ Pricing Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
