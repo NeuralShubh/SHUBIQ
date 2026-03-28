@@ -149,16 +149,18 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="site-navbar fixed top-0 left-0 right-0 z-[900] transition-[background,backdrop-filter,border-bottom] duration-700"
+        className="site-navbar fixed top-0 left-0 right-0 z-[9999] transition-[background,backdrop-filter,border-bottom,box-shadow] duration-700"
         style={{
           background: scrolled
-            ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.95), rgb(var(--surface-1-rgb) / 0.9))"
-            : "linear-gradient(to bottom, rgb(var(--surface-1-rgb) / 0.78), rgb(var(--ink-rgb) / 0.42))",
-          backdropFilter: scrolled ? "blur(12px)" : "blur(6px)",
+            ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.97), rgb(var(--surface-1-rgb) / 0.94))"
+            : "linear-gradient(to bottom, rgb(var(--surface-3-rgb) / 0.88), rgb(var(--surface-2-rgb) / 0.72))",
+          backdropFilter: scrolled ? "blur(16px)" : "blur(12px)",
           borderBottom: scrolled
-            ? "1px solid rgb(var(--gold-rgb) / 0.18)"
-            : "1px solid rgb(var(--gold-rgb) / 0.1)",
-          boxShadow: "none",
+            ? "1px solid rgb(var(--gold-rgb) / 0.22)"
+            : "1px solid rgb(var(--gold-rgb) / 0.18)",
+          boxShadow: scrolled
+            ? "0 2px 20px rgb(0 0 0 / 0.32)"
+            : "0 1px 12px rgb(0 0 0 / 0.28)",
         }}
       >
         <div
