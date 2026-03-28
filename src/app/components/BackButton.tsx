@@ -22,8 +22,8 @@ export default function BackButton() {
     <button
       type="button"
       onClick={handleBack}
-      className="absolute top-[96px] md:top-[112px] z-[90] inline-flex items-center gap-2 border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-2-rgb)/0.7)] px-3.5 py-2 text-[10px] tracking-[3px] uppercase font-rajdhani text-cream/75 backdrop-blur-md hover:text-gold hover:border-gold/50 hover:bg-gold/[0.08] transition-colors"
-      style={{ left: "max(1.5rem, calc(50% - 640px + 2.25rem))" }}
+      className="absolute top-[72px] md:top-[88px] z-[90] inline-flex items-center gap-2 border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-2-rgb)/0.7)] px-3.5 py-2 text-[10px] tracking-[3px] uppercase font-rajdhani text-cream/75 backdrop-blur-md hover:text-gold hover:border-gold/50 hover:bg-gold/[0.08] transition-colors"
+      style={{ left: "max(2.5rem, calc(50% - 640px + 3.25rem))" }}
       aria-label="Go back"
     >
       <span className="text-gold/80">←</span>
