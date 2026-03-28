@@ -244,7 +244,11 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <button onClick={togglePlay} className="text-white hover:text-white/80 transition-colors">
+            <button
+              onClick={togglePlay}
+              aria-label={isPlaying ? "Pause video" : "Play video"}
+              className="text-white hover:text-white/80 transition-colors"
+            >
               {isPlaying ? (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <rect x="6" y="4" width="4" height="16" rx="1" />
@@ -257,7 +261,11 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
               )}
             </button>
 
-            <button onClick={toggleMute} className="text-white hover:text-white/80 transition-colors">
+            <button
+              onClick={toggleMute}
+              aria-label={isMuted ? "Unmute video" : "Mute video"}
+              className="text-white hover:text-white/80 transition-colors"
+            >
               {isMuted ? (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill="currentColor" />
@@ -273,7 +281,11 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             </button>
           </div>
 
-          <button onClick={handleFullscreen} className="text-white hover:text-white/80 transition-colors">
+          <button
+            onClick={handleFullscreen}
+            aria-label="Toggle fullscreen"
+            className="text-white hover:text-white/80 transition-colors"
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="15,3 21,3 21,9" />
               <polyline points="9,21 3,21 3,15" />

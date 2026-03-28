@@ -876,6 +876,15 @@ html.theme-transitioning *::after {
   color: rgb(var(--cream-rgb) / 0.86);
 }
 
+*:focus-visible {
+  outline: 2px solid rgb(var(--gold-rgb));
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
