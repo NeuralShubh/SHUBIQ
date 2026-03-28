@@ -129,16 +129,6 @@ export default function ThemeToggle() {
           })}
         </div>
       )}
-                className={`theme-toggle-option w-full text-left px-3 py-2.5 font-rajdhani text-[12px] tracking-[1.6px] uppercase transition-colors duration-200 ${
-                  active ? "text-gold bg-gold/12" : "text-cream hover:text-gold hover:bg-gold/6"
-                }`}
-              >
-                {t.label}
-              </button>
-            )
-          })}
-        </div>
-      )}
     </div>
   )
 }
