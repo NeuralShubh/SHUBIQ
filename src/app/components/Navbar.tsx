@@ -2,13 +2,13 @@
 import { useEffect, useRef, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
-import { motion } from "framer-motion"
 import { NAV_LINKS } from "../data"
 import ThemeToggle, { STORAGE_KEY, THEMES, Theme, applyTheme } from "./ThemeToggle"
 
 export default function Navbar() {
   const router = useRouter()
   const pathname = usePathname()
+  if (pathname === "/shubiq-studio") return null
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState("Home")
   const [menuOpen, setMenuOpen] = useState(false)
@@ -147,11 +147,8 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav
+      <nav
         className="site-navbar fixed top-0 left-0 right-0 z-[900] transition-[background,backdrop-filter,border-bottom] duration-700"
-        initial={{ y: -64, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         style={{
           background: scrolled
             ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.95), rgb(var(--surface-1-rgb) / 0.9))"
@@ -227,7 +224,7 @@ export default function Navbar() {
             ))}
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       <div
         className="fixed inset-0 z-[950] md:hidden transition-opacity duration-300"

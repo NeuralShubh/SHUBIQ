@@ -35,8 +35,8 @@ export default function ScrollReveal({
     <motion.div
       initial={{ opacity: 0, ...offsets[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration, delay, ease: "easeOut" }}
+      viewport={{ once: false, margin: "-80px" }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] as const }}
       className={className}
     >
       {children}

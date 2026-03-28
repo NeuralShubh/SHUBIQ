@@ -1,9 +1,12 @@
 "use client"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { Github, Instagram, Linkedin, Twitter, type LucideIcon } from "lucide-react"
 import { SOCIAL_LINKS } from "../data"
 
 export default function Footer() {
+  const pathname = usePathname()
+  if (pathname === "/shubiq-studio") return null
   const year = new Date().getFullYear()
   const iconMap: Record<string, LucideIcon> = {
     "GitHub": Github,
