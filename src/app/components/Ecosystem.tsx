@@ -298,7 +298,7 @@ export default function Ecosystem() {
   const orbitRef = useRef<HTMLDivElement>(null)
   const [filter, setFilter] = useState<string>("all")
   const [items, setItems] = useState(ECOSYSTEM_ITEMS)
-  const prefersReduced = useReducedMotion()
+  const prefersReduced = !!useReducedMotion()
 
   const types = ["all", ...Array.from(new Set(items.map((i) => i.type)))]
   const filtered = (filter === "all" ? items : items.filter((i) => i.type === filter)).sort(
