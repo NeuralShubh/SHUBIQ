@@ -50,7 +50,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [titleMain, ...titleRest] = display.split(" ")
   const titleSecondary = titleRest.join(" ")
   const actions = [
-    { href: `/projects/${project.slug}`, label: "View Project ->", primary: false, external: false },
+    { href: `/projects/${project.slug}`, label: "View Project &rarr;", primary: false, external: false },
     project.liveUrl ? { href: project.liveUrl, label: "Live", primary: true, external: true } : null,
   ].filter(Boolean) as Array<{ href: string; label: string; primary: boolean; external: boolean }>
   const tag = `${project.category} | ${project.status}`
@@ -110,7 +110,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="mt-auto pt-1 flex items-center justify-between text-cream/55 text-[11px] font-rajdhani tracking-[3px] uppercase">
         <span className="flex items-center gap-2">
           Case Study
-          <span className="text-gold/80">-></span>
+          <span className="text-gold/80">&rarr;</span>
         </span>
         <span className="text-cream/45">View Details</span>
       </div>
@@ -226,4 +226,5 @@ export default function Projects() {
     </section>
   )
 }
+
 
