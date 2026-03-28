@@ -104,14 +104,6 @@ export default function ProjectCardShowcase({ project, index }: { project: Proje
         {project.subtitle}
       </p>
 
-      <div className="mt-auto pt-1 flex items-center justify-between text-cream/55 text-[11px] font-rajdhani tracking-[3px] uppercase">
-        <span className="flex items-center gap-2">
-          Case Study
-          <span className="text-gold/80">&rarr;</span>
-        </span>
-        <span className="text-cream/45">View Details</span>
-      </div>
-
       <div className="mt-3 pt-2 border-t border-gold/20">
         <div className={`grid gap-2 ${actions.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
           {actions.map((action) => (
