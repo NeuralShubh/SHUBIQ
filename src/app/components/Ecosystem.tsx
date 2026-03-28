@@ -1,9 +1,12 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
+import { useReducedMotion } from "framer-motion"
 import { AppWindow, Boxes, Building2, Lightbulb, Rocket, Wrench } from "lucide-react"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { ECOSYSTEM_ITEMS } from "../data"
+import { projects } from "../data-projects"
+import { LAB_PRODUCTS } from "../data-labs"
 import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
 import { useInViewOnce } from "../lib/gsap-hooks"
 
@@ -39,6 +42,75 @@ const TYPE_ICONS: Record<string, LucideIcon> = {
   service: Rocket,
   blog: Lightbulb,
   case_study: Lightbulb,
+}
+
+function useCountUp(end: number, duration = 1500, reducedMotion = false) {
+  const [count, setCount] = useState(reducedMotion ? end : 0)
+  const ref = useRef<HTMLDivElement>(null)
+  const counted = useRef(false)
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setCount(end)
+      return
+    }
+
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !counted.current) {
+          counted.current = true
+          const start = performance.now()
+          const tick = (now: number) => {
+            const progress = Math.min((now - start) / duration, 1)
+            const eased = 1 - Math.pow(1 - progress, 3)
+            setCount(Math.round(eased * end))
+            if (progress < 1) requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        }
+      },
+      { threshold: 0.3 },
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [end, duration, reducedMotion])
+
+  return { count, ref }
+}
+
+function StatCard({
+  label,
+  value,
+  delay,
+  reducedMotion,
+  inView,
+}: {
+  label: string
+  value: number
+  delay: string
+  reducedMotion: boolean
+  inView: boolean
+}) {
+  const { count, ref } = useCountUp(value, 1500, reducedMotion)
+
+  return (
+    <div
+      className={`reveal ${inView ? "in-view" : ""} border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-2.5 text-center md:border md:border-[rgb(var(--cream-rgb)/0.1)] md:bg-[rgb(var(--cream-rgb)/0.01)] md:px-4 md:py-5 md:transition-all md:duration-300 md:hover:border-gold/20 md:hover:bg-gold/[0.03] md:hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.1)]`}
+      style={{ animationDelay: delay }}
+    >
+      <div ref={ref} className="font-cinzel text-[34px] md:text-[44px] leading-none text-gold font-black">
+        {count}
+      </div>
+      <div className="font-rajdhani text-[10px] md:text-[11px] tracking-[2.6px] md:tracking-[3.4px] uppercase text-cream/55 mt-2">
+        {label}
+      </div>
+      <div className="mt-3 h-px w-10 mx-auto bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+    </div>
+  )
 }
 
 function EcoCard({ item }: { item: typeof ECOSYSTEM_ITEMS[0] }) {
@@ -226,36 +298,27 @@ export default function Ecosystem() {
   const orbitRef = useRef<HTMLDivElement>(null)
   const [filter, setFilter] = useState<string>("all")
   const [items, setItems] = useState(ECOSYSTEM_ITEMS)
+  const prefersReduced = useReducedMotion()
 
   const types = ["all", ...Array.from(new Set(items.map((i) => i.type)))]
   const filtered = (filter === "all" ? items : items.filter((i) => i.type === filter)).sort(
     (a, b) => a.order_index - b.order_index,
   )
-  const stats = [
-    { label: "Total Items", val: items.length },
-    { label: "Live", val: items.filter((i) => i.status === "live").length },
-    { label: "In Dev", val: items.filter((i) => i.status === "in_dev").length },
-    { label: "Planned", val: items.filter((i) => i.status === "concept" || i.status === "coming_soon").length },
-  ]
+  const studioItems = projects.map((project) => ({ status: project.status }))
+  const labItems = LAB_PRODUCTS.map((product) => ({ status: product.status }))
+  const allItems = [...studioItems, ...labItems]
 
-  useEffect(() => {
-    if (!isInView) return
-    const statsVals = sectionRef.current?.querySelectorAll<HTMLElement>(".eco-stat-val")
-    if (statsVals) {
-      statsVals.forEach((el) => {
-        const end = Number(el.dataset.value ?? "0")
-        const duration = 800
-        const start = performance.now()
-        const animate = (now: number) => {
-          const progress = Math.min(1, (now - start) / duration)
-          const value = Math.round(end * progress)
-          el.textContent = String(value)
-          if (progress < 1) requestAnimationFrame(animate)
-        }
-        requestAnimationFrame(animate)
-      })
-    }
-  }, [isInView])
+  const isLive = (status: string) => status.toLowerCase().includes("live")
+  const isInDev = (status: string) => status.toLowerCase().includes("in dev")
+  const isPlanned = (status: string) =>
+    status.toLowerCase().includes("planned") || status.toLowerCase().includes("concept") || status.toLowerCase().includes("coming")
+
+  const stats = [
+    { label: "Total Items", val: allItems.length },
+    { label: "Live", val: allItems.filter((item) => isLive(item.status)).length },
+    { label: "In Dev", val: allItems.filter((item) => isInDev(item.status)).length },
+    { label: "Planned", val: allItems.filter((item) => isPlanned(item.status)).length },
+  ]
 
   useEffect(() => {
     const load = async () => {
@@ -271,7 +334,7 @@ export default function Ecosystem() {
           title: row.title ?? "",
           subtitle: row.subtitle ?? "",
           desc: row.desc ?? "",
-          icon: row.icon ?? "◈",
+          icon: row.icon ?? "*",
           color: row.color ?? "rgb(var(--gold-rgb))",
           status: row.status ?? "concept",
           link: row.link ?? null,
@@ -345,20 +408,14 @@ export default function Ecosystem() {
 
         <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-[rgb(var(--cream-rgb)/0.1)] grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
           {stats.map((stat, idx) => (
-            <div
+            <StatCard
               key={stat.label}
-              className={`reveal ${isInView ? "in-view" : ""} border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-2.5 text-center md:border md:border-[rgb(var(--cream-rgb)/0.1)] md:bg-[rgb(var(--cream-rgb)/0.01)] md:px-4 md:py-5 md:transition-all md:duration-300 md:hover:border-gold/20 md:hover:bg-gold/[0.03] md:hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.1)] ${
-                idx > 0 ? "md:border-l-[rgb(var(--cream-rgb)/0.16)]" : ""
-              }`}
-              style={{ animationDelay: `${0.4 + idx * 0.08}s` }}
-            >
-              <div className="eco-stat-val font-cinzel text-[30px] md:text-[36px] leading-none text-gold font-black" data-value={stat.val}>
-                0
-              </div>
-              <div className="font-rajdhani text-[10px] md:text-[11px] tracking-[2.6px] md:tracking-[3.4px] uppercase text-cream/50 mt-1.5">
-                {stat.label}
-              </div>
-            </div>
+              label={stat.label}
+              value={stat.val}
+              delay={`${0.4 + idx * 0.08}s`}
+              reducedMotion={prefersReduced}
+              inView={isInView}
+            />
           ))}
         </div>
       </div>

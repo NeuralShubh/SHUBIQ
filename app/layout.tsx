@@ -4,6 +4,8 @@ import "../src/app/globals.css"
 import SmoothScroll from "../src/app/components/SmoothScroll"
 import ThemeInit from "../src/app/components/ThemeInit"
 import MagneticCursor from "../src/app/components/MagneticCursor"
+import ScrollProgress from "../src/app/components/ScrollProgress"
+import BackToTop from "../src/app/components/BackToTop"
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"] })
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cormorant", weight: ["300", "400", "500", "600"], style: ["normal", "italic"] })
@@ -101,7 +103,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <ThemeInit />
         <MagneticCursor />
+        <ScrollProgress />
         <SmoothScroll>{children}</SmoothScroll>
+        <BackToTop />
       </body>
     </html>
   )

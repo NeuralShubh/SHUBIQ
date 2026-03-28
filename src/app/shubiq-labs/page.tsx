@@ -2,48 +2,11 @@
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ArrowRight, Sparkles, Smartphone, Globe, MonitorSmartphone, ArrowUpRight } from "lucide-react"
+import { LAB_PRODUCTS } from "../data-labs"
 
 
 import GoldLine from "../components/GoldLine"
 import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
-
-const PRODUCTS = [
-  {
-    id: "shubiq-flow",
-    name: "SHUBIQ Flow",
-    subtitle: "Tasks, Habits & Focus",
-    status: "Live Beta",
-    category: "Mobile App",
-    desc: "A premium productivity system that fuses tasks, habits, and deep focus into one ritual-driven workflow.",
-    highlights: ["Tasks + Habits + Focus", "XP + Analytics", "Dark premium UX"],
-    cta: "Explore Product",
-    href: "/shubiq-labs/shubiq-flow",
-  },
-  {
-    id: "future-suite",
-    name: "SHUBIQ Pulse",
-    subtitle: "Performance OS (Coming Soon)",
-    status: "Concept",
-    category: "System",
-    desc: "Unified personal performance stack for planning, execution, and retrospectives across your life systems.",
-    highlights: ["Life OS", "Deep Analytics", "Automation"],
-    cta: "Planned",
-    href: "#",
-    disabled: true,
-  },
-  {
-    id: "future-web",
-    name: "SHUBIQ Atlas",
-    subtitle: "Knowledge System (Coming Soon)",
-    status: "In Dev",
-    category: "Web App",
-    desc: "A knowledge and research workspace designed to connect ideas into actionable outcomes.",
-    highlights: ["Research Vault", "Linked Notes", "AI Layer"],
-    cta: "Planned",
-    href: "#",
-    disabled: true,
-  },
-]
 
 function SectionLabel({ label }: { label: string }) {
   return (
@@ -130,7 +93,7 @@ export default function ShubiqLabsPage() {
           <div className="max-w-6xl mx-auto">
             <SectionLabel label="Products" />
             <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 gap-6">
-              {PRODUCTS.map((product) => (
+              {LAB_PRODUCTS.map((product) => (
                 <StaggerItem key={product.id}>
                 <div
                   className="relative border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft rounded-sm p-6 sm:p-7 overflow-hidden"

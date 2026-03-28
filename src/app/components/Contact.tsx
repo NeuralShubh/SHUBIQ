@@ -1,7 +1,9 @@
 "use client"
 import { useRef, useState } from "react"
+import { motion, useReducedMotion } from "framer-motion"
 import { SOCIAL_LINKS } from "../data"
 import { useInViewOnce } from "../lib/gsap-hooks"
+import FloatingInput from "./FloatingInput"
 
 export default function Contact() {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("200px 0px")
@@ -9,14 +11,28 @@ export default function Contact() {
   const dividerRef = useRef<HTMLDivElement>(null)
   const badgeRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const prefersReduced = useReducedMotion()
   const [form, setForm] = useState({ name: "", email: "", message: "" })
-  const [sending, setSending] = useState(false)
+  const [touched, setTouched] = useState({ name: false, email: false, message: false })
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [sent, setSent] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+  const nameError = touched.name && form.name.trim().length === 0
+  const emailError = touched.email && !emailValid
+  const messageError = touched.message && form.message.trim().length === 0
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSending(true)
+    setTouched({ name: true, email: true, message: true })
+    if (!form.name.trim() || !form.email.trim() || !emailValid || !form.message.trim()) {
+      setSubmitState("error")
+      setTimeout(() => setSubmitState("idle"), 2000)
+      return
+    }
+
+    setSubmitState("loading")
     setErrorMsg("")
 
     const payload = {
@@ -34,17 +50,17 @@ export default function Contact() {
       })
 
       if (!response.ok) throw new Error("Contact submit failed")
-      setSent(true)
+      setSubmitState("success")
       setForm({ name: "", email: "", message: "" })
+      setTimeout(() => setSent(true), 1200)
+      setTimeout(() => setSubmitState("idle"), 3000)
     } catch {
       setErrorMsg("Unable to submit right now. Please try again.")
-    } finally {
-      setSending(false)
+      setSubmitState("error")
+      setTimeout(() => setSubmitState("idle"), 2000)
     }
   }
 
-  const inputClass =
-    "w-full rounded-sm bg-[rgb(var(--surface-1-rgb)/0.76)] border border-[rgb(var(--cream-rgb)/0.16)] text-cream/95 font-cormorant text-[17px] px-4 py-3.5 focus:outline-none focus:border-gold/56 focus:bg-[rgb(var(--surface-2-rgb)/0.92)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.18),0_0_24px_rgb(var(--gold-rgb)_/_0.16),inset_0_1px_8px_rgb(var(--gold-rgb)_/_0.06)] transition-all duration-[360ms] ease-out placeholder:text-cream/45"
   const panelClass =
     "rounded-sm border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 transition-all duration-[380ms] ease-out hover:border-gold/26 relative overflow-hidden hover:bg-card-soft-hover hover:shadow-[0_16px_36px_rgb(var(--ink-rgb)_/_0.36),0_0_0_1px_rgb(var(--gold-rgb)_/_0.18)]"
 
@@ -105,48 +121,65 @@ export default function Contact() {
                   className="absolute inset-0 pointer-events-none"
                   style={{ background: "linear-gradient(140deg, rgb(var(--gold-rgb) / 0.08), transparent 35%, transparent 75%, rgb(var(--gold-rgb) / 0.07))" }}
                 />
-                <form onSubmit={handleSubmit} className="space-y-5 relative h-full flex flex-col">
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 block mb-2">Name</label>
-                      <input
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        placeholder="Your name"
-                        className={inputClass}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 block mb-2">Email</label>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        placeholder="your@email.com"
-                        className={inputClass}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/85 block mb-2">Message</label>
-                    <textarea
-                      rows={6}
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      placeholder="Tell us about your project..."
-                      className={`${inputClass} resize-none`}
+                <form onSubmit={handleSubmit} className="space-y-6 relative h-full flex flex-col">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <FloatingInput
+                      label="Name"
+                      name="name"
+                      value={form.name}
                       required
+                      onChange={(value) => setForm({ ...form, name: value })}
+                      onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
+                      error={nameError}
+                    />
+                    <FloatingInput
+                      label="Email"
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      required
+                      onChange={(value) => setForm({ ...form, email: value })}
+                      onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
+                      error={emailError}
                     />
                   </div>
-                  <button
+
+                  <FloatingInput
+                    label="Message"
+                    name="message"
+                    multiline
+                    value={form.message}
+                    required
+                    maxLength={500}
+                    onChange={(value) => setForm({ ...form, message: value })}
+                    onBlur={() => setTouched((prev) => ({ ...prev, message: true }))}
+                    error={messageError}
+                    helperText={`${form.message.length}/500`}
+                  />
+
+                  <motion.button
                     type="submit"
-                    disabled={sending}
-                    className="w-full rounded-sm font-rajdhani text-[13px] tracking-[3.2px] uppercase border border-gold/70 bg-gold text-ink py-3.5 font-semibold transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={submitState === "loading"}
+                    className="relative overflow-hidden w-full rounded-sm font-rajdhani text-[13px] tracking-[3.2px] uppercase border border-gold/70 bg-[linear-gradient(90deg,rgb(var(--gold-rgb)/0.16),rgb(var(--gold-rgb)/0.04))] bg-[length:0%_100%] bg-left bg-no-repeat text-gold-light py-3.5 font-semibold transition-all duration-300 hover:bg-[length:100%_100%] hover:text-ink hover:border-gold/80 disabled:opacity-60 disabled:cursor-not-allowed"
+                    whileHover={prefersReduced ? undefined : { scale: 1.02 }}
+                    whileTap={prefersReduced ? undefined : { scale: 0.98 }}
+                    animate={
+                      submitState === "error" && !prefersReduced
+                        ? { x: [0, -8, 8, -8, 8, 0] }
+                        : undefined
+                    }
+                    transition={submitState === "error" ? { duration: 0.4 } : { duration: 0.2 }}
                   >
-                    {sending ? "Sending..." : "Send Message"}
-                  </button>
+                    {submitState === "idle" && "Send Message"}
+                    {submitState === "loading" && (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-gold/70 border-t-transparent" />
+                        Sending
+                      </span>
+                    )}
+                    {submitState === "success" && "✓ Sent!"}
+                    {submitState === "error" && "Try Again"}
+                  </motion.button>
                   {errorMsg && <p className="font-cormorant text-red-300 text-center">{errorMsg}</p>}
                   <p className="font-rajdhani text-[10px] tracking-[2.5px] uppercase text-cream/70 text-center">Response usually within 24 hours</p>
                 </form>

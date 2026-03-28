@@ -709,3 +709,35 @@
   }
 
 }
+
+/* Premium nav underline */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: rgb(var(--gold-rgb));
+  transition: width 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Hire button pulse */
+@keyframes hirePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--gold-rgb) / 0.35); }
+  50% { box-shadow: 0 0 0 10px rgb(var(--gold-rgb) / 0); }
+}
+
+.hire-pulse {
+  animation: hirePulse 3.6s ease-in-out infinite;
+}
+
+.hire-pulse:hover,
+.hire-pulse:focus-visible {
+  animation: none;
+}

@@ -13,7 +13,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileThemeOpen, setMobileThemeOpen] = useState(false)
   const [mobileTheme, setMobileTheme] = useState<Theme>("gold")
-  const progressBarRef = useRef<HTMLDivElement>(null)
   const touchStartX = useRef(0)
   const touchMoveX = useRef(0)
 
@@ -25,8 +24,6 @@ export default function Navbar() {
       setScrolled(scrollTop > 24)
       const doc = document.documentElement
       const scrollable = Math.max(1, doc.scrollHeight - window.innerHeight)
-      const progress = Math.min(100, (scrollTop / scrollable) * 100)
-      if (progressBarRef.current) progressBarRef.current.style.width = `${progress}%`
 
       const sectionEntries = NAV_LINKS.map((name) => ({
         name,
@@ -147,6 +144,26 @@ export default function Navbar() {
 
   useEffect(() => {
     if (pathname === "/") return
+    if (pathname.startsWith("/projects")) {
+      setActive("Projects")
+      return
+    }
+    if (pathname.startsWith("/services")) {
+      setActive("Services")
+      return
+    }
+    if (pathname.startsWith("/shubiq-labs")) {
+      setActive("Labs")
+      return
+    }
+    if (pathname.startsWith("/shubiq-studio")) {
+      setActive("Studio")
+      return
+    }
+    if (pathname.startsWith("/founder")) {
+      setActive("About")
+      return
+    }
     setActive("Home")
   }, [pathname])
 
@@ -169,11 +186,6 @@ export default function Navbar() {
             : "0 1px 12px rgb(0 0 0 / 0.28)",
         }}
       >
-        <div
-          ref={progressBarRef}
-          className="absolute left-0 top-0 h-[2.5px] bg-gold/90"
-          style={{ width: "0%", transition: "width 80ms linear" }}
-        />
         <div className={`max-w-7xl mx-auto px-5 max-[768px]:px-4 sm:px-6 lg:px-12 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-[3.15rem] max-[768px]:h-[3.05rem]" : "h-[3.36rem] max-[768px]:h-[3.15rem]"}`}>
           <button onClick={() => scrollTo("Home")} className="group flex items-center h-full gap-[3px]">
             <Image
@@ -195,14 +207,12 @@ export default function Navbar() {
               <button
                 key={link}
                 onClick={() => scrollTo(link)}
-                className="site-nav-link relative font-rajdhani font-semibold text-[12px] tracking-[0.72px] uppercase transition-colors duration-200 hover:text-gold/90"
+                className={`site-nav-link nav-link relative font-rajdhani font-semibold text-[12px] tracking-[0.72px] uppercase transition-colors duration-200 hover:text-gold/90 ${
+                  active === link ? "active" : ""
+                }`}
                 style={{ color: active === link ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.8)" }}
               >
                 {link}
-                <span
-                  className="absolute -bottom-[2px] left-0 h-[4px] bg-gold/95 transition-all duration-200"
-                  style={{ width: active === link ? "100%" : "0%" }}
-                />
               </button>
             ))}
           </div>
@@ -211,7 +221,7 @@ export default function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => scrollTo("Contact")}
-              className="site-nav-cta font-rajdhani text-[12px] font-semibold tracking-[1.7px] uppercase border border-gold/70 bg-gold text-ink px-[18px] py-[7px] transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]"
+              className="site-nav-cta hire-pulse font-rajdhani text-[12px] font-semibold tracking-[1.7px] uppercase border border-gold/70 bg-gold text-ink px-[18px] py-[7px] transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]"
             >
               Hire Us
             </button>

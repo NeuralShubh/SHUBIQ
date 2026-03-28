@@ -3,6 +3,7 @@ import Hero from "./components/Hero"
 import About from "./components/About"
 import Services from "./components/Services"
 import Projects from "./components/Projects"
+import TechConfidence from "./components/TechConfidence"
 import Ecosystem from "./components/Ecosystem"
 import Marquee from "./components/Marquee"
 import Contact from "./components/Contact"
@@ -25,6 +26,8 @@ export default function Home() {
             <Services />
             <GoldLine />
             <Projects />
+            <GoldLine />
+            <TechConfidence />
             <GoldLine />
             <Marquee />
             <GoldLine />
