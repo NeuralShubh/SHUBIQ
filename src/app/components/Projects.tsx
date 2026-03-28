@@ -1,5 +1,5 @@
-"use client"
-import { useRef } from "react"
+﻿"use client"
+import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { projects, Project } from "../data-projects"
@@ -50,7 +50,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [titleMain, ...titleRest] = display.split(" ")
   const titleSecondary = titleRest.join(" ")
   const actions = [
-    { href: `/projects/${project.slug}`, label: "View Project →", primary: false, external: false },
+    { href: `/projects/${project.slug}`, label: "View Project ->", primary: false, external: false },
     project.liveUrl ? { href: project.liveUrl, label: "Live", primary: true, external: true } : null,
   ].filter(Boolean) as Array<{ href: string; label: string; primary: boolean; external: boolean }>
   const tag = `${project.category} | ${project.status}`
@@ -81,7 +81,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="absolute left-0 top-0 w-px h-9 bg-gold/45 pointer-events-none" />
       <div className="absolute right-0 bottom-0 w-9 h-px bg-gold/45 pointer-events-none" />
       <div className="absolute right-0 bottom-0 w-px h-9 bg-gold/45 pointer-events-none" />
-      {project.featured && <div className="absolute -top-px left-8 h-px w-16 bg-gold" />}
+      {project.id === "buildwithshubh" && <div className="absolute -top-px left-8 h-px w-16 bg-gold" />}
 
       <div className="flex items-center justify-between mb-4">
         <div className="font-cinzel text-[14px] sm:text-[16px] leading-none text-cream/35 tracking-[0.01em] transition-all duration-300 group-hover:text-cream/55 group-hover:scale-[1.03]">
@@ -110,7 +110,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="mt-auto pt-1 flex items-center justify-between text-cream/55 text-[11px] font-rajdhani tracking-[3px] uppercase">
         <span className="flex items-center gap-2">
           Case Study
-          <span className="text-gold/80">↗</span>
+          <span className="text-gold/80">-></span>
         </span>
         <span className="text-cream/45">View Details</span>
       </div>
@@ -226,3 +226,4 @@ export default function Projects() {
     </section>
   )
 }
+

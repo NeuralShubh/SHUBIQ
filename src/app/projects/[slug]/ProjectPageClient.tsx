@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -33,7 +33,7 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
           className="flex items-center justify-between text-sm font-rajdhani tracking-[2px] uppercase text-cream/70"
         >
           <Link href="/projects" className="flex items-center gap-2 hover:text-gold-light transition-colors">
-            <span className="text-gold/80">?</span>
+            <span className="text-gold/80"><-</span>
             Back to Projects
           </Link>
           <span className="flex items-center gap-2 text-cream/60">
@@ -167,7 +167,7 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
                       rel="noreferrer"
                       className="w-full text-center font-rajdhani text-[12px] tracking-[3.2px] uppercase px-4 py-3 border border-gold/40 bg-gold/10 text-gold-light hover:bg-gold/20 hover:shadow-[0_0_20px_rgb(var(--gold-rgb)_/_0.18)] transition-all"
                     >
-                      View Live ?
+                      View Live ->
                     </a>
                   )}
                   {project.githubUrl && (
@@ -177,7 +177,7 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
                       rel="noreferrer"
                       className="w-full text-center font-rajdhani text-[12px] tracking-[3.2px] uppercase px-4 py-3 border border-[rgb(var(--cream-rgb)/0.2)] text-cream/80 hover:text-gold-light hover:border-[rgb(var(--cream-rgb)/0.4)] transition-all"
                     >
-                      View Source ?
+                      View Source ->
                     </a>
                   )}
                 </div>
@@ -206,8 +206,8 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
             >
               <div className="text-cream/50 text-xs tracking-[3px] uppercase font-rajdhani">Previous Project</div>
               <div className="mt-3 font-cinzel text-[18px] sm:text-[20px] text-cream">
-                <span className="sm:hidden">? {prevProject.number}</span>
-                <span className="hidden sm:inline">? {prevProject.number} {prevProject.title}</span>
+                <span className="sm:hidden"><- {prevProject.number}</span>
+                <span className="hidden sm:inline"><- {prevProject.number} {prevProject.title}</span>
               </div>
             </Link>
             <Link
@@ -216,8 +216,8 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
             >
               <div className="text-cream/50 text-xs tracking-[3px] uppercase font-rajdhani">Next Project</div>
               <div className="mt-3 font-cinzel text-[18px] sm:text-[20px] text-cream">
-                <span className="sm:hidden">{nextProject.number} ?</span>
-                <span className="hidden sm:inline">{nextProject.number} {nextProject.title} ?</span>
+                <span className="sm:hidden">{nextProject.number} -></span>
+                <span className="hidden sm:inline">{nextProject.number} {nextProject.title} -></span>
               </div>
             </Link>
           </div>

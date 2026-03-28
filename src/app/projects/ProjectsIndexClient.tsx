@@ -1,4 +1,4 @@
-"use client"
+ï»¿"use client"
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
@@ -79,7 +79,7 @@ export default function ProjectsIndexClient() {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     <div className="absolute bottom-4 left-4 text-cream/70 font-rajdhani text-[12px] tracking-[3px] uppercase">
-                      {project.number} · {project.category}
+                      {project.number} - {project.category}
                     </div>
                   </div>
 
@@ -104,7 +104,7 @@ export default function ProjectsIndexClient() {
                       ))}
                     </div>
                     <div className="mt-5 text-gold/80 text-[12px] tracking-[3px] uppercase font-rajdhani">
-                      View Project ?
+                      View Project ->
                     </div>
                   </div>
                 </Link>
