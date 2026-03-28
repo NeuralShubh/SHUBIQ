@@ -33,7 +33,7 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
           className="flex items-center justify-between text-sm font-rajdhani tracking-[2px] uppercase text-cream/70"
         >
           <Link href="/projects" className="flex items-center gap-2 hover:text-gold-light transition-colors">
-            <span className="text-gold/80"><-</span>
+            <span className="text-gold/80">&larr;</span>
             Back to Projects
           </Link>
           <span className="flex items-center gap-2 text-cream/60">
@@ -206,8 +206,8 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
             >
               <div className="text-cream/50 text-xs tracking-[3px] uppercase font-rajdhani">Previous Project</div>
               <div className="mt-3 font-cinzel text-[18px] sm:text-[20px] text-cream">
-                <span className="sm:hidden"><- {prevProject.number}</span>
-                <span className="hidden sm:inline"><- {prevProject.number} {prevProject.title}</span>
+                <span className="sm:hidden">&larr; {prevProject.number}</span>
+                <span className="hidden sm:inline">&larr; {prevProject.number} {prevProject.title}</span>
               </div>
             </Link>
             <Link
@@ -244,3 +244,4 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
     </div>
   )
 }
+
