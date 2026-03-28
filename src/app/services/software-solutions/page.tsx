@@ -95,6 +95,17 @@ export default function SoftwareSolutionsServicePage() {
             <p>
               From clean architecture to polished UX, we focus on durability, security, and flexibility so your software keeps working as you grow.
             </p>
+            <p>
+              You receive a structured delivery roadmap, transparent sprint updates, and documentation so your team can operate and scale confidently.
+            </p>
+            <div className="pt-1">
+              <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-2">What You Get</div>
+              <ul className="space-y-2 text-[15px] text-cream/70">
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Single source of truth across teams</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Automations that remove manual steps</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Secure roles and audit-ready data</li>
+              </ul>
+            </div>
           </div>
           <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 rounded-sm">
             <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Deliverables</div>

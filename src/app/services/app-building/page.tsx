@@ -95,6 +95,17 @@ export default function AppBuildingServicePage() {
             <p>
               Our delivery model keeps you involved at every sprint, so the end product reflects your vision and real user needs.
             </p>
+            <p>
+              You get a build plan that prioritizes launch readiness, a refined UX baseline, and analytics to guide the next sprint.
+            </p>
+            <div className="pt-1">
+              <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-2">What You Get</div>
+              <ul className="space-y-2 text-[15px] text-cream/70">
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Polished UX flows and interaction details</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Crash-free baseline + store readiness</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Analytics to guide the next sprint</li>
+              </ul>
+            </div>
           </div>
           <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 rounded-sm">
             <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Deliverables</div>

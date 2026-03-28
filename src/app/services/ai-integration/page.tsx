@@ -95,6 +95,17 @@ export default function AiIntegrationServicePage() {
             <p>
               Every integration includes monitoring, cost optimization, and safety checks so AI becomes a reliable part of your stack.
             </p>
+            <p>
+              You get clear success metrics, responsible guardrails, and transparent iteration so the system improves without surprises.
+            </p>
+            <div className="pt-1">
+              <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-2">What You Get</div>
+              <ul className="space-y-2 text-[15px] text-cream/70">
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>ROI baseline + measurable success target</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Guardrails, monitoring, and cost controls</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Human-in-the-loop fallback paths</li>
+              </ul>
+            </div>
           </div>
           <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 rounded-sm">
             <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Deliverables</div>

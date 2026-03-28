@@ -99,6 +99,17 @@ export default function WebDevelopmentServicePage() {
             <p>
               Our process includes performance budgets, conversion-first UX, and production-grade deployment so your site stays fast and stable long term.
             </p>
+            <p>
+              You get a dedicated build lead, clear weekly milestones, and a delivery plan that aligns with launch goals, not vanity features.
+            </p>
+            <div className="pt-1">
+              <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-2">What You Get</div>
+              <ul className="space-y-2 text-[15px] text-cream/70">
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Performance budget + Lighthouse targets</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Conversion-ready IA and CTA hierarchy</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Clean handoff docs + launch checklist</li>
+              </ul>
+            </div>
           </div>
           <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 rounded-sm">
             <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Deliverables</div>
