@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import About from "./components/About"
@@ -9,6 +10,12 @@ import Marquee from "./components/Marquee"
 import Contact from "./components/Contact"
 import GoldLine from "./components/GoldLine"
 import Footer from "./components/Footer"
+
+export const metadata: Metadata = {
+  title: "SHUBIQ | Intelligence That Wins",
+  description:
+    "SHUBIQ is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
+}
 
 export default function Home() {
   return (

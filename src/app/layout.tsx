@@ -6,6 +6,9 @@ import ThemeInit from "./components/ThemeInit"
 import LayoutShell from "./components/LayoutShell"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
+import ScrollProgress from "./components/ScrollProgress"
+import BackToTop from "./components/BackToTop"
+import LoadingScreen from "./components/LoadingScreen"
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"], display: "swap" })
 const cormorant = Cormorant_Garamond({
@@ -20,12 +23,14 @@ const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", wei
 export const metadata: Metadata = {
   metadataBase: new URL("https://shubiq.com"),
   title: {
-    default: "SHUBIQ: Intelligence That Wins",
+    default: "SHUBIQ | Intelligence That Wins",
     template: "%s | SHUBIQ",
   },
   description:
-    "SHUBIQ is a digital product and intelligence studio delivering web platforms, apps, AI systems, and scalable solutions for modern businesses.",
-  keywords: ["web development", "mobile apps", "AI solutions", "digital product studio", "SHUBIQ"],
+    "SHUBIQ is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
+  keywords: ["web development", "digital engineering", "AI integration", "SHUBIQ", "Next.js", "premium web design"],
+  authors: [{ name: "Shubham", url: "https://shubiq.com/founder" }],
+  creator: "SHUBIQ",
   alternates: {
     canonical: "https://shubiq.com",
   },
@@ -41,26 +46,27 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
+    locale: "en_US",
     url: "https://shubiq.com",
     siteName: "SHUBIQ",
-    title: "SHUBIQ: Intelligence That Wins",
+    title: "SHUBIQ | Intelligence That Wins",
     description:
-      "SHUBIQ is a digital product and intelligence studio delivering web platforms, apps, AI systems, and scalable solutions for modern businesses.",
+      "Premium digital engineering — web platforms, AI systems, and productivity apps.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "SHUBIQ",
+        alt: "SHUBIQ — Intelligence That Wins",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SHUBIQ: Intelligence That Wins",
-    description:
-      "SHUBIQ is a digital product and intelligence studio delivering web platforms, apps, AI systems, and scalable solutions for modern businesses.",
-    images: ["/opengraph-image"],
+    title: "SHUBIQ | Intelligence That Wins",
+    description: "Premium digital engineering — web platforms, AI systems, and productivity apps.",
+    creator: "@shubiqofficial",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -73,12 +79,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable}`}>
         <ThemeInit />
+        <LoadingScreen />
+        <ScrollProgress />
         <Navbar />
         <SmoothScroll>
           <LayoutShell>
             {children}
           </LayoutShell>
         </SmoothScroll>
+        <BackToTop />
         <Footer />
       </body>
     </html>

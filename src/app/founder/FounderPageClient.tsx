@@ -1,7 +1,7 @@
 "use client"
 
-/* eslint-disable @next/next/no-img-element */
 import Link from "next/link"
+import Image from "next/image"
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
 import { LayoutGrid, Brain, TrendingUp, Target } from "lucide-react"
 import ScrollReveal from "../components/ScrollReveal"
@@ -124,10 +124,13 @@ export default function FounderPageClient() {
               className="border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.65)] p-4 sm:p-5 rounded-sm shadow-[0_20px_40px_rgb(0_0_0_/_0.35)]"
             >
               <div className="aspect-[3/4] w-full overflow-hidden border border-gold/20">
-                <img
+                <Image
                   src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772213832/Image_ky1fkg.png"
                   alt="Shubham - Founder of SHUBIQ"
+                  width={900}
+                  height={1200}
                   className="w-full h-full object-cover object-center"
+                  priority
                 />
               </div>
               <div className="mt-4 text-center">

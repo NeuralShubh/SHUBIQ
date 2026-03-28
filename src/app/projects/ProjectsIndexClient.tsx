@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
 import { projects } from "../data-projects"
@@ -68,10 +69,11 @@ export default function ProjectsIndexClient() {
                 >
                   <div className="relative w-full aspect-[16/9] bg-[rgb(var(--surface-2-rgb)/0.8)]">
                     {project.videoPoster ? (
-                      <img
+                      <Image
                         src={project.videoPoster}
                         alt={project.title}
-                        loading="lazy"
+                        width={1200}
+                        height={675}
                         className="w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity"
                       />
                     ) : (

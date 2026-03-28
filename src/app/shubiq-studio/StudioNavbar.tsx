@@ -1,8 +1,8 @@
 "use client"
-/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import ThemeToggle from "../components/ThemeToggle"
 
 const STUDIO_LINKS = [
@@ -145,9 +145,12 @@ export default function StudioNavbar() {
         <div className={`max-w-7xl mx-auto px-5 max-[768px]:px-4 sm:px-6 lg:px-12 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-[3.15rem] max-[768px]:h-[3.05rem]" : "h-[3.36rem] max-[768px]:h-[3.15rem]"}`}>
           <div className="flex items-center h-full gap-2.5">
             <button onClick={() => scrollTo("studio-hero")} className="group flex items-center h-full gap-[3px]">
-              <img
+              <Image
                 src="https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Logo/SHUBIQ.png"
                 alt="SHUBIQ"
+                width={180}
+                height={72}
+                priority
                 className={`w-auto object-contain transition-opacity duration-200 group-hover:opacity-95 ${scrolled ? "h-8 max-[768px]:h-[1.82rem] sm:h-[2.1rem] md:h-[2.2rem]" : "h-8 max-[768px]:h-[1.9rem] sm:h-[2.2rem] md:h-[2.35rem]"}`}
                 style={{ filter: "drop-shadow(0 0 12px rgb(var(--gold-rgb) / 0.2))" }}
               />

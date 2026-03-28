@@ -1,4 +1,5 @@
-﻿import Link from "next/link"
+﻿import type { Metadata } from "next"
+import Link from "next/link"
 
 import GoldLine from "../../components/GoldLine"
 import ScrollReveal from "../../components/ScrollReveal"
@@ -61,6 +62,12 @@ const appFAQ = [
     answer: "Yes. We handle the full submission process for both Apple App Store and Google Play Store, including screenshots, descriptions, and compliance requirements.",
   },
 ]
+
+export const metadata: Metadata = {
+  title: "App Building",
+  description: "Cross-platform mobile apps engineered for execution, performance, and long-term scalability.",
+}
+
 
 export default function AppBuildingServicePage() {
   return (

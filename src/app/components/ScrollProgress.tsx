@@ -1,11 +1,14 @@
 ﻿"use client"
 
+import { usePathname } from "next/navigation"
 import { motion, useReducedMotion, useScroll } from "framer-motion"
 
 export default function ScrollProgress() {
   const prefersReduced = useReducedMotion()
   const { scrollYProgress } = useScroll()
+  const pathname = usePathname()
 
+  if (pathname.startsWith("/blog/")) return null
   if (prefersReduced) return null
 
   return (

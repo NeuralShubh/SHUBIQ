@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 
 interface VideoPlayerProps {
@@ -138,10 +139,11 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
         style={{ aspectRatio: "16/9" }}
       >
         {poster ? (
-          <img
+          <Image
             src={poster}
             alt={title}
-            loading="lazy"
+            width={1200}
+            height={675}
             className="w-full h-full object-cover opacity-40"
           />
         ) : (

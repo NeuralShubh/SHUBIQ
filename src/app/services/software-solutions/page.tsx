@@ -1,4 +1,5 @@
-﻿import Link from "next/link"
+﻿import type { Metadata } from "next"
+import Link from "next/link"
 
 import GoldLine from "../../components/GoldLine"
 import ScrollReveal from "../../components/ScrollReveal"
@@ -61,6 +62,12 @@ const softwareFAQ = [
     answer: "We build with clean architecture to accommodate changes. Sprint-based development means we can adjust priorities every 1 to 2 weeks without derailing the project.",
   },
 ]
+
+export const metadata: Metadata = {
+  title: "Software Solutions",
+  description: "Custom software platforms and internal tools engineered for scale, security, and operational clarity.",
+}
+
 
 export default function SoftwareSolutionsServicePage() {
   return (

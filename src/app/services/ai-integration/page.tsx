@@ -1,4 +1,5 @@
-﻿import Link from "next/link"
+﻿import type { Metadata } from "next"
+import Link from "next/link"
 
 import GoldLine from "../../components/GoldLine"
 import ScrollReveal from "../../components/ScrollReveal"
@@ -61,6 +62,12 @@ const aiFAQ = [
     answer: "It depends on usage volume. We design systems that optimize API costs, use caching where possible, and provide dashboards to monitor spend.",
   },
 ]
+
+export const metadata: Metadata = {
+  title: "AI Integration",
+  description: "Applied AI systems that automate workflows, reduce noise, and unlock measurable efficiency gains.",
+}
+
 
 export default function AiIntegrationServicePage() {
   return (

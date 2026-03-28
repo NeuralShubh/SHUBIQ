@@ -1,4 +1,5 @@
-﻿import Link from "next/link"
+﻿import type { Metadata } from "next"
+import Link from "next/link"
 
 import GoldLine from "../../components/GoldLine"
 import ScrollReveal from "../../components/ScrollReveal"
@@ -65,6 +66,12 @@ const webDevFAQ = [
     answer: "Absolutely. We can redesign and rebuild from scratch, or incrementally modernize your existing site depending on timeline and budget.",
   },
 ]
+
+export const metadata: Metadata = {
+  title: "Web Development",
+  description: "High-performance, conversion-focused websites and web apps built with modern stacks. Fast, scalable, and engineered for clarity.",
+}
+
 
 export default function WebDevelopmentServicePage() {
   return (
