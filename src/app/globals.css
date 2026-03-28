@@ -755,6 +755,20 @@
   animation: none;
 }
 
+/* Smooth theme transitions */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition:
+    background-color 0.4s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    fill 0.3s ease,
+    stroke 0.3s ease !important;
+}
+
 /* Blog typography */
 .blog-prose {
   font-size: 17px;
@@ -869,4 +883,50 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Animated gradient border (subtle premium accent) */
+.gradient-border {
+  position: relative;
+  border-radius: 16px;
+  isolation: isolate;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    rgb(var(--gold-rgb)),
+    transparent 40%,
+    transparent 60%,
+    rgb(var(--gold-rgb))
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderRotate 4s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gradient-border > * {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes borderRotate {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }

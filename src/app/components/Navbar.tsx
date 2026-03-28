@@ -2,26 +2,35 @@
 import { useEffect, useRef, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
+import { motion, useMotionValueEvent, useScroll } from "framer-motion"
 import { NAV_LINKS } from "../data"
 import ThemeToggle, { STORAGE_KEY, THEMES, Theme, applyTheme } from "./ThemeToggle"
+import MagneticButton from "./MagneticButton"
 
 export default function Navbar() {
   const router = useRouter()
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [active, setActive] = useState("Home")
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileThemeOpen, setMobileThemeOpen] = useState(false)
   const [mobileTheme, setMobileTheme] = useState<Theme>("gold")
   const touchStartX = useRef(0)
   const touchMoveX = useRef(0)
+  const { scrollY } = useScroll()
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0
+    setHidden(latest > previous && latest > 150)
+    setScrolled(latest > 24)
+  })
 
   useEffect(() => {
     let ticking = false
 
     const updateNavState = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
-      setScrolled(scrollTop > 24)
       const doc = document.documentElement
       const scrollable = Math.max(1, doc.scrollHeight - window.innerHeight)
 
@@ -135,7 +144,7 @@ export default function Navbar() {
 
   const applyMobileTheme = (next: Theme) => {
     setMobileTheme(next)
-    applyTheme(next)
+    applyTheme(next, true)
     localStorage.setItem(STORAGE_KEY, next)
     window.dispatchEvent(new Event("shubiq-theme-change"))
   }
@@ -171,8 +180,10 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
+      <motion.nav
         className="site-navbar fixed top-0 left-0 right-0 z-[9999] transition-[background,backdrop-filter,border-bottom,box-shadow] duration-700"
+        animate={{ y: hidden ? "-100%" : "0%" }}
+        transition={{ duration: 0.28, ease: "easeInOut" }}
         style={{
           background: scrolled
             ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.97), rgb(var(--surface-1-rgb) / 0.94))"
@@ -219,12 +230,13 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            <button
+            <MagneticButton
               onClick={() => scrollTo("Contact")}
+              data-cursor="Hire"
               className="site-nav-cta hire-pulse font-rajdhani text-[12px] font-semibold tracking-[1.7px] uppercase border border-gold/70 bg-gold text-ink px-[18px] py-[7px] transition-all duration-300 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]"
             >
               Hire Us
-            </button>
+            </MagneticButton>
           </div>
 
           <button
@@ -243,7 +255,7 @@ export default function Navbar() {
             ))}
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       <div
         className="fixed inset-0 z-[950] md:hidden transition-opacity duration-300"

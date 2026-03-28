@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { motion, useMotionValueEvent, useScroll } from "framer-motion"
 import ThemeToggle from "../components/ThemeToggle"
 
 const STUDIO_LINKS = [
@@ -15,17 +16,24 @@ const STUDIO_LINKS = [
 
 export default function StudioNavbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [active, setActive] = useState("studio-hero")
   const [menuOpen, setMenuOpen] = useState(false)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const navRef = useRef<HTMLElement>(null)
+  const { scrollY } = useScroll()
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0
+    setHidden(latest > previous && latest > 150)
+    setScrolled(latest > 24)
+  })
 
   useEffect(() => {
     let ticking = false
 
     const updateNavState = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
-      setScrolled(scrollTop > 24)
 
       const doc = document.documentElement
       const scrollable = Math.max(1, doc.scrollHeight - window.innerHeight)
@@ -122,9 +130,11 @@ export default function StudioNavbar() {
 
   return (
     <>
-      <nav
+      <motion.nav
         ref={navRef}
         className="site-navbar fixed top-0 left-0 right-0 z-[900] transition-all duration-500"
+        animate={{ y: hidden ? "-100%" : "0%" }}
+        transition={{ duration: 0.28, ease: "easeInOut" }}
         style={{
           background: scrolled
             ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.96), rgb(var(--surface-1-rgb) / 0.92))"
@@ -207,7 +217,7 @@ export default function StudioNavbar() {
             ))}
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       <div
         className="fixed inset-0 z-[950] md:hidden transition-opacity duration-300"

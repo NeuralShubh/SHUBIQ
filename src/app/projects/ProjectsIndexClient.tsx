@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
+import TextReveal from "../components/TextReveal"
 import { projects } from "../data-projects"
 
 export default function ProjectsIndexClient() {
@@ -21,7 +22,12 @@ export default function ProjectsIndexClient() {
               <span className="w-1 h-1 rounded-full bg-gold/85" />
               <div className="font-rajdhani text-[12px] tracking-[4px] text-gold/80 uppercase">Projects</div>
             </div>
-            <h1 className="font-cinzel text-[clamp(34px,7vw,64px)] text-cream leading-[1.05]">Digital Portfolio</h1>
+            <TextReveal
+              text="Digital Portfolio"
+              as="h1"
+              mode="words"
+              className="font-cinzel text-[clamp(34px,7vw,64px)] text-cream leading-[1.05]"
+            />
             <p className="mt-3 font-cormorant text-[19px] sm:text-[21px] text-cream/70 max-w-3xl leading-[1.6]">
               Strategic product builds across web platforms, AI systems, and scalable business software.
             </p>
@@ -66,6 +72,7 @@ export default function ProjectsIndexClient() {
                 <Link
                   href={`/projects/${project.slug}`}
                   className="group block h-full border border-[rgb(var(--cream-rgb)/0.16)] bg-card-soft rounded-sm overflow-hidden hover:border-gold/40 transition-all"
+                  data-cursor="Open"
                 >
                   <div className="relative w-full aspect-[16/9] bg-[rgb(var(--surface-2-rgb)/0.8)]">
                     {project.videoPoster ? (

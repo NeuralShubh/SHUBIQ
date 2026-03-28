@@ -9,6 +9,7 @@ import { projects } from "../data-projects"
 import { LAB_PRODUCTS } from "../data-labs"
 import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
 import { useInViewOnce } from "../lib/gsap-hooks"
+import NumberTicker from "./NumberTicker"
 
 const TYPE_COLORS: Record<string, string> = {
   project: "rgb(var(--gold-light-rgb))",
@@ -44,44 +45,6 @@ const TYPE_ICONS: Record<string, LucideIcon> = {
   case_study: Lightbulb,
 }
 
-function useCountUp(end: number, duration = 1500, reducedMotion = false) {
-  const [count, setCount] = useState(reducedMotion ? end : 0)
-  const ref = useRef<HTMLDivElement>(null)
-  const counted = useRef(false)
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setCount(end)
-      return
-    }
-
-    const el = ref.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !counted.current) {
-          counted.current = true
-          const start = performance.now()
-          const tick = (now: number) => {
-            const progress = Math.min((now - start) / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setCount(Math.round(eased * end))
-            if (progress < 1) requestAnimationFrame(tick)
-          }
-          requestAnimationFrame(tick)
-        }
-      },
-      { threshold: 0.3 },
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [end, duration, reducedMotion])
-
-  return { count, ref }
-}
-
 function StatCard({
   label,
   value,
@@ -95,15 +58,13 @@ function StatCard({
   reducedMotion: boolean
   inView: boolean
 }) {
-  const { count, ref } = useCountUp(value, 1500, reducedMotion)
-
   return (
     <div
       className={`reveal ${inView ? "in-view" : ""} border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-2.5 text-center md:border md:border-[rgb(var(--cream-rgb)/0.1)] md:bg-[rgb(var(--cream-rgb)/0.01)] md:px-4 md:py-5 md:transition-all md:duration-300 md:hover:border-gold/20 md:hover:bg-gold/[0.03] md:hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.1)]`}
       style={{ animationDelay: delay }}
     >
-      <div ref={ref} className="font-cinzel text-[34px] md:text-[44px] leading-none text-gold font-black">
-        {count}
+      <div className="font-cinzel text-[34px] md:text-[44px] leading-none text-gold font-black">
+        {reducedMotion ? value : <NumberTicker value={value} />}
       </div>
       <div className="font-rajdhani text-[10px] md:text-[11px] tracking-[2.6px] md:tracking-[3.4px] uppercase text-cream/55 mt-2">
         {label}

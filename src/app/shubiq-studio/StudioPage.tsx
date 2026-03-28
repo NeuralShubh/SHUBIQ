@@ -9,6 +9,8 @@ import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 import SectionDivider from "../components/SectionDivider"
 import FloatingInput from "../components/FloatingInput"
 import FloatingSelect from "../components/FloatingSelect"
+import MagneticButton from "../components/MagneticButton"
+import NumberTicker from "../components/NumberTicker"
 import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
 import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 import {
@@ -196,64 +198,6 @@ function SectionLabel({ label, centered = false }: { label: string; centered?: b
   )
 }
 
-function useCountUpValue(target: number, duration = 1200, reducedMotion = false) {
-  const [value, setValue] = useState(reducedMotion ? target : 0)
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setValue(target)
-      return
-    }
-    const start = performance.now()
-    let rafId = 0
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setValue(Math.round(eased * target))
-      if (progress < 1) rafId = requestAnimationFrame(tick)
-    }
-    rafId = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(rafId)
-  }, [target, duration, reducedMotion])
-
-  return value
-}
-
-function useCountUpOnView(target: number, duration = 1200, reducedMotion = false) {
-  const [value, setValue] = useState(reducedMotion ? target : 0)
-  const ref = useRef<HTMLSpanElement>(null)
-  const started = useRef(false)
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setValue(target)
-      return
-    }
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true
-          const start = performance.now()
-          const tick = (now: number) => {
-            const progress = Math.min((now - start) / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setValue(Math.round(eased * target))
-            if (progress < 1) requestAnimationFrame(tick)
-          }
-          requestAnimationFrame(tick)
-        }
-      },
-      { threshold: 0.4 },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [target, duration, reducedMotion])
-
-  return { value, ref }
-}
-
 // â”€â”€â”€ Hero Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StudioHero() {
@@ -265,9 +209,6 @@ function StudioHero() {
   const ctaRef = useRef<HTMLDivElement>(null)
   const tagsRef = useRef<HTMLDivElement>(null)
   const statsRef = useRef<HTMLDivElement>(null)
-  const prefersReduced = !!useReducedMotion()
-  const countSystems = useCountUpValue(10, 1200, prefersReduced)
-  const countYears = useCountUpValue(3, 1200, prefersReduced)
 
   useEffect(() => {
     const init = async () => {
@@ -413,18 +354,20 @@ function StudioHero() {
         </p>
 
         <div ref={ctaRef} className="flex max-sm:flex-col gap-4 sm:gap-5 justify-center flex-wrap mb-12 max-md:mb-9 max-sm:w-full max-sm:max-w-[22rem] max-sm:mx-auto">
-          <button
+          <MagneticButton
             onClick={() => scrollTo("studio-pricing")}
+            data-cursor="View"
             className="font-rajdhani text-[13px] sm:text-[14px] tracking-[2.6px] sm:tracking-[3px] uppercase px-8 sm:px-11 py-[10px] font-semibold bg-gold text-ink border border-gold/70 md:hover:bg-gold-light md:hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] transition-all duration-300 max-sm:w-full"
           >
             View Pricing
-          </button>
-          <button
+          </MagneticButton>
+          <MagneticButton
             onClick={() => scrollTo("studio-contact-anchor")}
+            data-cursor="Start"
             className="font-rajdhani text-[13px] sm:text-[14px] tracking-[2.6px] sm:tracking-[3px] uppercase px-8 sm:px-11 py-[10px] font-semibold border border-gold/24 text-cream md:hover:border-gold/72 md:hover:bg-gold/[0.04] transition-all duration-300 max-sm:w-full"
           >
             Start a Project
-          </button>
+          </MagneticButton>
         </div>
 
         <div ref={tagsRef} className="mt-0 mb-14 max-md:mb-9" style={{ opacity: 0.9 }}>
@@ -447,12 +390,14 @@ function StudioHero() {
           className="pt-7 max-md:pt-6 grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-9 max-w-[760px] mx-auto"
         >
           {[
-            { val: `${countSystems}+`, label: "Production Systems" },
-            { val: `${countYears}+`, label: "Years Engineering" },
+            { val: <NumberTicker value={10} suffix="+" />, label: "Production Systems" },
+            { val: <NumberTicker value={3} suffix="+" />, label: "Years Engineering" },
             { val: "Precision-Driven", label: "Delivery" },
           ].map((s) => (
             <div key={s.label} className="text-center min-h-[72px] flex flex-col items-center justify-start">
-              <div className="font-cinzel font-black text-gold/88 leading-none" style={{ fontSize: "clamp(24px, 3.35vw, 34px)" }}>{s.val}</div>
+              <div className="font-cinzel font-black text-gold/88 leading-none" style={{ fontSize: "clamp(24px, 3.35vw, 34px)" }}>
+                {s.val}
+              </div>
               <div className="font-rajdhani text-[9px] tracking-[2.1px] uppercase text-cream/44 mt-0.5">{s.label}</div>
             </div>
           ))}
@@ -910,7 +855,6 @@ function ProjectCard({ project, index }: { project: StudioPortfolioProject; inde
 function StudioPricing({ content }: { content: StudioContent }) {
   const scrollToContact = () => document.getElementById("studio-contact-anchor")?.scrollIntoView({ behavior: "smooth" })
   const pricingPlans = content.plans?.length ? content.plans : DEFAULT_STUDIO_CONTENT.plans
-  const prefersReduced = !!useReducedMotion()
 
   return (
     <section id="studio-pricing" className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden">
@@ -955,7 +899,6 @@ function StudioPricing({ content }: { content: StudioContent }) {
         >
           {pricingPlans.map((plan) => {
             const Icon = PRICING_ICON_MAP[plan.icon] ?? TrendingUp
-            const { value, ref } = useCountUpOnView(plan.price, 1200, prefersReduced)
             return (
               <motion.article
                 key={plan.id}
@@ -966,7 +909,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
                 transition={{ duration: 0.6, ease: "easeOut", delay: plan.highlighted ? 0.12 : 0 }}
                 className={`group relative flex flex-col rounded-[22px] sm:rounded-[28px] p-5 max-sm:p-4.5 sm:px-9 sm:py-9 border opacity-95 overflow-visible duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] transition-[transform,border-color,box-shadow,color] hover:border-gold/65 hover:shadow-[0_20px_50px_rgba(40,90,255,0.12)] hover:scale-[1.03] max-md:hover:translate-y-0 max-md:hover:scale-100 ${
                   plan.highlighted
-                    ? "studio-popular-pulse md:scale-[1.03] md:min-h-[690px] pt-7 sm:pt-[54px] pb-6 sm:pb-[44px] opacity-100 border-2 border-gold/45 bg-gradient-to-b from-[rgb(var(--surface-2-rgb)/0.98)] to-[rgb(var(--surface-1-rgb)/0.95)] shadow-[0_14px_34px_rgb(var(--gold-rgb)/0.10)]"
+                    ? "studio-popular-pulse gradient-border md:scale-[1.03] md:min-h-[690px] pt-7 sm:pt-[54px] pb-6 sm:pb-[44px] opacity-100 border-2 border-gold/45 bg-gradient-to-b from-[rgb(var(--surface-2-rgb)/0.98)] to-[rgb(var(--surface-1-rgb)/0.95)] shadow-[0_14px_34px_rgb(var(--gold-rgb)/0.10)]"
                     : "border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,#11192d_0%,#0c1425_100%)]"
                 }`}
               >
@@ -991,8 +934,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
                 <div className="mb-3.5 sm:mb-4">
                   <div className="flex items-end gap-1.5 min-h-[62px] sm:min-h-[80px]">
                     <span className="font-cinzel font-bold text-[2.25rem] sm:text-5xl leading-[0.94] text-gold">
-                      <span className="inline-block align-top text-[0.8em]">₹</span>
-                      <span ref={ref}>{value.toLocaleString("en-IN")}</span>{plan.priceSuffix ?? ""}
+                      <NumberTicker value={plan.price} prefix="₹" suffix={plan.priceSuffix ?? ""} locale="en-IN" />
                     </span>
                   </div>
                   <div className={`font-cormorant text-[12px] sm:text-[13px] tracking-[0.5px] sm:tracking-[0.7px] mt-1 ${plan.highlighted ? "text-cream/84" : "text-cream/76"}`}>{plan.meta}</div>
@@ -1024,6 +966,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
                   onClick={scrollToContact}
                   whileTap={{ scale: 0.97 }}
                   transition={{ duration: 0.12 }}
+                  data-cursor="Start"
                   className={`w-full font-rajdhani text-[11px] sm:text-[13px] tracking-[1.3px] sm:tracking-[1.8px] uppercase py-3.5 font-semibold transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center justify-center gap-2 group border rounded-[14px] sm:rounded-2xl ${
                     plan.highlighted
                       ? "text-ink border-gold/70 bg-[linear-gradient(90deg,rgb(var(--gold-rgb))_0%,rgb(255_220_132)_50%,rgb(var(--gold-rgb))_100%)] bg-[length:200%_100%] bg-left md:hover:bg-right md:hover:brightness-105"

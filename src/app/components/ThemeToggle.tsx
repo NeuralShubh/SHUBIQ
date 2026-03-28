@@ -15,8 +15,12 @@ export const THEMES: { id: Theme; label: string }[] = [
   { id: "amber", label: "Amber Smoke" },
 ]
 
-export function applyTheme(theme: Theme) {
+export function applyTheme(theme: Theme, withTransition = false) {
   const root = document.documentElement
+  if (withTransition) {
+    root.classList.add("theme-transitioning")
+    window.setTimeout(() => root.classList.remove("theme-transitioning"), 520)
+  }
   if (theme === "gold") root.removeAttribute("data-theme")
   else root.setAttribute("data-theme", theme)
 }
@@ -46,7 +50,7 @@ export default function ThemeToggle() {
       const migrated = saved === "cyan" ? "cobalt" : saved
       const next: Theme = THEMES.some((t) => t.id === migrated) ? (migrated as Theme) : "gold"
       setTheme(next)
-      applyTheme(next)
+      applyTheme(next, true)
     }
     document.addEventListener("mousedown", onDocClick)
     document.addEventListener("keydown", onEsc)
@@ -62,13 +66,22 @@ export default function ThemeToggle() {
 
   const setThemeAndPersist = (next: Theme) => {
     setTheme(next)
-    applyTheme(next)
+    applyTheme(next, true)
     localStorage.setItem(STORAGE_KEY, next)
     window.dispatchEvent(new Event("shubiq-theme-change"))
     setOpen(false)
   }
 
   const activeLabel = THEMES.find((t) => t.id === theme)?.label ?? "Appearance"
+  const swatches: Record<Theme, string[]> = {
+    gold: ["rgb(196, 164, 88)", "rgb(8, 10, 14)", "rgb(233, 230, 222)"],
+    cobalt: ["rgb(94, 154, 233)", "rgb(8, 10, 14)", "rgb(229, 236, 247)"],
+    emerald: ["rgb(34, 180, 146)", "rgb(8, 10, 14)", "rgb(220, 235, 230)"],
+    violet: ["rgb(145, 118, 228)", "rgb(8, 10, 14)", "rgb(232, 227, 246)"],
+    crimson: ["rgb(203, 92, 102)", "rgb(8, 10, 14)", "rgb(240, 226, 227)"],
+    silver: ["rgb(178, 190, 208)", "rgb(8, 10, 14)", "rgb(235, 239, 244)"],
+    amber: ["rgb(224, 152, 79)", "rgb(8, 10, 14)", "rgb(241, 233, 218)"],
+  }
 
   return (
     <div ref={wrapRef} className="theme-toggle-wrap relative">
@@ -82,8 +95,9 @@ export default function ThemeToggle() {
         Appearance
       </button>
 
+      
       {open && (
-        <div className="theme-toggle-menu absolute right-0 mt-2 w-64 border border-[rgb(var(--cream-rgb)/0.2)] bg-ink/95 backdrop-blur-md p-1.5 z-[1000] shadow-[0_8px_22px_rgb(0_0_0_/_0.28)]">
+        <div className="theme-toggle-menu absolute right-0 mt-2 w-72 border border-[rgb(var(--cream-rgb)/0.2)] bg-ink/95 backdrop-blur-md p-2 z-[1000] shadow-[0_8px_22px_rgb(0_0_0_/_0.28)] animate-fade-in">
           {THEMES.map((t) => {
             const active = t.id === theme
             return (
@@ -91,6 +105,30 @@ export default function ThemeToggle() {
                 key={t.id}
                 type="button"
                 onClick={() => setThemeAndPersist(t.id)}
+                className={`theme-toggle-option w-full text-left px-3 py-2.5 rounded-lg font-rajdhani text-[12px] tracking-[1.6px] uppercase transition-colors duration-200 flex items-center gap-3 ${
+                  active ? "text-gold bg-gold/12" : "text-cream hover:text-gold hover:bg-gold/6"
+                }`}
+              >
+                <div className="flex -space-x-1">
+                  {swatches[t.id].map((color, index) => (
+                    <span
+                      key={`${t.id}-${index}`}
+                      className="w-4 h-4 rounded-full border-2 border-ink"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+                <span className="flex-1">{t.label}</span>
+                {active && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-gold">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+              </button>
+            )
+          })}
+        </div>
+      )}
                 className={`theme-toggle-option w-full text-left px-3 py-2.5 font-rajdhani text-[12px] tracking-[1.6px] uppercase transition-colors duration-200 ${
                   active ? "text-gold bg-gold/12" : "text-cream hover:text-gold hover:bg-gold/6"
                 }`}

@@ -5,6 +5,7 @@ import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
+import TextReveal from "../components/TextReveal"
 import { getBlogPosts } from "./blogData"
 
 export default function BlogIndexClient() {
@@ -42,7 +43,7 @@ export default function BlogIndexClient() {
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <h1 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6vw,64px)] mb-4">
-              SHUBIQ
+              <TextReveal text="SHUBIQ" as="span" mode="chars" className="inline-block" />
               <span className="text-gold"> Field Notes</span>
             </h1>
           </ScrollReveal>
@@ -61,7 +62,7 @@ export default function BlogIndexClient() {
         <div className="max-w-6xl mx-auto">
           <ScrollReveal>
             <Link href={`/blog/${featuredPost.slug}`}>
-              <div className="group relative rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] overflow-hidden hover:border-gold/40 transition-all duration-300">
+              <div className="group relative rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] overflow-hidden hover:border-gold/40 transition-all duration-300 gradient-border" data-cursor="Read">
                 <div className="aspect-[21/9] bg-[linear-gradient(135deg,rgb(var(--gold-rgb)/0.08),rgb(var(--surface-2-rgb)/0.85),rgb(var(--gold-rgb)/0.12))] relative overflow-hidden">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-[64px] sm:text-[90px] font-bold opacity-[0.05] select-none font-cinzel">
@@ -150,4 +151,3 @@ export default function BlogIndexClient() {
     </main>
   )
 }
-

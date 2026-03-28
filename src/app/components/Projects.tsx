@@ -70,6 +70,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       role="link"
       tabIndex={0}
       aria-label={`View ${project.title} project details`}
+      data-cursor="Open"
       style={{ boxShadow: "0 0 0 1px rgb(var(--cream-rgb) / 0.05) inset, 0 20px 38px rgb(0 0 0 / 0.26)" }}
     >
       <div

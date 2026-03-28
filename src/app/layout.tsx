@@ -9,6 +9,8 @@ import Footer from "./components/Footer"
 import ScrollProgress from "./components/ScrollProgress"
 import BackToTop from "./components/BackToTop"
 import LoadingScreen from "./components/LoadingScreen"
+import CustomCursor from "./components/CustomCursor"
+import MobileNav from "./components/MobileNav"
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"], display: "swap" })
 const cormorant = Cormorant_Garamond({
@@ -80,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable}`}>
         <ThemeInit />
         <LoadingScreen />
+        <CustomCursor />
         <ScrollProgress />
         <Navbar />
         <SmoothScroll>
@@ -87,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </LayoutShell>
         </SmoothScroll>
+        <MobileNav />
         <BackToTop />
         <Footer />
       </body>

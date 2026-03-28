@@ -1,8 +1,9 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { SOCIAL_LINKS } from "../data"
 import { useInViewOnce } from "../lib/gsap-hooks"
+import MagneticButton from "./MagneticButton"
 
 const EASE_PREMIUM = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -172,10 +173,20 @@ export default function Hero() {
           className="flex gap-3.5 max-[768px]:gap-2.5 sm:gap-4 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-9 sm:mb-10"
           {...fadeUp(0.7)}
         >
-          <MagneticButton onClick={() => scrollTo("projects")} primary>
+          <MagneticButton
+            onClick={() => scrollTo("projects")}
+            data-cursor="View"
+            className="w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 bg-gold text-ink border border-gold/70 hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]"
+          >
             Explore Work
           </MagneticButton>
-          <MagneticButton onClick={() => scrollTo("contact")}>Hire Us</MagneticButton>
+          <MagneticButton
+            onClick={() => scrollTo("contact")}
+            data-cursor="Hire"
+            className="w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream hover:border-gold hover:text-gold hover:bg-gold/6"
+          >
+            Hire Us
+          </MagneticButton>
         </motion.div>
 
         {/* Social links */}
@@ -215,51 +226,5 @@ export default function Hero() {
         </div>
       </motion.div>
     </section>
-  )
-}
-
-function MagneticButton({ children, onClick, primary }: { children: React.ReactNode; onClick: () => void; primary?: boolean }) {
-  const ref = useRef<HTMLButtonElement>(null)
-  const [isDesktopInteractions, setIsDesktopInteractions] = useState(false)
-
-  useEffect(() => {
-    const update = () => setIsDesktopInteractions(window.innerWidth >= 768 && !("ontouchstart" in window))
-    update()
-    window.addEventListener("resize", update)
-    return () => window.removeEventListener("resize", update)
-  }, [])
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDesktopInteractions) return
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const dx = (e.clientX - rect.left - rect.width / 2) * 0.3
-    const dy = (e.clientY - rect.top - rect.height / 2) * 0.3
-    el.style.transform = `translate(${dx}px, ${dy}px)`
-  }
-
-  const handleMouseLeave = () => {
-    if (!isDesktopInteractions) return
-    const el = ref.current
-    if (!el) return
-    el.style.transform = "translate(0px, 0px)"
-    el.style.transition = "transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
-  }
-
-  return (
-    <button
-      ref={ref}
-      onClick={onClick}
-      onMouseMove={isDesktopInteractions ? handleMouseMove : undefined}
-      onMouseLeave={isDesktopInteractions ? handleMouseLeave : undefined}
-      className={`w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 ${
-        primary
-          ? `max-[768px]:rounded-sm max-[768px]:text-[13px] max-[768px]:tracking-[3.2px] max-[768px]:border-gold/70 max-[768px]:bg-gold max-[768px]:text-ink max-[768px]:py-3.5 bg-gold text-ink border border-gold/70 ${isDesktopInteractions ? "hover:bg-gold-light hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)]" : ""}`
-          : `border border-gold/30 text-cream ${isDesktopInteractions ? "hover:border-gold hover:text-gold hover:bg-gold/6" : ""}`
-      }`}
-    >
-      {children}
-    </button>
   )
 }

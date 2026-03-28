@@ -186,11 +186,12 @@ export default function LabsPageClient() {
                   <div
                     className={`group relative border rounded-sm p-6 sm:p-7 overflow-hidden transition-all duration-300 ${
                       isLive
-                        ? "border-gold/45 bg-card-soft shadow-[0_28px_60px_rgb(0_0_0_/_0.34)] hover:shadow-[0_34px_70px_rgb(0_0_0_/_0.42)] hover:-translate-y-1"
+                        ? "gradient-border border-gold/45 bg-card-soft shadow-[0_28px_60px_rgb(0_0_0_/_0.34)] hover:shadow-[0_34px_70px_rgb(0_0_0_/_0.42)] hover:-translate-y-1"
                         : isInDev
                           ? "border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--surface-2-rgb)/0.6)] opacity-90 hover:-translate-y-0.5"
                           : "border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.5)] opacity-65"
                     }`}
+                    data-cursor={isLive ? "Open" : undefined}
                   >
                     <div
                       className="absolute inset-0 pointer-events-none"
