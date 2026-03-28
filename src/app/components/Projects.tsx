@@ -58,21 +58,13 @@ export default function Projects() {
           ))}
         </StaggerContainer>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 text-center">
+        <div className="mt-10 flex justify-center">
           <Link
             href="/projects"
-            className="group inline-flex items-center font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors relative"
+            className="group inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors"
           >
             View All Projects
-            <span className="ml-2 transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
-          </Link>
-          <span className="hidden sm:block h-4 w-px bg-[rgb(var(--cream-rgb)/0.2)]" />
-          <Link
-            href="/projects"
-            className="group inline-flex items-center font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors relative"
-          >
-            View All Products
-            <span className="ml-2 transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+            <span className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
           </Link>
         </div>
       </div>
