@@ -2,6 +2,8 @@
 
 import { motion, useReducedMotion } from "framer-motion"
 
+const ASSEMBLE_EASE = [0.16, 1, 0.3, 1] as const
+
 interface StaggerContainerProps {
   children: React.ReactNode
   staggerDelay?: number
@@ -23,10 +25,11 @@ export default function StaggerContainer({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-60px" }}
+      viewport={{ once: true, margin: "-50px" }}
       variants={{
+        hidden: {},
         visible: {
-          transition: { staggerChildren: staggerDelay },
+          transition: { staggerChildren: staggerDelay, delayChildren: 0.05 },
         },
       }}
       className={className}
@@ -52,14 +55,25 @@ export function StaggerItem({
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 30 },
+        hidden: {
+          opacity: 0,
+          y: 56,
+          scale: 0.88,
+          filter: "blur(6px)",
+        },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.5, ease: "easeOut" },
+          scale: 1,
+          filter: "blur(0px)",
+          transition: {
+            duration: 0.8,
+            ease: ASSEMBLE_EASE,
+          },
         },
       }}
       className={className}
+      style={{ willChange: "transform, opacity, filter" }}
     >
       {children}
     </motion.div>

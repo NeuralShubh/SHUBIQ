@@ -1,7 +1,8 @@
 "use client"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
+import { motion } from "framer-motion"
 import { NAV_LINKS } from "../data"
 import ThemeToggle, { STORAGE_KEY, THEMES, Theme, applyTheme } from "./ThemeToggle"
 
@@ -13,8 +14,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileThemeOpen, setMobileThemeOpen] = useState(false)
   const [mobileTheme, setMobileTheme] = useState<Theme>("gold")
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const navRef = useRef<HTMLElement>(null)
+  const progressBarRef = useRef<HTMLDivElement>(null)
   const touchStartX = useRef(0)
   const touchMoveX = useRef(0)
 
@@ -26,7 +26,8 @@ export default function Navbar() {
       setScrolled(scrollTop > 24)
       const doc = document.documentElement
       const scrollable = Math.max(1, doc.scrollHeight - window.innerHeight)
-      setScrollProgress(Math.min(100, (scrollTop / scrollable) * 100))
+      const progress = Math.min(100, (scrollTop / scrollable) * 100)
+      if (progressBarRef.current) progressBarRef.current.style.width = `${progress}%`
 
       const sectionEntries = NAV_LINKS.map((name) => ({
         name,
@@ -92,22 +93,6 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onEsc)
   }, [])
 
-  useLayoutEffect(() => {
-    if (navRef.current) navRef.current.style.opacity = "0"
-  }, [])
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        gsap.fromTo(navRef.current,
-          { y: -60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.2, ease: "power4.out", delay: 0.4 }
-        )
-      } catch { /* no-op */ }
-    }
-    init()
-  }, [])
 
   const scrollTo = (section: string) => {
     if (section === "Studio") {
@@ -162,9 +147,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        ref={navRef}
-        className="site-navbar fixed top-0 left-0 right-0 z-[900] transition-all duration-700"
+      <motion.nav
+        className="site-navbar fixed top-0 left-0 right-0 z-[900] transition-[background,backdrop-filter,border-bottom] duration-700"
+        initial={{ y: -64, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         style={{
           background: scrolled
             ? "linear-gradient(to bottom, rgb(var(--surface-2-rgb) / 0.95), rgb(var(--surface-1-rgb) / 0.9))"
@@ -177,8 +164,9 @@ export default function Navbar() {
         }}
       >
         <div
-          className="absolute left-0 top-0 h-[2.5px] bg-gold/90 transition-[width] duration-200"
-          style={{ width: `${scrollProgress}%` }}
+          ref={progressBarRef}
+          className="absolute left-0 top-0 h-[2.5px] bg-gold/90"
+          style={{ width: "0%", transition: "width 80ms linear" }}
         />
         <div className={`max-w-7xl mx-auto px-5 max-[768px]:px-4 sm:px-6 lg:px-12 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-[3.15rem] max-[768px]:h-[3.05rem]" : "h-[3.36rem] max-[768px]:h-[3.15rem]"}`}>
           <button onClick={() => scrollTo("Home")} className="group flex items-center h-full gap-[3px]">
@@ -239,7 +227,7 @@ export default function Navbar() {
             ))}
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       <div
         className="fixed inset-0 z-[950] md:hidden transition-opacity duration-300"
