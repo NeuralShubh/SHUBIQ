@@ -1,4 +1,6 @@
-﻿import Link from "next/link"
+﻿"use client"
+
+import Link from "next/link"
 import { motion, useReducedMotion } from "framer-motion"
 import ScrollReveal from "./ScrollReveal"
 
@@ -48,3 +50,4 @@ export default function PricingTeaser({ startingPrice, note }: PricingTeaserProp
     </ScrollReveal>
   )
 }
+
