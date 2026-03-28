@@ -14,19 +14,23 @@ export default function Home() {
     <>
       <Navbar />
       <main>
-        <Hero />
-        <GoldLine />
-        <About />
-        <GoldLine />
-        <Services />
-        <GoldLine />
-        <Projects />
-        <GoldLine />
-        <Marquee />
-        <GoldLine />
-        <Ecosystem />
-        <GoldLine />
-        <Contact />
+        <div className="hero-sticky">
+          <Hero />
+        </div>
+        <div className="page-stack">
+          <GoldLine />
+          <About />
+          <GoldLine />
+          <Services />
+          <GoldLine />
+          <Projects />
+          <GoldLine />
+          <Marquee />
+          <GoldLine />
+          <Ecosystem />
+          <GoldLine />
+          <Contact />
+        </div>
       </main>
       <Footer />
     </>

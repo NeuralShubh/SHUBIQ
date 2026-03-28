@@ -582,6 +582,18 @@
     animation: orbit-spin 40s linear infinite;
   }
 
+  .hero-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 0;
+  }
+
+  .page-stack {
+    position: relative;
+    z-index: 1;
+  }
+
   @keyframes pulse-gold {
     0%, 100% { box-shadow: 0 0 0 0 rgb(var(--gold-rgb) / 0); }
     50%       { box-shadow: 0 0 20px 4px rgb(var(--gold-rgb) / 0.2); }
