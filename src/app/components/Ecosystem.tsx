@@ -5,8 +5,6 @@ import { AppWindow, Boxes, Building2, Lightbulb, Rocket, Wrench } from "lucide-r
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { ECOSYSTEM_ITEMS } from "../data"
-import { projects } from "../data-projects"
-import { LAB_PRODUCTS } from "../data-labs"
 import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import NumberTicker from "./NumberTicker"
@@ -265,9 +263,7 @@ export default function Ecosystem() {
   const filtered = (filter === "all" ? items : items.filter((i) => i.type === filter)).sort(
     (a, b) => a.order_index - b.order_index,
   )
-  const studioItems = projects.map((project) => ({ status: project.status }))
-  const labItems = LAB_PRODUCTS.map((product) => ({ status: product.status }))
-  const allItems = [...studioItems, ...labItems]
+  const allItems = items.map((item) => ({ status: item.status }))
 
   const isLive = (status: string) => status.toLowerCase().includes("live")
   const isInDev = (status: string) => status.toLowerCase().includes("in dev")
