@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
 import { NAV_LINKS } from "../data"
@@ -92,6 +92,10 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onEsc)
   }, [])
 
+  useLayoutEffect(() => {
+    if (navRef.current) navRef.current.style.opacity = "0"
+  }, [])
+
   useEffect(() => {
     const init = async () => {
       try {
@@ -170,7 +174,6 @@ export default function Navbar() {
             ? "1px solid rgb(var(--gold-rgb) / 0.18)"
             : "1px solid rgb(var(--gold-rgb) / 0.1)",
           boxShadow: "none",
-          opacity: 0,
         }}
       >
         <div
