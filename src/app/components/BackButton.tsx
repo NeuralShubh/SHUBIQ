@@ -6,7 +6,7 @@ export default function BackButton() {
   const router = useRouter()
   const pathname = usePathname()
 
-  if (!pathname || pathname === "/" || pathname.startsWith("/admin") || pathname === "/shubiq-studio") {
+  if (!pathname || !pathname.startsWith("/services")) {
     return null
   }
 
@@ -14,7 +14,7 @@ export default function BackButton() {
     if (window.history.length > 1) {
       router.back()
     } else {
-      router.push("/")
+      router.push("/services")
     }
   }
 
