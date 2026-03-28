@@ -31,53 +31,6 @@ export const SERVICES = [
   },
 ];
 
-export const PROJECTS = [
-  {
-    name: "BuildWithShubh",
-    tag: "Agency | Live",
-    desc: "A modern business platform built with Next.js, Tailwind CSS, and Supabase, delivering fast, conversion-focused digital experiences for growing brands.",
-    tech: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
-    stars: 16,
-    link: "https://github.com/NeuralShubh/BuildWithShubh",
-    live: "https://buildwithshubh.vercel.app",
-    featured: true,
-    status: "live",
-  },
-  {
-    name: "Portfolio",
-    tag: "Studio | Live",
-    desc: "A personal portfolio showcasing selected work, technical capabilities, and execution quality across web and AI initiatives.",
-    tech: ["HTML", "CSS", "JavaScript"],
-    stars: 11,
-    link: "https://github.com/NeuralShubh/Portfolio",
-    live: "https://neuralshubh.github.io/Portfolio/",
-    featured: false,
-    status: "live",
-  },
-  {
-    name: "ShubhLedger",
-    tag: "Crypto | Live",
-    desc: "A web-based crypto portfolio tracker with real-time monitoring of holdings, investments, and portfolio value through a unified interactive dashboard.",
-    tech: ["CSS", "JavaScript", "GSAP"],
-    stars: 7,
-    link: "https://github.com/NeuralShubh/ShubhLedger",
-    live: "https://shubhledger.infinityfreeapp.com/",
-    featured: false,
-    status: "wip",
-  },
-  {
-    name: "SHUBIQ Flow",
-    tag: "App | Live",
-    desc: "A unified personal productivity system designed to run your day in one place: tasks, habits, focus blocks, health routines, study, and goals.",
-    tech: ["Productivity", "Life OS", "Focus"],
-    stars: 0,
-    link: "https://github.com/NeuralShubh/SHUBIQ-Flow",
-    live: "/shubiq-labs/shubiq-flow",
-    featured: false,
-    status: "live",
-  },
-];
-
 export const ECOSYSTEM_ITEMS = [
   {
     id: "1",

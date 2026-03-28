@@ -106,6 +106,12 @@ export default function Navbar() {
       setMobileThemeOpen(false)
       return
     }
+    if (section === "Projects" && pathname !== "/") {
+      router.push("/projects")
+      setMenuOpen(false)
+      setMobileThemeOpen(false)
+      return
+    }
     const id = section.toLowerCase().replace(/\s/g, "-")
     const target = document.getElementById(id)
     if (!target) {

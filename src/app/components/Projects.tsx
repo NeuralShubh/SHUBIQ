@@ -1,7 +1,8 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
-import { PROJECTS } from "../data"
-import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
+import { useRef } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { projects, Project } from "../data-projects"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 
@@ -43,20 +44,32 @@ function useScramble(text: string) {
   return { display, scramble, reset }
 }
 
-function ProjectCard({ project, index }: { project: typeof PROJECTS[0]; index: number }) {
-  const { display, scramble, reset } = useScramble(project.name)
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const router = useRouter()
+  const { display, scramble, reset } = useScramble(project.title)
   const [titleMain, ...titleRest] = display.split(" ")
   const titleSecondary = titleRest.join(" ")
   const actions = [
-    project.link ? { href: project.link, label: "GitHub", primary: false } : null,
-    project.live ? { href: project.live, label: "Live", primary: true } : null,
-  ].filter(Boolean) as Array<{ href: string; label: string; primary: boolean }>
+    { href: `/projects/${project.slug}`, label: "View Project →", primary: false, external: false },
+    project.liveUrl ? { href: project.liveUrl, label: "Live", primary: true, external: true } : null,
+  ].filter(Boolean) as Array<{ href: string; label: string; primary: boolean; external: boolean }>
+  const tag = `${project.category} | ${project.status}`
 
   return (
     <div
-      className="project-card group relative flex h-full min-h-[338px] sm:min-h-[376px] flex-col border border-[rgb(var(--cream-rgb)/0.14)] rounded-sm bg-card-soft p-6 sm:p-8 transition-all duration-500 hover:border-gold/28 hover:bg-card-soft-hover hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.14)_inset,0_22px_42px_rgb(0_0_0_/_0.32)] transform-gpu"
+      className="project-card group relative flex h-full min-h-[338px] sm:min-h-[376px] flex-col border border-[rgb(var(--cream-rgb)/0.14)] rounded-sm bg-card-soft p-6 sm:p-8 transition-all duration-500 hover:border-gold/28 hover:bg-card-soft-hover hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.14)_inset,0_22px_42px_rgb(0_0_0_/_0.32)] transform-gpu cursor-pointer"
       onMouseEnter={() => scramble()}
       onMouseLeave={() => reset()}
+      onClick={() => router.push(`/projects/${project.slug}`)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault()
+          router.push(`/projects/${project.slug}`)
+        }
+      }}
+      role="link"
+      tabIndex={0}
+      aria-label={`View ${project.title} project details`}
       style={{ boxShadow: "0 0 0 1px rgb(var(--cream-rgb) / 0.05) inset, 0 20px 38px rgb(0 0 0 / 0.26)" }}
     >
       <div
@@ -72,10 +85,10 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[0]; index: n
 
       <div className="flex items-center justify-between mb-4">
         <div className="font-cinzel text-[14px] sm:text-[16px] leading-none text-cream/35 tracking-[0.01em] transition-all duration-300 group-hover:text-cream/55 group-hover:scale-[1.03]">
-          {String(index + 1).padStart(2, "0")}
+          {project.number || String(index + 1).padStart(2, "0")}
         </div>
         <div className="font-rajdhani text-[14px] sm:text-[16px] tracking-[3.8px] uppercase text-gold/75 text-right">
-          {project.tag}
+          {tag}
         </div>
       </div>
       <div className="h-px w-full bg-gradient-to-r from-gold/20 via-gold/8 to-transparent mb-5 sm:mb-6" />
@@ -91,25 +104,52 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[0]; index: n
       <p
         className="font-cormorant text-[18px] sm:text-[17px] text-cream/80 leading-[1.72] sm:leading-[1.65] mb-4 max-w-[52ch] overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
       >
-        {project.desc}
+        {project.subtitle}
       </p>
+
+      <div className="mt-auto pt-1 flex items-center justify-between text-cream/55 text-[11px] font-rajdhani tracking-[3px] uppercase">
+        <span className="flex items-center gap-2">
+          Case Study
+          <span className="text-gold/80">↗</span>
+        </span>
+        <span className="text-cream/45">View Details</span>
+      </div>
 
       <div className="mt-3 pt-2 border-t border-gold/20">
         <div className={`grid gap-2 ${actions.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
           {actions.map((action) => (
-            <a
-              key={action.label}
-              href={action.href}
-              target="_blank"
-              rel="noreferrer"
-              className={`text-center font-rajdhani text-[12px] tracking-[3.2px] uppercase px-4 py-3 transition-all duration-300 ${
-                action.primary
-                  ? "text-gold/90 border border-gold/25 bg-gold/[0.06] hover:border-gold/50 hover:bg-gold/[0.1] hover:shadow-[0_0_20px_rgb(var(--gold-rgb)_/_0.14)]"
-                  : "text-cream/75 border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.02)] hover:border-[rgb(var(--cream-rgb)/0.34)] hover:text-gold-light hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.08)]"
-              }`}
-            >
-              {action.label}
-            </a>
+            action.external ? (
+              <a
+                key={action.label}
+                href={action.href}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                className={`text-center font-rajdhani text-[12px] tracking-[3.2px] uppercase px-4 py-3 transition-all duration-300 ${
+                  action.primary
+                    ? "text-gold/90 border border-gold/25 bg-gold/[0.06] hover:border-gold/50 hover:bg-gold/[0.1] hover:shadow-[0_0_20px_rgb(var(--gold-rgb)_/_0.14)]"
+                    : "text-cream/75 border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.02)] hover:border-[rgb(var(--cream-rgb)/0.34)] hover:text-gold-light hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.08)]"
+                }`}
+              >
+                {action.label}
+              </a>
+            ) : (
+              <button
+                key={action.label}
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  router.push(action.href)
+                }}
+                className={`text-center font-rajdhani text-[12px] tracking-[3.2px] uppercase px-4 py-3 transition-all duration-300 ${
+                  action.primary
+                    ? "text-gold/90 border border-gold/25 bg-gold/[0.06] hover:border-gold/50 hover:bg-gold/[0.1] hover:shadow-[0_0_20px_rgb(var(--gold-rgb)_/_0.14)]"
+                    : "text-cream/75 border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.02)] hover:border-[rgb(var(--cream-rgb)/0.34)] hover:text-gold-light hover:shadow-[0_0_16px_rgb(var(--gold-rgb)_/_0.08)]"
+                }`}
+              >
+                {action.label}
+              </button>
+            )
           ))}
         </div>
       </div>
@@ -123,34 +163,7 @@ export default function Projects() {
   const titleRef = useRef<HTMLHeadingElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
   const subheadingRef = useRef<HTMLParagraphElement>(null)
-  const [items, setItems] = useState(PROJECTS)
-
-  useEffect(() => {
-    const load = async () => {
-      if (!SUPABASE_ENABLED) return
-      try {
-        const supabase = await getSupabaseClient()
-        if (!supabase) return
-        const { data, error } = await supabase.from("projects").select("*").order("order_index", { ascending: true })
-        if (error || !data?.length) return
-        const mapped = data.map((row: any) => ({
-          name: row.name ?? "",
-          tag: row.tag ?? "",
-          desc: row.desc ?? "",
-          tech: Array.isArray(row.tech) ? row.tech : [],
-          stars: Number(row.stars ?? 0),
-          link: row.link ?? null,
-          live: row.live ?? null,
-          featured: !!row.featured,
-          status: row.status ?? "live",
-        }))
-        setItems(mapped)
-      } catch {
-        // no-op fallback to static data
-      }
-    }
-    load()
-  }, [])
+  const items = projects
 
   return (
     <section id="projects" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
@@ -186,29 +199,25 @@ export default function Projects() {
               Strategic product builds across web platforms, AI systems, and scalable business software.
             </p>
           </div>
-          <a
-            href="https://github.com/NeuralShubh"
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            href="/projects"
             className="hidden md:inline-flex items-center font-rajdhani text-[12px] tracking-[2.8px] uppercase text-cream/75 border border-transparent px-4 py-2 mb-3 hover:text-gold-light transition-all duration-300 group relative"
           >
-            View All on GitHub
+            View All Projects
             <span className="absolute left-4 right-4 bottom-1 h-px bg-gold/55 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-          </a>
+          </Link>
         </div>
-        <a
-          href="https://github.com/NeuralShubh"
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          href="/projects"
           className="md:hidden inline-block font-rajdhani text-[12px] tracking-[2.8px] uppercase text-cream/75 border border-transparent px-4 py-2 hover:text-gold-light transition-all duration-300 mb-8 group relative"
         >
-          View All on GitHub
+          View All Projects
           <span className="absolute left-4 right-4 bottom-1 h-px bg-gold/55 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-        </a>
+        </Link>
 
         <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 sm:gap-8">
           {items.map((project, i) => (
-            <StaggerItem key={project.name}>
+            <StaggerItem key={project.id}>
               <ProjectCard project={project} index={i} />
             </StaggerItem>
           ))}

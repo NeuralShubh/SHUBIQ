@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { projects } from "../src/app/data-projects"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
@@ -6,6 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: `${siteUrl}/`, lastModified },
+    { url: `${siteUrl}/projects`, lastModified },
+    ...projects.map((project) => ({ url: `${siteUrl}/projects/${project.slug}`, lastModified })),
     { url: `${siteUrl}/shubiq-studio`, lastModified },
     { url: `${siteUrl}/shubiq-labs`, lastModified },
     { url: `${siteUrl}/shubiq-labs/shubiq-flow`, lastModified },
