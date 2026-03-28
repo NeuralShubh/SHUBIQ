@@ -113,7 +113,7 @@ export default function ProjectsIndexClient() {
                       ))}
                     </div>
                     <div className="mt-5 text-gold/80 text-[12px] tracking-[3px] uppercase font-rajdhani">
-                      View Project &rarr;
+                      Watch Video
                     </div>
                   </div>
                 </Link>
