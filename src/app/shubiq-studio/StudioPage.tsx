@@ -527,7 +527,7 @@ function ServiceCard({
     >
       <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500" />
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-      <span className="absolute top-5 right-4 text-[52px] sm:text-[68px] font-cinzel font-black text-cream/10 group-hover:text-cream/16 transition-opacity duration-300 select-none pointer-events-none">
+      <span className="absolute top-6 right-5 text-[40px] sm:text-[52px] font-cinzel font-black text-cream/8 group-hover:text-cream/14 transition-opacity duration-300 select-none pointer-events-none">
         {`0${index + 1}`}
       </span>
 
