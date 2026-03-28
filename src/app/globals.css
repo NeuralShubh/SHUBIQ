@@ -881,6 +881,12 @@ html.theme-transitioning *::after {
   outline-offset: 2px;
 }
 
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none !important;
+}
+
 *:focus:not(:focus-visible) {
   outline: none;
 }
