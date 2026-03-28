@@ -17,7 +17,7 @@ export default function StudioNavbar() {
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState("studio-hero")
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const progressBarRef = useRef<HTMLDivElement>(null)
   const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -29,7 +29,8 @@ export default function StudioNavbar() {
 
       const doc = document.documentElement
       const scrollable = Math.max(1, doc.scrollHeight - window.innerHeight)
-      setScrollProgress(Math.min(100, (scrollTop / scrollable) * 100))
+      const progress = Math.min(100, (scrollTop / scrollable) * 100)
+      if (progressBarRef.current) progressBarRef.current.style.width = `${progress}%`
 
       const activationLine = 140
       let nextActive = "studio-hero"
@@ -137,8 +138,9 @@ export default function StudioNavbar() {
         }}
       >
         <div
-          className="absolute left-0 top-0 h-[2px] bg-gold/85 transition-[width] duration-200"
-          style={{ width: `${scrollProgress}%` }}
+          ref={progressBarRef}
+          className="absolute left-0 top-0 h-[2px] bg-gold/85"
+          style={{ width: "0%", transition: "width 80ms linear" }}
         />
         <div className={`max-w-7xl mx-auto px-5 max-[768px]:px-4 sm:px-6 lg:px-12 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-[3.15rem] max-[768px]:h-[3.05rem]" : "h-[3.36rem] max-[768px]:h-[3.15rem]"}`}>
           <div className="flex items-center h-full gap-2.5">
