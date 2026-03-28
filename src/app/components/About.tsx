@@ -73,15 +73,15 @@ export default function About() {
           <div className="w-full max-w-[520px] ml-auto">
             <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft rounded-sm p-5 sm:p-6">
               <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Brand Foundations</div>
-              <StaggerContainer staggerDelay={0.1} className="grid sm:grid-cols-2 gap-4">
+              <StaggerContainer staggerDelay={0.1} className="grid sm:grid-cols-2 gap-4 items-stretch">
                 {[
                   { title: "Precision Engineering", desc: "High-performance systems designed for speed, stability, and scale." },
                   { title: "Product Intelligence", desc: "AI-integrated workflows that elevate outcomes, not noise." },
                   { title: "Premium UX", desc: "Design systems built to convert attention into action." },
                   { title: "Long-Term Architecture", desc: "Durable infrastructure that grows with your business." },
                 ].map((item) => (
-                  <StaggerItem key={item.title}>
-                    <div className="border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-4">
+                  <StaggerItem key={item.title} className="h-full">
+                    <div className="h-full border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-4 flex flex-col">
                       <div className="font-cinzel text-[16px] text-cream/90">{item.title}</div>
                       <div className="font-cormorant text-cream/70 mt-2 text-[15px] leading-[1.55]">{item.desc}</div>
                     </div>
