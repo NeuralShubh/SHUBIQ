@@ -515,7 +515,7 @@ function ServiceCard({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
-      className={`service-card group relative p-5.5 max-sm:p-4 sm:p-7 border bg-card-soft hover:bg-card-soft-hover transform-gpu transition-[transform,border-color,background-color,box-shadow,opacity,filter] duration-[460ms] ease-[cubic-bezier(0.16,1,0.3,1)] max-md:rounded-[20px] ${
+      className={`service-card group relative p-5.5 max-sm:p-4 sm:p-7 border bg-card-soft hover:bg-card-soft-hover transform-gpu transition-[transform,border-color,background-color,box-shadow,opacity,filter] duration-[460ms] ease-[cubic-bezier(0.16,1,0.3,1)] max-md:rounded-[20px] min-h-[420px] sm:min-h-[450px] lg:min-h-[470px] ${
         isDimmed
           ? "opacity-[0.85] saturate-[0.92]"
           : "opacity-100 saturate-100"
@@ -527,18 +527,15 @@ function ServiceCard({
     >
       <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500" />
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-      <span className="absolute -top-3 -right-2 text-[72px] sm:text-[84px] font-cinzel font-black text-cream/10 group-hover:text-cream/20 transition-opacity duration-300 select-none pointer-events-none">
+      <span className="absolute -top-2 right-4 text-[64px] sm:text-[80px] font-cinzel font-black text-cream/10 group-hover:text-cream/18 transition-opacity duration-300 select-none pointer-events-none">
         {`0${index + 1}`}
       </span>
 
       <div className="relative z-10 h-full flex flex-col">
         <div className="flex items-start justify-between mb-6 sm:mb-6 max-md:items-center">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <span className="font-rajdhani text-[9px] sm:text-[11px] tracking-[1.5px] sm:tracking-[2px] uppercase text-gold/65 group-hover:text-gold/95 transition-colors">{`0${index + 1}`}</span>
-            <span className="w-9 h-9 max-sm:w-7.5 max-sm:h-7.5 border border-gold/40 bg-gold/[0.07] flex items-center justify-center text-gold/90">
-              <Icon size={15} strokeWidth={1.8} />
-            </span>
-          </div>
+          <span className="w-9 h-9 max-sm:w-7.5 max-sm:h-7.5 border border-gold/40 bg-gold/[0.07] flex items-center justify-center text-gold/90">
+            <Icon size={15} strokeWidth={1.8} />
+          </span>
           <span
             className="font-rajdhani text-[11px] max-sm:text-[9px] tracking-[2px] max-sm:tracking-[1.2px] uppercase text-gold/80 border px-2.5 max-sm:px-1.5 py-1 max-sm:py-[3px] bg-gold/[0.05]"
             style={{ borderColor: "rgb(var(--gold-rgb) / 0.4)" }}
