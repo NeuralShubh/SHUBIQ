@@ -12,7 +12,7 @@ export default function Projects() {
   const titleRef = useRef<HTMLHeadingElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
   const subheadingRef = useRef<HTMLParagraphElement>(null)
-  const items = projects
+  const items = projects.slice(0, 3)
 
   return (
     <section id="projects" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
@@ -64,7 +64,7 @@ export default function Projects() {
           <span className="absolute left-4 right-4 bottom-1 h-px bg-gold/55 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
         </Link>
 
-        <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-2 gap-6 sm:gap-8">
+        <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 sm:gap-8">
           {items.map((project, i) => (
             <StaggerItem key={project.id}>
               <ProjectCard project={project} index={i} />

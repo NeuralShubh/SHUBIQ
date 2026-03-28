@@ -579,7 +579,7 @@ function StudioPortfolio() {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
-  const portfolioProjects = projects
+  const portfolioProjects = projects.slice(0, 3)
 
   useEffect(() => {
     const init = async () => {
@@ -627,7 +627,7 @@ function StudioPortfolio() {
           </div>
         </div>
 
-        <div ref={cardsRef} className="grid sm:grid-cols-2 gap-6 sm:gap-6">
+        <div ref={cardsRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6">
           {portfolioProjects.map((project, index) => (
             <ProjectCard key={`${project.slug}-${index}`} project={project} index={index} />
           ))}

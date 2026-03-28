@@ -15,6 +15,8 @@ type Project = {
   stars: number
   link: string | null
   live: string | null
+  video_url?: string | null
+  video_poster?: string | null
   featured: boolean
   status: "live" | "wip" | "archived" | "concept"
   order_index: number
@@ -91,8 +93,8 @@ const SUPABASE_ENABLED =
   !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project.supabase.co")
 const DEFAULT_PROJECTS: Project[] = [
-  { id: "1", name: "SHUBIQ Studio", tag: "Agency | Live", desc: "A modern freelance business platform.", tech: ["Next.js", "Supabase"], stars: 16, link: "https://github.com/NeuralShubh/BuildWithShubh", live: "https://buildwithshubh.vercel.app", featured: true, status: "live", order_index: 0 },
-  { id: "2", name: "Portfolio", tag: "Personal | Live", desc: "Personal portfolio showcasing projects.", tech: ["HTML", "CSS", "JS"], stars: 11, link: "https://github.com/NeuralShubh/Portfolio", live: "https://neuralshubh.github.io/Portfolio/", featured: false, status: "live", order_index: 1 },
+  { id: "1", name: "SHUBIQ Studio", tag: "Agency | Live", desc: "A modern freelance business platform.", tech: ["Next.js", "Supabase"], stars: 16, link: "https://github.com/NeuralShubh/BuildWithShubh", live: "https://buildwithshubh.vercel.app", featured: true, status: "live", order_index: 0, video_url: null, video_poster: null },
+  { id: "2", name: "Portfolio", tag: "Personal | Live", desc: "Personal portfolio showcasing projects.", tech: ["HTML", "CSS", "JS"], stars: 11, link: "https://github.com/NeuralShubh/Portfolio", live: "https://neuralshubh.github.io/Portfolio/", featured: false, status: "live", order_index: 1, video_url: null, video_poster: null },
 ]
 const DEFAULT_ECO: EcoItem[] = [
   { id: "1", type: "app", title: "SHUBIQ Studio", subtitle: "Full-service digital agency", desc: "End-to-end web & software solutions.", icon: "⬡", color: "rgb(var(--gold-rgb))", status: "coming_soon", link: null, tags: ["Agency", "AI"], featured: true, order_index: 0 },
@@ -264,6 +266,8 @@ const mapProjectRow = (row: any): Project => ({
   stars: Number(row.stars ?? 0),
   link: row.link ?? null,
   live: row.live ?? null,
+  video_url: row.video_url ?? null,
+  video_poster: row.video_poster ?? null,
   featured: !!row.featured,
   status: (row.status ?? "live") as Project["status"],
   order_index: Number(row.order_index ?? 0),
@@ -370,8 +374,41 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
 
 // --- Project Form ---
 function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: (p: Project) => void; onClose: () => void }) {
-  const blank: Project = { id: generateId(), name: "", tag: "", desc: "", tech: [], stars: 0, link: null, live: null, featured: false, status: "live", order_index: 0 }
+  const blank: Project = {
+    id: generateId(),
+    name: "",
+    tag: "",
+    desc: "",
+    tech: [],
+    stars: 0,
+    link: null,
+    live: null,
+    featured: false,
+    status: "live",
+    order_index: 0,
+    video_url: null,
+    video_poster: null,
+  }
   const [form, setForm] = useState<Project>(initial || blank)
+  const [uploading, setUploading] = useState<null | "video" | "poster">(null)
+
+  const uploadToStorage = async (file: File, kind: "video" | "poster") => {
+    if (!SUPABASE_ENABLED) return
+    try {
+      setUploading(kind)
+      const ext = file.name.split(".").pop() || "bin"
+      const path = `projects/${form.id}/${kind}-${Date.now()}.${ext}`
+      const { error } = await supabase.storage.from("project-media").upload(path, file, { upsert: true })
+      if (error) throw error
+      const { data } = supabase.storage.from("project-media").getPublicUrl(path)
+      if (kind === "video") setForm((prev) => ({ ...prev, video_url: data.publicUrl }))
+      else setForm((prev) => ({ ...prev, video_poster: data.publicUrl }))
+    } catch {
+      console.warn("Upload failed. Check storage bucket and try again.")
+    } finally {
+      setUploading(null)
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -382,6 +419,8 @@ function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: 
       status: initial?.status ?? "live",
       order_index: initial?.order_index ?? 0,
       image_url: initial?.image_url ?? null,
+      video_url: form.video_url ?? null,
+      video_poster: form.video_poster ?? null,
     })
   }
 
@@ -411,6 +450,59 @@ function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: 
         <div>
           <label className={labelClass}>Live URL</label>
           <input value={form.live || ""} onChange={e => setForm({ ...form, live: e.target.value || null })} className={inputClass} placeholder="https://..." />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>Video URL</label>
+          <input value={form.video_url || ""} onChange={e => setForm({ ...form, video_url: e.target.value || null })} className={inputClass} placeholder="https://youtube.com/..." />
+          <div className="mt-2 flex items-center gap-2">
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) uploadToStorage(file, "video")
+              }}
+              className="text-[11px] text-cream/60"
+            />
+            {form.video_url && (
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, video_url: null })}
+                className="text-[11px] tracking-[2px] uppercase text-gold/80 hover:text-gold transition-colors"
+              >
+                Remove
+              </button>
+            )}
+            {uploading === "video" && <span className="text-[11px] text-cream/50">Uploading...</span>}
+          </div>
+        </div>
+        <div>
+          <label className={labelClass}>Poster Image URL</label>
+          <input value={form.video_poster || ""} onChange={e => setForm({ ...form, video_poster: e.target.value || null })} className={inputClass} placeholder="https://..." />
+          <div className="mt-2 flex items-center gap-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) uploadToStorage(file, "poster")
+              }}
+              className="text-[11px] text-cream/60"
+            />
+            {form.video_poster && (
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, video_poster: null })}
+                className="text-[11px] tracking-[2px] uppercase text-gold/80 hover:text-gold transition-colors"
+              >
+                Remove
+              </button>
+            )}
+            {uploading === "poster" && <span className="text-[11px] text-cream/50">Uploading...</span>}
+          </div>
         </div>
       </div>
 
