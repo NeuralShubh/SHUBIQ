@@ -160,7 +160,7 @@ export default function StudioNavbar() {
           <div className="hidden md:flex items-center gap-2 lg:gap-3">
             <Link
               href="/"
-              className="site-nav-link relative font-rajdhani font-semibold text-[12px] tracking-[1px] uppercase transition-all duration-200 px-2.5 py-1.5 text-[rgb(var(--cream-rgb)/0.8)] hover:text-gold/90"
+              className="site-nav-link nav-link relative font-rajdhani font-semibold text-[12px] tracking-[1px] uppercase transition-all duration-200 px-2.5 py-1.5 text-[rgb(var(--cream-rgb)/0.8)] hover:text-gold/90"
             >
               SHUBIQ
             </Link>
@@ -169,17 +169,13 @@ export default function StudioNavbar() {
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
                 aria-current={active === link.id ? "page" : undefined}
-                className={`site-nav-link relative font-rajdhani font-semibold text-[12px] tracking-[1px] uppercase transition-all duration-200 px-2.5 py-1.5 ${
+                className={`site-nav-link nav-link relative font-rajdhani font-semibold text-[12px] tracking-[1px] uppercase transition-all duration-200 px-2.5 py-1.5 ${
                   active === link.id
-                    ? "text-[rgb(var(--gold-light-rgb))]"
+                    ? "text-[rgb(var(--gold-light-rgb))] active"
                     : "text-[rgb(var(--cream-rgb)/0.8)] hover:text-gold/90"
                 }`}
               >
                 {link.label}
-                <span
-                  className="absolute -bottom-[1px] left-1/2 -translate-x-1/2 h-[2px] bg-gold/95 transition-all duration-200"
-                  style={{ width: active === link.id ? "100%" : "0%" }}
-                />
               </button>
             ))}
           </div>

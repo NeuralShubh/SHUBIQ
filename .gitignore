@@ -1,5 +1,7 @@
 .next/
 node_modules/
+tsconfig.tsbuildinfo
+.claude/
 
 # local environment files
 .env.local

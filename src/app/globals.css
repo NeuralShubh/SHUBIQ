@@ -741,3 +741,16 @@
 .hire-pulse:focus-visible {
   animation: none;
 }
+
+@keyframes studioPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--gold-rgb) / 0.22); }
+  50% { box-shadow: 0 0 0 8px rgb(var(--gold-rgb) / 0); }
+}
+
+.studio-popular-pulse {
+  animation: studioPulse 4s ease-in-out infinite;
+}
+
+.studio-popular-pulse:hover {
+  animation: none;
+}

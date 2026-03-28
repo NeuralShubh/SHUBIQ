@@ -1,9 +1,14 @@
 ﻿"use client"
 import { useEffect, useRef, useState } from "react"
-import { motion } from "framer-motion"
+import Link from "next/link"
+import { motion, useReducedMotion } from "framer-motion"
 import StudioNavbar from "./StudioNavbar"
 import Footer from "../components/Footer"
-import GoldLine from "../components/GoldLine"
+import ScrollReveal from "../components/ScrollReveal"
+import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
+import SectionDivider from "../components/SectionDivider"
+import FloatingInput from "../components/FloatingInput"
+import FloatingSelect from "../components/FloatingSelect"
 import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
 import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 import {
@@ -191,16 +196,78 @@ function SectionLabel({ label, centered = false }: { label: string; centered?: b
   )
 }
 
+function useCountUpValue(target: number, duration = 1200, reducedMotion = false) {
+  const [value, setValue] = useState(reducedMotion ? target : 0)
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setValue(target)
+      return
+    }
+    const start = performance.now()
+    let rafId = 0
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setValue(Math.round(eased * target))
+      if (progress < 1) rafId = requestAnimationFrame(tick)
+    }
+    rafId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId)
+  }, [target, duration, reducedMotion])
+
+  return value
+}
+
+function useCountUpOnView(target: number, duration = 1200, reducedMotion = false) {
+  const [value, setValue] = useState(reducedMotion ? target : 0)
+  const ref = useRef<HTMLSpanElement>(null)
+  const started = useRef(false)
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setValue(target)
+      return
+    }
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true
+          const start = performance.now()
+          const tick = (now: number) => {
+            const progress = Math.min((now - start) / duration, 1)
+            const eased = 1 - Math.pow(1 - progress, 3)
+            setValue(Math.round(eased * target))
+            if (progress < 1) requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        }
+      },
+      { threshold: 0.4 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [target, duration, reducedMotion])
+
+  return { value, ref }
+}
+
 // â”€â”€â”€ Hero Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StudioHero() {
   const sectionRef = useRef<HTMLElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
+  const badgeRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const bodyRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
-  const authorityRef = useRef<HTMLDivElement>(null)
+  const tagsRef = useRef<HTMLDivElement>(null)
   const statsRef = useRef<HTMLDivElement>(null)
+  const prefersReduced = !!useReducedMotion()
+  const countSystems = useCountUpValue(10, 1200, prefersReduced)
+  const countYears = useCountUpValue(3, 1200, prefersReduced)
 
   useEffect(() => {
     const init = async () => {
@@ -210,39 +277,54 @@ function StudioHero() {
         gsap.registerPlugin(ScrollTrigger)
 
         const titleLines = titleRef.current?.querySelectorAll<HTMLElement>(".hero-title-line") ?? []
+        const titleLineOne = titleLines[0]
+        const titleLineTwo = titleLines[1]
         const ctaItems = ctaRef.current?.children ?? []
         const statItems = statsRef.current?.children ?? []
+        const tagItems = tagsRef.current?.querySelectorAll<HTMLElement>("[data-tag-item]") ?? []
 
-        const tl = gsap.timeline({ delay: 0.12 })
+        const tl = gsap.timeline({ delay: 0.05 })
         tl.fromTo(
-          titleLines,
-          { yPercent: 105 },
-          { yPercent: 0, duration: 0.9, ease: "power2.out", stagger: 0.08 },
+          badgeRef.current,
+          { y: -10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.55, ease: "power2.out" },
           0,
         )
+          .fromTo(
+            titleLineOne,
+            { yPercent: 110 },
+            { yPercent: 0, duration: 0.75, ease: "power2.out" },
+            0.2,
+          )
+          .fromTo(
+            titleLineTwo,
+            { yPercent: 110 },
+            { yPercent: 0, duration: 0.75, ease: "power2.out" },
+            0.4,
+          )
           .fromTo(
             bodyRef.current,
             { y: 16, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
-            0.24,
+            0.6,
           )
           .fromTo(
             ctaItems,
             { y: 14, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", stagger: 0.1 },
-            0.42,
-          )
-          .fromTo(
-            authorityRef.current,
-            { y: 10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
-            0.6,
+            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", stagger: 0.12 },
+            0.8,
           )
           .fromTo(
             statItems,
             { y: 14, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.12 },
-            0.72,
+            1,
+          )
+          .fromTo(
+            tagItems,
+            { x: -14, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.45, ease: "power2.out", stagger: 0.15 },
+            1.2,
           )
 
         if (titleRef.current) {
@@ -303,7 +385,7 @@ function StudioHero() {
       />
 
       <div className="relative z-10 text-center max-w-[54rem] max-md:max-w-[34rem] mx-auto">
-        <div className="inline-flex items-center gap-2.5 border border-gold/14 bg-gold/[0.025] px-4 max-md:px-3.5 py-2 mb-7 max-md:mb-6">
+        <div ref={badgeRef} className="inline-flex items-center gap-2.5 border border-gold/14 bg-gold/[0.025] px-4 max-md:px-3.5 py-2 mb-7 max-md:mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-gold/65" />
           <span className="font-rajdhani text-[10px] sm:text-[12px] tracking-[2.5px] sm:tracking-[4px] uppercase text-gold/66">SHUBIQ Studio - Digital Engineering</span>
         </div>
@@ -345,13 +427,13 @@ function StudioHero() {
           </button>
         </div>
 
-        <div ref={authorityRef} className="mt-0 mb-14 max-md:mb-9" style={{ opacity: 0.9 }}>
+        <div ref={tagsRef} className="mt-0 mb-14 max-md:mb-9" style={{ opacity: 0.9 }}>
           <p className="font-rajdhani text-[8px] sm:text-[9px] tracking-[4.3px] uppercase text-gold/40 mb-3">
             ENGINEERING DISCIPLINES
           </p>
           <div className="flex items-center justify-center flex-wrap gap-x-2.5 sm:gap-x-3.5 gap-y-2">
             {["ARCHITECTURE", "INFRASTRUCTURE", "INTELLIGENCE", "PERFORMANCE"].map((item, index) => (
-              <div key={item} className="flex items-center">
+              <div key={item} className="flex items-center" data-tag-item>
                 {index > 0 && <span className="w-[1px] h-3 bg-gold/20 mr-2.5 sm:mr-3.5" />}
                 <span className="font-rajdhani text-[8px] sm:text-[10px] tracking-[2px] sm:tracking-[3px] uppercase text-gold/54">{item}</span>
               </div>
@@ -365,8 +447,8 @@ function StudioHero() {
           className="pt-7 max-md:pt-6 grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-9 max-w-[760px] mx-auto"
         >
           {[
-            { val: "10+", label: "Production Systems" },
-            { val: "3+", label: "Years Engineering" },
+            { val: `${countSystems}+`, label: "Production Systems" },
+            { val: `${countYears}+`, label: "Years Engineering" },
             { val: "Precision-Driven", label: "Delivery" },
           ].map((s) => (
             <div key={s.label} className="text-center min-h-[72px] flex flex-col items-center justify-start">
@@ -386,9 +468,7 @@ function StudioHero() {
   )
 }
 function StudioServices() {
-  const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
-  const gridRef = useRef<HTMLDivElement>(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
   const [services, setServices] = useState<StudioService[]>(DEFAULT_STUDIO_SERVICES)
 
@@ -419,23 +499,24 @@ function StudioServices() {
         const { ScrollTrigger } = await import("gsap/ScrollTrigger")
         gsap.registerPlugin(ScrollTrigger)
         const isMobile = window.innerWidth <= 768
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: sectionRef.current, start: isMobile ? "top 82%" : "top 72%", once: true },
-        })
-        tl.fromTo(headingRef.current, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" })
-          .fromTo(
-            gridRef.current?.children ?? [],
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", stagger: 0.08 },
-            "-=0.3",
-          )
+        gsap.fromTo(
+          headingRef.current,
+          { y: 24, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: "power3.out",
+            scrollTrigger: { trigger: headingRef.current, start: isMobile ? "top 82%" : "top 72%", once: true },
+          },
+        )
       } catch { /* no-op */ }
     }
     init()
   }, [])
 
   return (
-    <section id="studio-services-section" ref={sectionRef} className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden">
+    <section id="studio-services-section" className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -461,7 +542,7 @@ function StudioServices() {
           </div>
         </div>
 
-        <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4.5 max-sm:gap-4 sm:gap-6">
+        <StaggerContainer staggerDelay={0.1} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4.5 max-sm:gap-4 sm:gap-6">
           {services.map((service, index) => {
             const Icon = STUDIO_SERVICE_ICON_MAP[service.iconKey] ?? Code2
             const slug = service.title
@@ -470,18 +551,19 @@ function StudioServices() {
               .replace(/[^a-z0-9]+/g, "-")
               .replace(/^-+|-+$/g, "")
             return (
-              <ServiceCard
-                key={service.title}
-                service={service}
-                index={index}
-                Icon={Icon}
-                isDimmed={hoveredCard !== null && hoveredCard !== index}
-                onHoverChange={(active) => setHoveredCard(active ? index : null)}
-                anchorId={`service-${slug}`}
-              />
+              <StaggerItem key={service.title}>
+                <ServiceCard
+                  service={service}
+                  index={index}
+                  Icon={Icon}
+                  isDimmed={hoveredCard !== null && hoveredCard !== index}
+                  onHoverChange={(active) => setHoveredCard(active ? index : null)}
+                  anchorId={`service-${slug}`}
+                />
+              </StaggerItem>
             )
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   )
@@ -534,7 +616,7 @@ function ServiceCard({
         isDimmed
           ? "opacity-[0.85] saturate-[0.92]"
           : "opacity-100 saturate-100"
-      } border-[rgb(var(--cream-rgb)/0.14)] hover:border-[rgb(var(--gold-rgb)/0.34)] hover:-translate-y-1 hover:scale-[1.01] max-md:hover:translate-y-0 max-md:hover:scale-100`}
+      } border-[rgb(var(--cream-rgb)/0.14)] hover:border-[rgb(var(--gold-rgb)/0.34)] hover:-translate-y-1 hover:scale-[1.02] max-md:hover:translate-y-0 max-md:hover:scale-100`}
       style={{
         willChange: "transform, opacity, filter",
         boxShadow: "0 10px 24px rgb(0 0 0 / 0.18), 0 0 0 1px rgb(var(--cream-rgb) / 0.05) inset",
@@ -542,11 +624,14 @@ function ServiceCard({
     >
       <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500" />
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
+      <span className="absolute -top-3 -right-2 text-[72px] sm:text-[84px] font-cinzel font-black text-cream/10 group-hover:text-cream/20 transition-opacity duration-300 select-none pointer-events-none">
+        {`0${index + 1}`}
+      </span>
 
       <div className="relative z-10 h-full flex flex-col">
         <div className="flex items-start justify-between mb-6 sm:mb-6 max-md:items-center">
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className="font-rajdhani text-[9px] sm:text-[11px] tracking-[1.5px] sm:tracking-[2px] uppercase text-gold/65">{`0${index + 1}`}</span>
+            <span className="font-rajdhani text-[9px] sm:text-[11px] tracking-[1.5px] sm:tracking-[2px] uppercase text-gold/65 group-hover:text-gold/95 transition-colors">{`0${index + 1}`}</span>
             <span className="w-9 h-9 max-sm:w-7.5 max-sm:h-7.5 border border-gold/40 bg-gold/[0.07] flex items-center justify-center text-gold/90">
               <Icon size={15} strokeWidth={1.8} />
             </span>
@@ -560,7 +645,9 @@ function ServiceCard({
         </div>
 
         <h3 className="font-cinzel font-bold text-cream/93 mb-4 sm:mb-4 tracking-[0.2px] sm:tracking-[0.4px] leading-[1.16] max-sm:leading-[1.14] transition-[letter-spacing] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:tracking-[0.9px]" style={{ fontSize: "clamp(16.8px, 1.5vw, 21px)" }}>
-          {service.title}
+          <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gold/70 after:transition-all after:duration-300 group-hover:after:w-full">
+            {service.title}
+          </span>
         </h3>
 
         <p className="font-cormorant text-cream/74 leading-[1.6] sm:leading-[1.7] mb-6 sm:mb-6 flex-1 transition-opacity duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:text-cream/78" style={{ fontSize: "clamp(14px, 1.1vw, 17px)" }}>
@@ -572,7 +659,7 @@ function ServiceCard({
           {service.features.map((f) => (
             <li key={f} className="flex items-start gap-2 sm:gap-2.5">
               <CheckCircle2 size={12} className="text-gold/60 shrink-0 mt-[2px]" strokeWidth={2} />
-              <span className="font-rajdhani text-[12px] sm:text-[12px] tracking-[0.35px] sm:tracking-[0.9px] text-cream/86 uppercase max-sm:normal-case leading-[1.35]">
+              <span className="font-rajdhani text-[12px] sm:text-[12px] tracking-[0.35px] sm:tracking-[0.9px] text-cream/70 uppercase max-sm:normal-case leading-[1.35] transition-opacity duration-300 group-hover:text-cream/95">
                 {f}
               </span>
             </li>
@@ -666,16 +753,33 @@ function StudioPortfolio() {
             <ProjectCard key={`${project.name}-${index}`} project={project} index={index} />
           ))}
         </div>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/projects"
+            className="group inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors"
+          >
+            View All Projects
+            <span className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+          </Link>
+        </div>
       </div>
     </section>
   )
 }
 
 function ProjectCard({ project, index }: { project: StudioPortfolioProject; index: number }) {
-  const cardRef = useRef<HTMLAnchorElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
+  const caseStudySlug =
+    project.name.toLowerCase().includes("buildwithshubh")
+      ? "buildwithshubh"
+      : project.name.toLowerCase().includes("ledger")
+        ? "shubhledger"
+        : project.name.toLowerCase().includes("flow")
+          ? "shubiq-flow"
+          : project.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = cardRef.current
     const glow = glowRef.current
     if (!card || !glow) return
@@ -703,16 +807,26 @@ function ProjectCard({ project, index }: { project: StudioPortfolioProject; inde
     if (cardRef.current) cardRef.current.style.transition = "transform 0.14s ease"
   }
 
+  const openLive = () => {
+    if (project.link) window.open(project.link, "_blank", "noopener")
+  }
+
   return (
-    <a
+    <div
       ref={cardRef}
-      href={project.link}
-      target="_blank"
-      rel="noreferrer"
+      role="link"
+      tabIndex={0}
+      onClick={openLive}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault()
+          openLive()
+        }
+      }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
-      className="project-card group relative block p-5 max-sm:p-5 sm:p-9 border border-[rgb(var(--cream-rgb)/0.12)] bg-card-soft hover:bg-card-soft-hover hover:border-gold/35 transition-[transform,border-color,background-color,box-shadow] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] max-md:rounded-[20px] max-md:hover:translate-y-0 max-md:hover:scale-100 max-md:cursor-default"
+      className="project-card group relative block p-5 max-sm:p-5 sm:p-9 border border-[rgb(var(--cream-rgb)/0.12)] bg-card-soft hover:bg-card-soft-hover hover:border-gold/35 transition-[transform,border-color,background-color,box-shadow] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] max-md:rounded-[20px] max-md:hover:translate-y-0 max-md:hover:scale-100 max-md:cursor-default hover:shadow-[0_22px_44px_rgb(0_0_0_/_0.28)]"
       style={{ willChange: "transform", boxShadow: "0 12px 28px rgb(0 0 0 / 0.2), 0 0 0 1px rgb(var(--cream-rgb) / 0.05) inset" }}
     >
       <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300" />
@@ -723,7 +837,7 @@ function ProjectCard({ project, index }: { project: StudioPortfolioProject; inde
           {String(index + 1).padStart(2, "0")}
         </span>
         <span
-          className="font-rajdhani text-[9.5px] sm:text-[11px] tracking-[1.5px] sm:tracking-[2.5px] uppercase border px-2 max-sm:px-1.5 py-[3px] sm:px-2.5 sm:py-1"
+          className="font-rajdhani text-[9.5px] sm:text-[11px] tracking-[1.5px] sm:tracking-[2.5px] uppercase border px-2 max-sm:px-1.5 py-[3px] sm:px-2.5 sm:py-1 group-hover:animate-pulse"
           style={{
             color: project.status === "live" ? "rgb(var(--gold-rgb) / 0.86)" : "rgb(var(--gold-rgb) / 0.75)",
             borderColor: project.status === "live" ? "rgb(var(--gold-rgb) / 0.45)" : "rgb(var(--gold-rgb) / 0.3)",
@@ -756,24 +870,38 @@ function ProjectCard({ project, index }: { project: StudioPortfolioProject; inde
       </p>
 
       <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/14 to-transparent mb-4 sm:mb-0" />
-      <div className="mb-5 border-l border-gold/28 pl-3 max-sm:border-l-0 max-sm:pl-0">
+      <div className="mb-5 border-l border-gold/28 pl-3 max-sm:border-l-0 max-sm:pl-0 transition-opacity duration-300 group-hover:opacity-100">
         <div className="font-rajdhani text-[10px] sm:text-[11px] font-semibold tracking-[1.8px] sm:tracking-[2.4px] uppercase text-gold/88 mb-1">Impact</div>
-        <p className="font-cormorant text-cream/90 leading-[1.52]" style={{ fontSize: "clamp(14.5px, 1.05vw, 15.5px)" }}>
+        <p className="font-cormorant text-cream/80 group-hover:text-cream/95 leading-[1.52] transition-colors duration-300" style={{ fontSize: "clamp(14.5px, 1.05vw, 15.5px)" }}>
           {project.impact}
         </p>
       </div>
 
       <div className="flex flex-wrap gap-2 sm:gap-2 pt-4 border-t border-gold/12">
-        {project.tech.map((t) => (
+        {project.tech.map((t, idx) => (
           <span
             key={t}
-            className="font-rajdhani text-[10px] sm:text-[10px] tracking-[1.1px] sm:tracking-[1.5px] uppercase text-cream/72 border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-2-rgb)/0.6)] px-2.5 sm:px-2.5 py-1"
+            className="font-rajdhani text-[10px] sm:text-[10px] tracking-[1.1px] sm:tracking-[1.5px] uppercase text-cream/72 border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-2-rgb)/0.6)] px-2.5 sm:px-2.5 py-1 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+            style={{ transitionDelay: `${idx * 60}ms` }}
           >
             {t}
           </span>
         ))}
       </div>
-    </a>
+      <div className="mt-4 flex items-center justify-between text-gold/80 font-rajdhani text-[11px] tracking-[2.4px] uppercase">
+        <span>Live Project</span>
+        <Link
+          href={`/projects/${caseStudySlug}`}
+          onClick={(event) => {
+            event.stopPropagation()
+          }}
+          className="inline-flex items-center gap-1 hover:text-gold-light transition-colors"
+        >
+          View Case Study
+          <span className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+        </Link>
+      </div>
+    </div>
   )
 }
 
@@ -782,6 +910,7 @@ function ProjectCard({ project, index }: { project: StudioPortfolioProject; inde
 function StudioPricing({ content }: { content: StudioContent }) {
   const scrollToContact = () => document.getElementById("studio-contact-anchor")?.scrollIntoView({ behavior: "smooth" })
   const pricingPlans = content.plans?.length ? content.plans : DEFAULT_STUDIO_CONTENT.plans
+  const prefersReduced = !!useReducedMotion()
 
   return (
     <section id="studio-pricing" className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden">
@@ -815,27 +944,29 @@ function StudioPricing({ content }: { content: StudioContent }) {
         </motion.div>
 
         <motion.div
-          initial="visible"
+          initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={{
-            visible: { transition: { staggerChildren: 0.15 } },
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.12 } },
           }}
           className="grid grid-cols-1 md:[grid-template-columns:1.03fr_1.08fr_1.03fr] gap-5 max-sm:gap-4.5 sm:gap-7 items-center"
         >
           {pricingPlans.map((plan) => {
             const Icon = PRICING_ICON_MAP[plan.icon] ?? TrendingUp
+            const { value, ref } = useCountUpOnView(plan.price, 1200, prefersReduced)
             return (
               <motion.article
                 key={plan.id}
                 variants={{
-                  hidden: { opacity: 0, y: 40 },
-                  visible: { opacity: 1, y: 0 },
+                  hidden: { opacity: 0, y: 40, scale: plan.highlighted ? 0.95 : 0.98 },
+                  visible: { opacity: 1, y: 0, scale: 1 },
                 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className={`group relative flex flex-col rounded-[22px] sm:rounded-[28px] p-5 max-sm:p-4.5 sm:px-9 sm:py-9 border opacity-95 overflow-visible duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] transition-[transform,border-color,box-shadow,color] hover:border-gold/65 hover:shadow-[0_20px_50px_rgba(40,90,255,0.12)] max-md:hover:translate-y-0 max-md:hover:scale-100 ${
+                transition={{ duration: 0.6, ease: "easeOut", delay: plan.highlighted ? 0.12 : 0 }}
+                className={`group relative flex flex-col rounded-[22px] sm:rounded-[28px] p-5 max-sm:p-4.5 sm:px-9 sm:py-9 border opacity-95 overflow-visible duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] transition-[transform,border-color,box-shadow,color] hover:border-gold/65 hover:shadow-[0_20px_50px_rgba(40,90,255,0.12)] hover:scale-[1.03] max-md:hover:translate-y-0 max-md:hover:scale-100 ${
                   plan.highlighted
-                    ? "md:scale-[1.03] md:min-h-[690px] pt-7 sm:pt-[54px] pb-6 sm:pb-[44px] opacity-100 border-gold/32 bg-gradient-to-b from-[rgb(var(--surface-2-rgb)/0.98)] to-[rgb(var(--surface-1-rgb)/0.95)] shadow-[0_14px_34px_rgb(var(--gold-rgb)/0.10)]"
+                    ? "studio-popular-pulse md:scale-[1.03] md:min-h-[690px] pt-7 sm:pt-[54px] pb-6 sm:pb-[44px] opacity-100 border-2 border-gold/45 bg-gradient-to-b from-[rgb(var(--surface-2-rgb)/0.98)] to-[rgb(var(--surface-1-rgb)/0.95)] shadow-[0_14px_34px_rgb(var(--gold-rgb)/0.10)]"
                     : "border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,#11192d_0%,#0c1425_100%)]"
                 }`}
               >
@@ -861,7 +992,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
                   <div className="flex items-end gap-1.5 min-h-[62px] sm:min-h-[80px]">
                     <span className="font-cinzel font-bold text-[2.25rem] sm:text-5xl leading-[0.94] text-gold">
                       <span className="inline-block align-top text-[0.8em]">₹</span>
-                      {plan.price.toLocaleString("en-IN")}{plan.priceSuffix ?? ""}
+                      <span ref={ref}>{value.toLocaleString("en-IN")}</span>{plan.priceSuffix ?? ""}
                     </span>
                   </div>
                   <div className={`font-cormorant text-[12px] sm:text-[13px] tracking-[0.5px] sm:tracking-[0.7px] mt-1 ${plan.highlighted ? "text-cream/84" : "text-cream/76"}`}>{plan.meta}</div>
@@ -896,7 +1027,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
                   className={`w-full font-rajdhani text-[11px] sm:text-[13px] tracking-[1.3px] sm:tracking-[1.8px] uppercase py-3.5 font-semibold transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center justify-center gap-2 group border rounded-[14px] sm:rounded-2xl ${
                     plan.highlighted
                       ? "text-ink border-gold/70 bg-[linear-gradient(90deg,rgb(var(--gold-rgb))_0%,rgb(255_220_132)_50%,rgb(var(--gold-rgb))_100%)] bg-[length:200%_100%] bg-left md:hover:bg-right md:hover:brightness-105"
-                      : "text-cream border-gold/30 bg-[rgb(var(--surface-2-rgb)/0.75)] md:hover:bg-[rgb(var(--surface-2-rgb)/0.95)] md:hover:border-gold/50"
+                      : "text-cream border-gold/30 bg-[rgb(var(--surface-2-rgb)/0.75)] bg-[length:0%_100%] bg-left bg-no-repeat md:hover:bg-[length:100%_100%] md:hover:border-gold/50"
                   }`}
                 >
                   {plan.cta}
@@ -907,13 +1038,22 @@ function StudioPricing({ content }: { content: StudioContent }) {
           })}
         </motion.div>
 
-        <div className="mt-8 sm:mt-10 text-center">
-          <p className="font-cormorant text-cream/78 leading-[1.55]" style={{ fontSize: "clamp(16px, 1vw, 18px)" }}>
-            {content.pricingFooterPrefix}{" "}
-            <button onClick={scrollToContact} className="text-gold md:hover:text-gold-light font-semibold transition-colors duration-200">
-              {content.pricingFooterCta}
-            </button>
-          </p>
+        <div className="mt-8 sm:mt-10 flex justify-center">
+          <button
+            onClick={scrollToContact}
+            className="group border border-dashed border-[rgb(var(--cream-rgb)/0.28)] px-6 py-4 rounded-sm text-center hover:border-gold/60 hover:bg-gold/[0.04] transition-all duration-300"
+          >
+            <div className="font-cormorant text-cream/78 leading-[1.55]" style={{ fontSize: "clamp(16px, 1vw, 18px)" }}>
+              {content.pricingFooterPrefix}{" "}
+              <span className="text-gold md:group-hover:text-gold-light font-semibold transition-colors duration-200">
+                {content.pricingFooterCta}
+              </span>
+            </div>
+            <div className="mt-1 flex items-center justify-center gap-2 text-gold/70 font-rajdhani text-[10px] tracking-[2.6px] uppercase">
+              Custom Scope
+              <span className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+            </div>
+          </button>
         </div>
       </div>
     </section>
@@ -926,9 +1066,17 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const [form, setForm] = useState({ name: "", email: "", phone: "", project: "", budget: "" })
-  const [sending, setSending] = useState(false)
+  const [touched, setTouched] = useState({ name: false, email: false, phone: false, project: false })
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [sent, setSent] = useState(false)
   const [error, setError] = useState("")
+  const prefersReduced = !!useReducedMotion()
+
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+  const nameError = touched.name && form.name.trim().length === 0
+  const emailError = touched.email && !emailValid
+  const phoneError = touched.phone && form.phone.trim().length === 0
+  const projectError = touched.project && form.project.trim().length === 0
 
   useEffect(() => {
     const init = async () => {
@@ -950,7 +1098,15 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSending(true)
+    setTouched({ name: true, email: true, phone: true, project: true })
+    if (!form.name.trim() || !form.email.trim() || !emailValid || !form.phone.trim() || !form.project.trim()) {
+      setSubmitState("error")
+      setError("Please complete the required fields.")
+      setTimeout(() => setSubmitState("idle"), 2000)
+      return
+    }
+
+    setSubmitState("loading")
     setError("")
     try {
       const res = await fetch("/api/contact", {
@@ -967,15 +1123,24 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
       if (!res.ok) throw new Error("Failed")
       setSent(true)
       setForm({ name: "", email: "", phone: "", project: "", budget: "" })
+      setSubmitState("success")
+      setTimeout(() => setSubmitState("idle"), 3000)
     } catch {
       setError("Unable to submit right now. Please try again or email us directly.")
+      setSubmitState("error")
+      setTimeout(() => setSubmitState("idle"), 2000)
     } finally {
-      setSending(false)
+      if (submitState === "loading") setSubmitState("idle")
     }
   }
 
-  const inputClass =
-    "w-full rounded-[10px] sm:rounded-[6px] bg-[rgb(var(--surface-2-rgb)/0.56)] sm:bg-[rgb(var(--surface-1-rgb)/0.82)] border border-[rgb(var(--cream-rgb)/0.16)] sm:border-[rgb(var(--cream-rgb)/0.12)] text-cream/94 font-cormorant text-[16px] sm:text-[17px] px-5 py-3 sm:py-3.5 focus:outline-none focus:border-gold/50 focus:bg-[rgb(var(--surface-2-rgb)/0.9)] focus:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.12),0_0_10px_rgb(var(--gold-rgb)_/_0.08)] transition-all duration-300 ease-out placeholder:text-cream/44 sm:placeholder:text-cream/32"
+  const budgetOptions = [
+    "Under ₹20,000",
+    "₹20,000 - ₹40,000",
+    "₹40,000 - ₹60,000",
+    "₹60,000+",
+    "Not sure yet",
+  ]
 
   return (
     <section id="studio-contact" ref={sectionRef} className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-4 sm:px-6 relative overflow-hidden">
@@ -1022,72 +1187,57 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
               <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent hidden sm:block" />
 
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-3.5 sm:mb-4">
-                <div>
-                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
-                    Your Name *
-                  </label>
-                  <input
-                    required
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    placeholder="Enter your name"
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    required
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                    placeholder="your@email.com"
-                    className={inputClass}
-                  />
-                </div>
+                <FloatingInput
+                  label="Your Name"
+                  name="studio-name"
+                  value={form.name}
+                  required
+                  onChange={(value) => setForm((f) => ({ ...f, name: value }))}
+                  onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
+                  error={nameError}
+                />
+                <FloatingInput
+                  label="Email Address"
+                  name="studio-email"
+                  type="email"
+                  value={form.email}
+                  required
+                  onChange={(value) => setForm((f) => ({ ...f, email: value }))}
+                  onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
+                  error={emailError}
+                />
               </div>
 
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-3.5 sm:mb-4">
-                <div>
-                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
-                    Phone Number *
-                  </label>
-                  <input
-                    required
-                    type="tel"
-                    value={form.phone}
-                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                    placeholder="+91 98765 43210"
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
-                    Estimated Cost
-                  </label>
-                  <input
-                    type="text"
-                    value={form.budget}
-                    onChange={(e) => setForm((f) => ({ ...f, budget: e.target.value }))}
-                    placeholder="Enter your estimated budget"
-                    className={inputClass}
-                  />
-                </div>
+                <FloatingInput
+                  label="Phone Number"
+                  name="studio-phone"
+                  type="tel"
+                  value={form.phone}
+                  required
+                  onChange={(value) => setForm((f) => ({ ...f, phone: value }))}
+                  onBlur={() => setTouched((prev) => ({ ...prev, phone: true }))}
+                  error={phoneError}
+                />
+                <FloatingSelect
+                  label="Estimated Cost"
+                  name="studio-budget"
+                  value={form.budget}
+                  options={budgetOptions}
+                  onChange={(value) => setForm((f) => ({ ...f, budget: value }))}
+                />
               </div>
 
               <div className="mb-6 sm:mb-6">
-                <label className="block pl-[2px] font-rajdhani text-[11px] sm:text-[12px] tracking-[1.1px] sm:tracking-[3px] uppercase text-gold/78 mb-1.5 sm:mb-2">
-                  Project Description *
-                </label>
-                <textarea
-                  required
-                  rows={3}
+                <FloatingInput
+                  label="Project Description"
+                  name="studio-project"
                   value={form.project}
-                  onChange={(e) => setForm((f) => ({ ...f, project: e.target.value }))}
-                  placeholder="Tell us about your project..."
-                  className={`${inputClass} resize-none min-h-[122px] sm:min-h-[150px]`}
+                  required
+                  multiline
+                  onChange={(value) => setForm((f) => ({ ...f, project: value }))}
+                  onBlur={() => setTouched((prev) => ({ ...prev, project: true }))}
+                  error={projectError}
                 />
               </div>
 
@@ -1095,14 +1245,26 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
                 <p className="font-rajdhani text-[12px] tracking-[1.5px] text-red-400/80 mb-4">{error}</p>
               )}
 
-              <button
+              <motion.button
                 type="submit"
-                disabled={sending}
+                disabled={submitState === "loading"}
                 className="w-full mt-1 rounded-[10px] sm:rounded-[6px] font-rajdhani text-[12px] sm:text-[13px] tracking-[1.4px] sm:tracking-[3.2px] uppercase border border-gold/70 bg-[linear-gradient(160deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb))_58%,rgb(var(--gold-dark-rgb)))] text-ink py-3 sm:py-3.5 font-semibold transition-all duration-300 md:hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                whileHover={prefersReduced ? undefined : { scale: 1.01 }}
+                whileTap={prefersReduced ? undefined : { scale: 0.98 }}
+                animate={submitState === "error" && !prefersReduced ? { x: [0, -6, 6, -6, 6, 0] } : undefined}
+                transition={submitState === "error" ? { duration: 0.35 } : { duration: 0.2 }}
               >
-                {sending ? "Sending..." : content.contactSubmitText}
-                {!sending && <ArrowRight size={15} />}
-              </button>
+                {submitState === "idle" && content.contactSubmitText}
+                {submitState === "loading" && (
+                  <span className="inline-flex items-center gap-2">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-ink/70 border-t-transparent" />
+                    Sending
+                  </span>
+                )}
+                {submitState === "success" && "✓ Sent!"}
+                {submitState === "error" && "Try Again"}
+                {submitState === "idle" && <ArrowRight size={15} />}
+              </motion.button>
 
               <p className="font-rajdhani text-[7.5px] sm:text-[10px] tracking-[0.8px] sm:tracking-[2.5px] uppercase text-cream/55 sm:text-cream/70 text-center mt-3 sm:mt-4">
                 {content.contactResponseNote}
@@ -1155,15 +1317,15 @@ export default function StudioPage() {
       <main>
         <StudioHero />
         <div id="studio-services-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
-        <GoldLine />
+        <SectionDivider />
         <StudioServices />
         <div id="studio-portfolio-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
-        <GoldLine />
+        <SectionDivider />
         <StudioPortfolio />
         <div id="studio-pricing-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
-        <GoldLine />
+        <SectionDivider />
         <StudioPricing content={studioContent} />
-        <GoldLine />
+        <SectionDivider />
         <StudioContactCTA content={studioContent} />
       </main>
       <Footer />
