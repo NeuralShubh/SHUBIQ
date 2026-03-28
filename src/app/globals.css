@@ -594,10 +594,15 @@
     z-index: 1;
     margin-top: -45vh;
     padding-top: 45vh;
+    isolation: isolate;
+  }
+
+  .page-stack-body {
+    position: relative;
+    z-index: 1;
     background:
       radial-gradient(120% 120% at 50% -20%, rgb(var(--gold-rgb) / 0.05), transparent 55%),
       linear-gradient(180deg, rgb(var(--surface-0-rgb)), rgb(var(--ink-rgb)));
-    isolation: isolate;
   }
 
   @keyframes pulse-gold {

@@ -19,17 +19,19 @@ export default function Home() {
         </div>
         <div className="page-stack">
           <GoldLine />
-          <About />
-          <GoldLine />
-          <Services />
-          <GoldLine />
-          <Projects />
-          <GoldLine />
-          <Marquee />
-          <GoldLine />
-          <Ecosystem />
-          <GoldLine />
-          <Contact />
+          <div className="page-stack-body">
+            <About />
+            <GoldLine />
+            <Services />
+            <GoldLine />
+            <Projects />
+            <GoldLine />
+            <Marquee />
+            <GoldLine />
+            <Ecosystem />
+            <GoldLine />
+            <Contact />
+          </div>
         </div>
       </main>
       <Footer />
