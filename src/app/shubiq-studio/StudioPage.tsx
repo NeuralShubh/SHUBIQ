@@ -14,7 +14,7 @@ import NumberTicker from "../components/NumberTicker"
 import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
 import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 import { projects, type Project } from "../data-projects"
-import ProjectCard from "../components/ProjectCard"
+import ProjectCardShowcase from "../components/ProjectCardShowcase"
 import {
   Code2,
   LayoutDashboard,
@@ -629,7 +629,7 @@ function StudioPortfolio() {
 
         <div ref={cardsRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6">
           {portfolioProjects.map((project, index) => (
-            <ProjectCard key={`${project.slug}-${index}`} project={project} index={index} />
+            <ProjectCardShowcase key={`${project.slug}-${index}`} project={project} index={index} />
           ))}
         </div>
         <div className="mt-10 flex justify-center">

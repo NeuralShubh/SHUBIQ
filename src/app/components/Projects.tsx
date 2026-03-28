@@ -4,7 +4,7 @@ import Link from "next/link"
 import { projects } from "../data-projects"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
-import ProjectCard from "./ProjectCard"
+import ProjectCardShowcase from "./ProjectCardShowcase"
 
 export default function Projects() {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
@@ -53,7 +53,7 @@ export default function Projects() {
         <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 sm:gap-8">
           {items.map((project, i) => (
             <StaggerItem key={project.id}>
-              <ProjectCard project={project} index={i} />
+              <ProjectCardShowcase project={project} index={i} />
             </StaggerItem>
           ))}
         </StaggerContainer>
