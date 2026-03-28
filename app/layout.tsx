@@ -3,6 +3,7 @@ import { Cinzel, Cormorant_Garamond, Orbitron, Rajdhani } from "next/font/google
 import "../src/app/globals.css"
 import SmoothScroll from "../src/app/components/SmoothScroll"
 import ThemeInit from "../src/app/components/ThemeInit"
+import LoadingScreen from "../src/app/components/LoadingScreen"
 import MagneticCursor from "../src/app/components/MagneticCursor"
 import ScrollProgress from "../src/app/components/ScrollProgress"
 import BackToTop from "../src/app/components/BackToTop"
@@ -102,6 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <ThemeInit />
+        <LoadingScreen />
         <MagneticCursor />
         <ScrollProgress />
         <SmoothScroll>{children}</SmoothScroll>

@@ -10,6 +10,7 @@ interface NumberTickerProps {
   duration?: number
   className?: string
   locale?: string
+  start?: boolean
 }
 
 export default function NumberTicker({
@@ -19,6 +20,7 @@ export default function NumberTicker({
   duration = 1500,
   className = "",
   locale,
+  start,
 }: NumberTickerProps) {
   const prefersReduced = useReducedMotion()
   const [display, setDisplay] = useState(prefersReduced ? value : 0)
@@ -30,32 +32,47 @@ export default function NumberTicker({
       setDisplay(value)
       return
     }
+    if (start === false) {
+      setDisplay(0)
+      return
+    }
+
+    const run = () => {
+      if (started.current) return
+      started.current = true
+      const startTime = Date.now()
+      const scrambleDuration = duration * 0.6
+      const countDuration = duration * 0.4
+
+      const tick = () => {
+        const elapsed = Date.now() - startTime
+        if (elapsed < scrambleDuration) {
+          setDisplay(Math.floor(Math.random() * value * 1.3))
+          requestAnimationFrame(tick)
+        } else if (elapsed < duration) {
+          const countProgress = (elapsed - scrambleDuration) / countDuration
+          const eased = 1 - Math.pow(1 - countProgress, 3)
+          setDisplay(Math.round(eased * value))
+          requestAnimationFrame(tick)
+        } else {
+          setDisplay(value)
+        }
+      }
+      requestAnimationFrame(tick)
+    }
+
+    if (typeof start === "boolean") {
+      if (start) run()
+      return
+    }
+
     const el = ref.current
     if (!el) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true
-          const startTime = Date.now()
-          const scrambleDuration = duration * 0.6
-          const countDuration = duration * 0.4
-
-          const tick = () => {
-            const elapsed = Date.now() - startTime
-            if (elapsed < scrambleDuration) {
-              setDisplay(Math.floor(Math.random() * value * 1.3))
-              requestAnimationFrame(tick)
-            } else if (elapsed < duration) {
-              const countProgress = (elapsed - scrambleDuration) / countDuration
-              const eased = 1 - Math.pow(1 - countProgress, 3)
-              setDisplay(Math.round(eased * value))
-              requestAnimationFrame(tick)
-            } else {
-              setDisplay(value)
-            }
-          }
-          requestAnimationFrame(tick)
+        if (entry.isIntersecting) {
+          run()
         }
       },
       { threshold: 0.5 },
@@ -63,7 +80,7 @@ export default function NumberTicker({
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [value, duration, prefersReduced])
+  }, [value, duration, prefersReduced, start])
 
   return (
     <span ref={ref} className={className}>

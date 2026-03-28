@@ -64,7 +64,7 @@ function StatCard({
       style={{ animationDelay: delay }}
     >
       <div className="font-cinzel text-[34px] md:text-[44px] leading-none text-gold font-black">
-        {reducedMotion ? value : <NumberTicker value={value} />}
+        {reducedMotion ? value : <NumberTicker value={value} start={inView} />}
       </div>
       <div className="font-rajdhani text-[10px] md:text-[11px] tracking-[2.6px] md:tracking-[3.4px] uppercase text-cream/55 mt-2">
         {label}
