@@ -7,9 +7,10 @@ export default function ProjectCard({ project, index }: { project: Project; inde
   const status = project.status?.toUpperCase() || "LIVE"
 
   return (
-    <div className="group h-full border border-[rgb(var(--cream-rgb)/0.18)] bg-card-soft hover:bg-card-soft-hover transition-all duration-400">
+    <div className="group h-full border border-[rgb(var(--cream-rgb)/0.18)] bg-card-soft hover:bg-card-soft-hover transition-all duration-400 hover:border-gold/40 hover:shadow-[0_18px_42px_rgb(0_0_0_/_0.35)]">
       <div className="relative h-[170px] sm:h-[210px] bg-[rgb(var(--surface-2-rgb)/0.72)]">
         <div className="absolute inset-0 bg-gradient-to-br from-[rgb(var(--surface-3-rgb)/0.7)] via-transparent to-[rgb(var(--surface-1-rgb)/0.7)]" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
         <div className="absolute bottom-4 left-5 text-[11px] tracking-[3px] uppercase font-rajdhani text-gold/70">
           {number}
         </div>

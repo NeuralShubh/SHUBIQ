@@ -632,7 +632,7 @@ function StudioPortfolio() {
             <ProjectCard key={`${project.slug}-${index}`} project={project} index={index} />
           ))}
         </div>
-        <div className="mt-8 flex justify-center">
+        <div className="mt-10 flex justify-center">
           <Link
             href="/projects"
             className="group inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors"

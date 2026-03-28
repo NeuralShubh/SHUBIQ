@@ -48,21 +48,7 @@ export default function Projects() {
               Strategic product builds across web platforms, AI systems, and scalable business software.
             </p>
           </div>
-          <Link
-            href="/projects"
-            className="hidden md:inline-flex items-center font-rajdhani text-[12px] tracking-[2.8px] uppercase text-cream/75 border border-transparent px-4 py-2 mb-3 hover:text-gold-light transition-all duration-300 group relative"
-          >
-            View All Projects
-            <span className="absolute left-4 right-4 bottom-1 h-px bg-gold/55 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-          </Link>
         </div>
-        <Link
-          href="/projects"
-          className="md:hidden inline-block font-rajdhani text-[12px] tracking-[2.8px] uppercase text-cream/75 border border-transparent px-4 py-2 hover:text-gold-light transition-all duration-300 mb-8 group relative"
-        >
-          View All Projects
-          <span className="absolute left-4 right-4 bottom-1 h-px bg-gold/55 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-        </Link>
 
         <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 sm:gap-8">
           {items.map((project, i) => (
@@ -71,6 +57,24 @@ export default function Projects() {
             </StaggerItem>
           ))}
         </StaggerContainer>
+
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 text-center">
+          <Link
+            href="/projects"
+            className="group inline-flex items-center font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors relative"
+          >
+            View All Projects
+            <span className="ml-2 transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+          </Link>
+          <span className="hidden sm:block h-4 w-px bg-[rgb(var(--cream-rgb)/0.2)]" />
+          <Link
+            href="/projects"
+            className="group inline-flex items-center font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors relative"
+          >
+            View All Products
+            <span className="ml-2 transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+          </Link>
+        </div>
       </div>
     </section>
   )
