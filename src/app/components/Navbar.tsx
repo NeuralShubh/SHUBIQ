@@ -8,7 +8,6 @@ import ThemeToggle, { STORAGE_KEY, THEMES, Theme, applyTheme } from "./ThemeTogg
 export default function Navbar() {
   const router = useRouter()
   const pathname = usePathname()
-  if (pathname === "/shubiq-studio") return null
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState("Home")
   const [menuOpen, setMenuOpen] = useState(false)
@@ -144,6 +143,8 @@ export default function Navbar() {
     if (pathname === "/") return
     setActive("Home")
   }, [pathname])
+
+  if (pathname === "/shubiq-studio") return null
 
   return (
     <>
