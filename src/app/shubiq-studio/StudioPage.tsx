@@ -527,14 +527,14 @@ function ServiceCard({
     >
       <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500" />
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-      <span className="absolute -top-2 right-4 text-[64px] sm:text-[80px] font-cinzel font-black text-cream/10 group-hover:text-cream/18 transition-opacity duration-300 select-none pointer-events-none">
+      <span className="absolute top-5 right-4 text-[52px] sm:text-[68px] font-cinzel font-black text-cream/10 group-hover:text-cream/18 transition-opacity duration-300 select-none pointer-events-none">
         {`0${index + 1}`}
       </span>
 
       <div className="relative z-10 h-full flex flex-col">
         <div className="flex items-start justify-between mb-6 sm:mb-6 max-md:items-center">
-          <span className="w-9 h-9 max-sm:w-7.5 max-sm:h-7.5 border border-gold/40 bg-gold/[0.07] flex items-center justify-center text-gold/90">
-            <Icon size={15} strokeWidth={1.8} />
+          <span className="font-rajdhani text-[10px] sm:text-[11px] tracking-[2px] uppercase text-gold/70">
+            {`0${index + 1}`}
           </span>
           <span
             className="font-rajdhani text-[11px] max-sm:text-[9px] tracking-[2px] max-sm:tracking-[1.2px] uppercase text-gold/80 border px-2.5 max-sm:px-1.5 py-1 max-sm:py-[3px] bg-gold/[0.05]"
