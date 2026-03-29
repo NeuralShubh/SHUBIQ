@@ -107,7 +107,7 @@ export default function FounderPageClient() {
 
   return (
     <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
-      <section className="relative pt-[96px] sm:pt-[120px] pb-14 px-5 sm:px-8 overflow-hidden">
+      <section className="relative pt-[80px] sm:pt-[104px] pb-12 px-5 sm:px-8 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -117,7 +117,7 @@ export default function FounderPageClient() {
         />
         <div className="max-w-5xl mx-auto relative grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-center">
           <div className="lg:col-span-2">
-            <BackLink href="/" label="Back to Home" className="mb-4" />
+            <BackLink href="/" label="Back to Home" className="mb-2" />
           </div>
           <ScrollReveal direction="right">
             <motion.div
