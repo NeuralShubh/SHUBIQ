@@ -41,14 +41,6 @@ export default function ProjectCard({ project, index }: { project: Project; inde
           ))}
         </div>
 
-        <div className="flex items-center justify-between text-[10px] tracking-[3px] uppercase font-rajdhani text-cream/55">
-          <span className="flex items-center gap-2">
-            Case Study
-            <span className="text-gold/80">&rarr;</span>
-          </span>
-          <span className="text-cream/45">View Details</span>
-        </div>
-
         <div className="mt-4 pt-4 border-t border-[rgb(var(--cream-rgb)/0.16)] grid grid-cols-2 gap-3">
           <Link
             href={`/projects/${project.slug}`}
