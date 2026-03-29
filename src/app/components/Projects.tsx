@@ -5,6 +5,7 @@ import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import ProjectCardShowcase from "./ProjectCardShowcase"
 import SectionLabel from "./SectionLabel"
+import { projects as fallbackProjects } from "../data-projects"
 
 interface ProjectsProps {
   initialProjects: any[]
@@ -14,8 +15,39 @@ export default function Projects({ initialProjects }: ProjectsProps) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   
-  // Convert Supabase projects back to component required format or just slice
-  const items = initialProjects.slice(0, 3)
+  const slugify = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "")
+
+  const sourceItems = initialProjects?.length ? initialProjects : fallbackProjects
+
+  const items = sourceItems
+    .map((item: any, index: number) => {
+      if (item?.slug) return item
+      const rawTag = typeof item?.tag === "string" ? item.tag : ""
+      const [categoryRaw, statusRaw] = rawTag.split("|").map((part) => part.trim())
+      return {
+        id: item?.id ?? `project-${index}`,
+        slug: item?.slug ?? slugify(item?.name ?? item?.title ?? `project-${index + 1}`),
+        number: item?.number ?? String(index + 1).padStart(2, "0"),
+        title: item?.name ?? item?.title ?? "Project",
+        subtitle: item?.desc ?? item?.subtitle ?? "",
+        description: item?.desc ?? item?.description ?? "",
+        category: categoryRaw || item?.category || "Project",
+        status: statusRaw || item?.status || "Live",
+        videoUrl: item?.video_url ?? item?.videoUrl ?? "",
+        videoPoster: item?.video_poster ?? item?.videoPoster ?? "",
+        liveUrl: item?.live ?? item?.liveUrl ?? undefined,
+        githubUrl: item?.link ?? item?.githubUrl ?? undefined,
+        techStack: item?.tech ?? item?.techStack ?? [],
+        impact: item?.impact ?? { headline: "", description: "" },
+        features: item?.features ?? [],
+        year: item?.year ?? "2026",
+      }
+    })
+    .slice(0, 3)
 
   return (
     <section id="projects" ref={sectionRef} className="cv-auto py-[96px] max-md:py-16 px-4 sm:px-6 relative overflow-hidden">
