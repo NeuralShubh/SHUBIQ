@@ -21,11 +21,11 @@ export default async function AdminDashboard() {
       { count: lCount },
       { data: inq }
     ] = await Promise.all([
-      supabase.from('projects').select('*', { count: 'exact', head: true }),
+      supabase.from('projects_admin').select('*', { count: 'exact', head: true }),
       supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
-      supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('is_read', false),
+      supabase.from('contact_submissions').select('*', { count: 'exact', head: true }).eq('is_read', false),
       supabase.from('labs_products').select('*', { count: 'exact', head: true }).like('status', '%Live%'),
-      supabase.from('inquiries').select('*').order('created_at', { ascending: false }).limit(5)
+      supabase.from('contact_submissions').select('*').order('created_at', { ascending: false }).limit(5)
     ])
 
     projectsCount = pCount || 0
