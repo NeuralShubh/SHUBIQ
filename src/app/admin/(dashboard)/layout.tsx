@@ -61,11 +61,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
 
-  // Wait for the hydration before rendering complex layout
-  // Or handle carefully but for Admin UI this is okay.
-  if (pathname === '/admin/login') {
-    return <>{children}</>
-  }
 
   const handleLogout = async () => {
     const supabase = createClient()
