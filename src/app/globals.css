@@ -945,3 +945,22 @@ select:focus-visible {
   initial-value: 0deg;
   inherits: false;
 }
+
+
+/* Admin Dashboard Input Styles */
+.admin-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgb(var(--cream-rgb) / 0.1);
+  background: rgb(var(--cream-rgb) / 0.03);
+  color: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.admin-input:focus {
+  border-color: rgb(var(--gold-rgb) / 0.5);
+  background: rgb(var(--cream-rgb) / 0.05);
+}
