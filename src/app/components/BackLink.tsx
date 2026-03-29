@@ -12,7 +12,7 @@ export default function BackLink({ href, label, className = "" }: BackLinkProps)
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold-light transition-colors ${className}`}
+      className={`inline-flex items-center gap-2 font-rajdhani text-[12px] leading-none tracking-[3px] uppercase text-cream/70 hover:text-gold-light transition-colors ${className}`}
     >
       <span className="text-gold/80">&larr;</span>
       {label}
