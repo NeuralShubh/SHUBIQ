@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import ProjectsIndexClient from "./ProjectsIndexClient"
+import { getProjectsData } from "./project-data"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
 
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ProjectsPage() {
-  return <ProjectsIndexClient />
+export default async function ProjectsPage() {
+  const projects = await getProjectsData()
+  return <ProjectsIndexClient projects={projects} />
 }

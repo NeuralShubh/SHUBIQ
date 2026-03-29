@@ -4,10 +4,14 @@ import { useMemo, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
 import TextReveal from "../components/TextReveal"
-import { projects } from "../data-projects"
 import ProjectCard from "../components/ProjectCard"
+import type { Project } from "../data-projects"
 
-export default function ProjectsIndexClient() {
+interface ProjectsIndexClientProps {
+  projects: Project[]
+}
+
+export default function ProjectsIndexClient({ projects }: ProjectsIndexClientProps) {
   const [filter, setFilter] = useState("All")
   const categories = useMemo(() => ["All", ...new Set(projects.map((project) => project.category))], [])
   const filtered = filter === "All" ? projects : projects.filter((project) => project.category === filter)
