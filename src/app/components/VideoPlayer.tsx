@@ -21,7 +21,8 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
 
   const isYouTube = src.includes("youtube.com") || src.includes("youtu.be")
   const isVimeo = src.includes("vimeo.com")
-  const isEmbed = isYouTube || isVimeo
+  const isDrive = src.includes("drive.google.com")
+  const isEmbed = isYouTube || isVimeo || isDrive
   const isEmpty = !src || src.trim() === ""
 
   const getEmbedUrl = () => {
@@ -34,6 +35,14 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     if (isVimeo) {
       const videoId = src.split("vimeo.com/")[1]?.split("?")[0]
       return `https://player.vimeo.com/video/${videoId}?autoplay=0`
+    }
+    if (isDrive) {
+      if (src.includes("/preview")) return src
+      const match = src.match(/\/d\/([^/]+)/)
+      if (match?.[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`
+      }
+      return src
     }
     return src
   }
