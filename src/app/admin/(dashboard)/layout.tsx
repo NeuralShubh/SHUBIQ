@@ -22,7 +22,7 @@ import {
   LogOut,
 } from 'lucide-react'
 import { Toaster, toast } from 'sonner'
-import { createClient } from '@/lib/supabase/client'
+import { logout } from '../login/actions'
 
 const navItems = [
   {
@@ -63,9 +63,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    window.location.href = '/admin/login'
+    await logout()
   }
 
   return (
