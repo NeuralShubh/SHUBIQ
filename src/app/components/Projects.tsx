@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import ProjectCardShowcase from "./ProjectCardShowcase"
+import SectionLabel from "./SectionLabel"
 
 interface ProjectsProps {
   initialProjects: any[]
@@ -12,15 +13,12 @@ interface ProjectsProps {
 export default function Projects({ initialProjects }: ProjectsProps) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const dividerRef = useRef<HTMLDivElement>(null)
-  const subheadingRef = useRef<HTMLParagraphElement>(null)
   
   // Convert Supabase projects back to component required format or just slice
   const items = initialProjects.slice(0, 3)
 
   return (
-    <section id="projects" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
+    <section id="projects" ref={sectionRef} className="cv-auto py-[96px] max-md:py-16 px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute -right-20 top-16 w-[420px] h-[420px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.05) 0%, transparent 70%)" }}
@@ -30,28 +28,16 @@ export default function Projects({ initialProjects }: ProjectsProps) {
         style={{ background: "radial-gradient(ellipse 54% 36% at 50% 40%, rgb(var(--gold-rgb) / 0.03) 0%, transparent 72%)" }}
       />
       <div className="max-w-7xl mx-auto w-full">
-        <div ref={headingRef} className="flex items-end justify-between mb-10 sm:mb-12 md:mb-14">
-          <div>
-            <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-              <span className="w-1 h-1 rounded-full bg-gold/85" />
-              <div className="font-rajdhani text-[12px] sm:text-[13px] tracking-[4px] sm:tracking-[6px] text-gold/78 uppercase">Projects</div>
-              <span className="w-12 sm:w-16 h-px bg-gradient-to-r from-gold/40 to-transparent" />
-            </div>
+        <div ref={headingRef} className="mb-10 sm:mb-12 md:mb-14 text-center">
+          <SectionLabel label="Portfolio" centered />
+          <div className={`reveal ${isInView ? "in-view" : ""} flex flex-col items-center gap-4`} style={{ animationDelay: "0.1s" }}>
             <h2
-              ref={titleRef}
-              className={`reveal ${isInView ? "in-view" : ""} font-cinzel font-black text-gradient-gold leading-[1.02] tracking-[-0.01em] text-[clamp(29px,9vw,44px)] sm:text-[clamp(34px,5vw,68px)]`}
-              style={{ animationDelay: "0.1s" }}
+              className="font-cinzel font-black leading-[0.92] tracking-[0.5px]"
+              style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}
             >
-              Digital Portfolio
+              <span className="text-cream/90">Engineered </span>
+              <span className="text-gold">Systems</span>
             </h2>
-            <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent mt-3 sm:mt-4`} style={{ animationDelay: "0.22s" }} />
-            <p
-              ref={subheadingRef}
-              className={`reveal ${isInView ? "in-view" : ""} mt-3 sm:mt-4 font-cormorant text-[18px] sm:text-[20px] text-cream/74 max-w-2xl leading-[1.5]`}
-              style={{ animationDelay: "0.32s" }}
-            >
-              Strategic product builds across web platforms, AI systems, and scalable business software.
-            </p>
           </div>
         </div>
 
