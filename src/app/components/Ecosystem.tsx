@@ -5,7 +5,6 @@ import { AppWindow, Boxes, Building2, Lightbulb, Rocket, Wrench } from "lucide-r
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { ECOSYSTEM_ITEMS } from "../data"
-import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import NumberTicker from "./NumberTicker"
 
@@ -282,34 +281,8 @@ export default function Ecosystem({ initialEcosystem }: EcosystemProps = {}) {
   ]
 
   useEffect(() => {
-    const load = async () => {
-      if (!SUPABASE_ENABLED) return
-      try {
-        const supabase = await getSupabaseClient()
-        if (!supabase) return
-        const { data, error } = await supabase.from("ecosystem").select("*").order("order_index", { ascending: true })
-        if (error || !data?.length) return
-        const mapped = data.map((row: any) => ({
-          id: String(row.id),
-          type: row.type ?? "app",
-          title: row.title ?? "",
-          subtitle: row.subtitle ?? "",
-          desc: row.desc ?? "",
-          icon: row.icon ?? "*",
-          color: row.color ?? "rgb(var(--gold-rgb))",
-          status: row.status ?? "concept",
-          link: row.link ?? null,
-          tags: Array.isArray(row.tags) ? row.tags : [],
-          featured: !!row.featured,
-          order_index: Number(row.order_index ?? 0),
-        }))
-        setItems(mapped)
-      } catch {
-        // no-op fallback to static data
-      }
-    }
-    load()
-  }, [])
+    setItems(initialEcosystem?.length ? initialEcosystem : ECOSYSTEM_ITEMS)
+  }, [initialEcosystem])
 
   return (
     <section id="ecosystem" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">

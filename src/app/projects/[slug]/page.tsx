@@ -1,15 +1,16 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { projects as fallbackProjects } from "../../data-projects"
-import { getProjectsData, getProjectBySlugDynamic } from "../project-data"
+import { getAllProjectSlugs, getProjectBySlug, projects } from "../../data-projects"
 import ProjectPageClient from "./ProjectPageClient"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
 
-export const dynamic = "force-dynamic"
+export async function generateStaticParams() {
+  return getAllProjectSlugs().map((slug) => ({ slug }))
+}
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const project = await getProjectBySlugDynamic(params.slug)
+  const project = getProjectBySlug(params.slug)
   if (!project) {
     return {
       title: "Project Not Found",
@@ -32,15 +33,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const list = await getProjectsData()
-  const project = list.find((item) => item.slug === params.slug)
+export default function ProjectPage({ params }: { params: { slug: string } }) {
+  const project = getProjectBySlug(params.slug)
   if (!project) return notFound()
 
-  const source = list.length ? list : fallbackProjects
-  const currentIndex = source.findIndex((item) => item.slug === project.slug)
-  const prevProject = source[(currentIndex - 1 + source.length) % source.length]
-  const nextProject = source[(currentIndex + 1) % source.length]
+  const currentIndex = projects.findIndex((item) => item.slug === project.slug)
+  const prevProject = projects[(currentIndex - 1 + projects.length) % projects.length]
+  const nextProject = projects[(currentIndex + 1) % projects.length]
 
   return <ProjectPageClient project={project} prevProject={prevProject} nextProject={nextProject} />
 }

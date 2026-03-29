@@ -12,7 +12,6 @@ import FloatingSelect from "../components/FloatingSelect"
 import MagneticButton from "../components/MagneticButton"
 import NumberTicker from "../components/NumberTicker"
 import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
-import { SUPABASE_ENABLED, supabase } from "../lib/supabase"
 import { projects, type Project } from "../data-projects"
 import ProjectCardShowcase from "../components/ProjectCardShowcase"
 import {
@@ -376,23 +375,7 @@ function StudioServices() {
   const [services, setServices] = useState<StudioService[]>(DEFAULT_STUDIO_SERVICES)
 
   useEffect(() => {
-    const load = async () => {
-      if (!SUPABASE_ENABLED) return
-      try {
-        const { data, error } = await supabase.from("studio_services").select("*").order("order_index", { ascending: true })
-        if (error || !data?.length) return
-        setServices(data.map((row: any) => ({
-          iconKey: (row.icon_key ?? "code") as StudioService["iconKey"],
-          title: row.title ?? "",
-          tag: row.tag ?? "",
-          desc: row.desc ?? "",
-          features: Array.isArray(row.features) ? row.features : [],
-        })))
-      } catch {
-        // no-op fallback to defaults
-      }
-    }
-    load()
+    setServices(DEFAULT_STUDIO_SERVICES)
   }, [])
 
   useEffect(() => {
@@ -1024,32 +1007,7 @@ export default function StudioPage() {
   const [studioContent, setStudioContent] = useState<StudioContent>(DEFAULT_STUDIO_CONTENT)
 
   useEffect(() => {
-    const load = async () => {
-      if (!SUPABASE_ENABLED) return
-      try {
-        const { data, error } = await supabase.from("studio_pricing_plans").select("*").order("order_index", { ascending: true })
-        if (error || !data?.length) return
-        setStudioContent((prev) => ({
-          ...prev,
-          plans: data.map((row: any) => ({
-            id: String(row.id),
-            tier: row.tier ?? "",
-            tag: row.tag ?? "",
-            bestFor: row.best_for ?? "",
-            price: Number(row.price ?? 0),
-            priceSuffix: row.price_suffix ?? "",
-            meta: row.meta ?? "",
-            features: Array.isArray(row.features) ? row.features : [],
-            cta: row.cta ?? "Get Started",
-            highlighted: !!row.highlighted,
-            icon: (row.icon ?? "trending") as "zap" | "trending" | "shield",
-          })),
-        }))
-      } catch {
-        // no-op fallback to defaults
-      }
-    }
-    load()
+    setStudioContent(DEFAULT_STUDIO_CONTENT)
   }, [])
 
   return (

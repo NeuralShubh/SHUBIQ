@@ -5,7 +5,6 @@ import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
-import { SUPABASE_ENABLED, getSupabaseClient } from "../lib/supabase-client"
 import { useInViewOnce } from "../lib/gsap-hooks"
 
 const SERVICE_ICONS = [Code2, LayoutDashboard, Bot, Smartphone]
@@ -153,27 +152,8 @@ export default function Services({ initialServices }: ServicesProps = {}) {
   const [items, setItems] = useState<MainService[]>(initialServices?.length ? initialServices : SERVICES)
 
   useEffect(() => {
-    const load = async () => {
-      if (!SUPABASE_ENABLED) return
-      try {
-        const supabase = await getSupabaseClient()
-        if (!supabase) return
-        const { data, error } = await supabase.from("services").select("*").order("order_index", { ascending: true })
-        if (error || !data?.length) return
-        setItems(data.map((row: any) => ({
-          id: String(row.id),
-          icon: row.icon ?? "?",
-          title: row.title ?? "",
-          desc: row.desc ?? "",
-          tag: row.tag ?? "",
-          order_index: Number(row.order_index ?? 0),
-        })))
-      } catch {
-        // no-op fallback to static data
-      }
-    }
-    load()
-  }, [])
+    setItems(initialServices?.length ? initialServices : SERVICES)
+  }, [initialServices])
 
   return (
     <section id="services" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">

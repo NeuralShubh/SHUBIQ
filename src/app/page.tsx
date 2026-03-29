@@ -11,7 +11,8 @@ import Contact from "./components/Contact"
 import GoldLine from "./components/GoldLine"
 import Footer from "./components/Footer"
 
-import { createClient } from "@/lib/supabase/server"
+import { SERVICES, ECOSYSTEM_ITEMS } from "./data"
+import { projects } from "./data-projects"
 
 export const metadata: Metadata = {
   title: "SHUBIQ | Intelligence That Wins",
@@ -19,13 +20,7 @@ export const metadata: Metadata = {
     "SHUBIQ is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
 }
 
-export default async function Home() {
-  const supabase = await createClient()
-
-  const { data: projectsData } = await supabase.from('projects_admin').select('*').order('order_index')
-  const { data: servicesData } = await supabase.from('services').select('*').order('order_index')
-  const { data: ecosystemData } = await supabase.from('labs_products').select('*').order('order_index')
-
+export default function Home() {
   return (
     <>
       <Navbar />
@@ -38,15 +33,15 @@ export default async function Home() {
           <div className="page-stack-body">
             <About />
             <GoldLine />
-            <Services initialServices={servicesData || []} />
+            <Services initialServices={SERVICES} />
             <GoldLine />
-            <Projects initialProjects={projectsData || []} />
+            <Projects initialProjects={projects} />
             <GoldLine />
             <TechConfidence />
             <GoldLine />
             <Marquee />
             <GoldLine />
-            <Ecosystem initialEcosystem={ecosystemData || []} />
+            <Ecosystem initialEcosystem={ECOSYSTEM_ITEMS} />
             <GoldLine />
             <Contact />
           </div>
