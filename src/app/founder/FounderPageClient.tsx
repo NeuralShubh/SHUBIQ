@@ -7,6 +7,7 @@ import { LayoutGrid, Brain, TrendingUp, Target } from "lucide-react"
 import ScrollReveal from "../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 import SectionDivider from "../components/SectionDivider"
+import BackLink from "../components/BackLink"
 
 const focusAreas = [
   { label: "Digital product architecture", icon: LayoutGrid },
@@ -115,6 +116,9 @@ export default function FounderPageClient() {
           }}
         />
         <div className="max-w-5xl mx-auto relative grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-center">
+          <div className="lg:col-span-2">
+            <BackLink href="/" label="Back to Home" />
+          </div>
           <ScrollReveal direction="right">
             <motion.div
               style={{ y: photoY }}

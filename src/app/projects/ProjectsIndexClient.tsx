@@ -6,6 +6,7 @@ import ScrollReveal from "../components/ScrollReveal"
 import TextReveal from "../components/TextReveal"
 import ProjectCard from "../components/ProjectCard"
 import type { Project } from "../data-projects"
+import BackLink from "../components/BackLink"
 
 interface ProjectsIndexClientProps {
   projects: Project[]
@@ -21,6 +22,7 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <div>
+            <BackLink href="/" label="Back to Home" className="mb-6" />
             <div className="flex items-center gap-3 mb-3">
               <span className="w-1 h-1 rounded-full bg-gold/85" />
               <div className="font-rajdhani text-[12px] tracking-[4px] text-gold/80 uppercase">Projects</div>

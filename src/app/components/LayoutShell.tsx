@@ -2,19 +2,13 @@
 
 import { usePathname } from "next/navigation"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
-import BackButton from "./BackButton"
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const prefersReduced = useReducedMotion()
 
   if (prefersReduced) {
-    return (
-      <div className="relative">
-        <BackButton />
-        {children}
-      </div>
-    )
+    return <>{children}</>
   }
 
   return (
@@ -27,7 +21,6 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
         transition={{ duration: 0.35, ease: "easeInOut" }}
         className="relative"
       >
-        <BackButton />
         {children}
       </motion.div>
     </AnimatePresence>

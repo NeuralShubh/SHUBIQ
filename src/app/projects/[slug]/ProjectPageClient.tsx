@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import ScrollReveal from "../../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../../components/StaggerContainer"
 import VideoPlayer from "../../components/VideoPlayer"
+import BackLink from "../../components/BackLink"
 import type { Project } from "../../data-projects"
 
 interface ProjectPageClientProps {
@@ -32,10 +33,7 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
           transition={{ duration: 0.4 }}
           className="flex items-center justify-between text-sm font-rajdhani tracking-[2px] uppercase text-cream/70"
         >
-          <Link href="/projects" className="flex items-center gap-2 hover:text-gold-light transition-colors">
-            <span className="text-gold/80">&larr;</span>
-            Back to Projects
-          </Link>
+          <BackLink href="/projects" label="Back to Projects" />
           <span className="flex items-center gap-2 text-cream/60">
             <span className={`w-2 h-2 rounded-full ${statusDot}`} />
             {project.category} | {project.status}
