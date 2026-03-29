@@ -3,55 +3,20 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  LayoutDashboard,
-  FolderOpen,
-  FileText,
-  Wrench,
-  FlaskConical,
-  Mail,
-  ClipboardList,
-  CreditCard,
-  User,
-  Palette,
-  BarChart3,
-  Settings,
-  PanelLeftClose,
-  PanelLeftOpen,
-  ArrowUpRight,
-  LogOut,
-} from 'lucide-react'
-import { Toaster, toast } from 'sonner'
+import { Mail, Settings, PanelLeftClose, PanelLeftOpen, LogOut, ArrowUpRight } from 'lucide-react'
+import { Toaster } from 'sonner'
 import { logout } from '../login/actions'
 
 const navItems = [
   {
-    group: null,
-    items: [{ label: 'Dashboard', href: '/admin', icon: LayoutDashboard }],
-  },
-  {
-    group: 'Content',
+    group: 'Inbox',
     items: [
-      { label: 'Projects', href: '/admin/projects', icon: FolderOpen },
-      { label: 'Blog', href: '/admin/blog', icon: FileText },
-      { label: 'Services', href: '/admin/services', icon: Wrench },
-      { label: 'Labs Products', href: '/admin/labs', icon: FlaskConical },
+      { label: 'Form Submissions', href: '/admin', icon: Mail },
     ],
   },
   {
-    group: 'Business',
+    group: 'System',
     items: [
-      { label: 'Inquiries', href: '/admin/inquiries', icon: Mail },
-      { label: 'Studio Briefs', href: '/admin/studio-briefs', icon: ClipboardList },
-      { label: 'Pricing', href: '/admin/pricing', icon: CreditCard },
-    ],
-  },
-  {
-    group: 'Site',
-    items: [
-      { label: 'Founder', href: '/admin/founder', icon: User },
-      { label: 'Themes', href: '/admin/themes', icon: Palette },
-      { label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
       { label: 'Settings', href: '/admin/settings', icon: Settings },
     ],
   },
