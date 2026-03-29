@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 
 export async function loginWithPassword(prevState: any, formData: FormData) {
   const password = formData.get('password')
-  const correctPassword = process.env.ADMIN_PASSWORD || 'shubiq2026' // Please set ADMIN_PASSWORD in your .env.local
+  const correctPassword = process.env.ADMIN_PASSWORD || process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'shubiq2026' // Please set ADMIN_PASSWORD in your .env.local
   
   if (password === correctPassword) {
     const cookieStore = await cookies();
