@@ -142,11 +142,15 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
   )
 }
 
-export default function Services() {
+interface ServicesProps {
+  initialServices?: MainService[]
+}
+
+export default function Services({ initialServices }: ServicesProps = {}) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
-  const [items, setItems] = useState<MainService[]>(SERVICES)
+  const [items, setItems] = useState<MainService[]>(initialServices?.length ? initialServices : SERVICES)
 
   useEffect(() => {
     const load = async () => {

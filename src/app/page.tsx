@@ -11,13 +11,21 @@ import Contact from "./components/Contact"
 import GoldLine from "./components/GoldLine"
 import Footer from "./components/Footer"
 
+import { createClient } from "@/lib/supabase/server"
+
 export const metadata: Metadata = {
   title: "SHUBIQ | Intelligence That Wins",
   description:
     "SHUBIQ is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
 }
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient()
+
+  const { data: projectsData } = await supabase.from('projects_admin').select('*').order('order_index')
+  const { data: servicesData } = await supabase.from('services').select('*').order('order_index')
+  const { data: ecosystemData } = await supabase.from('labs_products').select('*').order('order_index')
+
   return (
     <>
       <Navbar />
@@ -30,15 +38,15 @@ export default function Home() {
           <div className="page-stack-body">
             <About />
             <GoldLine />
-            <Services />
+            <Services initialServices={servicesData || []} />
             <GoldLine />
-            <Projects />
+            <Projects initialProjects={projectsData || []} />
             <GoldLine />
             <TechConfidence />
             <GoldLine />
             <Marquee />
             <GoldLine />
-            <Ecosystem />
+            <Ecosystem initialEcosystem={ecosystemData || []} />
             <GoldLine />
             <Contact />
           </div>

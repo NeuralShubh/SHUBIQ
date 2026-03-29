@@ -250,13 +250,17 @@ function EcoCard({ item }: { item: typeof ECOSYSTEM_ITEMS[0] }) {
   )
 }
 
-export default function Ecosystem() {
+interface EcosystemProps {
+  initialEcosystem?: any[]
+}
+
+export default function Ecosystem({ initialEcosystem }: EcosystemProps = {}) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("200px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
   const orbitRef = useRef<HTMLDivElement>(null)
   const [filter, setFilter] = useState<string>("all")
-  const [items, setItems] = useState(ECOSYSTEM_ITEMS)
+  const [items, setItems] = useState<any[]>(initialEcosystem?.length ? initialEcosystem : ECOSYSTEM_ITEMS)
   const prefersReduced = !!useReducedMotion()
 
   const types = ["all", ...Array.from(new Set(items.map((i) => i.type)))]

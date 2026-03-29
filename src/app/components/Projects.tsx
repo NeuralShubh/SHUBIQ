@@ -1,18 +1,23 @@
-﻿"use client"
+"use client"
 import { useRef } from "react"
 import Link from "next/link"
-import { projects } from "../data-projects"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import ProjectCardShowcase from "./ProjectCardShowcase"
 
-export default function Projects() {
+interface ProjectsProps {
+  initialProjects: any[]
+}
+
+export default function Projects({ initialProjects }: ProjectsProps) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const dividerRef = useRef<HTMLDivElement>(null)
   const subheadingRef = useRef<HTMLParagraphElement>(null)
-  const items = projects.slice(0, 3)
+  
+  // Convert Supabase projects back to component required format or just slice
+  const items = initialProjects.slice(0, 3)
 
   return (
     <section id="projects" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
