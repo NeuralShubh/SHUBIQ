@@ -27,7 +27,7 @@ export default function Projects({ initialProjects }: ProjectsProps) {
     .map((item: any, index: number) => {
       if (item?.slug) return item
       const rawTag = typeof item?.tag === "string" ? item.tag : ""
-      const [categoryRaw, statusRaw] = rawTag.split("|").map((part) => part.trim())
+      const [categoryRaw, statusRaw] = rawTag.split("|").map((part: string) => part.trim())
       return {
         id: item?.id ?? `project-${index}`,
         slug: item?.slug ?? slugify(item?.name ?? item?.title ?? `project-${index + 1}`),
