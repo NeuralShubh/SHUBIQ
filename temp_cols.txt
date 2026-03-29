@@ -1,0 +1,5 @@
+﻿Table projects_admin columns: id, techStack, impact, features, created_at, updated_at, category, status, videoUrl, videoPoster, liveUrl, githubUrl, duration, year, slug, number, title, subtitle, description
+Table services columns: id, order_index, created_at, tag, desc, icon, title
+Table labs_products columns: id, tags, featured, order_index, created_at, updated_at, color, status, link, type, title, subtitle, description, icon
+Table studio_pricing_plans columns: id, price, features, highlighted, order_index, created_at, meta, icon, tier, tag, best_for, cta, price_suffix
+Table blog_posts columns: id, tags, content, readingTime, created_at, updated_at, author, slug, title, excerpt, category, date
