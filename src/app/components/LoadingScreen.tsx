@@ -38,7 +38,7 @@ export default function LoadingScreen() {
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <Image src={LOGO_URL} alt="SHUBIQ" width={360} height={144} priority className="h-20 md:h-24 w-auto object-contain" />
+              <Image src={LOGO_URL} alt="SHUBIQ" width={720} height={288} priority className="h-40 md:h-48 w-auto object-contain" />
             </motion.div>
 
             <motion.p
