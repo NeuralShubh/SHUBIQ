@@ -86,7 +86,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate min-h-screen flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-28 max-[768px]:pt-24 pb-12 sm:pb-20"
+      className="relative isolate min-h-screen flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[12vh] pb-10 sm:pb-16"
     >
       {/* Background grid */}
       <div
@@ -98,24 +98,24 @@ export default function Hero() {
         }}
       />
       <div
-        className="hero-bg hero-center-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[740px] h-[740px] md:w-[800px] md:h-[800px] rounded-full"
+        className="hero-bg hero-center-glow absolute top-[46%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[740px] h-[740px] md:w-[800px] md:h-[800px] rounded-full"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.09) 0%, transparent 65%)" }}
       />
 
       {/* Animated rings (CSS-based, keep existing) */}
       <div
         ref={ring1Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-[46%] left-1/2 ${isInView ? "in-view" : ""}`}
         style={{ width: 600, height: 600, marginLeft: -300, marginTop: -300, opacity: 0, animationDelay: "0.1s" }}
       >
         <div className="hero-ring-1-border absolute inset-0 rounded-full border border-[rgb(var(--gold-rgb)/0.14)]" />
         <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-gold/80 -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-1/4 w-1 h-1 rounded-full bg-gold/30" />
+        <div className="absolute bottom-0 right-[8%] w-1 h-1 rounded-full bg-gold/25" />
         <div className="absolute top-1/3 right-0 w-1.5 h-1.5 rounded-full bg-gold/15" />
       </div>
       <div
         ref={ring2Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-[46%] left-1/2 ${isInView ? "in-view" : ""}`}
         style={{ width: 380, height: 380, marginLeft: -190, marginTop: -190, opacity: 0, animationDelay: "0.28s" }}
       >
         <div className="hero-ring-2-border absolute inset-0 rounded-full" style={{ border: "1px dashed rgb(var(--gold-rgb) / 0.12)" }} />
@@ -123,14 +123,14 @@ export default function Hero() {
       </div>
       <div
         ref={ring3Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-[46%] left-1/2 ${isInView ? "in-view" : ""}`}
         style={{ width: 220, height: 220, marginLeft: -110, marginTop: -110, opacity: 0, animationDelay: "0.46s" }}
       >
         <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
       </div>
 
       {/* Main content — cinematic entrance */}
-      <div className="hero-content relative z-20 text-center max-w-[51rem] max-[768px]:max-w-[46rem] mx-auto md:-translate-y-8 overflow-visible">
+      <div className="hero-content relative z-20 text-center max-w-[51rem] max-[768px]:max-w-[46rem] mx-auto md:-translate-y-6 overflow-visible">
 
         {/* SHUBIQ wordmark — blur + scale entrance */}
         <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em] relative">
@@ -143,7 +143,7 @@ export default function Hero() {
             }}
           />
           <motion.h1
-            className="font-cinzel font-black text-[clamp(32px,6.8vw,69px)] max-[768px]:text-[clamp(25.5px,8.5vw,38px)] md:text-[clamp(37px,4.2vw,67px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.3px] max-[768px]:tracking-[1px] md:tracking-[1.4px] mb-3 max-[768px]:mb-[8px] md:mb-4 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal"
+            className="font-cinzel font-black text-[clamp(36px,7.4vw,76px)] max-[768px]:text-[clamp(28px,9vw,42px)] md:text-[clamp(40px,4.6vw,74px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-4 max-[768px]:mb-[10px] md:mb-5 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal"
             style={{ perspective: "800px" }}
             initial={prefersReduced ? {} : { opacity: 0, scale: 0.98, filter: "blur(4px)", y: 16 }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }}
@@ -155,24 +155,24 @@ export default function Hero() {
 
         {/* Tagline with lines */}
         <motion.div
-          className="hero-tagline-row mb-6 max-[768px]:mb-3 md:mb-7"
+          className="hero-tagline-row mb-4 max-[768px]:mb-3 md:mb-6"
           initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.25, ease: EASE_PREMIUM }}
         >
           <span className="hero-tagline-line" />
-          <span className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase tracking-[3px] md:tracking-[6px]">
+          <span className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase tracking-[3.6px] md:tracking-[7px]">
             Intelligence That Wins
           </span>
           <span className="hero-tagline-line" />
         </motion.div>
 
-        {/* Minimal spacing before CTAs */}
-        <div className="h-2 sm:h-4" />
+        {/* Spacing before CTAs */}
+        <div className="h-3 sm:h-4" />
 
         {/* CTA Buttons */}
         <motion.div
-          className="hero-interactive relative z-30 flex gap-3.5 max-[768px]:gap-2.5 sm:gap-4 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-7 sm:mb-8"
+          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-5 sm:mb-6"
           initial={prefersReduced ? {} : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.45, ease: EASE_PREMIUM }}
@@ -197,7 +197,7 @@ export default function Hero() {
 
         {/* Social links */}
         <motion.div
-          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-9"
+          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-3 sm:pt-4 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-8"
           initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.6, ease: EASE_PREMIUM }}
@@ -219,7 +219,7 @@ export default function Hero() {
 
       {/* Scroll indicator with bounce */}
       <motion.div
-        className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2"
+        className="absolute bottom-1 sm:bottom-2 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 opacity-70"
         {...fadeUp(1.1, 0.4)}
       >
         <motion.span
