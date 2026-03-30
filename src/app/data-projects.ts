@@ -34,7 +34,7 @@ export const projects: Project[] = [
     status: "Live",
     videoUrl: "https://drive.google.com/file/d/16F-AncQEXnmnUhgT4Z-Aw-n3SNnIudUY/preview",
     videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/Pragati%20Finance%20Banner.png",
-    liveUrl: "https://os.shubiq.com",
+    liveUrl: "",
     githubUrl: "",
     techStack: [
       "Next.js",
@@ -76,7 +76,7 @@ export const projects: Project[] = [
     status: "Live",
     videoUrl: "https://drive.google.com/file/d/1aePwahvxamgn1VD6aGdbqwHboGYaJmE-/preview",
     videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/bramha%20banner.png",
-    liveUrl: "",
+    liveUrl: "https://os.shubiq.com",
     githubUrl: "",
     techStack: [
       "React",
