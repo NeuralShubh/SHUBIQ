@@ -130,7 +130,7 @@ export default function Hero() {
       </div>
 
       {/* Main content — cinematic entrance */}
-      <div className="hero-content relative z-20 text-center max-w-[51rem] max-[768px]:max-w-[46rem] w-full left-1/2 -translate-x-1/2 md:-translate-y-10 overflow-visible">
+      <div className="hero-content relative z-20 text-center max-w-[51rem] max-[768px]:max-w-[46rem] w-full mx-auto md:-translate-y-10 overflow-visible">
 
         {/* SHUBIQ wordmark — blur + scale entrance */}
         <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em] relative">
