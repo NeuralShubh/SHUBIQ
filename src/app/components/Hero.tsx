@@ -157,24 +157,8 @@ export default function Hero() {
           <span className="hero-tagline-line" />
         </motion.div>
 
-        {/* Description */}
-        <motion.p
-          className="site-hero-copy font-cormorant text-cream/84 leading-[1.62] max-[768px]:leading-[1.58] max-w-[860px] mx-auto mb-7 md:mb-8 px-2 max-[768px]:px-5 max-[768px]:text-[15.5px]"
-          style={{ fontSize: "clamp(16px, 1.38vw, 20px)" }}
-          {...fadeUp(0.5)}
-        >
-          <span
-            className="block font-cinzel text-cream mb-6 max-[768px]:mb-4 md:mb-7 leading-[1.15] max-[768px]:text-[clamp(22px,8vw,32px)]"
-            style={{ fontSize: "clamp(26px, 4vw, 56px)" }}
-          >
-            <span className="font-semibold">We Build </span>
-            <span className="font-black">Digital Products</span>
-            <span className="font-medium"> That Win.</span>
-          </span>
-          <span className="block">
-            We design and engineer high-performance digital systems for brands that value precision and long-term impact.
-          </span>
-        </motion.p>
+        {/* Minimal spacing before CTAs */}
+        <div className="h-2 sm:h-3" />
 
         {/* CTA Buttons */}
         <motion.div
