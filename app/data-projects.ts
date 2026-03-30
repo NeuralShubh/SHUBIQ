@@ -76,7 +76,7 @@ export const projects: Project[] = [
     status: "Live",
     videoUrl: "https://drive.google.com/file/d/1aePwahvxamgn1VD6aGdbqwHboGYaJmE-/preview",
     videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/bramha%20banner.png",
-    liveUrl: "https://os.shubiq.com",
+    liveUrl: "",
     githubUrl: "",
     techStack: [
       "React",
@@ -119,7 +119,7 @@ export const projects: Project[] = [
     status: "Live",
     videoUrl: "https://drive.google.com/file/d/12XOuH7tOKqSKkYrZNqdcMjbuyh5j649a/preview",
     videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/SHUBIQ%20OS.png",
-    liveUrl: "",
+    liveUrl: "https://os.shubiq.com",
     githubUrl: "",
     techStack: [
       "HTML",
