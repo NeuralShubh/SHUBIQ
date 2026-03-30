@@ -770,7 +770,7 @@
   color: rgb(var(--cream-rgb));
   border-color: rgb(var(--gold-rgb) / 0.4);
   box-shadow: 0 0 0 1px rgb(var(--gold-rgb) / 0.08) inset;
-  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
 }
 
 .hero-tagline-row {
