@@ -792,7 +792,7 @@
 
 .cta-ghost:hover,
 .cta-ghost:focus-visible {
-  color: rgb(var(--ink-rgb));
+  color: rgb(var(--ink-rgb)) !important;
   border-color: rgb(var(--gold-rgb));
   box-shadow: 0 0 24px rgb(var(--gold-rgb) / 0.22);
 }
