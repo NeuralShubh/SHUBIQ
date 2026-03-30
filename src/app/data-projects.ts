@@ -1,4 +1,4 @@
-export interface Project {
+﻿export interface Project {
   id: string
   slug: string
   number: string
@@ -63,6 +63,49 @@ export const projects: Project[] = [
     ],
     year: "2026",
     duration: "6 weeks",
+  },
+  {
+    id: "bramha-urban-performance",
+    slug: "bramha-urban-performance",
+    number: "02",
+    title: "Bramha Urban Multistate",
+    subtitle: "A performance portal for staff to log daily business, track targets, and view rankings in one place.",
+    description:
+      "This internal performance portal enables bank staff to log daily business entries, auto-calculate points based on FD tenure and Gold Loan processing rules, and track monthly targets in real time. Managers and admins get branch, segment, and employee visibility, while leaderboards show rank across FD, Gold, and Savings. Targets are assigned monthly, achievements update instantly, and reports export cleanly for audits. Role-based access ensures employees edit only their own entries, managers follow employee-level access, and admins retain full control.",
+    category: "Finance",
+    status: "Live",
+    videoUrl: "https://drive.google.com/file/d/1aePwahvxamgn1VD6aGdbqwHboGYaJmE-/preview",
+    videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/bramha%20banner.png",
+    liveUrl: "",
+    githubUrl: "",
+    techStack: [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Chart.js",
+      "Lucide Icons",
+      "Node.js",
+      "Express.js",
+      "PostgreSQL",
+      "PM2",
+      "Nginx",
+      "Ubuntu VPS",
+      "Let's Encrypt",
+    ],
+    impact: {
+      headline: "Unified daily performance tracking with live targets and rankings",
+      description:
+        "Centralized staff performance tracking across branches and segments with automated scoring, real-time leaderboards, and exportable analytics.",
+    },
+    features: [
+      "Daily FD / Gold Loan / Saving entry with auto points",
+      "Monthly targets by segment with instant achievement view",
+      "Leaderboards with segment filters and rank visibility",
+      "Admin management for branches, employees, and bulk targets",
+      "Exportable reports with date and segment filters",
+    ],
+    year: "2026",
+    duration: "5 weeks",
   },
 ]
 
