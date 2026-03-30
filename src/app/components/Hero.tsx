@@ -145,23 +145,16 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        {/* Tagline */}
-        <motion.p
-          className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase mb-7 max-[768px]:mb-4 md:mb-8 tracking-[3px] md:tracking-[6px]"
-          style={{ fontSize: "clamp(18px, 2.5vw, 30px)" }}
+        {/* Tagline with lines */}
+        <motion.div
+          className="hero-tagline-row mb-7 max-[768px]:mb-4 md:mb-8"
           {...fadeUp(0.3)}
         >
-          Intelligence That Wins
-        </motion.p>
-
-        {/* Decorative divider line */}
-        <motion.div
-          className="flex items-center justify-center gap-4 mb-7 max-[768px]:mb-4 md:mb-8"
-          {...fadeUp(0.4, 0.4)}
-        >
-          <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/50" />
-          <div className="w-1.5 h-1.5 rounded-full bg-gold" />
-          <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/50" />
+          <span className="hero-tagline-line" />
+          <span className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase tracking-[3px] md:tracking-[6px]">
+            Intelligence That Wins
+          </span>
+          <span className="hero-tagline-line" />
         </motion.div>
 
         {/* Description */}

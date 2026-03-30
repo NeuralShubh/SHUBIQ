@@ -773,6 +773,20 @@
   clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
 }
 
+.hero-tagline-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.hero-tagline-line {
+  height: 1px;
+  width: clamp(60px, 12vw, 140px);
+  background: linear-gradient(90deg, transparent, rgb(var(--gold-rgb)), transparent);
+  opacity: 0.55;
+}
+
 .cta-premium::before,
 .cta-ghost::before {
   content: "";
