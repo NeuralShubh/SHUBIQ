@@ -18,6 +18,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   const [progress, setProgress] = useState(0)
   const [showControls, setShowControls] = useState(true)
   const [showPlayButton, setShowPlayButton] = useState(true)
+  const [showEmbed, setShowEmbed] = useState(false)
 
   const isYouTube = src.includes("youtube.com") || src.includes("youtu.be")
   const isVimeo = src.includes("vimeo.com")
@@ -171,19 +172,44 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   }
 
   if (isEmbed) {
+    const shouldShowPoster = Boolean(poster) && !showEmbed
     return (
       <div
         className="relative w-full rounded-2xl overflow-hidden shadow-[0_18px_46px_rgb(0_0_0_/_0.5)]"
         style={{ aspectRatio: "16/9" }}
       >
-        <iframe
-          src={getEmbedUrl()}
-          className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          loading="lazy"
-          title={`${title} video demo`}
-        />
+        {shouldShowPoster ? (
+          <>
+            <Image
+              src={poster as string}
+              alt={title}
+              width={1200}
+              height={675}
+              className="w-full h-full object-cover"
+            />
+            <button
+              type="button"
+              onClick={() => setShowEmbed(true)}
+              aria-label="Play video"
+              className="absolute inset-0 flex items-center justify-center bg-black/35 hover:bg-black/45 transition-colors"
+            >
+              <span className="w-20 h-20 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="white" className="ml-1">
+                  <polygon points="5,3 19,12 5,21" />
+                </svg>
+              </span>
+            </button>
+          </>
+        ) : (
+          <iframe
+            src={getEmbedUrl()}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+            title={`${title} video demo`}
+          />
+        )}
       </div>
     )
   }

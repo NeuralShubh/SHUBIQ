@@ -1,14 +1,12 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { getProjectBySlug, projects } from "../../data-projects"
-import ProjectPageClient from "./ProjectPageClient"
+import { projects, getProjectBySlug } from "../../data-projects"
+import ProjectPageClient from "../../../src/app/projects/[slug]/ProjectPageClient"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
 
-export const dynamic = "force-dynamic"
-
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const project = getProjectBySlug(params.slug)
+export async function generateMetadata(): Promise<Metadata> {
+  const project = getProjectBySlug("pragati-finance")
   if (!project) {
     return {
       title: "Project Not Found",
@@ -31,8 +29,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = getProjectBySlug(params.slug)
+export default function PragatiFinancePage() {
+  const project = getProjectBySlug("pragati-finance")
   if (!project) {
     notFound()
   }
@@ -42,8 +40,4 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
   const nextProject = projects[(currentIndex + 1) % projects.length]
 
   return <ProjectPageClient project={project} prevProject={prevProject} nextProject={nextProject} />
-}
-
-export async function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }))
 }
