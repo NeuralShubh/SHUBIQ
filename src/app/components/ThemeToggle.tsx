@@ -87,11 +87,29 @@ export default function ThemeToggle() {
     <div ref={wrapRef} className="theme-toggle-wrap relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="font-rajdhani text-[11px] tracking-[1.5px] uppercase border border-[0.7px] border-[rgb(var(--cream-rgb)/0.1)] text-cream/74 px-[9px] py-[4px] transition-colors duration-200 hover:border-[rgb(var(--gold-rgb)/0.28)] hover:text-cream/82 hover:bg-gold/5"
+        className="inline-flex items-center gap-2 font-rajdhani text-[11px] tracking-[1.5px] uppercase border border-[0.7px] border-[rgb(var(--cream-rgb)/0.1)] text-cream/74 px-[9px] py-[4px] transition-colors duration-200 hover:border-[rgb(var(--gold-rgb)/0.28)] hover:text-cream/82 hover:bg-gold/5"
         aria-label="Open appearance selector"
         title={activeLabel}
         type="button"
       >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-gold/90"
+          aria-hidden
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 3a9 9 0 0 0 0 18 4.5 4.5 0 0 0 0-9V3z" />
+          <circle cx="8.5" cy="10.5" r="0.6" fill="currentColor" stroke="none" />
+          <circle cx="12.5" cy="8.5" r="0.6" fill="currentColor" stroke="none" />
+          <circle cx="15.5" cy="12.5" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
         Appearance
       </button>
 
