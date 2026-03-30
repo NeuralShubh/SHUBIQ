@@ -47,6 +47,22 @@ export default function Hero() {
     }
   }, [sectionRef])
 
+  // Allow hero CTAs to be clickable while the hero is active
+  useEffect(() => {
+    const updateHeroState = () => {
+      const active = window.scrollY < window.innerHeight * 0.65
+      document.body.classList.toggle("hero-active", active)
+    }
+    updateHeroState()
+    window.addEventListener("scroll", updateHeroState, { passive: true })
+    window.addEventListener("resize", updateHeroState)
+    return () => {
+      window.removeEventListener("scroll", updateHeroState)
+      window.removeEventListener("resize", updateHeroState)
+      document.body.classList.remove("hero-active")
+    }
+  }, [])
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id)
     if (!el) return

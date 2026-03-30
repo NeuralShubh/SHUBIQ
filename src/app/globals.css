@@ -848,6 +848,17 @@
   z-index: 30;
 }
 
+body.hero-active .page-stack,
+body.hero-active .page-stack-body {
+  pointer-events: none;
+}
+
+body.hero-active .hero-content,
+body.hero-active .hero-interactive,
+body.hero-active .hero-cta {
+  pointer-events: auto !important;
+}
+
 /* Smooth theme transitions */
 html.theme-transitioning,
 html.theme-transitioning *,
