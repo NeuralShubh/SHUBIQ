@@ -143,7 +143,7 @@ export default function Hero() {
             }}
           />
           <motion.h1
-            className="font-cinzel font-black text-[clamp(36px,7.4vw,76px)] max-[768px]:text-[clamp(28px,9vw,42px)] md:text-[clamp(40px,4.6vw,74px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-4 max-[768px]:mb-[10px] md:mb-5 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal"
+            className="font-cinzel font-black text-[clamp(45px,9.25vw,95px)] max-[768px]:text-[clamp(35px,11.25vw,52px)] md:text-[clamp(50px,5.75vw,92px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-4 max-[768px]:mb-[10px] md:mb-5 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal"
             style={{ perspective: "800px" }}
             initial={prefersReduced ? {} : { opacity: 0, scale: 0.98, filter: "blur(4px)", y: 16 }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }}
