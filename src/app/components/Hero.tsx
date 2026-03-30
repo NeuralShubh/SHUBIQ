@@ -133,11 +133,19 @@ export default function Hero() {
       <div className="hero-content relative z-20 text-center max-w-[51rem] max-[768px]:max-w-[46rem] mx-auto md:-translate-y-8 overflow-visible">
 
         {/* SHUBIQ wordmark — blur + scale entrance */}
-        <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em]">
+        <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em] relative">
+          <div
+            className="absolute inset-0 -z-10 blur-2xl opacity-60"
+            style={{
+              background:
+                "radial-gradient(circle, rgb(var(--gold-rgb) / 0.35) 0%, transparent 70%)",
+              transform: "translateY(6px)",
+            }}
+          />
           <motion.h1
             className="font-cinzel font-black text-[clamp(32px,6.8vw,69px)] max-[768px]:text-[clamp(25.5px,8.5vw,38px)] md:text-[clamp(37px,4.2vw,67px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.3px] max-[768px]:tracking-[1px] md:tracking-[1.4px] mb-3 max-[768px]:mb-[8px] md:mb-4 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal"
             style={{ perspective: "800px" }}
-            initial={prefersReduced ? {} : { opacity: 0, scale: 0.95, filter: "blur(4px)", y: 16 }}
+            initial={prefersReduced ? {} : { opacity: 0, scale: 0.98, filter: "blur(4px)", y: 16 }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 0.6, ease: EASE_PREMIUM }}
           >
@@ -147,8 +155,10 @@ export default function Hero() {
 
         {/* Tagline with lines */}
         <motion.div
-          className="hero-tagline-row mb-7 max-[768px]:mb-4 md:mb-8"
-          {...fadeUp(0.3)}
+          className="hero-tagline-row mb-6 max-[768px]:mb-3 md:mb-7"
+          initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.25, ease: EASE_PREMIUM }}
         >
           <span className="hero-tagline-line" />
           <span className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase tracking-[3px] md:tracking-[6px]">
@@ -158,12 +168,14 @@ export default function Hero() {
         </motion.div>
 
         {/* Minimal spacing before CTAs */}
-        <div className="h-2 sm:h-3" />
+        <div className="h-2 sm:h-4" />
 
         {/* CTA Buttons */}
         <motion.div
-          className="hero-interactive relative z-30 flex gap-3.5 max-[768px]:gap-2.5 sm:gap-4 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-9 sm:mb-10"
-          {...fadeUp(0.7)}
+          className="hero-interactive relative z-30 flex gap-3.5 max-[768px]:gap-2.5 sm:gap-4 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-7 sm:mb-8"
+          initial={prefersReduced ? {} : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.45, ease: EASE_PREMIUM }}
         >
           <button
             type="button"
@@ -185,8 +197,10 @@ export default function Hero() {
 
         {/* Social links */}
         <motion.div
-          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-5 sm:pt-6 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-10"
-          {...fadeUp(0.9)}
+          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-9"
+          initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.6, ease: EASE_PREMIUM }}
         >
           {SOCIAL_LINKS.map((s) => (
             <div key={s.label} className="flex items-center justify-center">
