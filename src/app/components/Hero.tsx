@@ -143,7 +143,7 @@ export default function Hero() {
             }}
           />
         <motion.h1
-          className="font-cinzel font-normal text-[clamp(56px,11.5vw,118px)] max-[768px]:text-[clamp(44px,14vw,65px)] md:text-[clamp(62px,7.2vw,115px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-4 max-[768px]:mb-[10px] md:mb-5 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal translate-x-[5%] max-[768px]:translate-x-[2.5%]"
+          className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-4 max-[768px]:mb-[10px] md:mb-5 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] pr-[0.56em] max-[768px]:pr-[0.4em] md:pr-[0.62em] inline-block overflow-visible max-w-full break-normal whitespace-normal -mt-[10px]"
           style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
           initial={prefersReduced ? {} : { opacity: 0, scale: 0.98, filter: "blur(4px)", y: 16 }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }}
@@ -155,7 +155,7 @@ export default function Hero() {
 
         {/* Tagline with lines */}
         <motion.div
-          className="hero-tagline-row mb-2 max-[768px]:mb-1.5 md:mb-3 -mt-2 md:-mt-3"
+          className="hero-tagline-row mb-2 max-[768px]:mb-1.5 md:mb-3 -mt-4 md:-mt-5"
           initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.25, ease: EASE_PREMIUM }}
@@ -172,7 +172,7 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <motion.div
-          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mb-5 sm:mb-6"
+          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-8 sm:mt-10 mb-5 sm:mb-6"
           initial={prefersReduced ? {} : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.45, ease: EASE_PREMIUM }}
