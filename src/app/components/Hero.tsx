@@ -98,15 +98,15 @@ export default function Hero() {
         }}
       />
       <div
-        className="hero-bg hero-center-glow absolute top-[46%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[740px] h-[740px] md:w-[800px] md:h-[800px] rounded-full"
+        className="hero-bg hero-center-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] md:w-[1100px] md:h-[1100px] rounded-full"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.09) 0%, transparent 65%)" }}
       />
 
       {/* Animated rings (CSS-based, keep existing) */}
       <div
         ref={ring1Ref}
-        className={`hero-bg hero-ring absolute top-[46%] left-1/2 ${isInView ? "in-view" : ""}`}
-        style={{ width: 600, height: 600, marginLeft: -300, marginTop: -300, opacity: 0, animationDelay: "0.1s" }}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        style={{ width: 720, height: 720, marginLeft: -360, marginTop: -360, opacity: 0, animationDelay: "0.1s" }}
       >
         <div className="hero-ring-1-border absolute inset-0 rounded-full border border-[rgb(var(--gold-rgb)/0.14)]" />
         <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-gold/80 -translate-x-1/2 -translate-y-1/2" />
@@ -115,16 +115,16 @@ export default function Hero() {
       </div>
       <div
         ref={ring2Ref}
-        className={`hero-bg hero-ring absolute top-[46%] left-1/2 ${isInView ? "in-view" : ""}`}
-        style={{ width: 380, height: 380, marginLeft: -190, marginTop: -190, opacity: 0, animationDelay: "0.28s" }}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        style={{ width: 460, height: 460, marginLeft: -230, marginTop: -230, opacity: 0, animationDelay: "0.28s" }}
       >
         <div className="hero-ring-2-border absolute inset-0 rounded-full" style={{ border: "1px dashed rgb(var(--gold-rgb) / 0.12)" }} />
         <div className="absolute top-0 left-1/2 w-1 h-1 rounded-full bg-gold/30 -translate-x-1/2" />
       </div>
       <div
         ref={ring3Ref}
-        className={`hero-bg hero-ring absolute top-[46%] left-1/2 ${isInView ? "in-view" : ""}`}
-        style={{ width: 220, height: 220, marginLeft: -110, marginTop: -110, opacity: 0, animationDelay: "0.46s" }}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        style={{ width: 270, height: 270, marginLeft: -135, marginTop: -135, opacity: 0, animationDelay: "0.46s" }}
       >
         <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
       </div>
