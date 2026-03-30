@@ -765,11 +765,6 @@
   transition: color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-.cta-premium {
-  background: rgb(var(--gold-rgb));
-  color: rgb(var(--ink-rgb));
-}
-
 .cta-ghost {
   background: transparent;
   color: rgb(var(--cream-rgb));
@@ -786,24 +781,13 @@
   z-index: 0;
 }
 
-.cta-premium::before {
-  background: linear-gradient(90deg, rgb(var(--gold-light-rgb)) 0%, rgb(var(--gold-rgb)) 70%);
-}
-
 .cta-ghost::before {
   background: linear-gradient(90deg, rgb(var(--gold-rgb)) 0%, rgb(var(--gold-light-rgb)) 70%);
 }
 
-.cta-premium:hover::before,
-.cta-premium:focus-visible::before,
 .cta-ghost:hover::before,
 .cta-ghost:focus-visible::before {
   transform: scaleX(1);
-}
-
-.cta-premium:hover,
-.cta-premium:focus-visible {
-  box-shadow: 0 0 28px rgb(var(--gold-rgb) / 0.28);
 }
 
 .cta-ghost:hover,
