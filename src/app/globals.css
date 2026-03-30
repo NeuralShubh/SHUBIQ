@@ -803,6 +803,11 @@
   z-index: 1;
 }
 
+.cta-premium,
+.cta-ghost {
+  color: rgb(var(--cream-rgb)) !important;
+}
+
 .hero-bg {
   pointer-events: none !important;
   z-index: 0;
