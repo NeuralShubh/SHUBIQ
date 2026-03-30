@@ -71,11 +71,11 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-28 max-[768px]:pt-24 pb-12 sm:pb-20"
+      className="relative isolate min-h-screen flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-28 max-[768px]:pt-24 pb-12 sm:pb-20"
     >
       {/* Background grid */}
       <div
-        className="hero-grid-overlay absolute inset-0 pointer-events-none"
+        className="hero-bg hero-grid-overlay absolute inset-0"
         style={{
           backgroundImage:
             "linear-gradient(rgb(var(--gold-rgb) / 0.05) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--gold-rgb) / 0.05) 1px, transparent 1px)",
@@ -83,14 +83,14 @@ export default function Hero() {
         }}
       />
       <div
-        className="hero-center-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[740px] h-[740px] md:w-[800px] md:h-[800px] rounded-full pointer-events-none"
+        className="hero-bg hero-center-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[740px] h-[740px] md:w-[800px] md:h-[800px] rounded-full"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.09) 0%, transparent 65%)" }}
       />
 
       {/* Animated rings (CSS-based, keep existing) */}
       <div
         ref={ring1Ref}
-        className={`hero-ring absolute top-1/2 left-1/2 pointer-events-none ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
         style={{ width: 600, height: 600, marginLeft: -300, marginTop: -300, opacity: 0, animationDelay: "0.1s" }}
       >
         <div className="hero-ring-1-border absolute inset-0 rounded-full border border-[rgb(var(--gold-rgb)/0.14)]" />
@@ -100,7 +100,7 @@ export default function Hero() {
       </div>
       <div
         ref={ring2Ref}
-        className={`hero-ring absolute top-1/2 left-1/2 pointer-events-none ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
         style={{ width: 380, height: 380, marginLeft: -190, marginTop: -190, opacity: 0, animationDelay: "0.28s" }}
       >
         <div className="hero-ring-2-border absolute inset-0 rounded-full" style={{ border: "1px dashed rgb(var(--gold-rgb) / 0.12)" }} />
@@ -108,14 +108,14 @@ export default function Hero() {
       </div>
       <div
         ref={ring3Ref}
-        className={`hero-ring absolute top-1/2 left-1/2 pointer-events-none ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
         style={{ width: 220, height: 220, marginLeft: -110, marginTop: -110, opacity: 0, animationDelay: "0.46s" }}
       >
         <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
       </div>
 
       {/* Main content — cinematic entrance */}
-      <div className="relative z-10 text-center max-w-[51rem] max-[768px]:max-w-[46rem] mx-auto md:-translate-y-8 overflow-visible">
+      <div className="hero-content relative z-20 text-center max-w-[51rem] max-[768px]:max-w-[46rem] mx-auto md:-translate-y-8 overflow-visible">
 
         {/* SHUBIQ wordmark — blur + scale entrance */}
         <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em]">

@@ -830,6 +830,17 @@
   );
 }
 
+.hero-bg {
+  pointer-events: none !important;
+  z-index: 0;
+}
+
+.hero-content {
+  pointer-events: auto;
+  z-index: 20;
+  position: relative;
+}
+
 .hero-interactive,
 .hero-cta {
   pointer-events: auto !important;
