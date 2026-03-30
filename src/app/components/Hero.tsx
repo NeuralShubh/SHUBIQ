@@ -194,7 +194,7 @@ export default function Hero() {
             data-cursor="View"
             className="hero-cta cta-ghost w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
           >
-            Explore Work
+            <span className="relative z-[1]">Explore Work</span>
           </button>
           <button
             type="button"
@@ -202,7 +202,7 @@ export default function Hero() {
             data-cursor="Hire"
             className="hero-cta cta-ghost w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
           >
-            Hire Us
+            <span className="relative z-[1]">Hire Us</span>
           </button>
         </motion.div>
 
