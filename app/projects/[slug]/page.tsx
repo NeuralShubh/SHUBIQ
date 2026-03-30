@@ -1,6 +1,6 @@
 ﻿import type { Metadata } from "next"
-import { projects, getProjectBySlug } from "../../data-projects"
-import ProjectPageClient from "../../../src/app/projects/[slug]/ProjectPageClient"
+import { projects, getProjectBySlug } from "../data-projects"
+import ProjectPageClient from "../../src/app/projects/[slug]/ProjectPageClient"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
 
