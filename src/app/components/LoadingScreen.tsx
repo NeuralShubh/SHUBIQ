@@ -11,13 +11,7 @@ export default function LoadingScreen() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const hasLoaded = sessionStorage.getItem("shubiq-loaded")
-    if (hasLoaded) {
-      setLoading(false)
-      return
-    }
-
-    const minTime = new Promise((resolve) => setTimeout(resolve, 1100))
+    const minTime = new Promise((resolve) => setTimeout(resolve, 2000))
     const pageLoad = new Promise((resolve) => {
       if (document.readyState === "complete") resolve(true)
       else window.addEventListener("load", () => resolve(true), { once: true })
@@ -25,7 +19,6 @@ export default function LoadingScreen() {
 
     Promise.all([minTime, pageLoad]).then(() => {
       setLoading(false)
-      sessionStorage.setItem("shubiq-loaded", "true")
     })
   }, [])
 
@@ -45,7 +38,7 @@ export default function LoadingScreen() {
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <Image src={LOGO_URL} alt="SHUBIQ" width={180} height={72} priority className="h-10 md:h-12 w-auto object-contain" />
+              <Image src={LOGO_URL} alt="SHUBIQ" width={360} height={144} priority className="h-20 md:h-24 w-auto object-contain" />
             </motion.div>
 
             <motion.p
@@ -77,4 +70,3 @@ export default function LoadingScreen() {
     </AnimatePresence>
   )
 }
-
