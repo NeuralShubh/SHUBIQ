@@ -87,18 +87,18 @@ export default function ThemeToggle() {
     <div ref={wrapRef} className="theme-toggle-wrap relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center justify-center font-rajdhani text-[11px] tracking-[1.5px] uppercase border border-[0.7px] border-[rgb(var(--cream-rgb)/0.1)] text-cream/74 w-9 h-8 transition-colors duration-200 hover:border-[rgb(var(--gold-rgb)/0.28)] hover:text-cream/82 hover:bg-gold/5"
+        className="inline-flex items-center justify-center text-cream/80 w-12 h-12 transition-colors duration-200 hover:text-gold"
         aria-label="Open appearance selector"
         title={activeLabel}
         type="button"
       >
         <svg
-          width="14"
-          height="14"
+          width="22"
+          height="22"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.6"
+          strokeWidth="1.8"
           strokeLinecap="round"
           strokeLinejoin="round"
           className="text-gold/90"
