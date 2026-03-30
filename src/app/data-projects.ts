@@ -107,6 +107,49 @@ export const projects: Project[] = [
     year: "2026",
     duration: "5 weeks",
   },
+  {
+    id: "shubiq-os",
+    slug: "shubiq-os",
+    number: "03",
+    title: "SHUBIQ OS",
+    subtitle: "A business operating system for founders, agencies, and small teams.",
+    description:
+      "SHUBIQ OS is a business operating system for founders, agencies, and small teams. It replaces scattered spreadsheets, invoicing tools, and project trackers with one clean command center. It manages clients, projects, invoices, income, and expenses while providing business analytics across Studio and Labs. Document workflows handle quotations, proposals, and invoices with auto numbering and PDF export, while revenue and expense modules show real-time cashflow, profitability, and subscription trends. Admin settings manage business profile details, tax, currency, and banking configuration for invoicing.",
+    category: "Business",
+    status: "Live",
+    videoUrl: "https://drive.google.com/file/d/12XOuH7tOKqSKkYrZNqdcMjbuyh5j649a/preview",
+    videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/SHUBIQ%20OS.png",
+    liveUrl: "",
+    githubUrl: "",
+    techStack: [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Chart.js",
+      "Node.js",
+      "Express",
+      "SQLite",
+      "PM2",
+      "Nginx",
+      "Helmet",
+      "CORS",
+      "Let's Encrypt",
+    ],
+    impact: {
+      headline: "Unified client, project, and finance workflows into one operational command center",
+      description:
+        "Replaced fragmented tools with a single system for tracking delivery, revenue, expenses, and subscriptions in real time.",
+    },
+    features: [
+      "Client profiles with relationship status tracking",
+      "Project pipeline with budgets and balances",
+      "Invoices, quotations, and proposals with PDF export",
+      "Income and expense tracking with monthly trends",
+      "Product and subscription revenue analytics",
+    ],
+    year: "2026",
+    duration: "6 weeks",
+  },
 ]
 
 export function getProjectBySlug(slug: string): Project | undefined {
