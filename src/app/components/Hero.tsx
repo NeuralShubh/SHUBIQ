@@ -155,7 +155,7 @@ export default function Hero() {
 
         {/* Tagline with lines */}
         <motion.div
-          className="hero-tagline-row mb-4 max-[768px]:mb-3 md:mb-6"
+          className="hero-tagline-row mb-3 max-[768px]:mb-2 md:mb-4 -mt-1 md:-mt-2"
           initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.25, ease: EASE_PREMIUM }}
