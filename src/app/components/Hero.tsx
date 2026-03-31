@@ -218,8 +218,8 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator with bounce */}
-      <motion.div
-        className="absolute bottom-1 sm:bottom-2 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 opacity-70"
+        <motion.div
+          className="absolute bottom-1 sm:bottom-2 left-0 right-0 hidden sm:flex flex-col items-center gap-2 opacity-70"
         {...fadeUp(1.1, 0.4)}
       >
         <motion.span
