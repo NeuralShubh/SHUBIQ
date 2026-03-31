@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Cinzel, Cormorant_Garamond, Orbitron, Rajdhani } from "next/font/google"
+import { Cinzel, Cinzel_Decorative, Cormorant_Garamond, Orbitron, Rajdhani } from "next/font/google"
 import "../src/app/globals.css"
 import SmoothScroll from "../src/app/components/SmoothScroll"
 import ThemeInit from "../src/app/components/ThemeInit"
@@ -10,6 +10,7 @@ import BackToTop from "../src/app/components/BackToTop"
 import BackButton from "../src/app/components/BackButton"
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"] })
+const cinzelDecorative = Cinzel_Decorative({ subsets: ["latin"], variable: "--font-cinzel-decorative", weight: ["400", "700", "900"] })
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cormorant", weight: ["300", "400", "500", "600"], style: ["normal", "italic"] })
 const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", weight: ["300", "400", "500", "600", "700"] })
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", weight: ["500", "700", "900"] })
@@ -100,7 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en">
-      <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable} ${orbitron.variable}`}>
+      <body className={`${cinzel.variable} ${cinzelDecorative.variable} ${cormorant.variable} ${rajdhani.variable} ${orbitron.variable}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <ThemeInit />
