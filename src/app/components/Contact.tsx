@@ -82,14 +82,7 @@ export default function Contact() {
               <span className="text-gold">Together</span>
             </h2>
           </div>
-          <div
-            ref={badgeRef}
-            className={`reveal ${isInView ? "in-view" : ""} inline-flex items-center gap-2.5 mb-4 rounded-sm border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-1.5 hover:border-gold/34 hover:shadow-[0_0_18px_rgb(var(--gold-rgb)_/_0.14)] transition-all duration-300 mx-auto`}
-            style={{ animationDelay: "0.26s" }}
-          >
-            <span className="contact-status-dot w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="font-rajdhani text-[11px] tracking-[3.3px] uppercase text-cream/80">Available for select projects</span>
-          </div>
+          <div className="h-2 sm:h-3" />
         </div>
 
         <div ref={contentRef} className={`reveal ${isInView ? "in-view" : ""} grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-14 items-stretch`} style={{ animationDelay: "0.34s" }}>
