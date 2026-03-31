@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer utilities {
-  .font-cinzel {
+  h1.font-cinzel,
+  h2.font-cinzel,
+  .font-shubiq-heading {
+    font-family: "Algerian", var(--font-cinzel-decorative), var(--font-cinzel), serif !important;
     font-weight: 400 !important;
+    font-style: normal !important;
   }
 }
 
