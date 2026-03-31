@@ -63,8 +63,8 @@ export const ECOSYSTEM_ITEMS = [
 ];
 
 export const SOCIAL_LINKS = [
-  { label: "GitHub", url: "https://github.com/shubiqofficial", handle: "shubiqofficial" },
   { label: "LinkedIn", url: "https://linkedin.com/company/shubiqofficial", handle: "shubiqofficial" },
+  { label: "GitHub", url: "https://github.com/shubiqofficial", handle: "shubiqofficial" },
   { label: "Instagram", url: "https://instagram.com/shubiqofficial", handle: "@shubiqofficial" },
 ];
 
