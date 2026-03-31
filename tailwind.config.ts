@@ -12,7 +12,7 @@ const config: Config = {
         cream: "rgb(var(--cream-rgb) / <alpha-value>)",
       },
       fontFamily: {
-        cinzel: ["var(--font-cinzel)", "serif"],
+        cinzel: ["Algerian", "var(--font-cinzel)", "serif"],
         cormorant: ["var(--font-cormorant)", "serif"],
         rajdhani: ["var(--font-rajdhani)", "sans-serif"],
       },

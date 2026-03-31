@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .font-cinzel {
-    font-family: "Algerian", "Cinzel", serif;
-    font-weight: 400;
-  }
-}
-
 @layer base {
   :root {
     --gold-rgb: 196 164 88;
