@@ -149,7 +149,6 @@ interface ServicesProps {
 export default function Services({ initialServices }: ServicesProps = {}) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
-  const dividerRef = useRef<HTMLDivElement>(null)
   const [items, setItems] = useState<MainService[]>(initialServices?.length ? initialServices : SERVICES)
 
   useEffect(() => {
@@ -176,7 +175,6 @@ export default function Services({ initialServices }: ServicesProps = {}) {
               <span className="text-gold">Do</span>
             </h2>
           </div>
-          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent mx-auto mt-4`} style={{ animationDelay: "0.22s" }} />
         </div>
 
         <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">

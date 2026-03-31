@@ -257,7 +257,6 @@ interface EcosystemProps {
 export default function Ecosystem({ initialEcosystem }: EcosystemProps = {}) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("200px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
-  const dividerRef = useRef<HTMLDivElement>(null)
   const orbitRef = useRef<HTMLDivElement>(null)
   const [filter, setFilter] = useState<string>("all")
   const [items, setItems] = useState<any[]>(initialEcosystem?.length ? initialEcosystem : ECOSYSTEM_ITEMS)
@@ -307,7 +306,6 @@ export default function Ecosystem({ initialEcosystem }: EcosystemProps = {}) {
               <span className="text-gold">Universe</span>
             </h2>
           </div>
-          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent mx-auto mt-4`} style={{ animationDelay: "0.22s" }} />
         </div>
 
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10">

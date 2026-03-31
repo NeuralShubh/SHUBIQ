@@ -9,7 +9,6 @@ import SectionLabel from "./SectionLabel"
 export default function Contact() {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("200px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
-  const dividerRef = useRef<HTMLDivElement>(null)
   const badgeRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const prefersReduced = useReducedMotion()
@@ -91,7 +90,6 @@ export default function Contact() {
             <span className="contact-status-dot w-1.5 h-1.5 rounded-full bg-emerald-400" />
             <span className="font-rajdhani text-[11px] tracking-[3.3px] uppercase text-cream/80">Available for select projects</span>
           </div>
-          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} h-px w-16 sm:w-20 bg-gradient-to-r from-transparent via-gold/70 to-transparent mx-auto`} style={{ animationDelay: "0.18s" }} />
         </div>
 
         <div ref={contentRef} className={`reveal ${isInView ? "in-view" : ""} grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-14 items-stretch`} style={{ animationDelay: "0.34s" }}>
