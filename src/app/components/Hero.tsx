@@ -197,7 +197,7 @@ export default function Hero() {
 
         {/* Social links */}
         <motion.div
-          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-8 mt-6 sm:mt-8"
+          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-8 mt-6 sm:mt-8 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
           initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.6, ease: EASE_PREMIUM }}
