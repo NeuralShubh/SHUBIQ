@@ -64,7 +64,7 @@ export default function Projects({ initialProjects }: ProjectsProps) {
           <SectionLabel label="Portfolio" centered />
           <div className={`reveal ${isInView ? "in-view" : ""} flex flex-col items-center gap-4`} style={{ animationDelay: "0.1s" }}>
             <h2
-              className="font-cinzel font-black leading-[0.92] tracking-[0.5px]"
+              className="font-shubiq-heading font-normal leading-[0.92]"
               style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}
             >
               <span className="text-cream/90">Engineered </span>
