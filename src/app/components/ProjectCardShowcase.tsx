@@ -90,21 +90,23 @@ export default function ProjectCardShowcase({ project, index }: { project: Proje
       </div>
       <div className="h-px w-full bg-gradient-to-r from-gold/20 via-gold/8 to-transparent mb-5 sm:mb-6" />
 
-      <h3
-        className="font-cinzel text-[28px] sm:text-[34px] leading-[1.06] sm:leading-[1.05] text-cream mb-5 transition-colors duration-300 group-hover:text-gradient-gold"
-        style={{ fontFeatureSettings: "'liga' 0, 'calt' 0" }}
-      >
-        <span>{titleMain}</span>
-        {titleSecondary && <span className="ml-[0.58em]">{titleSecondary}</span>}
-      </h3>
+      <div className="flex-1 flex flex-col">
+        <h3
+          className="font-cinzel text-[28px] sm:text-[34px] leading-[1.06] sm:leading-[1.05] text-cream mb-5 transition-colors duration-300 group-hover:text-gradient-gold"
+          style={{ fontFeatureSettings: "'liga' 0, 'calt' 0" }}
+        >
+          <span>{titleMain}</span>
+          {titleSecondary && <span className="ml-[0.58em]">{titleSecondary}</span>}
+        </h3>
 
-      <p
-        className="font-cormorant text-[18px] sm:text-[17px] text-cream/80 leading-[1.72] sm:leading-[1.65] mb-4 max-w-[52ch] overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
-      >
-        {project.subtitle}
-      </p>
+        <p
+          className="font-cormorant text-[18px] sm:text-[17px] text-cream/80 leading-[1.72] sm:leading-[1.65] mb-4 max-w-[52ch] overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
+        >
+          {project.subtitle}
+        </p>
+      </div>
 
-      <div className="mt-3 pt-2 border-t border-gold/20">
+      <div className="mt-auto pt-2 border-t border-gold/20">
         <div className={`grid gap-2 ${actions.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
           {actions.map((action) => (
             action.external ? (
