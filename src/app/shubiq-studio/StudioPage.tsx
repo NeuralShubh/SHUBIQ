@@ -149,8 +149,9 @@ const PRICING_ICON_MAP = {
 function SectionLabel({ label, centered = false }: { label: string; centered?: boolean }) {
   return (
     <div className={`flex items-center gap-2.5 sm:gap-3 mb-5 ${centered ? "justify-center" : ""}`}>
-      <span className="w-1 h-1 rounded-full bg-gold/80" />
+      <span className="w-14 h-px bg-gradient-to-r from-transparent to-gold/50" />
       <div className="font-rajdhani text-[12px] sm:text-[14px] tracking-[4px] sm:tracking-[7px] text-gold/85 uppercase">{label}</div>
+      <span className="w-14 h-px bg-gradient-to-r from-gold/50 to-transparent" />
     </div>
   )
 }
