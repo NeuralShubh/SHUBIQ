@@ -143,7 +143,7 @@ export default function Hero() {
             }}
           />
         <motion.h1
-          className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-4 max-[768px]:mb-[10px] md:mb-5 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.16em] md:px-[0.26em] inline-block overflow-visible max-w-full break-normal whitespace-normal -mt-[10px]"
+          className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-0 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.16em] md:px-[0.26em] inline-block overflow-visible max-w-full break-normal whitespace-normal -mt-[10px]"
           style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
           initial={prefersReduced ? {} : { opacity: 0, scale: 0.98, filter: "blur(4px)", y: 16 }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }}
@@ -155,7 +155,7 @@ export default function Hero() {
 
         {/* Tagline with lines */}
         <motion.div
-          className="hero-tagline-row mb-2 max-[768px]:mb-1.5 md:mb-3 -mt-10 md:-mt-12"
+          className="hero-tagline-row mb-2 max-[768px]:mb-1.5 md:mb-3 -mt-16 md:-mt-20"
           initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.25, ease: EASE_PREMIUM }}
