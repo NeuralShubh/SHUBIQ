@@ -62,9 +62,10 @@ export default function About() {
               <div className="mt-[104px]">
                 <a
                   href="/founder"
-                  className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/60 px-5 py-3 text-cream hover:text-gold hover:border-gold transition-all duration-300"
+                  data-cursor="View"
+                  className="hero-cta cta-ghost inline-flex items-center justify-center min-w-[220px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
                 >
-                  Meet the Founder
+                  <span className="relative z-[1]">Meet the Founder</span>
                 </a>
               </div>
             </div>
