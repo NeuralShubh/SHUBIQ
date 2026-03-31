@@ -26,12 +26,12 @@ export default function About() {
         <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 sm:gap-16 lg:gap-28 xl:gap-32 items-start">
           <div>
             <h2
-              className={`reveal ${isInView ? "in-view" : ""} about-mobile-heading font-cinzel font-black mb-4 sm:mb-6 md:mb-8 leading-[0.92] md:leading-[0.89] tracking-[0.35px] md:tracking-[0.5px]`}
+              className={`reveal ${isInView ? "in-view" : ""} about-mobile-heading font-cinzel font-normal mb-4 sm:mb-6 md:mb-8 leading-[0.92] md:leading-[0.89] tracking-[0.35px] md:tracking-[0.5px]`}
               style={{ fontSize: "clamp(32px, 10vw, 78px)", animationDelay: "0.1s" }}
             >
-              <span className="text-cream/92 font-semibold text-[0.9em]">About</span>
+              <span className="text-cream/92 text-[0.9em]">About</span>
               <br />
-              <span className="text-gold font-black tracking-[1.4px] md:tracking-[1.8px] -mt-[5px] block">SHUBIQ</span>
+              <span className="text-gold tracking-[1.4px] md:tracking-[1.8px] -mt-[5px] block">SHUBIQ</span>
             </h2>
 
             <div className="w-16 sm:w-24 h-px bg-gradient-to-r from-gold/90 via-gold/45 to-transparent mb-6 sm:mb-7 md:mb-9" />
