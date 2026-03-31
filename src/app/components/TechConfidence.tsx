@@ -2,6 +2,7 @@
 
 import ScrollReveal from "./ScrollReveal"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
+import SectionLabel from "./SectionLabel"
 
 const TECH_STACK = [
   { name: "Next.js", mark: "N" },
@@ -20,16 +21,14 @@ export default function TechConfidence() {
       <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 20%, rgb(var(--gold-rgb) / 0.06) 0%, transparent 65%)" }} />
       <div className="max-w-6xl mx-auto relative">
         <ScrollReveal>
-          <div className="mb-10 sm:mb-12">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="w-1 h-1 rounded-full bg-gold/80" />
-              <div className="font-rajdhani text-[12px] tracking-[4px] uppercase text-gold/80">Engineering Standards</div>
-              <span className="w-14 h-px bg-gradient-to-r from-gold/40 to-transparent" />
+          <div className="mb-10 sm:mb-12 text-center">
+            <SectionLabel label="Engineering Standards" centered />
+            <div className="mt-4 flex flex-col items-center gap-4">
+              <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
+                <span className="text-cream/90">Built With </span>
+                <span className="text-gold">Premium Tools</span>
+              </h2>
             </div>
-            <h2 className="font-cinzel text-[clamp(30px,5vw,54px)] text-cream leading-[1.08]">Built With Premium Tools</h2>
-            <p className="mt-3 font-cormorant text-[18px] sm:text-[20px] text-cream/70 max-w-2xl leading-[1.6]">
-              Every SHUBIQ system is built on production-grade foundations with performance, security, and clarity in mind.
-            </p>
           </div>
         </ScrollReveal>
 
