@@ -6,6 +6,7 @@ import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
 import { useInViewOnce } from "../lib/gsap-hooks"
+import SectionLabel from "./SectionLabel"
 
 const SERVICE_ICONS = [Code2, LayoutDashboard, Bot, Smartphone]
 const MAIN_SERVICE_ICON_MAP: Record<string, LucideIcon> = {
@@ -167,16 +168,15 @@ export default function Services({ initialServices }: ServicesProps = {}) {
       />
 
       <div className="max-w-7xl mx-auto w-full">
-        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-8 sm:mb-10 md:mb-12 max-w-3xl`} style={{ animationDelay: "0.1s" }}>
-          <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-            <span className="w-1 h-1 rounded-full bg-gold/80" />
-            <div className="font-rajdhani text-[12px] sm:text-[13px] tracking-[4px] sm:tracking-[6px] text-gold/70 uppercase">Services</div>
-            <span className="w-12 sm:w-16 h-px bg-gradient-to-r from-gold/40 to-transparent" />
+        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-10 sm:mb-12 md:mb-14 text-center`} style={{ animationDelay: "0.1s" }}>
+          <SectionLabel label="Services" centered />
+          <div className="mt-4 flex flex-col items-center gap-4">
+            <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
+              <span className="text-cream/90">What We </span>
+              <span className="text-gold">Do</span>
+            </h2>
           </div>
-          <h2 className="font-cinzel font-black text-gradient-gold leading-tight text-[clamp(29px,9vw,44px)] sm:text-[clamp(34px,5vw,68px)]">
-            What We Do
-          </h2>
-          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent mt-3 sm:mt-4`} style={{ animationDelay: "0.22s" }} />
+          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent mx-auto mt-4`} style={{ animationDelay: "0.22s" }} />
         </div>
 
         <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">

@@ -7,6 +7,7 @@ import type { LucideIcon } from "lucide-react"
 import { ECOSYSTEM_ITEMS } from "../data"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import NumberTicker from "./NumberTicker"
+import SectionLabel from "./SectionLabel"
 
 const TYPE_COLORS: Record<string, string> = {
   project: "rgb(var(--gold-light-rgb))",
@@ -298,17 +299,15 @@ export default function Ecosystem({ initialEcosystem }: EcosystemProps = {}) {
       </div>
 
       <div className="max-w-7xl mx-auto w-full relative">
-        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-5 sm:mb-6 md:mb-8`} style={{ animationDelay: "0.1s" }}>
-          <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-            <span className="w-1 h-1 rounded-full bg-gold/85" />
-            <div className="font-rajdhani text-[12px] sm:text-[13px] tracking-[4px] sm:tracking-[6px] text-gold/78 uppercase">Ecosystem</div>
-            <span className="w-12 sm:w-16 h-px bg-gradient-to-r from-gold/40 to-transparent" />
+        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-10 sm:mb-12 md:mb-14 text-center`} style={{ animationDelay: "0.1s" }}>
+          <SectionLabel label="Ecosystem" centered />
+          <div className="mt-4 flex flex-col items-center gap-4">
+            <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
+              <span className="text-cream/90">The </span>
+              <span className="text-gold">Universe</span>
+            </h2>
           </div>
-          <h2 className="font-cinzel font-black text-gradient-gold leading-[1.02] tracking-[0.01em] text-[clamp(32px,9vw,52px)] sm:text-[clamp(38px,5.2vw,68px)] mb-4">
-            <span className="text-cream">The</span>{" "}
-            <span className="bg-[linear-gradient(135deg,rgb(var(--gold-light-rgb)),rgb(var(--gold-rgb)))] bg-clip-text text-transparent">Universe</span>
-          </h2>
-          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-gold/80 to-transparent`} style={{ animationDelay: "0.22s" }} />
+          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} w-16 sm:w-20 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent mx-auto mt-4`} style={{ animationDelay: "0.22s" }} />
         </div>
 
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10">

@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion"
 import { SOCIAL_LINKS } from "../data"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import FloatingInput from "./FloatingInput"
+import SectionLabel from "./SectionLabel"
 
 export default function Contact() {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("200px 0px")
@@ -74,33 +75,23 @@ export default function Contact() {
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.06) 0%, transparent 70%)" }} />
 
       <div className="max-w-7xl mx-auto w-full">
-        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-2 sm:mb-4 md:mb-6 max-w-4xl`} style={{ animationDelay: "0.1s" }}>
-          <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-            <span className="w-1 h-1 rounded-full bg-gold/85" />
-            <div className="font-rajdhani text-[12px] sm:text-[13px] tracking-[4px] sm:tracking-[6px] text-gold/78 uppercase">Contact</div>
-            <span className="w-12 sm:w-16 h-px bg-gradient-to-r from-gold/40 to-transparent" />
+        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-6 sm:mb-8 md:mb-10 text-center`} style={{ animationDelay: "0.1s" }}>
+          <SectionLabel label="Contact" centered />
+          <div className="mt-4 flex flex-col items-center gap-4">
+            <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
+              <span className="text-cream/90">Let&apos;s Build </span>
+              <span className="text-gold">Together</span>
+            </h2>
           </div>
-          <h2 className="font-cinzel font-black leading-tight mb-4" style={{ fontSize: "clamp(38px, 5.3vw, 68px)" }}>
-            <span className="text-cream">Let&apos;s Build </span>
-            <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(135deg, rgb(var(--gold-rgb)) 18%, rgb(var(--gold-light-rgb)) 52%, rgb(var(--gold-rgb)) 92%)",
-              }}
-            >
-              Together
-            </span>
-          </h2>
           <div
             ref={badgeRef}
-            className={`reveal ${isInView ? "in-view" : ""} inline-flex items-center gap-2.5 mb-4 rounded-sm border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-1.5 hover:border-gold/34 hover:shadow-[0_0_18px_rgb(var(--gold-rgb)_/_0.14)] transition-all duration-300`}
+            className={`reveal ${isInView ? "in-view" : ""} inline-flex items-center gap-2.5 mb-4 rounded-sm border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--cream-rgb)/0.02)] px-3 py-1.5 hover:border-gold/34 hover:shadow-[0_0_18px_rgb(var(--gold-rgb)_/_0.14)] transition-all duration-300 mx-auto`}
             style={{ animationDelay: "0.26s" }}
           >
             <span className="contact-status-dot w-1.5 h-1.5 rounded-full bg-emerald-400" />
             <span className="font-rajdhani text-[11px] tracking-[3.3px] uppercase text-cream/80">Available for select projects</span>
           </div>
-          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} h-px w-28 sm:w-36 bg-gradient-to-r from-gold/45 to-transparent`} style={{ animationDelay: "0.18s" }} />
+          <div ref={dividerRef} className={`reveal-line ${isInView ? "in-view" : ""} h-px w-16 sm:w-20 bg-gradient-to-r from-transparent via-gold/70 to-transparent mx-auto`} style={{ animationDelay: "0.18s" }} />
         </div>
 
         <div ref={contentRef} className={`reveal ${isInView ? "in-view" : ""} grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-14 items-stretch`} style={{ animationDelay: "0.34s" }}>

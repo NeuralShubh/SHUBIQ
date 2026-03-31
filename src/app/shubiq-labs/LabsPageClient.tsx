@@ -17,14 +17,17 @@ import ScrollReveal from "../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 import Roadmap, { RoadmapItem } from "../components/Roadmap"
 import SectionDivider from "../components/SectionDivider"
+import SectionLabel from "../components/SectionLabel"
 
 function SectionHeading({ label, title, description }: { label: string; title: string; description?: string }) {
   return (
     <ScrollReveal>
-      <div className="mb-8 md:mb-12">
-        <p className="text-xs uppercase tracking-[0.2em] text-cream/60 mb-2 font-rajdhani">{label}</p>
-        <h2 className="text-2xl md:text-3xl font-cinzel text-cream">{title}</h2>
-        {description ? <p className="text-cream/70 font-cormorant mt-2">{description}</p> : null}
+      <div className="mb-10 md:mb-12 text-center">
+        <SectionLabel label={label} centered />
+        <h2 className="mt-4 font-shubiq-heading font-normal text-cream" style={{ fontSize: "clamp(30px, 5.5vw, 62px)", lineHeight: 0.92 }}>
+          {title}
+        </h2>
+        {description ? <p className="text-cream/70 font-cormorant mt-3 max-w-3xl mx-auto">{description}</p> : null}
       </div>
     </ScrollReveal>
   )
