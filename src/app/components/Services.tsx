@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion"
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
 import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone, Wrench } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
@@ -163,10 +163,10 @@ function MotionServiceCard({
   progress: ReturnType<typeof useScroll>["scrollYProgress"]
   reduceMotion: boolean
 }) {
-  const x = useTransform(progress, [0, 1], [offset.x, 0])
-  const y = useTransform(progress, [0, 1], [offset.y, 0])
-  const opacity = useTransform(progress, [0, 0.4, 1], [0, 1, 1])
-  const scale = useTransform(progress, [0, 1], [0.98, 1])
+  const x = useTransform(progress, [0, 0.5, 1], [offset.x, 0, offset.x])
+  const y = useTransform(progress, [0, 0.5, 1], [offset.y, 0, offset.y])
+  const opacity = useTransform(progress, [0, 0.35, 0.65, 1], [0, 1, 1, 0])
+  const scale = useTransform(progress, [0, 0.5, 1], [0.96, 1, 0.98])
 
   return (
     <motion.div
@@ -192,14 +192,14 @@ interface ServicesProps {
 
 export default function Services({ initialServices }: ServicesProps = {}) {
   const sectionRef = useRef<HTMLElement>(null)
-  const headingRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(sectionRef, { amount: 0.35 })
   const prefersReduced = !!useReducedMotion()
   const [items, setItems] = useState<MainService[]>(initialServices?.length ? initialServices : SERVICES)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start 80%", "end 20%"],
   })
+  const headingOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0])
+  const headingY = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [24, 0, -24])
 
   useEffect(() => {
     setItems(initialServices?.length ? initialServices : SERVICES)
@@ -227,23 +227,28 @@ export default function Services({ initialServices }: ServicesProps = {}) {
       />
 
       <div className="max-w-7xl mx-auto w-full">
-        <motion.div
-          ref={headingRef}
-          className="mb-10 sm:mb-12 md:mb-14 text-center"
-          initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <SectionLabel label="Services" centered />
-          <div className="mt-4 flex flex-col items-center gap-4">
-            <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
-              <span className="text-cream/90">What We </span>
-              <span className="text-gold">Do</span>
-            </h2>
-          </div>
-        </motion.div>
+        <div className="relative">
+          <motion.div
+            className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none"
+            style={
+              prefersReduced
+                ? undefined
+                : {
+                    opacity: headingOpacity,
+                    y: headingY,
+                  }
+            }
+          >
+            <SectionLabel label="Services" centered />
+            <div className="mt-4 flex flex-col items-center gap-4">
+              <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
+                <span className="text-cream/90">What We </span>
+                <span className="text-gold">Do</span>
+              </h2>
+            </div>
+          </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6 lg:gap-7">
           {items.map((service, i) => {
             const offset = cardOffsets[i % cardOffsets.length]
             return (
@@ -257,6 +262,7 @@ export default function Services({ initialServices }: ServicesProps = {}) {
               </MotionServiceCard>
             )
           })}
+          </div>
         </div>
       </div>
     </section>
