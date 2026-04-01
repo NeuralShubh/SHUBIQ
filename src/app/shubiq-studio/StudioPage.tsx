@@ -1,11 +1,10 @@
 ﻿"use client"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
 import StudioNavbar from "./StudioNavbar"
 import Footer from "../components/Footer"
 import ScrollReveal from "../components/ScrollReveal"
-import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 import SectionDivider from "../components/SectionDivider"
 import FloatingInput from "../components/FloatingInput"
 import FloatingSelect from "../components/FloatingSelect"
@@ -371,39 +370,36 @@ function StudioHero() {
   )
 }
 function StudioServices() {
-  const headingRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
   const [services, setServices] = useState<StudioService[]>(DEFAULT_STUDIO_SERVICES)
+  const prefersReduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 80%", "end 20%"],
+  })
+  const headingOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0])
+  const headingY = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [24, 0, -24])
 
   useEffect(() => {
     setServices(DEFAULT_STUDIO_SERVICES)
   }, [])
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-        const isMobile = window.innerWidth <= 768
-        gsap.fromTo(
-          headingRef.current,
-          { y: 24, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: "power3.out",
-            scrollTrigger: { trigger: headingRef.current, start: isMobile ? "top 82%" : "top 72%", once: true },
-          },
-        )
-      } catch { /* no-op */ }
-    }
-    init()
-  }, [])
+  const cardOffsets = [
+    { x: -90, y: -70 },
+    { x: 90, y: -70 },
+    { x: -90, y: 10 },
+    { x: 90, y: 10 },
+    { x: -90, y: 70 },
+    { x: 90, y: 70 },
+  ]
 
   return (
-    <section id="studio-services-section" className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden">
+    <section
+      id="studio-services-section"
+      ref={sectionRef}
+      className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden"
+    >
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -415,44 +411,93 @@ function StudioServices() {
         className="absolute right-0 top-1/3 w-80 h-80 rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.03) 0%, transparent 70%)" }}
       />
-      <div className="max-w-7xl mx-auto">
-        <div ref={headingRef} style={{ opacity: 0 }}>
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col items-center gap-4 sm:gap-5 mb-6 sm:mb-8">
           <SectionLabel label="Services" centered />
-          <div className="flex flex-col items-center gap-4 max-md:gap-3 mb-8 max-md:mb-6 sm:mb-10 text-center">
-            <h2
-              className="font-cinzel font-black leading-[0.92] tracking-[0.5px] max-md:leading-[0.96]"
-              style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}
-            >
-              <span className="text-cream/90">Systems We </span>
-              <span className="text-gold">Engineer</span>
-            </h2>
-          </div>
         </div>
 
-        <StaggerContainer staggerDelay={0.1} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4.5 max-sm:gap-4 sm:gap-6">
-          {services.map((service, index) => {
-            const Icon = STUDIO_SERVICE_ICON_MAP[service.iconKey] ?? Code2
-            const slug = service.title
-              .toLowerCase()
-              .replace(/&/g, "and")
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/^-+|-+$/g, "")
-            return (
-              <StaggerItem key={service.title}>
-                <ServiceCard
-                  service={service}
-                  index={index}
-                  Icon={Icon}
-                  isDimmed={hoveredCard !== null && hoveredCard !== index}
-                  onHoverChange={(active) => setHoveredCard(active ? index : null)}
-                  anchorId={`service-${slug}`}
-                />
-              </StaggerItem>
-            )
-          })}
-        </StaggerContainer>
+        <div className="relative">
+          <motion.div
+            className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none"
+            style={
+              prefersReduced
+                ? undefined
+                : {
+                    opacity: headingOpacity,
+                    y: headingY,
+                  }
+            }
+          >
+            <div className="relative px-6 sm:px-8 py-5 sm:py-6 border border-gold/25 bg-[rgb(var(--ink-rgb))]">
+              <div className="absolute -left-6 top-1/2 h-px w-6 bg-gold/45" />
+              <div className="absolute -right-6 top-1/2 h-px w-6 bg-gold/45" />
+              <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
+                <span className="text-cream/90">Systems We </span>
+                <span className="text-gold">Engineer</span>
+              </h2>
+            </div>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4.5 max-sm:gap-4 sm:gap-6 pt-16 sm:pt-20">
+            {services.map((service, index) => {
+              const Icon = STUDIO_SERVICE_ICON_MAP[service.iconKey] ?? Code2
+              const slug = service.title
+                .toLowerCase()
+                .replace(/&/g, "and")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+              const offset = cardOffsets[index % cardOffsets.length]
+              return (
+                <MotionStudioCard key={service.title} offset={offset} progress={scrollYProgress} reduceMotion={!!prefersReduced}>
+                  <ServiceCard
+                    service={service}
+                    index={index}
+                    Icon={Icon}
+                    isDimmed={hoveredCard !== null && hoveredCard !== index}
+                    onHoverChange={(active) => setHoveredCard(active ? index : null)}
+                    anchorId={`service-${slug}`}
+                  />
+                </MotionStudioCard>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </section>
+  )
+}
+
+function MotionStudioCard({
+  children,
+  offset,
+  progress,
+  reduceMotion,
+}: {
+  children: React.ReactNode
+  offset: { x: number; y: number }
+  progress: ReturnType<typeof useScroll>["scrollYProgress"]
+  reduceMotion: boolean
+}) {
+  const x = useTransform(progress, [0, 0.5, 1], [offset.x, 0, offset.x])
+  const y = useTransform(progress, [0, 0.5, 1], [offset.y, 0, offset.y])
+  const opacity = useTransform(progress, [0, 0.35, 0.65, 1], [0, 1, 1, 0])
+  const scale = useTransform(progress, [0, 0.5, 1], [0.96, 1, 0.98])
+
+  return (
+    <motion.div
+      style={
+        reduceMotion
+          ? undefined
+          : {
+              opacity,
+              x,
+              y,
+              scale,
+            }
+      }
+    >
+      {children}
+    </motion.div>
   )
 }
 
