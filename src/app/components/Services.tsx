@@ -226,7 +226,7 @@ export default function Services({ initialServices }: ServicesProps = {}) {
         style={{ background: "radial-gradient(ellipse 52% 38% at 50% 38%, rgb(var(--gold-rgb) / 0.035) 0%, transparent 72%)" }}
       />
 
-      <div className="max-w-7xl mx-auto w-full">
+      <div className="max-w-6xl mx-auto w-full">
         <div className="relative">
           <motion.div
             className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none"
@@ -239,19 +239,21 @@ export default function Services({ initialServices }: ServicesProps = {}) {
                   }
             }
           >
-            <SectionLabel label="Services" centered />
-            <div className="mt-4 flex flex-col items-center gap-4">
-              <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
+            <div className="relative px-6 sm:px-8 py-5 sm:py-6 border border-gold/25 bg-[rgb(var(--ink-rgb))]">
+              <div className="absolute -left-6 top-1/2 h-px w-6 bg-gold/45" />
+              <div className="absolute -right-6 top-1/2 h-px w-6 bg-gold/45" />
+              <SectionLabel label="Services" centered />
+              <h2 className="mt-3 font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
                 <span className="text-cream/90">What We </span>
                 <span className="text-gold">Do</span>
               </h2>
             </div>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-4 sm:gap-6 lg:gap-7">
-          {items.map((service, i) => {
-            const offset = cardOffsets[i % cardOffsets.length]
-            return (
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
+            {items.map((service, i) => {
+              const offset = cardOffsets[i % cardOffsets.length]
+              return (
               <MotionServiceCard
                 key={service.title}
                 offset={offset}
