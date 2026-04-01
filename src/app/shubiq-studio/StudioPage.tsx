@@ -819,10 +819,11 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
   }
 
   const budgetOptions = [
-    "Under ₹20,000",
-    "₹20,000 - ₹40,000",
-    "₹40,000 - ₹60,000",
-    "₹60,000+",
+    "Under ₹50,000",
+    "₹50,000 - ₹1,00,000",
+    "₹1,00,000 - ₹2,00,000",
+    "₹2,00,000 - ₹4,00,000",
+    "₹4,00,000+",
     "Not sure yet",
   ]
 
@@ -932,7 +933,7 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
                   error={phoneError}
                 />
                 <FloatingSelect
-                  label="Estimated Cost"
+                  label="Estimated Budget (INR)"
                   name="studio-budget"
                   value={form.budget}
                   options={budgetOptions}
