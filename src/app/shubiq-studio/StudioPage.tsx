@@ -1,7 +1,7 @@
 ﻿"use client"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import StudioNavbar from "./StudioNavbar"
 import Footer from "../components/Footer"
 import ScrollReveal from "../components/ScrollReveal"
@@ -14,128 +14,17 @@ import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
 import { projects, type Project } from "../data-projects"
 import ProjectCardShowcase from "../components/ProjectCardShowcase"
 import {
-  Code2,
-  LayoutDashboard,
-  Bot,
-  Smartphone,
-  Globe,
-  Layers,
   CheckCircle2,
   ArrowRight,
   Zap,
   Shield,
   TrendingUp,
 } from "lucide-react"
+import Services from "../components/Services"
 
 // â”€â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-const STUDIO_SERVICES = [
-  {
-    icon: Code2,
-    title: "High-Performance Web Platforms",
-    tag: "Core",
-    desc: "Engineered for speed and scale, high-performance platforms built to convert, scale, and dominate competitive markets.",
-    features: ["Modern frontend architecture", "Secure backend infrastructure", "Performance-first engineering"],
-  },
-  {
-    icon: LayoutDashboard,
-    title: "Custom Software Architecture",
-    tag: "Agency",
-    desc: "Designed to solve complex operational challenges with scalable, data-driven architecture aligned to business execution.",
-    features: ["Scalable system design", "Data-driven infrastructure", "Secure access control"],
-  },
-  {
-    icon: Bot,
-    title: "Applied AI Systems",
-    tag: "Intelligence",
-    desc: "Integrated AI systems and intelligent automation unlock measurable efficiency and strategic advantage.",
-    features: ["AI workflow integration", "Smart data pipelines", "Intelligent automation systems"],
-  },
-  {
-    icon: Smartphone,
-    title: "Scalable Application Systems",
-    tag: "Product",
-    desc: "Production-grade application systems engineered for long-term scalability and performance resilience.",
-    features: ["Web & mobile platforms", "Optimized performance", "Deployment & lifecycle support"],
-  },
-  {
-    icon: Globe,
-    title: "Digital Brand Infrastructure",
-    tag: "Growth",
-    desc: "Structured digital ecosystems convert attention into authority, trust, and sustainable growth.",
-    features: ["Conversion-focused landing systems", "Portfolio & brand platforms", "Analytics & optimization"],
-  },
-  {
-    icon: Layers,
-    title: "Design & Component Architecture",
-    tag: "Foundation",
-    desc: "Structured design systems and component architecture ensuring speed, consistency, and scalable product growth.",
-    features: ["Component libraries", "Design token systems", "Documentation & governance"],
-  },
-]
-
 type StudioPortfolioProject = Project
-const STUDIO_SERVICE_ICON_MAP = {
-  code: Code2,
-  layout: LayoutDashboard,
-  bot: Bot,
-  phone: Smartphone,
-  globe: Globe,
-  layers: Layers,
-} as const
-
-type StudioService = {
-  iconKey: keyof typeof STUDIO_SERVICE_ICON_MAP
-  title: string
-  tag: string
-  desc: string
-  features: string[]
-}
-
-const DEFAULT_STUDIO_SERVICES: StudioService[] = [
-  {
-    iconKey: "code",
-    title: "High-Performance Web Platforms",
-    tag: "Core",
-    desc: "Engineered for speed and scale, high-performance platforms built to convert, scale, and dominate competitive markets.",
-    features: ["Modern frontend architecture", "Secure backend infrastructure", "Performance-first engineering"],
-  },
-  {
-    iconKey: "layout",
-    title: "Custom Software Architecture",
-    tag: "Agency",
-    desc: "Designed to solve complex operational challenges with scalable, data-driven architecture aligned to business execution.",
-    features: ["Scalable system design", "Data-driven infrastructure", "Secure access control"],
-  },
-  {
-    iconKey: "bot",
-    title: "Applied AI Systems",
-    tag: "Intelligence",
-    desc: "Integrated AI systems and intelligent automation unlock measurable efficiency and strategic advantage.",
-    features: ["AI workflow integration", "Smart data pipelines", "Intelligent automation systems"],
-  },
-  {
-    iconKey: "phone",
-    title: "Scalable Application Systems",
-    tag: "Product",
-    desc: "Production-grade application systems engineered for long-term scalability and performance resilience.",
-    features: ["Web & mobile platforms", "Optimized performance", "Deployment & lifecycle support"],
-  },
-  {
-    iconKey: "globe",
-    title: "Digital Brand Infrastructure",
-    tag: "Growth",
-    desc: "Structured digital ecosystems convert attention into authority, trust, and sustainable growth.",
-    features: ["Conversion-focused landing systems", "Portfolio & brand platforms", "Analytics & optimization"],
-  },
-  {
-    iconKey: "layers",
-    title: "Design & Component Architecture",
-    tag: "Foundation",
-    desc: "Structured design systems and component architecture ensuring speed, consistency, and scalable product growth.",
-    features: ["Component libraries", "Design token systems", "Documentation & governance"],
-  },
-]
 
 const PRICING_ICON_MAP = {
   zap: Zap,
@@ -369,239 +258,6 @@ function StudioHero() {
     </section>
   )
 }
-function StudioServices() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const [services, setServices] = useState<StudioService[]>(DEFAULT_STUDIO_SERVICES)
-  const prefersReduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start 80%", "end 20%"],
-  })
-  const headingOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0])
-  const headingY = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [24, 0, -24])
-
-  useEffect(() => {
-    setServices(DEFAULT_STUDIO_SERVICES)
-  }, [])
-
-  const cardOffsets = [
-    { x: -90, y: -70 },
-    { x: 90, y: -70 },
-    { x: -90, y: 10 },
-    { x: 90, y: 10 },
-    { x: -90, y: 70 },
-    { x: 90, y: 70 },
-  ]
-
-  return (
-    <section
-      id="studio-services-section"
-      ref={sectionRef}
-      className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden"
-    >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 50% 38%, rgb(var(--gold-rgb) / 0.055) 0%, transparent 62%)",
-          mixBlendMode: "soft-light",
-        }}
-      />
-      <div
-        className="absolute right-0 top-1/3 w-80 h-80 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.03) 0%, transparent 70%)" }}
-      />
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col items-center gap-4 sm:gap-5 mb-6 sm:mb-8">
-          <SectionLabel label="Services" centered />
-        </div>
-
-        <div className="relative">
-          <motion.div
-            className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none"
-            style={
-              prefersReduced
-                ? undefined
-                : {
-                    opacity: headingOpacity,
-                    y: headingY,
-                  }
-            }
-          >
-            <div className="relative px-6 sm:px-8 py-5 sm:py-6 border border-gold/25 bg-[rgb(var(--ink-rgb))]">
-              <div className="absolute -left-6 top-1/2 h-px w-6 bg-gold/45" />
-              <div className="absolute -right-6 top-1/2 h-px w-6 bg-gold/45" />
-              <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
-                <span className="text-cream/90">Systems We </span>
-                <span className="text-gold">Engineer</span>
-              </h2>
-            </div>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4.5 max-sm:gap-4 sm:gap-6 pt-16 sm:pt-20">
-            {services.map((service, index) => {
-              const Icon = STUDIO_SERVICE_ICON_MAP[service.iconKey] ?? Code2
-              const slug = service.title
-                .toLowerCase()
-                .replace(/&/g, "and")
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, "")
-              const offset = cardOffsets[index % cardOffsets.length]
-              return (
-                <MotionStudioCard key={service.title} offset={offset} progress={scrollYProgress} reduceMotion={!!prefersReduced}>
-                  <ServiceCard
-                    service={service}
-                    index={index}
-                    Icon={Icon}
-                    isDimmed={hoveredCard !== null && hoveredCard !== index}
-                    onHoverChange={(active) => setHoveredCard(active ? index : null)}
-                    anchorId={`service-${slug}`}
-                  />
-                </MotionStudioCard>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function MotionStudioCard({
-  children,
-  offset,
-  progress,
-  reduceMotion,
-}: {
-  children: React.ReactNode
-  offset: { x: number; y: number }
-  progress: ReturnType<typeof useScroll>["scrollYProgress"]
-  reduceMotion: boolean
-}) {
-  const x = useTransform(progress, [0, 0.5, 1], [offset.x, 0, offset.x])
-  const y = useTransform(progress, [0, 0.5, 1], [offset.y, 0, offset.y])
-  const opacity = useTransform(progress, [0, 0.35, 0.65, 1], [0, 1, 1, 0])
-  const scale = useTransform(progress, [0, 0.5, 1], [0.96, 1, 0.98])
-
-  return (
-    <motion.div
-      style={
-        reduceMotion
-          ? undefined
-          : {
-              opacity,
-              x,
-              y,
-              scale,
-            }
-      }
-    >
-      {children}
-    </motion.div>
-  )
-}
-
-function ServiceCard({
-  service,
-  index,
-  Icon,
-  isDimmed,
-  onHoverChange,
-  anchorId,
-}: {
-  service: StudioService
-  index: number
-  Icon: React.ElementType
-  isDimmed: boolean
-  onHoverChange: (active: boolean) => void
-  anchorId: string
-}) {
-  const glowRef = useRef<HTMLDivElement>(null)
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const glow = glowRef.current
-    const card = e.currentTarget
-    if (!card || !glow) return
-    const rect = card.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    glow.style.background = `radial-gradient(circle at ${x}% ${y}%, rgb(var(--gold-rgb) / 0.1) 0%, transparent 62%)`
-    glow.style.opacity = "1"
-  }
-
-  const handleMouseLeave = () => {
-    if (glowRef.current) glowRef.current.style.opacity = "0"
-    onHoverChange(false)
-  }
-
-  const handleMouseEnter = () => {
-    onHoverChange(true)
-  }
-
-  return (
-    <article
-      id={anchorId}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
-      className={`service-card group relative p-5.5 max-sm:p-4 sm:p-7 border bg-card-soft hover:bg-card-soft-hover transform-gpu transition-[transform,border-color,background-color,box-shadow,opacity,filter] duration-[460ms] ease-[cubic-bezier(0.16,1,0.3,1)] max-md:rounded-[20px] min-h-[420px] sm:min-h-[450px] lg:min-h-[470px] ${
-        isDimmed
-          ? "opacity-[0.85] saturate-[0.92]"
-          : "opacity-100 saturate-100"
-      } border-[rgb(var(--cream-rgb)/0.14)] hover:border-[rgb(var(--gold-rgb)/0.34)] hover:-translate-y-1 hover:scale-[1.02] max-md:hover:translate-y-0 max-md:hover:scale-100`}
-      style={{
-        willChange: "transform, opacity, filter",
-        boxShadow: "0 10px 24px rgb(0 0 0 / 0.18), 0 0 0 1px rgb(var(--cream-rgb) / 0.05) inset",
-      }}
-    >
-      <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500" />
-      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-      <span className="absolute top-6 right-5 text-[40px] sm:text-[52px] font-cinzel font-black text-cream/8 group-hover:text-cream/14 transition-opacity duration-300 select-none pointer-events-none">
-        {`0${index + 1}`}
-      </span>
-
-      <div className="relative z-10 h-full flex flex-col">
-        <div className="flex items-start justify-between mb-6 sm:mb-6 max-md:items-center">
-          <span
-            className="font-rajdhani text-[11px] max-sm:text-[9px] tracking-[2px] max-sm:tracking-[1.2px] uppercase text-gold/80 border px-2.5 max-sm:px-1.5 py-1 max-sm:py-[3px] bg-gold/[0.05]"
-            style={{ borderColor: "rgb(var(--gold-rgb) / 0.4)" }}
-          >
-            {service.tag}
-          </span>
-        </div>
-
-        <h3
-          className="font-cinzel font-bold text-cream/93 mb-4 sm:mb-4 tracking-[0.2px] sm:tracking-[0.4px] leading-[1.16] max-sm:leading-[1.14] transition-[letter-spacing] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:tracking-[0.9px] line-clamp-2 min-h-[3.2em]"
-          style={{ fontSize: "clamp(16.8px, 1.5vw, 21px)" }}
-        >
-          <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-gold/70 after:transition-all after:duration-300 group-hover:after:w-full">
-            {service.title}
-          </span>
-        </h3>
-
-        <p
-          className="font-cormorant text-cream/74 leading-[1.6] sm:leading-[1.7] mb-6 sm:mb-6 flex-1 transition-opacity duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:text-cream/78 line-clamp-3 min-h-[4.8em]"
-          style={{ fontSize: "clamp(14px, 1.1vw, 17px)" }}
-        >
-          {service.desc}
-        </p>
-
-        <div className="h-px w-full bg-[rgb(var(--gold-rgb)/0.16)] transition-[background-color] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:bg-[rgb(var(--gold-rgb)/0.28)]" />
-        <ul className="space-y-3 sm:space-y-2 pt-5 sm:pt-5">
-          {service.features.map((f) => (
-            <li key={f} className="flex items-start gap-2 sm:gap-2.5">
-              <CheckCircle2 size={12} className="text-gold/60 shrink-0 mt-[2px]" strokeWidth={2} />
-              <span className="font-rajdhani text-[12px] sm:text-[12px] tracking-[0.35px] sm:tracking-[0.9px] text-cream/70 uppercase max-sm:normal-case leading-[1.35] transition-opacity duration-300 group-hover:text-cream/95">
-                {f}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </article>
-  )
-}
-
 // â”€â”€â”€ Portfolio Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StudioPortfolio() {
@@ -1063,7 +719,7 @@ export default function StudioPage() {
         <StudioHero />
         <div id="studio-services-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
         <SectionDivider />
-        <StudioServices />
+        <Services />
         <div id="studio-portfolio-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
         <SectionDivider />
         <StudioPortfolio />
