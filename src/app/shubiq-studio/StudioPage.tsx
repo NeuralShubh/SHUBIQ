@@ -614,26 +614,24 @@ function StudioPricing({ content }: { content: StudioContent }) {
           </div>
         </motion.div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.12 } },
-          }}
-          className="grid grid-cols-1 md:[grid-template-columns:1.03fr_1.08fr_1.03fr] gap-5 max-sm:gap-4.5 sm:gap-7 items-center"
-        >
-          {pricingPlans.map((plan) => {
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={pricingMode}
+            initial={{ opacity: 0, y: 16, filter: "blur(2px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -12, filter: "blur(2px)" }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="grid grid-cols-1 md:[grid-template-columns:1.03fr_1.08fr_1.03fr] gap-5 max-sm:gap-4.5 sm:gap-7 items-center"
+          >
+            {pricingPlans.map((plan, index) => {
             const Icon = PRICING_ICON_MAP[plan.icon] ?? TrendingUp
             return (
               <motion.article
-                key={plan.id}
-                variants={{
-                  hidden: { opacity: 0, y: 40, scale: plan.highlighted ? 0.95 : 0.98 },
-                  visible: { opacity: 1, y: 0, scale: 1 },
-                }}
-                transition={{ duration: 0.6, ease: "easeOut", delay: plan.highlighted ? 0.12 : 0 }}
+                key={`${pricingMode}-${plan.id}`}
+                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -16, scale: 0.98 }}
+                transition={{ duration: 0.38, delay: index * 0.06, ease: "easeOut" }}
                 className={`group relative flex flex-col rounded-[22px] sm:rounded-[28px] p-5 max-sm:p-4.5 sm:px-9 sm:py-9 border opacity-95 overflow-visible duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] transition-[transform,border-color,box-shadow,color] hover:border-gold/65 hover:shadow-[0_20px_50px_rgba(40,90,255,0.12)] hover:scale-[1.03] max-md:hover:translate-y-0 max-md:hover:scale-100 ${
                   plan.highlighted
                     ? "studio-popular-pulse gradient-border md:scale-[1.03] md:min-h-[690px] pt-7 sm:pt-[54px] pb-6 sm:pb-[44px] opacity-100 border-2 border-gold/45 bg-gradient-to-b from-[rgb(var(--surface-2-rgb)/0.98)] to-[rgb(var(--surface-1-rgb)/0.95)] shadow-[0_14px_34px_rgb(var(--gold-rgb)/0.10)]"
@@ -661,7 +659,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
                 <div className="mb-3.5 sm:mb-4">
                   <div className="flex items-end gap-1.5 min-h-[62px] sm:min-h-[80px]">
                     <span className="font-cinzel font-bold text-[2.25rem] sm:text-5xl leading-[0.94] text-gold">
-                      <NumberTicker value={plan.price} prefix="₹" suffix={plan.priceSuffix ?? ""} locale="en-IN" />
+                      <NumberTicker key={`${pricingMode}-${plan.id}-${plan.price}`} value={plan.price} prefix="₹" suffix={plan.priceSuffix ?? ""} locale="en-IN" start />
                     </span>
                   </div>
                   <div className={`font-cormorant text-[12px] sm:text-[13px] tracking-[0.5px] sm:tracking-[0.7px] mt-1 ${plan.highlighted ? "text-cream/84" : "text-cream/76"}`}>{plan.meta}</div>
@@ -705,8 +703,9 @@ function StudioPricing({ content }: { content: StudioContent }) {
                 </motion.button>
               </motion.article>
             )
-          })}
-        </motion.div>
+            })}
+          </motion.div>
+        </AnimatePresence>
 
         <div className="mt-8 sm:mt-10 flex justify-center">
           <button
