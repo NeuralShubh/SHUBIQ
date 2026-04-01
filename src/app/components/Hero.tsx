@@ -12,7 +12,11 @@ export default function Hero() {
   const ring2Ref = useRef<HTMLDivElement>(null)
   const ring3Ref = useRef<HTMLDivElement>(null)
   const prefersReduced = useReducedMotion()
+  const [ringsReady, setRingsReady] = useState(false)
   const [wordmarkReady, setWordmarkReady] = useState(false)
+  const [taglineReady, setTaglineReady] = useState(false)
+  const [ctaReady, setCtaReady] = useState(false)
+  const [socialReady, setSocialReady] = useState(false)
 
   // Ring rotation RAF
   useEffect(() => {
@@ -63,17 +67,22 @@ export default function Hero() {
     }
   }, [])
 
-  // Delay wordmark animation until after loading screen exit
+  // Delay hero sequence until after loading screen exit
   useEffect(() => {
     let timeoutId: number | undefined
     const saved = window.sessionStorage.getItem("shubiq-loaded")
-    if (saved) {
-      timeoutId = window.setTimeout(() => setWordmarkReady(true), 220)
-    } else {
-      timeoutId = window.setTimeout(() => setWordmarkReady(true), 2300)
-    }
+    const base = saved ? 220 : 2300
+    timeoutId = window.setTimeout(() => setRingsReady(true), base)
+    const t2 = window.setTimeout(() => setWordmarkReady(true), base + 700)
+    const t3 = window.setTimeout(() => setTaglineReady(true), base + 1050)
+    const t4 = window.setTimeout(() => setCtaReady(true), base + 1350)
+    const t5 = window.setTimeout(() => setSocialReady(true), base + 1550)
     return () => {
       if (timeoutId) window.clearTimeout(timeoutId)
+      window.clearTimeout(t2)
+      window.clearTimeout(t3)
+      window.clearTimeout(t4)
+      window.clearTimeout(t5)
     }
   }, [])
 
@@ -112,15 +121,18 @@ export default function Hero() {
           backgroundSize: "64px 64px",
         }}
       />
-      <div
+      <motion.div
         className="hero-bg hero-center-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] md:w-[1100px] md:h-[1100px] rounded-full"
         style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.09) 0%, transparent 65%)" }}
+        initial={prefersReduced ? false : { opacity: 0, scale: 0.92 }}
+        animate={ringsReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
+        transition={{ duration: 0.9, ease: EASE_PREMIUM }}
       />
 
       {/* Animated rings (CSS-based, keep existing) */}
       <div
         ref={ring1Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView && ringsReady ? "in-view" : ""}`}
         style={{ width: 720, height: 720, marginLeft: -360, marginTop: -360, opacity: 0, animationDelay: "0.1s" }}
       >
         <div className="hero-ring-1-border absolute inset-0 rounded-full border border-[rgb(var(--gold-rgb)/0.14)]" />
@@ -130,7 +142,7 @@ export default function Hero() {
       </div>
       <div
         ref={ring2Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView && ringsReady ? "in-view" : ""}`}
         style={{ width: 460, height: 460, marginLeft: -230, marginTop: -230, opacity: 0, animationDelay: "0.28s" }}
       >
         <div className="hero-ring-2-border absolute inset-0 rounded-full" style={{ border: "1px dashed rgb(var(--gold-rgb) / 0.12)" }} />
@@ -138,7 +150,7 @@ export default function Hero() {
       </div>
       <div
         ref={ring3Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView && ringsReady ? "in-view" : ""}`}
         style={{ width: 270, height: 270, marginLeft: -135, marginTop: -135, opacity: 0, animationDelay: "0.46s" }}
       >
         <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
@@ -226,8 +238,8 @@ export default function Hero() {
         <motion.div
           className="hero-tagline-row mb-2 max-[768px]:mb-1.5 md:mb-3 -mt-12 max-[768px]:-mt-9 md:-mt-16"
           initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
-          animate={wordmarkReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-          transition={{ duration: 0.55, delay: 0.4, ease: EASE_PREMIUM }}
+          animate={taglineReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
         >
           <span className="hero-tagline-line" />
           <span className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase tracking-[3.6px] md:tracking-[7px]">
@@ -243,8 +255,8 @@ export default function Hero() {
         <motion.div
           className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-12 sm:mt-14 mb-5 sm:mb-6"
           initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
-          animate={wordmarkReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-          transition={{ duration: 0.55, delay: 0.85, ease: EASE_PREMIUM }}
+          animate={ctaReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
         >
           <button
             type="button"
@@ -268,8 +280,8 @@ export default function Hero() {
         <motion.div
           className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-8 mt-6 sm:mt-8 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
           initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
-          animate={wordmarkReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ duration: 0.55, delay: 1.05, ease: EASE_PREMIUM }}
+          animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
         >
           {SOCIAL_LINKS.map((s) => (
             <div key={s.label} className="flex items-center justify-center">
