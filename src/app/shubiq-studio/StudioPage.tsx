@@ -16,9 +16,13 @@ import ProjectCardShowcase from "../components/ProjectCardShowcase"
 import {
   CheckCircle2,
   ArrowRight,
+  Clock3,
+  Layers,
+  Rocket,
   Zap,
   Shield,
   TrendingUp,
+  Workflow,
 } from "lucide-react"
 import Services from "../components/Services"
 
@@ -253,6 +257,113 @@ function StudioHero() {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2">
         <div className="w-px h-10 overflow-hidden">
           <div className="w-full h-full bg-gradient-to-b from-gold to-transparent animate-scroll-line" />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function StudioExecutionGrid() {
+  const cards = [
+    {
+      title: "Strategy Layer",
+      desc: "Positioning, offer architecture, and conversion intent mapped before design starts.",
+      icon: Layers,
+    },
+    {
+      title: "System Design",
+      desc: "Information architecture, interaction flow, and component system aligned for scale.",
+      icon: Workflow,
+    },
+    {
+      title: "Launch Velocity",
+      desc: "Engineering and deployment tuned for speed, reliability, and measurable outcomes.",
+      icon: Rocket,
+    },
+  ]
+
+  return (
+    <section className="relative py-[88px] max-md:py-14 px-5 sm:px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.55 }}
+          className="mb-8 text-center"
+        >
+          <SectionLabel label="Execution Model" centered />
+          <h2 className="font-cinzel font-black leading-[0.94] text-cream/92" style={{ fontSize: "clamp(30px, 5vw, 60px)" }}>
+            Built As
+            <span className="text-gold"> A Performance System</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {cards.map((card, index) => (
+            <motion.article
+              key={card.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="rounded-[22px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(170deg,rgb(var(--cream-rgb)/0.06),rgb(var(--surface-2-rgb)/0.72))] p-6"
+            >
+              <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gold/35 bg-gold/[0.1]">
+                <card.icon size={16} className="text-gold" />
+              </div>
+              <h3 className="mt-4 font-cinzel text-[24px] leading-[1.02] text-cream">{card.title}</h3>
+              <p className="mt-3 font-cormorant text-[18px] leading-[1.5] text-cream/76">{card.desc}</p>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function StudioDeliveryProcess() {
+  const steps = [
+    { step: "01", title: "Discovery", text: "We align objectives, constraints, and project success metrics." },
+    { step: "02", title: "Design + Build", text: "UX and engineering run in tight cycles to reduce handoff friction." },
+    { step: "03", title: "Launch + Iterate", text: "Deploy fast, monitor signal, and optimize based on real behavior." },
+  ]
+
+  return (
+    <section className="relative py-[90px] max-md:py-14 px-5 sm:px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto rounded-[28px] border border-[rgb(var(--gold-rgb)/0.26)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.16),rgb(var(--surface-1-rgb)/0.86)_44%)] p-6 sm:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.55 }}
+          className="mb-6"
+        >
+          <div className="inline-flex items-center gap-2">
+            <Clock3 size={14} className="text-gold" />
+            <p className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/70">Delivery Process</p>
+          </div>
+          <h3 className="mt-3 font-cinzel font-black leading-[0.95]" style={{ fontSize: "clamp(30px, 4.5vw, 56px)" }}>
+            Fast. Structured.
+            <span className="text-gold"> Outcome-Focused.</span>
+          </h3>
+        </motion.div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {steps.map((item, index) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              className="rounded-2xl border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--gold-rgb)/0.08)] p-4"
+            >
+              <p className="font-rajdhani text-[10px] tracking-[2.5px] uppercase text-cream/64">{item.step}</p>
+              <p className="mt-1 font-cinzel text-[22px] text-cream">{item.title}</p>
+              <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/78">{item.text}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -715,14 +826,19 @@ export default function StudioPage() {
   return (
     <>
       <StudioNavbar />
-      <main>
+      <main className="studio-premium-bg relative overflow-hidden">
+        <div className="studio-grid-overlay pointer-events-none absolute inset-0" />
+        <div className="studio-glow-orb pointer-events-none absolute -left-20 top-28 h-72 w-72 rounded-full" />
+        <div className="studio-glow-orb-2 pointer-events-none absolute right-[-100px] top-[420px] h-96 w-96 rounded-full" />
         <StudioHero />
+        <StudioExecutionGrid />
         <div id="studio-services-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
         <SectionDivider />
         <Services />
         <div id="studio-portfolio-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
         <SectionDivider />
         <StudioPortfolio />
+        <StudioDeliveryProcess />
         <div id="studio-pricing-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
         <SectionDivider />
         <StudioPricing content={studioContent} />
@@ -733,7 +849,6 @@ export default function StudioPage() {
     </>
   )
 }
-
 
 
 

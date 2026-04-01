@@ -1212,3 +1212,42 @@ select:focus-visible {
     padding-bottom: 86px;
   }
 }
+
+/* Studio premium surface */
+.studio-premium-bg {
+  background:
+    radial-gradient(80% 75% at 16% 14%, rgb(var(--gold-rgb) / 0.06), transparent 60%),
+    radial-gradient(82% 68% at 86% 26%, rgb(var(--gold-rgb) / 0.045), transparent 64%),
+    linear-gradient(180deg, rgb(var(--surface-0-rgb)), rgb(var(--ink-rgb)));
+}
+
+.studio-grid-overlay {
+  opacity: 0.14;
+  background-image:
+    linear-gradient(rgb(var(--cream-rgb) / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--cream-rgb) / 0.05) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 50% 38%, black 36%, transparent 78%);
+}
+
+.studio-glow-orb,
+.studio-glow-orb-2 {
+  background: radial-gradient(circle, rgb(var(--gold-rgb) / 0.14) 0%, transparent 68%);
+  filter: blur(24px);
+  animation: studioDrift 13s ease-in-out infinite alternate;
+  opacity: 0.55;
+}
+
+.studio-glow-orb-2 {
+  animation-duration: 16s;
+  opacity: 0.45;
+}
+
+@keyframes studioDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(20px, -16px, 0) scale(1.06);
+  }
+}
