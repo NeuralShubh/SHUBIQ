@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
-import { motion, useMotionValueEvent, useScroll } from "framer-motion"
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion"
 import { NAV_LINKS } from "../data"
 import ThemeToggle, { STORAGE_KEY, THEMES, Theme, applyTheme } from "./ThemeToggle"
 import MagneticButton from "./MagneticButton"
@@ -257,129 +257,235 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      <div
-        className="fixed inset-0 z-[950] md:hidden transition-opacity duration-300"
-        style={{
-          opacity: menuOpen ? 1 : 0,
-          pointerEvents: menuOpen ? "all" : "none",
-          background: "rgb(var(--ink-rgb) / 0.48)",
-          backdropFilter: "blur(6px)",
-        }}
-        onClick={() => {
-          setMenuOpen(false)
-          setMobileThemeOpen(false)
-        }}
-      >
-        <div
-          className="absolute inset-y-0 right-0 w-[92vw] max-w-[420px] border-l border-gold/18 bg-[rgb(var(--surface-1-rgb)/0.95)] shadow-[-12px_0_36px_rgb(0_0_0_/_0.34)] transition-transform duration-[380ms] ease-out"
-          style={{ transform: menuOpen ? "translateX(0%)" : "translateX(104%)" }}
-          onClick={(e) => e.stopPropagation()}
-          onTouchStart={(e) => {
-            touchStartX.current = e.touches[0].clientX
-            touchMoveX.current = e.touches[0].clientX
-          }}
-          onTouchMove={(e) => {
-            touchMoveX.current = e.touches[0].clientX
-          }}
-          onTouchEnd={() => {
-            if (touchMoveX.current - touchStartX.current > 70) {
-              setMenuOpen(false)
-              setMobileThemeOpen(false)
-            }
-          }}
-        >
-          <div className="sticky top-0 z-10 h-[76px] border-b border-gold/16 px-5 backdrop-blur-md bg-[rgb(var(--surface-2-rgb)/0.72)] flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <Image
-                src="https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Logo/SHUBIQ.png"
-                alt="SHUBIQ"
-                width={160}
-                height={64}
-                className="h-9 w-auto object-contain"
-                style={{ filter: "drop-shadow(0 0 10px rgb(var(--gold-rgb) / 0.2))" }}
-              />
-              <span className="font-cinzel font-semibold text-[18px] tracking-[0.8px] text-cream/92">SHUBIQ</span>
-            </div>
-            <button
-              onClick={() => {
-                setMenuOpen(false)
-                setMobileThemeOpen(false)
+      {/* ── Premium Mobile Drawer ── */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="mob-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.32 }}
+              className="fixed inset-0 z-[10000] md:hidden"
+              style={{ background: "rgb(0 0 0 / 0.78)", backdropFilter: "blur(10px)" }}
+              onClick={() => { setMenuOpen(false); setMobileThemeOpen(false) }}
+            />
+
+            {/* Panel */}
+            <motion.div
+              key="mob-panel"
+              initial={{ x: "100%" }}
+              animate={{ x: "0%" }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 340, damping: 38, mass: 0.85 }}
+              className="fixed inset-y-0 right-0 z-[10001] md:hidden w-[82vw] max-w-[380px] flex flex-col overflow-hidden"
+              style={{
+                background: "linear-gradient(145deg, rgb(var(--surface-2-rgb)) 0%, rgb(var(--surface-0-rgb)) 100%)",
+                boxShadow: "-20px 0 60px rgb(0 0 0 / 0.55), -1px 0 0 rgb(var(--gold-rgb) / 0.22)",
               }}
-              className="relative w-11 h-11 border border-gold/28 flex items-center justify-center rounded-sm active:opacity-75"
-              aria-label="Close menu"
+              onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; touchMoveX.current = e.touches[0].clientX }}
+              onTouchMove={(e) => { touchMoveX.current = e.touches[0].clientX }}
+              onTouchEnd={() => { if (touchMoveX.current - touchStartX.current > 60) { setMenuOpen(false); setMobileThemeOpen(false) } }}
             >
-              <span className="block w-4 h-px bg-gold rotate-45 absolute" />
-              <span className="block w-4 h-px bg-gold -rotate-45 absolute" />
-            </button>
-          </div>
+              {/* Ambient gold glow */}
+              <div className="pointer-events-none absolute top-0 right-0 w-[260px] h-[260px] rounded-full opacity-[0.07]"
+                style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb)) 0%, transparent 70%)", transform: "translate(30%, -30%)" }} />
 
-          <div className="h-[calc(100%-76px)] overflow-y-auto px-5 pt-6 pb-6">
-            <div className="flex flex-col">
-              {NAV_LINKS.map((link) => (
-                <button
-                  key={link}
-                  onClick={() => scrollTo(link)}
-                  className="text-left min-h-[56px] py-3 border-b border-b-[0.5px] border-gold/18 transition-opacity duration-200 active:opacity-70"
-                  style={{ color: active === link ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.92)" }}
+              {/* Vertical gold accent bar */}
+              <div className="absolute left-0 top-[15%] bottom-[15%] w-px"
+                style={{ background: "linear-gradient(180deg, transparent, rgb(var(--gold-rgb) / 0.55) 40%, rgb(var(--gold-rgb) / 0.55) 60%, transparent)" }} />
+
+              {/* ── Header ── */}
+              <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.08, duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center justify-between pl-8 pr-5 pt-7 pb-5"
+              >
+                <div className="flex items-center gap-3">
+                  <Image
+                    src="https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Logo/SHUBIQ.png"
+                    alt="SHUBIQ" width={160} height={64}
+                    className="h-8 w-auto object-contain"
+                    style={{ filter: "drop-shadow(0 0 14px rgb(var(--gold-rgb) / 0.35))" }}
+                  />
+                  <span className="font-cinzel font-bold text-[17px] tracking-[3px] text-cream/90">SHUBIQ</span>
+                </div>
+
+                <motion.button
+                  onClick={() => { setMenuOpen(false); setMobileThemeOpen(false) }}
+                  whileTap={{ scale: 0.88 }}
+                  aria-label="Close menu"
+                  className="relative w-10 h-10 flex items-center justify-center shrink-0"
                 >
-                  <span className="relative inline-block font-cinzel text-[1.52rem] leading-[1.08] tracking-[2.2px] uppercase">
-                    {link}
-                    <span
-                      className="absolute left-0 -bottom-1.5 h-[2px] bg-gold/90 transition-all duration-200"
-                      style={{ width: active === link ? "100%" : "0%" }}
-                    />
-                  </span>
-                </button>
-              ))}
-            </div>
+                  <motion.span
+                    className="absolute inset-0 rounded-full border border-gold/25"
+                    animate={{ scale: [1, 1.18, 1], opacity: [0.6, 0.2, 0.6] }}
+                    transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <span className="absolute w-[16px] h-px bg-gold rotate-45" />
+                  <span className="absolute w-[16px] h-px bg-gold -rotate-45" />
+                </motion.button>
+              </motion.div>
 
-            <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+              {/* Gold rule */}
+              <motion.div
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ delay: 0.18, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="mx-8 h-px origin-left"
+                style={{ background: "linear-gradient(90deg, rgb(var(--gold-rgb) / 0.7), rgb(var(--gold-rgb) / 0.2) 60%, transparent)" }}
+              />
 
-            <div className="mt-4 border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-2-rgb)/0.5)] rounded-sm overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setMobileThemeOpen((v) => !v)}
-                className="w-full min-h-[52px] px-4 py-3 text-left border-b border-b-[rgb(var(--cream-rgb)/0.12)] transition-colors duration-300 active:opacity-80"
-              >
-                <div className="font-rajdhani text-[12px] tracking-[3px] uppercase text-gold/92">Appearance</div>
-                <div className="font-rajdhani text-[11px] tracking-[1.8px] text-cream/68 mt-1">{currentThemeLabel}</div>
-              </button>
-
-              <div
-                className="transition-all duration-300 ease-out overflow-hidden"
-                style={{ maxHeight: mobileThemeOpen ? "520px" : "0px", opacity: mobileThemeOpen ? 1 : 0 }}
-              >
-                <div className="px-2 py-2">
-                  {THEMES.map((t) => {
-                    const activeTheme = t.id === mobileTheme
+              {/* ── Nav links ── */}
+              <div className="flex-1 overflow-y-auto pl-8 pr-6 pt-6 pb-3">
+                <nav className="flex flex-col">
+                  {NAV_LINKS.map((link, i) => {
+                    const isActive = active === link
                     return (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => applyMobileTheme(t.id)}
-                        className="w-full min-h-[44px] px-3 py-2 rounded-sm text-left flex items-center gap-2.5 transition-all duration-200 active:opacity-80"
-                        style={{
-                          color: activeTheme ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.88)",
-                          background: activeTheme ? "rgb(var(--gold-rgb) / 0.13)" : "transparent",
-                          boxShadow: activeTheme ? "0 0 18px rgb(var(--gold-rgb) / 0.16) inset" : "none",
-                        }}
+                      <motion.button
+                        key={link}
+                        initial={{ opacity: 0, x: 36 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.16 + i * 0.055, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                        onClick={() => scrollTo(link)}
+                        className="group relative flex items-center gap-4 py-[11px] text-left active:opacity-60"
                       >
-                        <span
-                          className="w-1.5 h-1.5 rounded-full shrink-0"
-                          style={{ background: activeTheme ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.45)" }}
+                        {/* Active side bar */}
+                        <motion.span
+                          className="absolute -left-8 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full"
+                          animate={{ height: isActive ? "55%" : "0%", opacity: isActive ? 1 : 0 }}
+                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                          style={{ background: "rgb(var(--gold-rgb))", boxShadow: "2px 0 12px rgb(var(--gold-rgb) / 0.6)" }}
                         />
-                        <span className="font-rajdhani text-[12px] tracking-[1.5px] uppercase">{t.label}</span>
-                      </button>
+
+                        {/* Index */}
+                        <motion.span
+                          animate={{ color: isActive ? "rgb(var(--gold-rgb))" : "rgb(var(--cream-rgb) / 0.25)" }}
+                          transition={{ duration: 0.25 }}
+                          className="font-rajdhani text-[10px] tracking-[2.5px] shrink-0 w-5 text-right"
+                        >
+                          {String(i + 1).padStart(2, "0")}
+                        </motion.span>
+
+                        {/* Label */}
+                        <motion.span
+                          animate={{ color: isActive ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.82)" }}
+                          whileHover={{ color: "rgb(var(--gold-rgb))", x: 4 }}
+                          transition={{ duration: 0.22 }}
+                          className="font-cinzel text-[1.45rem] leading-none tracking-[1.8px] uppercase"
+                        >
+                          {link}
+                        </motion.span>
+
+                        {/* Arrow */}
+                        <motion.span
+                          initial={{ opacity: 0, x: -6 }}
+                          animate={{ opacity: isActive ? 0.7 : 0, x: isActive ? 0 : -6 }}
+                          transition={{ duration: 0.25 }}
+                          className="ml-auto font-rajdhani text-[14px] text-gold shrink-0"
+                        >
+                          →
+                        </motion.span>
+                      </motion.button>
                     )
                   })}
-                </div>
+                </nav>
               </div>
-            </div>
 
-            <div className="h-4" />
-          </div>
-        </div>
-      </div>
+              {/* ── Bottom block ── */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.58, duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                className="pl-8 pr-6 pb-8 pt-4"
+              >
+                {/* Gold rule */}
+                <div className="mb-5 h-px" style={{ background: "linear-gradient(90deg, rgb(var(--gold-rgb) / 0.3), transparent)" }} />
+
+                {/* Hire Us CTA */}
+                <motion.button
+                  onClick={() => scrollTo("Contact")}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full py-[11px] mb-4 border border-gold/65 bg-gold text-ink font-rajdhani text-[12px] tracking-[2.8px] uppercase font-semibold transition-all duration-300 active:opacity-80"
+                  style={{ boxShadow: "0 0 22px rgb(var(--gold-rgb) / 0.18)" }}
+                >
+                  Hire Us
+                </motion.button>
+
+                {/* Appearance toggle */}
+                <button
+                  type="button"
+                  onClick={() => setMobileThemeOpen((v) => !v)}
+                  className="w-full flex items-center gap-3 py-2 active:opacity-70"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-gold/70 shrink-0">
+                    <circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 0 0 18 4.5 4.5 0 0 0 0-9V3z" />
+                  </svg>
+                  <span className="font-rajdhani text-[11px] tracking-[2.5px] uppercase text-cream/45">Appearance</span>
+                  <span className="ml-auto font-rajdhani text-[11px] tracking-[1.5px] uppercase text-gold/75">{currentThemeLabel}</span>
+                  <motion.span
+                    animate={{ rotate: mobileThemeOpen ? 180 : 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="text-gold/50 text-[10px] shrink-0"
+                  >▼</motion.span>
+                </button>
+
+                {/* Theme palette */}
+                <AnimatePresence>
+                  {mobileThemeOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-3 grid grid-cols-2 gap-1.5">
+                        {THEMES.map((t) => {
+                          const activeTheme = t.id === mobileTheme
+                          return (
+                            <motion.button
+                              key={t.id}
+                              type="button"
+                              onClick={() => applyMobileTheme(t.id)}
+                              whileTap={{ scale: 0.95 }}
+                              className="flex items-center gap-2 px-3 py-2 transition-all duration-200 active:opacity-70"
+                              style={{
+                                border: `1px solid ${activeTheme ? "rgb(var(--gold-rgb) / 0.55)" : "rgb(var(--cream-rgb) / 0.1)"}`,
+                                background: activeTheme ? "rgb(var(--gold-rgb) / 0.1)" : "transparent",
+                              }}
+                            >
+                              <span className="w-3 h-3 rounded-full shrink-0 border border-black/20"
+                                style={{ background: activeTheme ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.35)" }} />
+                              <span className="font-rajdhani text-[10px] tracking-[1.5px] uppercase truncate"
+                                style={{ color: activeTheme ? "rgb(var(--gold-light-rgb))" : "rgb(var(--cream-rgb) / 0.7)" }}>
+                                {t.label.split(" ")[0]}
+                              </span>
+                              {activeTheme && (
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-gold ml-auto shrink-0">
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                              )}
+                            </motion.button>
+                          )
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Footer mark */}
+                <div className="mt-5 font-rajdhani text-[9px] tracking-[2.5px] uppercase text-cream/20">
+                  © {new Date().getFullYear()} SHUBIQ · Intelligence That Wins
+                </div>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   )
 }
