@@ -19,6 +19,7 @@ import {
   Zap,
 } from "lucide-react"
 import { LAB_PRODUCTS } from "../data-labs"
+import LabsNavbar from "./LabsNavbar"
 
 function ProductIcon({ category }: { category: string }) {
   if (category === "Mobile App") return <Smartphone size={18} className="text-[rgb(var(--gold-rgb))]" />
@@ -164,6 +165,7 @@ export default function LabsPageClient() {
 
   return (
     <main className="labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
+      <LabsNavbar />
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
       <div className="labs-noise-layer pointer-events-none absolute inset-0" />
       <div className="labs-glow-orb pointer-events-none absolute -left-28 top-28 h-72 w-72 rounded-full" />
