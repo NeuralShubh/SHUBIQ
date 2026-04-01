@@ -42,7 +42,7 @@ const APP_PLANS: StudioContent["plans"] = [
     tier: "BASIC",
     tag: "APP BASIC",
     bestFor: "Best for MVP apps with production intent",
-    price: 199999,
+    price: 77999,
     meta: "One-time • Ready in 5-7 weeks",
     features: [
       "Product flow mapping and core UX",
@@ -60,7 +60,7 @@ const APP_PLANS: StudioContent["plans"] = [
     tier: "STANDARD",
     tag: "APP STANDARD",
     bestFor: "Best for market-ready app products",
-    price: 399999,
+    price: 167999,
     meta: "One-time • Ready in 8-12 weeks",
     features: [
       "Cross-platform build with scalable architecture",
@@ -78,7 +78,7 @@ const APP_PLANS: StudioContent["plans"] = [
     tier: "PREMIUM",
     tag: "APP PREMIUM",
     bestFor: "Best for enterprise-grade app ecosystems",
-    price: 749999,
+    price: 329999,
     priceSuffix: "+",
     meta: "One-time • Ready in 12-18 weeks",
     features: [

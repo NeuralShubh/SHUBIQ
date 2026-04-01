@@ -46,7 +46,7 @@ export const DEFAULT_STUDIO_CONTENT: StudioContent = {
       tier: "BASIC",
       tag: "WEB BASIC",
       bestFor: "Best for conversion-first business websites",
-      price: 79999,
+      price: 29999,
       meta: "One-time • Ready in 2-3 weeks",
       features: [
         "Brand-led website direction",
@@ -64,7 +64,7 @@ export const DEFAULT_STUDIO_CONTENT: StudioContent = {
       tier: "STANDARD",
       tag: "WEB STANDARD",
       bestFor: "Best for growth-stage companies scaling online",
-      price: 179999,
+      price: 67499,
       meta: "One-time • Ready in 4-6 weeks",
       features: [
         "Custom UI system and page architecture",
@@ -82,7 +82,7 @@ export const DEFAULT_STUDIO_CONTENT: StudioContent = {
       tier: "PREMIUM",
       tag: "WEB PREMIUM",
       bestFor: "Best for flagship digital platforms",
-      price: 349999,
+      price: 134999,
       priceSuffix: "+",
       meta: "One-time • Ready in 7-10 weeks",
       features: [
