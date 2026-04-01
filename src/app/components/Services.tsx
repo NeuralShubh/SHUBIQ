@@ -218,8 +218,8 @@ export default function Services({ initialServices }: ServicesProps = {}) {
         <div className="flex flex-col items-center gap-4 sm:gap-5 mb-6 sm:mb-8">
           <SectionLabel label="Services" centered />
           <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(32px, 5vw, 62px)" }}>
-            <span className="text-cream/90">What We </span>
-            <span className="text-gold">Do</span>
+            <span className="text-cream/90">Systems We </span>
+            <span className="text-gold">Engineer</span>
           </h2>
         </div>
 
