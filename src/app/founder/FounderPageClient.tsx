@@ -321,17 +321,31 @@ export default function FounderPageClient() {
       <section className="py-14 sm:py-16 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto">
           <SectionHeading label="Connect" title="Founder Links" description="Follow along across platforms." />
-          <StaggerContainer className="flex gap-3 flex-wrap">
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {socialLinks.map((link) => (
               <StaggerItem key={link.label}>
                 <a
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[rgb(var(--cream-rgb)/0.2)] hover:border-gold/50 hover:bg-gold/[0.05] transition-all duration-300"
+                  className="group relative overflow-hidden rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.55)] px-5 py-4 transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-[0_24px_50px_rgb(0_0_0_/_0.35),0_0_0_1px_rgb(var(--gold-rgb)_/_0.2)_inset]"
                 >
-                  <span className="text-cream/60 group-hover:text-gold transition-colors">{link.icon}</span>
-                  <span className="text-sm font-medium text-cream/90">{link.label}</span>
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background:
+                        "radial-gradient(circle at 30% 20%, rgb(var(--gold-rgb) / 0.16), transparent 60%), linear-gradient(140deg, rgb(var(--gold-rgb) / 0.08), transparent 45%, transparent 75%, rgb(var(--gold-rgb) / 0.06))",
+                    }}
+                  />
+                  <div className="relative z-10 flex items-center gap-3">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--cream-rgb)/0.04)] text-cream/70 group-hover:text-gold group-hover:border-gold/50 transition-colors">
+                      {link.icon}
+                    </span>
+                    <div className="flex flex-col">
+                      <span className="text-[13px] font-semibold tracking-[0.18em] uppercase text-cream/90">{link.label}</span>
+                      <span className="text-[11px] tracking-[0.22em] uppercase text-cream/50">View profile</span>
+                    </div>
+                  </div>
                   <svg
                     width="12"
                     height="12"
@@ -339,7 +353,7 @@ export default function FounderPageClient() {
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="text-cream/50 group-hover:text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                    className="absolute right-4 top-4 text-cream/45 group-hover:text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
                   >
                     <line x1="7" y1="17" x2="17" y2="7" />
                     <polyline points="7 7 17 7 17 17" />
