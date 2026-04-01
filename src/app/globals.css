@@ -860,6 +860,19 @@
   position: relative;
 }
 
+/* Tablet-only home hero alignment: keep desktop unchanged */
+@media (min-width: 768px) and (max-width: 1366px) and (hover: none) and (pointer: coarse) {
+  #home {
+    align-items: flex-start !important;
+    padding-top: 5vh !important;
+    padding-bottom: 24px !important;
+  }
+
+  #home .hero-content {
+    transform: translateY(-2vh);
+  }
+}
+
 .hero-interactive,
 .hero-cta {
   pointer-events: auto !important;
