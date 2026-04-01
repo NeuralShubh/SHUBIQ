@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { SOCIAL_LINKS } from "../data"
 import { useInViewOnce } from "../lib/gsap-hooks"
@@ -12,6 +12,7 @@ export default function Hero() {
   const ring2Ref = useRef<HTMLDivElement>(null)
   const ring3Ref = useRef<HTMLDivElement>(null)
   const prefersReduced = useReducedMotion()
+  const [wordmarkReady, setWordmarkReady] = useState(false)
 
   // Ring rotation RAF
   useEffect(() => {
@@ -59,6 +60,20 @@ export default function Hero() {
       window.removeEventListener("scroll", updateHeroState)
       window.removeEventListener("resize", updateHeroState)
       document.body.classList.remove("hero-active")
+    }
+  }, [])
+
+  // Delay wordmark animation until after loading screen exit
+  useEffect(() => {
+    let timeoutId: number | undefined
+    const saved = window.sessionStorage.getItem("shubiq-loaded")
+    if (saved) {
+      timeoutId = window.setTimeout(() => setWordmarkReady(true), 220)
+    } else {
+      timeoutId = window.setTimeout(() => setWordmarkReady(true), 2300)
+    }
+    return () => {
+      if (timeoutId) window.clearTimeout(timeoutId)
     }
   }, [])
 
@@ -145,19 +160,19 @@ export default function Hero() {
         {(() => {
           const letters = ["S", "H", "U", "B", "I", "Q"]
           const offsets = [
-            { x: -36, y: -28, rotate: -6 },
-            { x: 28, y: -32, rotate: 5 },
-            { x: -18, y: 26, rotate: -4 },
-            { x: 22, y: 18, rotate: 6 },
-            { x: -26, y: -10, rotate: -3 },
-            { x: 30, y: 10, rotate: 4 },
+            { x: -90, y: -70, rotate: -14 },
+            { x: 80, y: -82, rotate: 12 },
+            { x: -64, y: 70, rotate: -11 },
+            { x: 72, y: 54, rotate: 13 },
+            { x: -88, y: -12, rotate: -9 },
+            { x: 96, y: 22, rotate: 10 },
           ]
           const containerVariants = {
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.08,
-                delayChildren: 0.25,
+                staggerChildren: 0.12,
+                delayChildren: 0.05,
               },
             },
           }
@@ -170,15 +185,17 @@ export default function Hero() {
                     x: offsets[i].x,
                     y: offsets[i].y,
                     rotate: offsets[i].rotate,
-                    filter: "blur(6px)",
+                    scale: 0.92,
+                    filter: "blur(8px)",
                   },
             visible: {
               opacity: 1,
               x: 0,
               y: 0,
               rotate: 0,
+              scale: 1,
               filter: "blur(0px)",
-              transition: { duration: 0.7, ease: EASE_PREMIUM },
+              transition: { duration: 0.9, ease: EASE_PREMIUM },
             },
           }
 
@@ -188,7 +205,7 @@ export default function Hero() {
               style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
               variants={containerVariants}
               initial="hidden"
-              animate="visible"
+              animate={wordmarkReady ? "visible" : "hidden"}
             >
               {letters.map((letter, i) => (
                 <motion.span
