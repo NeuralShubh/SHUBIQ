@@ -1,192 +1,271 @@
 "use client"
-import { useEffect, useRef } from "react"
+
 import Link from "next/link"
-import { ArrowDownCircle, ArrowRight, ShieldCheck, Sparkles, Smartphone, Package } from "lucide-react"
-
-
-import GoldLine from "../../components/GoldLine"
-import ScrollReveal from "../../components/ScrollReveal"
+import { motion } from "framer-motion"
+import {
+  ArrowDownCircle,
+  ArrowRight,
+  CheckCircle2,
+  Package,
+  ShieldCheck,
+  Smartphone,
+  Sparkles,
+} from "lucide-react"
 
 const APK_URL = "https://flow.shubiq.com/downloads/SHUBIQ-Flow.apk"
 const BUILD_VERSION = "0.9.0-beta"
 const BUILD_DATE = "March 2026"
+
 const RELEASE_NOTES = [
-  "New SHUBIQ Labs download hub for beta distribution.",
-  "Stability pass across tasks, habits, and focus flows.",
-  "Improved sync-ready architecture (Pro-only).",
+  "New SHUBIQ Labs download hub for smoother beta distribution.",
+  "Stability and interaction polish across tasks, habits, and focus.",
+  "Improved sync-ready architecture for upcoming Pro rollout.",
 ]
 
+const INSTALL_STEPS = [
+  "Enable Install unknown apps when Android prompts for permission.",
+  "This build is a private beta package and may receive rapid updates.",
+  "For updates, install the newer APK directly over the current build.",
+]
+
+const CONFIDENCE_CHECKS = [
+  { label: "Task Engine", status: "Stable" },
+  { label: "Habit Loops", status: "Stable" },
+  { label: "Focus Sessions", status: "Optimizing" },
+  { label: "Sync Layer", status: "In Progress" },
+]
+
+const SUPPORT_PROTOCOL = [
+  "Bug reports: include device model + Android version + issue video if possible.",
+  "Feedback cycle: updates are reviewed weekly and prioritized for next beta push.",
+  "Critical issues: mark message subject with [Critical] for same-day triage.",
+]
 
 export default function ShubiqFlowDownloadPage() {
-  const heroRef = useRef<HTMLDivElement>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        gsap.fromTo(heroRef.current, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" })
-        gsap.fromTo(cardRef.current, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out", delay: 0.15 })
-      } catch {
-        // no-op
-      }
-    }
-    init()
-  }, [])
-
   return (
-    <>
+    <main className="labs-premium-bg relative min-h-screen overflow-hidden text-cream">
+      <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
+      <div className="labs-glow-orb pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full" />
 
-      <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
-        <section className="relative pt-[110px] sm:pt-[130px] pb-12 px-5 sm:px-8 overflow-hidden">
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse at 42% 18%, rgb(var(--gold-rgb) / 0.1) 0%, transparent 60%), radial-gradient(ellipse at 80% 30%, rgb(var(--gold-light-rgb) / 0.08) 0%, transparent 60%)",
-            }}
-          />
-          <div className="max-w-5xl mx-auto relative">
-            <div ref={heroRef} className="opacity-0">
-              <div className="inline-flex items-center gap-2 border border-gold/20 bg-gold/[0.04] px-3.5 py-2 mb-6">
-                <Smartphone size={14} className="text-gold" />
-                <span className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/80">
-                  SHUBIQ Flow - Android Beta
-                </span>
+      <section className="relative px-5 pb-14 pt-[120px] sm:px-8 sm:pt-[140px]">
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.35)] bg-[rgb(var(--gold-rgb)/0.1)] px-4 py-2"
+          >
+            <Smartphone size={14} className="text-[rgb(var(--gold-rgb))]" />
+            <span className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">
+              SHUBIQ Flow Android Beta
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.08 }}
+            className="mt-6 max-w-5xl font-shubiq-heading text-[clamp(38px,6.5vw,84px)] leading-[0.92]"
+          >
+            Focus. Execute.
+            <span className="block text-[rgb(var(--gold-rgb))]">Repeat With Precision.</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.16 }}
+            className="mt-6 max-w-3xl font-cormorant text-[clamp(17px,2vw,24px)] leading-[1.5] text-cream/78"
+          >
+            SHUBIQ Flow is a premium execution app unifying tasks, habits, and deep work sessions in one ritual-driven workspace.
+            This page gives you direct access to the latest beta build.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.24 }}
+            className="mt-9 flex flex-wrap gap-3"
+          >
+            <a
+              href={APK_URL}
+              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              <ArrowDownCircle size={16} />
+              Download APK
+            </a>
+            <Link
+              href="/shubiq-labs"
+              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.24)] bg-[rgb(var(--cream-rgb)/0.02)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
+            >
+              Back to Labs
+              <ArrowRight size={14} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="relative px-5 pb-8 sm:px-8">
+        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.6 }}
+            className="overflow-hidden rounded-3xl border border-[rgb(var(--gold-rgb)/0.34)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.17),rgb(var(--surface-1-rgb)/0.82)_44%)] p-6 sm:p-8"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="font-rajdhani text-[10px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Current Build</p>
+                <h2 className="mt-2 font-cinzel text-[32px] leading-[1] text-cream">Beta Channel</h2>
               </div>
-              <h1 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6vw,62px)] mb-3">
-                SHUBIQ Flow
-                <span className="text-gold"> - Tasks, Habits & Focus</span>
-              </h1>
-              <p className="font-cormorant text-cream/75 leading-[1.7] max-w-[680px]" style={{ fontSize: "clamp(16px,1.4vw,20px)" }}>
-                A premium dark-mode productivity app engineered for execution. Track tasks, build habits, and go deep with focus sessions -
-                all in one unified system.
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.4px] text-emerald-300">
+                <ShieldCheck size={14} />
+                Verified Package
+              </span>
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {[
+                { label: "Platform", value: "Android" },
+                { label: "Version", value: BUILD_VERSION },
+                { label: "Released", value: BUILD_DATE },
+              ].map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.58)] px-4 py-3"
+                >
+                  <p className="font-rajdhani text-[9px] uppercase tracking-[2.5px] text-cream/56">{stat.label}</p>
+                  <p className="mt-1 font-cormorant text-[18px] text-cream/90">{stat.value}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-7 grid gap-2">
+              {RELEASE_NOTES.map((note, index) => (
+                <motion.div
+                  key={note}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="flex items-start gap-2 rounded-xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] px-3 py-3"
+                >
+                  <Sparkles size={14} className="mt-0.5 text-[rgb(var(--gold-rgb))]" />
+                  <p className="font-cormorant text-[17px] leading-[1.5] text-cream/76">{note}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.aside
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.28 }}
+            transition={{ duration: 0.6, delay: 0.08 }}
+            className="rounded-3xl border border-[rgb(var(--cream-rgb)/0.16)] bg-[linear-gradient(165deg,rgb(var(--cream-rgb)/0.08),rgb(var(--surface-1-rgb)/0.72)_48%)] p-6"
+          >
+            <div className="flex items-center gap-2">
+              <Package size={14} className="text-[rgb(var(--gold-rgb))]" />
+              <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Install Notes</p>
+            </div>
+
+            <ul className="mt-5 space-y-3">
+              {INSTALL_STEPS.map((step) => (
+                <li key={step} className="flex items-start gap-2">
+                  <CheckCircle2 size={14} className="mt-1 text-[rgb(var(--gold-rgb))]" />
+                  <span className="font-cormorant text-[17px] leading-[1.5] text-cream/76">{step}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8 rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] p-4">
+              <p className="font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/58">Next Milestone</p>
+              <p className="mt-2 font-cormorant text-[18px] leading-[1.45] text-cream/82">
+                Public Play Store release after closed-beta validation, payment checks, and onboarding refinement.
               </p>
             </div>
-          </div>
-        </section>
+          </motion.aside>
+        </div>
+      </section>
 
-        <GoldLine />
+      <section className="relative px-5 pb-20 pt-8 sm:px-8 sm:pb-24">
+        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55 }}
+            className="rounded-[28px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.88),rgb(var(--surface-0-rgb)/0.92))] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Release Confidence</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(28px,3.8vw,50px)] leading-[0.95]">System Readiness</h3>
 
-        <ScrollReveal>
-        <section className="py-12 sm:py-14 px-5 sm:px-8">
-          <div className="max-w-5xl mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-6 items-start">
-            <div
-              ref={cardRef}
-              className="relative border border-[rgb(var(--cream-rgb)/0.16)] bg-card-soft p-6 sm:p-8 rounded-sm overflow-hidden"
-              style={{ boxShadow: "0 28px 52px rgb(0 0 0 / 0.25), 0 0 0 1px rgb(var(--cream-rgb)/0.06) inset" }}
+            <div className="mt-6 grid gap-3">
+              {CONFIDENCE_CHECKS.map((check, index) => {
+                const isStable = check.status === "Stable"
+                const isOptimizing = check.status === "Optimizing"
+                return (
+                  <motion.div
+                    key={check.label}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.45, delay: index * 0.06 }}
+                    className="flex items-center justify-between rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] px-4 py-3"
+                  >
+                    <p className="font-cormorant text-[20px] text-cream/88">{check.label}</p>
+                    <span
+                      className={`rounded-full border px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.4px] ${
+                        isStable
+                          ? "border-emerald-400/35 bg-emerald-400/10 text-emerald-300"
+                          : isOptimizing
+                            ? "border-amber-400/35 bg-amber-400/10 text-amber-300"
+                            : "border-[rgb(var(--cream-rgb)/0.25)] bg-[rgb(var(--cream-rgb)/0.06)] text-cream/68"
+                      }`}
+                    >
+                      {check.status}
+                    </span>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55, delay: 0.05 }}
+            className="rounded-[28px] border border-[rgb(var(--gold-rgb)/0.3)] bg-[linear-gradient(160deg,rgb(var(--gold-rgb)/0.14),rgb(var(--surface-1-rgb)/0.84)_46%)] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Support Protocol</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(28px,3.8vw,50px)] leading-[0.95]">Beta Communication</h3>
+            <ul className="mt-6 space-y-3">
+              {SUPPORT_PROTOCOL.map((line, index) => (
+                <motion.li
+                  key={line}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                  className="rounded-2xl border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--gold-rgb)/0.08)] p-4 font-cormorant text-[18px] leading-[1.45] text-cream/78"
+                >
+                  {line}
+                </motion.li>
+              ))}
+            </ul>
+
+            <a
+              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Flow%20Beta%20Feedback"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
             >
-              <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(150deg, rgb(var(--gold-rgb)/0.08), transparent 45%)" }} />
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-gold/70">Current Release</div>
-                  <div className="font-cinzel text-[22px] text-cream/90">Beta Build</div>
-                </div>
-                <div className="flex items-center gap-2 text-gold/80 text-[11px] font-rajdhani tracking-[2px] uppercase">
-                  <ShieldCheck size={16} />
-                  Verified
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-3 gap-3 mb-6">
-                {[
-                  { label: "Platform", value: "Android" },
-                  { label: "Build", value: BUILD_VERSION },
-                  { label: "Release", value: BUILD_DATE },
-                ].map((item) => (
-                  <div key={item.label} className="border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-3">
-                    <div className="font-rajdhani text-[9px] tracking-[2.4px] uppercase text-cream/50">{item.label}</div>
-                    <div className="font-cormorant text-[16px] text-cream/85">{item.value}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-wrap gap-2 mb-6">
-                {["Tasks", "Habits", "Focus", "Analytics", "Dark UI"].map((tag) => (
-                  <span key={tag} className="px-3 py-1 text-[10px] tracking-[2px] uppercase font-rajdhani border border-gold/25 text-gold/75">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href={APK_URL}
-                  className="inline-flex items-center justify-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/70 bg-gold text-ink px-6 py-3 hover:bg-gold-light transition-all duration-300"
-                >
-                  <ArrowDownCircle size={16} />
-                  Download APK
-                </a>
-                <Link
-                  href="/shubiq-labs"
-                  className="inline-flex items-center justify-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.25)] px-6 py-3 text-cream/80 hover:text-gold hover:border-gold transition-all duration-300"
-                >
-                  Back to Labs
-                  <ArrowRight size={14} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-2-rgb)/0.55)] p-6 rounded-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles size={14} className="text-gold" />
-                <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/75">Install Notes</div>
-              </div>
-              <ul className="font-cormorant text-cream/72 leading-[1.6] space-y-3 text-[15px]">
-                <li>Enable “Install unknown apps” when prompted.</li>
-                <li>This is a beta build for private testing only.</li>
-                <li>Updates require manual download until Play Store launch.</li>
-              </ul>
-              <div className="mt-6 border-t border-[rgb(var(--cream-rgb)/0.12)] pt-4">
-                <div className="font-rajdhani text-[10px] tracking-[2.5px] uppercase text-cream/50 mb-2">Roadmap</div>
-                <div className="font-cormorant text-cream/75 text-[14px] leading-[1.55]">
-                  Play Store launch after closed beta, payments testing, and stability validation.
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        </ScrollReveal>
-
-        <GoldLine />
-
-        <ScrollReveal delay={0.1}>
-        <section className="py-12 sm:py-14 px-5 sm:px-8">
-          <div className="max-w-5xl mx-auto grid md:grid-cols-[1.05fr_0.95fr] gap-6">
-            <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 rounded-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <Package size={14} className="text-gold" />
-                <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/75">Release Notes</div>
-              </div>
-              <ul className="space-y-3 font-cormorant text-cream/78 text-[15px] leading-[1.6]">
-                {RELEASE_NOTES.map((note) => (
-                  <li key={note} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 mt-2 rounded-full bg-gold/70" />
-                    <span>{note}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-2-rgb)/0.55)] p-6 sm:p-7 rounded-sm">
-              <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/75 mb-4">System Requirements</div>
-              <ul className="space-y-3 font-cormorant text-cream/75 text-[15px] leading-[1.6]">
-                <li>Android 9+ recommended for best performance.</li>
-                <li>Allow notifications for reminders and focus sessions.</li>
-                <li>Keep battery optimizations disabled for reliable alarms.</li>
-              </ul>
-              <div className="mt-5 border-t border-[rgb(var(--cream-rgb)/0.12)] pt-4">
-                <div className="font-rajdhani text-[10px] tracking-[2.5px] uppercase text-cream/55 mb-2">Update Method</div>
-                <div className="font-cormorant text-cream/75 text-[14px] leading-[1.55]">
-                  Download the latest APK and install over the existing build.
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        </ScrollReveal>
-      </main>
-
-    </>
+              Send Beta Feedback
+              <ArrowRight size={14} />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+    </main>
   )
 }

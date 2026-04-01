@@ -2,283 +2,402 @@
 
 import { useMemo } from "react"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import {
   ArrowRight,
-  Sparkles,
-  Smartphone,
+  ArrowUpRight,
   Globe,
   MonitorSmartphone,
-  ArrowUpRight,
-  Lock,
-  Clock,
+  Sparkles,
+  Smartphone,
+  Target,
+  TrendingUp,
+  Zap,
 } from "lucide-react"
 import { LAB_PRODUCTS } from "../data-labs"
-import ScrollReveal from "../components/ScrollReveal"
-import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
-import Roadmap, { RoadmapItem } from "../components/Roadmap"
-import SectionDivider from "../components/SectionDivider"
-import SectionLabel from "../components/SectionLabel"
-
-function SectionHeading({ label, title, description }: { label: string; title: string; description?: string }) {
-  return (
-    <ScrollReveal>
-      <div className="mb-10 md:mb-12 text-center">
-        <SectionLabel label={label} centered />
-        <h2 className="mt-4 font-shubiq-heading font-normal text-cream" style={{ fontSize: "clamp(30px, 5.5vw, 62px)", lineHeight: 0.92 }}>
-          {title}
-        </h2>
-        {description ? <p className="text-cream/70 font-cormorant mt-3 max-w-3xl mx-auto">{description}</p> : null}
-      </div>
-    </ScrollReveal>
-  )
-}
 
 function ProductIcon({ category }: { category: string }) {
-  if (category === "Mobile App") return <Smartphone size={18} className="text-gold" />
-  if (category === "Web App") return <Globe size={18} className="text-gold" />
-  return <MonitorSmartphone size={18} className="text-gold" />
+  if (category === "Mobile App") return <Smartphone size={18} className="text-[rgb(var(--gold-rgb))]" />
+  if (category === "Web App") return <Globe size={18} className="text-[rgb(var(--gold-rgb))]" />
+  return <MonitorSmartphone size={18} className="text-[rgb(var(--gold-rgb))]" />
+}
+
+function StatusBadge({ status }: { status: string }) {
+  if (status === "Live Beta") {
+    return (
+      <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.4px] text-emerald-300">
+        <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
+        Live Beta
+      </span>
+    )
+  }
+
+  if (status === "In Dev") {
+    return (
+      <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-amber-400/10 px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.4px] text-amber-300">
+        <span className="h-2 w-2 rounded-full bg-amber-300" />
+        In Dev
+      </span>
+    )
+  }
+
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--cream-rgb)/0.04)] px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.4px] text-cream/60">
+      <span className="h-2 w-2 rounded-full bg-[rgb(var(--cream-rgb)/0.32)]" />
+      Planned
+    </span>
+  )
 }
 
 export default function LabsPageClient() {
   const orderedProducts = useMemo(() => {
-    const flow = LAB_PRODUCTS.find((p) => p.id === "shubiq-flow")
-    const atlas = LAB_PRODUCTS.find((p) => p.id === "future-web")
-    const pulse = LAB_PRODUCTS.find((p) => p.id === "future-suite")
+    const flow = LAB_PRODUCTS.find((product) => product.id === "shubiq-flow")
+    const atlas = LAB_PRODUCTS.find((product) => product.id === "future-web")
+    const pulse = LAB_PRODUCTS.find((product) => product.id === "future-suite")
     return [flow, atlas, pulse].filter(Boolean)
   }, [])
 
-  const roadmapData: RoadmapItem[] = [
+  const milestones = [
     {
       quarter: "Q3 2025",
-      title: "SHUBIQ Flow - Concept and Design",
-      description: "Product vision defined. Core feature set mapped. UI and UX system established.",
-      status: "completed",
-      product: "Flow",
+      title: "Flow Foundation",
+      description: "Product model, UX architecture, and execution system designed.",
+      state: "Completed",
     },
     {
       quarter: "Q4 2025",
-      title: "SHUBIQ Flow - Core Development",
-      description: "Tasks, habits, and focus modules built. Dark premium UI implemented. Internal testing begins.",
-      status: "completed",
-      product: "Flow",
+      title: "Core Engine Built",
+      description: "Tasks, habits, and focus layers shipped into internal test builds.",
+      state: "Completed",
     },
     {
       quarter: "Q1 2026",
-      title: "SHUBIQ Flow - Beta Launch",
-      description: "Android beta released for private testing. Download hub established. Stability validation underway.",
-      status: "current",
-      product: "Flow",
+      title: "Private Beta Live",
+      description: "Android beta released with onboarding, telemetry, and release pipeline.",
+      state: "Current",
     },
     {
       quarter: "Q2 2026",
-      title: "SHUBIQ Flow - Play Store Launch",
-      description: "Public launch on Google Play Store. Pro tier with sync features. Onboarding flow refined.",
-      status: "upcoming",
-      product: "Flow",
+      title: "Public Launch Window",
+      description: "Play Store launch, premium sync layer, and polished onboarding release.",
+      state: "Next",
+    },
+  ]
+
+  const metrics = [
+    { label: "Products", value: "03", icon: Target },
+    { label: "Current Stage", value: "Beta", icon: TrendingUp },
+    { label: "Build Focus", value: "Speed", icon: Zap },
+  ]
+
+  const pillars = [
+    {
+      title: "Ritual-First UX",
+      description: "Interfaces are shaped around repeatable execution rituals, not one-time interactions.",
     },
     {
-      quarter: "Q2 2026",
-      title: "SHUBIQ Atlas - Development Begins",
-      description: "Knowledge system architecture finalized. Research vault and linked notes modules in development.",
-      status: "upcoming",
-      product: "Atlas",
+      title: "Compounding Clarity",
+      description: "Every feature should reduce cognitive drag and make daily decisions cleaner and faster.",
     },
     {
-      quarter: "Q3 2026",
-      title: "SHUBIQ Pulse - Design Phase",
-      description: "Performance OS concept validated. Planning, execution, and retrospective systems being designed.",
-      status: "upcoming",
-      product: "Pulse",
+      title: "Performance Instrumentation",
+      description: "Core workflows are measurable so users can improve consistency, not just stay busy.",
+    },
+  ]
+
+  const accessTracks = [
+    {
+      name: "Early Testers",
+      detail: "Get private beta builds, report UX friction, and influence product direction directly.",
+    },
+    {
+      name: "Power Users",
+      detail: "Validate advanced flows, analytics, and automation loops before public release.",
+    },
+    {
+      name: "Launch Cohort",
+      detail: "Receive first-wave production access once Play Store readiness and stability are cleared.",
     },
   ]
 
   return (
-    <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
-      <section className="relative pt-[110px] sm:pt-[130px] pb-14 px-5 sm:px-8 overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at 40% 30%, rgb(var(--gold-rgb) / 0.08) 0%, transparent 58%), radial-gradient(ellipse at 70% 10%, rgb(var(--gold-light-rgb) / 0.06) 0%, transparent 50%)",
-          }}
-        />
-        <div className="max-w-6xl mx-auto relative">
-          <ScrollReveal>
-            <div className="inline-flex items-center gap-2 border border-gold/20 bg-gold/[0.04] px-3.5 py-2 mb-6">
-              <Sparkles size={14} className="text-gold" />
-              <span className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/80">
-                SHUBIQ Labs - Product Division
-              </span>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.2}>
-            <h1 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6.2vw,68px)] mb-4">
-              The SHUBIQ
-              <span className="text-gold"> Product Stack</span>
-            </h1>
-          </ScrollReveal>
-          <ScrollReveal delay={0.4}>
-            <p
-              className="font-cormorant text-cream/75 leading-[1.7] max-w-[640px]"
-              style={{ fontSize: "clamp(16px,1.4vw,20px)" }}
+    <main className="labs-premium-bg relative min-h-screen overflow-hidden text-cream">
+      <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
+      <div className="labs-glow-orb pointer-events-none absolute -left-28 top-28 h-72 w-72 rounded-full" />
+      <div className="labs-glow-orb-2 pointer-events-none absolute right-[-110px] top-[420px] h-96 w-96 rounded-full" />
+
+      <section className="relative px-5 pb-14 pt-[120px] sm:px-8 sm:pt-[140px]">
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.35)] bg-[rgb(var(--gold-rgb)/0.1)] px-4 py-2"
+          >
+            <Sparkles size={14} className="text-[rgb(var(--gold-rgb))]" />
+            <span className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">
+              SHUBIQ Labs Product Division
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.08 }}
+            className="mt-6 max-w-5xl font-shubiq-heading text-[clamp(40px,7vw,92px)] leading-[0.92] text-cream"
+          >
+            Systems For
+            <span className="block text-[rgb(var(--gold-rgb))]">Elite Execution</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mt-6 max-w-3xl font-cormorant text-[clamp(17px,2.1vw,25px)] leading-[1.48] text-cream/78"
+          >
+            SHUBIQ Labs builds precision products for people who treat performance as craft. Every app is engineered to remove noise,
+            accelerate decisions, and compound execution quality over time.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="mt-9 flex flex-wrap items-center gap-3"
+          >
+            <Link
+              href="/shubiq-labs/shubiq-flow"
+              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
             >
-              A focused ecosystem of apps, web platforms, and performance tools engineered under SHUBIQ. Each product is
-              built for clarity, speed, and long-term execution power.
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.6}>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/shubiq-labs/shubiq-flow"
-                className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/70 bg-gold text-ink px-5 py-3 hover:bg-gold-light transition-all duration-300"
+              Explore Flow Beta
+              <ArrowRight size={14} />
+            </Link>
+            <a
+              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Early%20Access"
+              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.24)] bg-[rgb(var(--cream-rgb)/0.02)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
+            >
+              Join Early Access
+              <ArrowUpRight size={14} />
+            </a>
+          </motion.div>
+
+          <div className="mt-11 grid gap-3 sm:grid-cols-3">
+            {metrics.map((metric, index) => (
+              <motion.div
+                key={metric.label}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.35 + index * 0.08 }}
+                className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] bg-[linear-gradient(150deg,rgb(var(--cream-rgb)/0.08),rgb(var(--surface-1-rgb)/0.2))] px-4 py-4 backdrop-blur"
               >
-                View Live Beta
-                <ArrowRight size={14} />
-              </Link>
-              <div className="flex flex-col gap-1">
-                <a
-                  href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Early%20Access"
-                  className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.25)] px-5 py-3 text-cream/80 hover:text-gold hover:border-gold transition-all duration-300"
-                >
-                  Request Early Access
-                  <ArrowUpRight size={14} />
-                </a>
-                <span className="font-rajdhani text-[9px] tracking-[2.6px] uppercase text-cream/50">
-                  Join the beta testing group
-                </span>
-              </div>
-            </div>
-          </ScrollReveal>
+                <div className="flex items-center justify-between">
+                  <p className="font-rajdhani text-[10px] uppercase tracking-[2.8px] text-cream/60">{metric.label}</p>
+                  <metric.icon size={15} className="text-[rgb(var(--gold-rgb))]" />
+                </div>
+                <p className="mt-2 font-cinzel text-2xl text-cream">{metric.value}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <SectionDivider />
+      <section className="relative px-5 py-14 sm:px-8 sm:py-16">
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.28 }}
+            transition={{ duration: 0.6 }}
+            className="mb-9"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Product Stack</p>
+            <h2 className="mt-3 font-shubiq-heading text-[clamp(34px,5.2vw,68px)] leading-[0.95] text-cream">Built With Intent</h2>
+          </motion.div>
 
-      <section className="py-14 sm:py-16 px-5 sm:px-8">
-        <div className="max-w-6xl mx-auto">
-          <SectionHeading
-            label="Products"
-            title="Execution-Ready Product Lines"
-            description="Live, in-development, and planned SHUBIQ Labs systems engineered for personal performance."
-          />
-          <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {orderedProducts.map((product) => {
+          <div className="grid gap-6 lg:grid-cols-3">
+            {orderedProducts.map((product, index) => {
               if (!product) return null
+
               const isLive = product.status === "Live Beta"
-              const isInDev = product.status === "In Dev"
-              const isPlanned = !isLive && !isInDev
-              const badge = isLive ? (
-                <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-medium uppercase tracking-[2px]">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Beta
-                </span>
-              ) : isInDev ? (
-                <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-medium uppercase tracking-[2px]">
-                  <span className="w-2 h-2 rounded-full bg-amber-400" />
-                  In Development
-                </span>
-              ) : (
-                <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--cream-rgb)/0.08)] text-cream/55 text-[10px] font-medium uppercase tracking-[2px]">
-                  <span className="w-2 h-2 rounded-full bg-[rgb(var(--cream-rgb)/0.35)]" />
-                  Planned
-                </span>
-              )
-
               return (
-                <StaggerItem key={product.id}>
-                  <div
-                    className={`group relative border rounded-sm p-6 sm:p-7 overflow-hidden transition-all duration-300 ${
-                      isLive
-                        ? "gradient-border border-gold/45 bg-card-soft shadow-[0_24px_50px_rgb(0_0_0_/_0.32)] hover:shadow-[0_30px_60px_rgb(0_0_0_/_0.4)] hover:-translate-y-1"
-                        : isInDev
-                          ? "border-[rgb(var(--cream-rgb)/0.22)] bg-[rgb(var(--surface-2-rgb)/0.6)] opacity-90 hover:-translate-y-0.5"
-                          : "border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.5)] opacity-65"
-                    }`}
-                    data-cursor={isLive ? "Open" : undefined}
-                  >
-                    <div
-                      className="absolute inset-0 pointer-events-none"
-                      style={{
-                        background: isLive
-                          ? "linear-gradient(160deg, rgb(var(--gold-rgb)/0.16), transparent 55%)"
-                          : "linear-gradient(160deg, rgb(var(--gold-rgb)/0.06), transparent 50%)",
-                      }}
-                    />
-                    <div className="relative z-10 flex flex-col h-full">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 border flex items-center justify-center ${isLive ? "border-gold/35 bg-gold/[0.12]" : "border-gold/25 bg-gold/[0.08]"}`}>
-                            <ProductIcon category={product.category} />
-                          </div>
-                          <div className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/70">{product.category}</div>
-                        </div>
-                        {badge}
+                <motion.article
+                  key={product.id}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.55, delay: index * 0.08 }}
+                  className={`group relative overflow-hidden rounded-3xl border p-6 sm:p-7 ${
+                    isLive
+                      ? "border-[rgb(var(--gold-rgb)/0.4)] bg-[linear-gradient(160deg,rgb(var(--gold-rgb)/0.18),rgb(var(--surface-1-rgb)/0.78)_44%)]"
+                      : "border-[rgb(var(--cream-rgb)/0.16)] bg-[linear-gradient(160deg,rgb(var(--cream-rgb)/0.08),rgb(var(--surface-1-rgb)/0.72)_48%)]"
+                  }`}
+                  whileHover={{ y: -6, transition: { duration: 0.24 } }}
+                >
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_8%,rgb(var(--gold-rgb)/0.22),transparent_42%)] opacity-70" />
+                  <div className="relative z-10 flex h-full flex-col">
+                    <div className="mb-6 flex items-start justify-between gap-3">
+                      <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[rgb(var(--gold-rgb)/0.34)] bg-[rgb(var(--gold-rgb)/0.1)]">
+                        <ProductIcon category={product.category} />
                       </div>
+                      <StatusBadge status={product.status} />
+                    </div>
 
-                      <div className="flex items-center justify-between gap-3 mb-3">
-                        <div className="font-cinzel text-[22px] sm:text-[20px] text-cream/92">{product.name}</div>
-                        <div className="font-rajdhani text-[11px] tracking-[2px] uppercase text-gold/70">{product.subtitle}</div>
-                      </div>
+                    <div className="mb-4">
+                      <p className="font-rajdhani text-[10px] uppercase tracking-[2.8px] text-cream/58">{product.category}</p>
+                      <h3 className="mt-2 font-cinzel text-[30px] leading-[1.02] text-cream">{product.name}</h3>
+                      <p className="mt-2 font-cormorant text-[17px] text-[rgb(var(--gold-light-rgb))]">{product.subtitle}</p>
+                    </div>
 
-                      <p className="font-cormorant text-cream/75 leading-[1.6] mb-5">
-                        {product.desc}
-                      </p>
+                    <p className="font-cormorant text-[18px] leading-[1.55] text-cream/76">{product.desc}</p>
 
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {product.highlights.map((h) => (
-                          <span
-                            key={h}
-                            className="px-3 py-1 text-[10px] tracking-[2px] uppercase font-rajdhani border border-gold/20 text-gold/75"
-                          >
-                            {h}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="my-6 flex flex-wrap gap-2">
+                      {product.highlights.map((highlight) => (
+                        <span
+                          key={highlight}
+                          className="rounded-full border border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--cream-rgb)/0.05)] px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.4px] text-cream/74"
+                        >
+                          {highlight}
+                        </span>
+                      ))}
+                    </div>
 
-                      {isInDev && (
-                        <div className="mb-6">
-                          <div className="flex items-center justify-between text-[10px] uppercase tracking-[2px] font-rajdhani text-amber-300/80 mb-2">
-                            <span>Progress</span>
-                            <span>40%</span>
-                          </div>
-                          <div className="h-1 bg-[rgb(var(--cream-rgb)/0.1)] rounded-full overflow-hidden">
-                            <div className="h-full w-[40%] bg-amber-400" />
-                          </div>
-                        </div>
+                    <div className="mt-auto">
+                      {product.disabled ? (
+                        <button
+                          disabled
+                          className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.2)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-cream/55"
+                        >
+                          {product.cta}
+                        </button>
+                      ) : (
+                        <Link
+                          href={product.href}
+                          className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.58)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.12)]"
+                        >
+                          {product.cta}
+                          <ArrowRight size={14} />
+                        </Link>
                       )}
-
-                      <div className="mt-auto">
-                        {product.disabled ? (
-                          <button
-                            className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.2)] px-5 py-3 text-cream/60 cursor-not-allowed"
-                            disabled
-                          >
-                            {product.cta}
-                          </button>
-                        ) : (
-                          <Link
-                            href={product.href}
-                            className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/60 px-5 py-3 text-cream hover:text-gold hover:border-gold transition-all duration-300"
-                          >
-                            {product.cta}
-                            <ArrowRight size={14} />
-                          </Link>
-                        )}
-                      </div>
                     </div>
                   </div>
-                </StaggerItem>
+                </motion.article>
               )
             })}
-          </StaggerContainer>
+          </div>
         </div>
       </section>
 
-      <SectionDivider />
+      <section className="relative px-5 pb-20 pt-10 sm:px-8 sm:pb-24">
+        <div className="mx-auto mb-10 grid max-w-6xl gap-6 lg:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55 }}
+            className="rounded-[28px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.88),rgb(var(--surface-0-rgb)/0.92))] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Operating Pillars</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(30px,4vw,52px)] leading-[0.94]">How We Build</h3>
+            <div className="mt-6 grid gap-3">
+              {pillars.map((pillar, index) => (
+                <motion.div
+                  key={pillar.title}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.07 }}
+                  className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] p-4"
+                >
+                  <p className="font-cinzel text-[21px] text-cream">{pillar.title}</p>
+                  <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/75">{pillar.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
 
-      <section className="py-14 sm:py-16 px-5 sm:px-8">
-        <div className="max-w-5xl mx-auto">
-          <Roadmap items={roadmapData} />
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55, delay: 0.05 }}
+            className="rounded-[28px] border border-[rgb(var(--gold-rgb)/0.28)] bg-[linear-gradient(160deg,rgb(var(--gold-rgb)/0.16),rgb(var(--surface-1-rgb)/0.84)_46%)] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Access Tracks</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(30px,4vw,52px)] leading-[0.94]">Join The Rollout</h3>
+            <div className="mt-6 space-y-3">
+              {accessTracks.map((track, index) => (
+                <motion.div
+                  key={track.name}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.07 }}
+                  className="rounded-2xl border border-[rgb(var(--gold-rgb)/0.25)] bg-[rgb(var(--gold-rgb)/0.08)] p-4"
+                >
+                  <p className="font-cinzel text-[21px] text-cream">{track.name}</p>
+                  <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/76">{track.detail}</p>
+                </motion.div>
+              ))}
+            </div>
+            <a
+              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Track%20Request"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
+            >
+              Request Track Access
+              <ArrowUpRight size={14} />
+            </a>
+          </motion.div>
+        </div>
+
+        <div className="mx-auto max-w-6xl rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.94))] p-7 sm:p-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Roadmap</p>
+            <h2 className="mt-3 font-shubiq-heading text-[clamp(32px,5vw,62px)] leading-[0.95]">Launch Sequence</h2>
+          </motion.div>
+
+          <div className="grid gap-4">
+            {milestones.map((phase, index) => {
+              const isCurrent = phase.state === "Current"
+              return (
+                <motion.div
+                  key={phase.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  className={`rounded-2xl border p-5 sm:p-6 ${
+                    isCurrent
+                      ? "border-[rgb(var(--gold-rgb)/0.42)] bg-[rgb(var(--gold-rgb)/0.11)]"
+                      : "border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)]"
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="font-rajdhani text-[10px] uppercase tracking-[2.8px] text-cream/62">{phase.quarter}</p>
+                      <h3 className="mt-1 font-cinzel text-[25px] leading-[1.05] text-cream">{phase.title}</h3>
+                    </div>
+                    <span
+                      className={`rounded-full border px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.4px] ${
+                        isCurrent
+                          ? "border-[rgb(var(--gold-rgb)/0.55)] text-[rgb(var(--gold-light-rgb))]"
+                          : "border-[rgb(var(--cream-rgb)/0.22)] text-cream/66"
+                      }`}
+                    >
+                      {phase.state}
+                    </span>
+                  </div>
+                  <p className="mt-3 max-w-3xl font-cormorant text-[18px] leading-[1.5] text-cream/74">{phase.description}</p>
+                </motion.div>
+              )
+            })}
+          </div>
         </div>
       </section>
     </main>

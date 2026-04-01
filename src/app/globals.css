@@ -1095,3 +1095,39 @@ select:focus-visible {
 .corner-cut-bl { bottom: -14px; left: -14px; }
 .corner-cut-br { bottom: -14px; right: -14px; }
 
+/* Labs premium surface */
+.labs-premium-bg {
+  background:
+    radial-gradient(75% 70% at 15% 12%, rgb(var(--gold-rgb) / 0.12), transparent 58%),
+    radial-gradient(80% 65% at 86% 28%, rgb(var(--gold-rgb) / 0.09), transparent 62%),
+    linear-gradient(180deg, rgb(var(--surface-0-rgb)), rgb(var(--ink-rgb)));
+}
+
+.labs-grid-overlay {
+  opacity: 0.25;
+  background-image:
+    linear-gradient(rgb(var(--cream-rgb) / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--cream-rgb) / 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at 50% 38%, black 36%, transparent 78%);
+}
+
+.labs-glow-orb,
+.labs-glow-orb-2 {
+  background: radial-gradient(circle, rgb(var(--gold-rgb) / 0.34) 0%, transparent 62%);
+  filter: blur(18px);
+  animation: labsDrift 9s ease-in-out infinite alternate;
+}
+
+.labs-glow-orb-2 {
+  animation-duration: 12s;
+}
+
+@keyframes labsDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(24px, -18px, 0) scale(1.08);
+  }
+}
