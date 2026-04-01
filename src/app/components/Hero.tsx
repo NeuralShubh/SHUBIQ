@@ -110,7 +110,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate min-h-screen flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[8vh] max-[768px]:pt-[6vh] pb-6 sm:pb-10"
+      className="relative isolate min-h-screen flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[12vh] pb-10 sm:pb-16"
     >
       {/* Background grid */}
       <div
@@ -249,11 +249,11 @@ export default function Hero() {
         </motion.div>
 
         {/* Spacing before CTAs */}
-        <div className="h-3 sm:h-4" />
+        <div className="h-8 sm:h-10" />
 
         {/* CTA Buttons */}
         <motion.div
-          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-7 sm:mt-8 mb-4 sm:mb-5"
+          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-12 sm:mt-14 mb-5 sm:mb-6"
           initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
           animate={ctaReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
           transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
@@ -278,7 +278,7 @@ export default function Hero() {
 
         {/* Social links */}
         <motion.div
-          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-4 sm:mb-5 mt-4 sm:mt-5 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
+          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-8 mt-6 sm:mt-8 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
           initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
           animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
