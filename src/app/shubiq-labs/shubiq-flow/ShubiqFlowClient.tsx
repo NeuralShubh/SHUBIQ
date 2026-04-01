@@ -6,7 +6,9 @@ import {
   ArrowDownCircle,
   ArrowRight,
   CheckCircle2,
+  LockKeyhole,
   Package,
+  Shield,
   ShieldCheck,
   Smartphone,
   Sparkles,
@@ -53,6 +55,24 @@ const BETA_FAQ = [
   {
     q: "Can I suggest workflow-level features?",
     a: "Yes. Product decisions in this phase are heavily feedback-driven, especially around task and focus rituals.",
+  },
+]
+
+const PERMISSION_MATRIX = [
+  {
+    permission: "Notifications",
+    why: "Delivers reminders for habits, tasks, and focus timers.",
+    required: "Recommended",
+  },
+  {
+    permission: "Battery Optimization Exemption",
+    why: "Prevents timer interruptions on strict background policies.",
+    required: "Recommended",
+  },
+  {
+    permission: "Storage Access",
+    why: "Allows secure APK update and cache management when needed.",
+    required: "Limited",
   },
 ]
 
@@ -342,6 +362,75 @@ export default function ShubiqFlowDownloadPage() {
           </motion.div>
         </div>
       </section>
+
+      <section className="relative px-5 pb-20 sm:px-8 sm:pb-24">
+        <div className="mx-auto max-w-6xl rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.94))] p-6 sm:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55 }}
+            className="flex flex-wrap items-center justify-between gap-4"
+          >
+            <div>
+              <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Transparency</p>
+              <h3 className="mt-2 font-shubiq-heading text-[clamp(30px,4.2vw,54px)] leading-[0.95]">Permission Matrix</h3>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--gold-rgb)/0.1)] px-3 py-1.5">
+              <Shield size={14} className="text-[rgb(var(--gold-rgb))]" />
+              <span className="font-rajdhani text-[10px] uppercase tracking-[2.5px] text-[rgb(var(--gold-light-rgb))]">Security First</span>
+            </div>
+          </motion.div>
+
+          <div className="mt-6 grid gap-3">
+            {PERMISSION_MATRIX.map((row, index) => (
+              <motion.div
+                key={row.permission}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, delay: index * 0.06 }}
+                className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] px-4 py-4"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-cinzel text-[21px] text-cream">{row.permission}</p>
+                  <span className="rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--gold-rgb)/0.1)] px-3 py-1 font-rajdhani text-[10px] uppercase tracking-[2.5px] text-cream/76">
+                    {row.required}
+                  </span>
+                </div>
+                <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/77">{row.why}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mt-6 rounded-2xl border border-[rgb(var(--gold-rgb)/0.26)] bg-[rgb(var(--gold-rgb)/0.08)] p-4"
+          >
+            <div className="flex items-center gap-2">
+              <LockKeyhole size={14} className="text-[rgb(var(--gold-rgb))]" />
+              <p className="font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/70">Privacy Note</p>
+            </div>
+            <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/78">
+              SHUBIQ Flow beta requests only what is needed for core workflows and reliability. Permissions remain user-controlled.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      <div className="labs-mobile-dock md:hidden">
+        <div className="labs-mobile-dock-inner">
+          <a href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Flow%20Priority%20Beta" className="labs-mobile-dock-btn labs-mobile-dock-btn-muted">
+            Priority Invite
+          </a>
+          <a href={APK_URL} className="labs-mobile-dock-btn labs-mobile-dock-btn-primary">
+            Download APK
+          </a>
+        </div>
+      </div>
     </main>
   )
 }

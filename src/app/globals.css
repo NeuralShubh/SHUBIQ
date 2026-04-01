@@ -1161,3 +1161,46 @@ select:focus-visible {
 .labs-sheen-btn:hover::after {
   transform: translateX(140%) skewX(-20deg);
 }
+
+.labs-mobile-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgb(var(--ink-rgb) / 0.92), rgb(var(--ink-rgb) / 0.64), transparent);
+  backdrop-filter: blur(10px);
+}
+
+.labs-mobile-dock-inner {
+  margin: 0 auto;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.labs-mobile-dock-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-family: var(--font-rajdhani), sans-serif;
+  font-size: 11px;
+  letter-spacing: 2.8px;
+  text-transform: uppercase;
+  border: 1px solid rgb(var(--cream-rgb) / 0.25);
+}
+
+.labs-mobile-dock-btn-primary {
+  background: rgb(var(--gold-rgb));
+  color: rgb(var(--ink-rgb));
+  border-color: rgb(var(--gold-rgb) / 0.78);
+}
+
+.labs-mobile-dock-btn-muted {
+  background: rgb(var(--cream-rgb) / 0.06);
+  color: rgb(var(--cream-rgb) / 0.88);
+}

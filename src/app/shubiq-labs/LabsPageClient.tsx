@@ -6,11 +6,15 @@ import { motion } from "framer-motion"
 import {
   ArrowRight,
   ArrowUpRight,
+  Command,
+  Gauge,
   Globe,
+  ShieldCheck,
   MonitorSmartphone,
   Sparkles,
   Smartphone,
   Target,
+  Timer,
   TrendingUp,
   Zap,
 } from "lucide-react"
@@ -124,6 +128,31 @@ export default function LabsPageClient() {
     { label: "Beta Throughput", value: "Weekly Drops", note: "New iterations shipped every week during private testing." },
     { label: "Design Standard", value: "Premium-First", note: "All interaction surfaces are tuned for speed and clarity." },
     { label: "Execution Goal", value: "Compounding", note: "Each release must increase focus quality over previous builds." },
+  ]
+
+  const commandDeck = [
+    {
+      title: "Execution Control",
+      detail: "Every active build has clearly defined rituals and measurable daily loops.",
+      icon: Command,
+    },
+    {
+      title: "Performance Index",
+      detail: "Release decisions are tied to speed, clarity, and completion quality signals.",
+      icon: Gauge,
+    },
+    {
+      title: "Stability Policy",
+      detail: "Public rollout is gated by reliability checks and sustained beta confidence.",
+      icon: ShieldCheck,
+    },
+  ]
+
+  const launchGuardrails = [
+    { label: "Rollout Window", value: "Staged Release" },
+    { label: "Feedback SLA", value: "< 72 Hours" },
+    { label: "Build Cycle", value: "Weekly Iteration" },
+    { label: "Hotfix Target", value: "Same Day" },
   ]
 
   return (
@@ -386,6 +415,72 @@ export default function LabsPageClient() {
           </div>
         </div>
 
+        <div className="mx-auto mb-10 grid max-w-6xl gap-6 lg:grid-cols-[1.12fr_0.88fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.24 }}
+            transition={{ duration: 0.55 }}
+            className="rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.93))] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Command Deck</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(30px,4.2vw,54px)] leading-[0.95]">Operational Clarity</h3>
+            <div className="mt-6 grid gap-3">
+              {commandDeck.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                  className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] p-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <item.icon size={15} className="text-[rgb(var(--gold-rgb))]" />
+                    <p className="font-cinzel text-[22px] text-cream">{item.title}</p>
+                  </div>
+                  <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/76">{item.detail}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.24 }}
+            transition={{ duration: 0.55, delay: 0.05 }}
+            className="rounded-[30px] border border-[rgb(var(--gold-rgb)/0.3)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.18),rgb(var(--surface-1-rgb)/0.84)_44%)] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Launch Guardrails</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(30px,4.2vw,54px)] leading-[0.95]">Reliability Protocol</h3>
+            <div className="mt-6 grid gap-3">
+              {launchGuardrails.map((guard, index) => (
+                <motion.div
+                  key={guard.label}
+                  initial={{ opacity: 0, x: 10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                  className="flex items-center justify-between rounded-2xl border border-[rgb(var(--gold-rgb)/0.25)] bg-[rgb(var(--gold-rgb)/0.08)] px-4 py-3"
+                >
+                  <p className="font-rajdhani text-[10px] uppercase tracking-[2.5px] text-cream/68">{guard.label}</p>
+                  <p className="font-cinzel text-[20px] text-cream">{guard.value}</p>
+                </motion.div>
+              ))}
+            </div>
+            <div className="mt-6 rounded-2xl border border-[rgb(var(--gold-rgb)/0.26)] bg-[rgb(var(--gold-rgb)/0.1)] p-4">
+              <div className="flex items-center gap-2">
+                <Timer size={14} className="text-[rgb(var(--gold-rgb))]" />
+                <p className="font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/70">Live Ops Note</p>
+              </div>
+              <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/78">
+                Private channels are reviewed continuously. High-impact issues are prioritized into immediate fixes.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
         <div className="mx-auto max-w-6xl rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.94))] p-7 sm:p-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -468,6 +563,20 @@ export default function LabsPageClient() {
           </div>
         </motion.div>
       </section>
+
+      <div className="labs-mobile-dock md:hidden">
+        <div className="labs-mobile-dock-inner">
+          <a
+            href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Priority%20Access"
+            className="labs-mobile-dock-btn labs-mobile-dock-btn-muted"
+          >
+            Join Beta
+          </a>
+          <Link href="/shubiq-labs/shubiq-flow" className="labs-mobile-dock-btn labs-mobile-dock-btn-primary">
+            Flow Beta
+          </Link>
+        </div>
+      </div>
     </main>
   )
 }
