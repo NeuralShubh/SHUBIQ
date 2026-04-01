@@ -13,6 +13,12 @@
 }
 
 @layer base {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
   :root {
     --gold-rgb: 196 164 88;
     --gold-light-rgb: 224 195 129;
