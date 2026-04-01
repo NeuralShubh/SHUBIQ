@@ -62,7 +62,7 @@ export default function Projects({ initialProjects }: ProjectsProps) {
       <div className="max-w-7xl mx-auto w-full">
         <div ref={headingRef} className="mb-10 sm:mb-12 md:mb-14 text-center">
           <SectionLabel label="Portfolio" centered />
-          <div className={`reveal ${isInView ? "in-view" : ""} flex flex-col items-center gap-4`} style={{ animationDelay: "0.1s" }}>
+          <div className={`reveal ${isInView ? "in-view" : ""} mt-4 flex flex-col items-center gap-4`} style={{ animationDelay: "0.1s" }}>
             <h2
               className="font-shubiq-heading font-normal leading-[0.92]"
               style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}
