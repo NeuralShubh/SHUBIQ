@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { motion, useInView, useReducedMotion } from "framer-motion"
+import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion"
 import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone, Wrench } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
@@ -152,6 +152,40 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
   )
 }
 
+function MotionServiceCard({
+  children,
+  offset,
+  progress,
+  reduceMotion,
+}: {
+  children: React.ReactNode
+  offset: { x: number; y: number }
+  progress: ReturnType<typeof useScroll>["scrollYProgress"]
+  reduceMotion: boolean
+}) {
+  const x = useTransform(progress, [0, 1], [offset.x, 0])
+  const y = useTransform(progress, [0, 1], [offset.y, 0])
+  const opacity = useTransform(progress, [0, 0.4, 1], [0, 1, 1])
+  const scale = useTransform(progress, [0, 1], [0.98, 1])
+
+  return (
+    <motion.div
+      style={
+        reduceMotion
+          ? undefined
+          : {
+              opacity,
+              x,
+              y,
+              scale,
+            }
+      }
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 interface ServicesProps {
   initialServices?: MainService[]
 }
@@ -160,8 +194,12 @@ export default function Services({ initialServices }: ServicesProps = {}) {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
   const inView = useInView(sectionRef, { amount: 0.35 })
-  const prefersReduced = useReducedMotion()
+  const prefersReduced = !!useReducedMotion()
   const [items, setItems] = useState<MainService[]>(initialServices?.length ? initialServices : SERVICES)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 80%", "end 20%"],
+  })
 
   useEffect(() => {
     setItems(initialServices?.length ? initialServices : SERVICES)
@@ -209,14 +247,14 @@ export default function Services({ initialServices }: ServicesProps = {}) {
           {items.map((service, i) => {
             const offset = cardOffsets[i % cardOffsets.length]
             return (
-              <motion.div
+              <MotionServiceCard
                 key={service.title}
-                initial={prefersReduced ? {} : { opacity: 0, x: offset.x, y: offset.y, scale: 0.98 }}
-                animate={inView ? { opacity: 1, x: 0, y: 0, scale: 1 } : { opacity: 0, x: offset.x, y: offset.y, scale: 0.98 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: prefersReduced ? 0 : 0.08 * i }}
+                offset={offset}
+                progress={scrollYProgress}
+                reduceMotion={prefersReduced}
               >
                 <TiltCard service={service} index={i} />
-              </motion.div>
+              </MotionServiceCard>
             )
           })}
         </div>
