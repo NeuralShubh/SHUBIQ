@@ -184,7 +184,7 @@ export default function Hero() {
 
           return (
             <motion.h1
-              className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-0 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.16em] md:px-[0.26em] inline-block overflow-visible max-w-full break-normal whitespace-normal -mt-[10px]"
+              className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-0 perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.16em] md:px-[0.26em] inline-block overflow-visible max-w-full break-normal whitespace-normal -mt-[10px]"
               style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
               variants={containerVariants}
               initial="hidden"
@@ -195,7 +195,7 @@ export default function Hero() {
                   key={letter}
                   custom={i}
                   variants={letterVariants}
-                  className="inline-block"
+                  className="inline-block text-gradient-gold"
                 >
                   {letter}
                 </motion.span>
