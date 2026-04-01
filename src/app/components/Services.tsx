@@ -105,12 +105,10 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
 
       <div className="relative z-10 h-full flex flex-col">
-        <div className="flex items-center justify-between mb-5 sm:mb-6">
-          <div className="flex items-center">
-            <span className="w-10 h-10 sm:w-9 sm:h-9 border border-gold/45 bg-gold/[0.07] flex items-center justify-center text-gold/95">
-              <Icon size={18} strokeWidth={1.9} />
-            </span>
-          </div>
+        <div className="flex items-center justify-center sm:justify-between mb-5 sm:mb-6 gap-3">
+          <span className="w-10 h-10 sm:w-9 sm:h-9 border border-gold/45 bg-gold/[0.07] flex items-center justify-center text-gold/95">
+            <Icon size={18} strokeWidth={1.9} />
+          </span>
           <span
             className="font-rajdhani text-[13px] sm:text-[12px] leading-none tracking-[2.2px] uppercase text-gold/85 border px-3 py-1.5 bg-gold/[0.05]"
             style={{ borderColor: "rgb(var(--gold-rgb) / 0.45)" }}
@@ -118,19 +116,19 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
             {service.tag}
           </span>
         </div>
-        <div className="h-px w-full bg-gradient-to-r from-gold/20 via-gold/8 to-transparent mb-5 sm:mb-6" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/20 to-transparent sm:from-gold/20 sm:via-gold/8 sm:to-transparent mb-5 sm:mb-6" />
 
-        <h3 className="font-cinzel text-[28px] sm:text-[34px] leading-[1.06] sm:leading-[1.05] text-cream mb-3 sm:mb-4">
+        <h3 className="font-cinzel text-[26px] sm:text-[34px] leading-[1.06] sm:leading-[1.05] text-cream mb-3 sm:mb-4 text-center sm:text-left">
           {service.title}
         </h3>
 
-        <p className="font-cormorant text-[18px] sm:text-[17px] text-cream/72 leading-[1.72] sm:leading-[1.65] max-w-[52ch]">
+        <p className="font-cormorant text-[17px] sm:text-[17px] text-cream/72 leading-[1.72] sm:leading-[1.65] text-center sm:text-left">
           {service.desc}
         </p>
 
         <Link
           href={href}
-          className="mt-7 sm:mt-8 pt-2 flex items-center justify-end gap-2 text-gold/78 group-hover:text-gold transition-colors duration-300"
+          className="mt-7 sm:mt-8 pt-2 flex items-center justify-center sm:justify-end gap-2 text-gold/78 group-hover:text-gold transition-colors duration-300"
         >
           <span className="w-8 h-px bg-current/70 transition-all duration-300 group-hover:w-10" />
           <span className="font-rajdhani text-[13px] sm:text-[12px] tracking-[3px] uppercase">Learn More</span>
