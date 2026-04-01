@@ -259,6 +259,22 @@ function StudioHero() {
               </span>
             </div>
             <h3 className="mt-2 font-cinzel text-[34px] leading-[0.96] text-cream">Build Momentum</h3>
+            <div className="mt-3 flex flex-wrap justify-end gap-2">
+              <motion.span
+                className="rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--surface-2-rgb)/0.76)] px-3 py-1.5"
+                animate={{ y: [0, -2, 0] }}
+                transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <span className="font-rajdhani text-[8px] tracking-[2.2px] uppercase text-gold/72">Process Locked</span>
+              </motion.span>
+              <motion.span
+                className="rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--surface-2-rgb)/0.76)] px-3 py-1.5"
+                animate={{ y: [0, -2, 0] }}
+                transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+              >
+                <span className="font-rajdhani text-[8px] tracking-[2.2px] uppercase text-gold/72">Launch Ready</span>
+              </motion.span>
+            </div>
 
             <div className="mt-5 rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] p-4">
               <p className="font-rajdhani text-[9px] tracking-[2.4px] uppercase text-cream/58">Signal Stream</p>
@@ -307,22 +323,6 @@ function StudioHero() {
               ))}
             </div>
           </div>
-
-          <motion.div
-            className="absolute -left-5 top-1/2 hidden -translate-y-1/2 rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--surface-2-rgb)/0.76)] px-3 py-1.5 lg:block"
-            animate={{ x: [0, 8, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <span className="font-rajdhani text-[8px] tracking-[2.2px] uppercase text-gold/72">Process Locked</span>
-          </motion.div>
-
-          <motion.div
-            className="absolute -right-4 bottom-8 hidden rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--surface-2-rgb)/0.76)] px-3 py-1.5 lg:block"
-            animate={{ x: [0, -10, 0] }}
-            transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-          >
-            <span className="font-rajdhani text-[8px] tracking-[2.2px] uppercase text-gold/72">Launch Ready</span>
-          </motion.div>
         </motion.div>
       </div>
 
