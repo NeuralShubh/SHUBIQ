@@ -1,11 +1,10 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
+import { motion, useInView, useReducedMotion } from "framer-motion"
 import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone, Wrench } from "lucide-react"
-import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
-import { useInViewOnce } from "../lib/gsap-hooks"
 import SectionLabel from "./SectionLabel"
 
 const SERVICE_ICONS = [Code2, LayoutDashboard, Bot, Smartphone]
@@ -104,6 +103,17 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
     >
       <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300" />
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
+      <span
+        className={[
+          "corner-cut",
+          index === 0 ? "corner-cut-br" : "",
+          index === 1 ? "corner-cut-bl" : "",
+          index === 2 ? "corner-cut-tr" : "",
+          index === 3 ? "corner-cut-tl" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      />
 
       <div className="relative z-10 h-full flex flex-col">
         <div className="flex items-center justify-between mb-5 sm:mb-6">
@@ -147,13 +157,25 @@ interface ServicesProps {
 }
 
 export default function Services({ initialServices }: ServicesProps = {}) {
-  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
+  const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(sectionRef, { amount: 0.35 })
+  const prefersReduced = useReducedMotion()
   const [items, setItems] = useState<MainService[]>(initialServices?.length ? initialServices : SERVICES)
 
   useEffect(() => {
     setItems(initialServices?.length ? initialServices : SERVICES)
   }, [initialServices])
+
+  const cardOffsets = useMemo(
+    () => [
+      { x: -80, y: -60 },
+      { x: 80, y: -60 },
+      { x: -80, y: 60 },
+      { x: 80, y: 60 },
+    ],
+    [],
+  )
 
   return (
     <section id="services" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[96px] px-4 sm:px-6 relative overflow-hidden">
@@ -167,7 +189,13 @@ export default function Services({ initialServices }: ServicesProps = {}) {
       />
 
       <div className="max-w-7xl mx-auto w-full">
-        <div ref={headingRef} className={`reveal ${isInView ? "in-view" : ""} mb-10 sm:mb-12 md:mb-14 text-center`} style={{ animationDelay: "0.1s" }}>
+        <motion.div
+          ref={headingRef}
+          className="mb-10 sm:mb-12 md:mb-14 text-center"
+          initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
           <SectionLabel label="Services" centered />
           <div className="mt-4 flex flex-col items-center gap-4">
             <h2 className="font-shubiq-heading font-normal leading-[0.92]" style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}>
@@ -175,15 +203,23 @@ export default function Services({ initialServices }: ServicesProps = {}) {
               <span className="text-gold">Do</span>
             </h2>
           </div>
-        </div>
+        </motion.div>
 
-        <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">
-          {items.map((service, i) => (
-            <StaggerItem key={service.title}>
-              <TiltCard service={service} index={i} />
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
+        <div className="grid md:grid-cols-2 gap-5 sm:gap-7 lg:gap-8">
+          {items.map((service, i) => {
+            const offset = cardOffsets[i % cardOffsets.length]
+            return (
+              <motion.div
+                key={service.title}
+                initial={prefersReduced ? {} : { opacity: 0, x: offset.x, y: offset.y, scale: 0.98 }}
+                animate={inView ? { opacity: 1, x: 0, y: 0, scale: 1 } : { opacity: 0, x: offset.x, y: offset.y, scale: 0.98 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: prefersReduced ? 0 : 0.08 * i }}
+              >
+                <TiltCard service={service} index={i} />
+              </motion.div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )

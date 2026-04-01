@@ -1073,3 +1073,11 @@ select:focus-visible {
   border-color: rgb(var(--gold-rgb) / 0.5);
   background: rgb(var(--cream-rgb) / 0.05);
 }
+
+/* Services corner cuts */
+.corner-cut { position: absolute; width: 22px; height: 22px; background: rgb(var(--ink-rgb)); transform: rotate(45deg); opacity: 0.9; }
+.corner-cut-tl { top: -10px; left: -10px; }
+.corner-cut-tr { top: -10px; right: -10px; }
+.corner-cut-bl { bottom: -10px; left: -10px; }
+.corner-cut-br { bottom: -10px; right: -10px; }
+
