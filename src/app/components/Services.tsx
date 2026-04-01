@@ -103,17 +103,6 @@ function TiltCard({ service, index }: { service: MainService; index: number }) {
     >
       <div ref={glowRef} className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300" />
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
-      <span
-        className={[
-          "corner-cut",
-          index === 0 ? "corner-cut-br" : "",
-          index === 1 ? "corner-cut-bl" : "",
-          index === 2 ? "corner-cut-tr" : "",
-          index === 3 ? "corner-cut-tl" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      />
 
       <div className="relative z-10 h-full flex flex-col">
         <div className="flex items-center justify-between mb-5 sm:mb-6">
@@ -229,11 +218,11 @@ export default function Services({ initialServices }: ServicesProps = {}) {
           <SectionLabel label="Services" centered />
         </div>
         <div className="relative">
+          {/* Full-width horizontal rule at the row gap */}
+          <div className="absolute left-0 right-0 top-1/2 h-px bg-gold/22 z-10 pointer-events-none" />
           <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-            <div className="relative px-6 sm:px-8 py-5 sm:py-6">
-              <div className="absolute -left-6 top-1/2 h-px w-6 bg-gold/45" />
-              <div className="absolute -right-6 top-1/2 h-px w-6 bg-gold/45" />
-              <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
+            <div className="relative px-8 sm:px-10 py-4 sm:py-5 bg-[rgb(var(--ink-rgb))]">
+              <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center whitespace-nowrap" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
                 <span className="text-cream/90">What We </span>
                 <span className="text-gold">Do</span>
               </h2>
