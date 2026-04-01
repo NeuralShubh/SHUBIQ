@@ -51,213 +51,135 @@ function SectionLabel({ label, centered = false }: { label: string; centered?: b
 // â”€â”€â”€ Hero Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StudioHero() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const gridRef = useRef<HTMLDivElement>(null)
-  const badgeRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const bodyRef = useRef<HTMLParagraphElement>(null)
-  const ctaRef = useRef<HTMLDivElement>(null)
-  const tagsRef = useRef<HTMLDivElement>(null)
-  const statsRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const { gsap } = await import("gsap")
-        const { ScrollTrigger } = await import("gsap/ScrollTrigger")
-        gsap.registerPlugin(ScrollTrigger)
-
-        const titleLines = titleRef.current?.querySelectorAll<HTMLElement>(".hero-title-line") ?? []
-        const titleLineOne = titleLines[0]
-        const titleLineTwo = titleLines[1]
-        const ctaItems = ctaRef.current?.children ?? []
-        const statItems = statsRef.current?.children ?? []
-        const tagItems = tagsRef.current?.querySelectorAll<HTMLElement>("[data-tag-item]") ?? []
-
-        const tl = gsap.timeline({ delay: 0.05 })
-        tl.fromTo(
-          badgeRef.current,
-          { y: -10, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.55, ease: "power2.out" },
-          0,
-        )
-          .fromTo(
-            titleLineOne,
-            { yPercent: 110 },
-            { yPercent: 0, duration: 0.75, ease: "power2.out" },
-            0.2,
-          )
-          .fromTo(
-            titleLineTwo,
-            { yPercent: 110 },
-            { yPercent: 0, duration: 0.75, ease: "power2.out" },
-            0.4,
-          )
-          .fromTo(
-            bodyRef.current,
-            { y: 16, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
-            0.6,
-          )
-          .fromTo(
-            ctaItems,
-            { y: 14, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", stagger: 0.12 },
-            0.8,
-          )
-          .fromTo(
-            statItems,
-            { y: 14, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.12 },
-            1,
-          )
-          .fromTo(
-            tagItems,
-            { x: -14, opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.45, ease: "power2.out", stagger: 0.15 },
-            1.2,
-          )
-
-        if (titleRef.current) {
-          gsap.to(titleRef.current, {
-            y: -2,
-            duration: 7,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          })
-        }
-
-        if (gridRef.current) {
-          gsap.to(gridRef.current, {
-            yPercent: -3,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.8,
-            },
-          })
-        }
-      } catch {
-        // no-op
-      }
-    }
-
-    init()
-  }, [])
-
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
-    <section
-      ref={sectionRef}
-      id="studio-hero"
-      className="relative min-h-[100vh] max-md:min-h-[92vh] flex flex-col items-center justify-center overflow-hidden px-5 sm:px-6 pt-16 max-md:pt-[5.25rem] md:pt-[4.5rem] pb-12 max-md:pb-10 md:pb-14"
-    >
-      <div
-        ref={gridRef}
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgb(var(--gold-rgb) / 0.022) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--gold-rgb) / 0.022) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 56%, rgb(0 0 0 / 0.22) 100%)",
-        }}
-      />
+    <section id="studio-hero" className="relative min-h-[100vh] overflow-hidden px-5 sm:px-6 pt-[7.25rem] pb-12 md:pb-14">
+      <div className="studio-hero-mesh pointer-events-none absolute inset-0" />
+      <div className="studio-hero-beam pointer-events-none absolute inset-0" />
+      <div className="studio-hero-ring studio-hero-ring-a pointer-events-none absolute left-[14%] top-[18%]" />
+      <div className="studio-hero-ring studio-hero-ring-b pointer-events-none absolute right-[12%] top-[20%]" />
 
-      <div className="relative z-10 text-center max-w-[54rem] max-md:max-w-[34rem] mx-auto">
-        <div ref={badgeRef} className="inline-flex items-center gap-2.5 border border-gold/14 bg-gold/[0.025] px-4 max-md:px-3.5 py-2 mb-7 max-md:mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold/65" />
-          <span className="font-rajdhani text-[10px] sm:text-[12px] tracking-[2.5px] sm:tracking-[4px] uppercase text-gold/66">SHUBIQ Studio - Digital Engineering</span>
-        </div>
-
-        <h1
-          ref={titleRef}
-          className="font-cinzel font-black leading-[1.06] max-md:leading-[1.04] mb-7 max-md:mb-5"
-        >
-          <span className="block overflow-hidden mb-2.5">
-            <span className="hero-title-line inline-block text-[clamp(32px,7vw,84px)] tracking-[1.2px] sm:tracking-[2.2px] md:tracking-[2.6px] text-cream/95">Digital Systems.</span>
-          </span>
-          <span className="block overflow-hidden">
-            <span className="hero-title-line inline-block text-[clamp(27px,5.7vw,68px)] tracking-[0.8px] sm:tracking-[1.3px] md:tracking-[1.5px] text-cream/94">
-              <span className="text-gold/88">Engineered</span> to Win.
-            </span>
-          </span>
-        </h1>
-
-        <p
-          ref={bodyRef}
-          className="font-cormorant text-cream/80 leading-[1.75] sm:leading-[1.86] max-w-[610px] mx-auto mb-10 max-md:mb-8 px-1 sm:px-2"
-          style={{ fontSize: "clamp(15px, 1.34vw, 19px)", opacity: 0 }}
-        >
-          SHUBIQ Studio partners with founders and brands to design and engineer high-performance digital systems built for scale, speed, and long-term competitive advantage.
-        </p>
-
-        <div ref={ctaRef} className="flex max-sm:flex-col gap-4 sm:gap-5 justify-center flex-wrap mb-12 max-md:mb-9 max-sm:w-full max-sm:max-w-[22rem] max-sm:mx-auto">
-          <MagneticButton
-            onClick={() => scrollTo("studio-pricing")}
-            data-cursor="View"
-            className="font-rajdhani text-[13px] sm:text-[14px] tracking-[2.6px] sm:tracking-[3px] uppercase px-8 sm:px-11 py-[10px] font-semibold bg-gold text-ink border border-gold/70 md:hover:bg-gold-light md:hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] transition-all duration-300 max-sm:w-full"
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+        <div>
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-6 inline-flex items-center gap-2.5 border border-gold/20 bg-gold/[0.05] px-4 py-2"
           >
-            View Pricing
-          </MagneticButton>
-          <MagneticButton
-            onClick={() => scrollTo("studio-contact-anchor")}
-            data-cursor="Start"
-            className="font-rajdhani text-[13px] sm:text-[14px] tracking-[2.6px] sm:tracking-[3px] uppercase px-8 sm:px-11 py-[10px] font-semibold border border-gold/24 text-cream md:hover:border-gold/72 md:hover:bg-gold/[0.04] transition-all duration-300 max-sm:w-full"
-          >
-            Start a Project
-          </MagneticButton>
-        </div>
+            <span className="h-1.5 w-1.5 rounded-full bg-gold/75" />
+            <span className="font-rajdhani text-[10px] tracking-[3.2px] uppercase text-gold/75">SHUBIQ Studio - Digital Engineering</span>
+          </motion.div>
 
-        <div ref={tagsRef} className="mt-0 mb-14 max-md:mb-9" style={{ opacity: 0.9 }}>
-          <p className="font-rajdhani text-[8px] sm:text-[9px] tracking-[4.3px] uppercase text-gold/40 mb-3">
-            ENGINEERING DISCIPLINES
-          </p>
-          <div className="flex items-center justify-center flex-wrap gap-x-2.5 sm:gap-x-3.5 gap-y-2">
-            {["ARCHITECTURE", "INFRASTRUCTURE", "INTELLIGENCE", "PERFORMANCE"].map((item, index) => (
-              <div key={item} className="flex items-center" data-tag-item>
-                {index > 0 && <span className="w-[1px] h-3 bg-gold/20 mr-2.5 sm:mr-3.5" />}
-                <span className="font-rajdhani text-[8px] sm:text-[10px] tracking-[2px] sm:tracking-[3px] uppercase text-gold/54">{item}</span>
-              </div>
+          <motion.h1
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.72, delay: 0.08 }}
+            className="font-cinzel font-black leading-[0.95] text-cream/95"
+            style={{ fontSize: "clamp(36px, 6.8vw, 90px)" }}
+          >
+            Design.
+            <span className="block text-gold/92">Engineer. Scale.</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.62, delay: 0.18 }}
+            className="mt-5 max-w-[660px] font-cormorant leading-[1.72] text-cream/80"
+            style={{ fontSize: "clamp(16px, 1.32vw, 21px)" }}
+          >
+            SHUBIQ Studio helps ambitious brands launch premium digital systems with speed and precision. We combine strategy, design,
+            and engineering into one outcome-driven build process.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.28 }}
+            className="mt-8 flex flex-wrap gap-4"
+          >
+            <MagneticButton
+              onClick={() => scrollTo("studio-pricing")}
+              data-cursor="View"
+              className="labs-sheen-btn font-rajdhani text-[13px] tracking-[2.8px] uppercase px-8 sm:px-10 py-[10px] font-semibold bg-gold text-ink border border-gold/70 md:hover:bg-gold-light md:hover:shadow-[0_0_28px_rgb(var(--gold-rgb)/0.28)] transition-all duration-300"
+            >
+              View Pricing
+            </MagneticButton>
+            <MagneticButton
+              onClick={() => scrollTo("studio-contact-anchor")}
+              data-cursor="Start"
+              className="font-rajdhani text-[13px] tracking-[2.8px] uppercase px-8 sm:px-10 py-[10px] font-semibold border border-gold/32 text-cream md:hover:border-gold/72 md:hover:bg-gold/[0.05] transition-all duration-300"
+            >
+              Start a Project
+            </MagneticButton>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.38 }}
+            className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2"
+          >
+            {["Architecture", "UX Systems", "Performance", "Conversion"].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--cream-rgb)/0.04)] px-3 py-1 font-rajdhani text-[9px] tracking-[2.2px] uppercase text-cream/70"
+              >
+                {item}
+              </span>
             ))}
-          </div>
+          </motion.div>
         </div>
 
-        <div className="w-full max-w-[760px] mx-auto h-px bg-[rgb(var(--gold-rgb)/0.1)]" />
-        <div
-          ref={statsRef}
-          className="pt-7 max-md:pt-6 grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-9 max-w-[760px] mx-auto"
+        <motion.div
+          initial={{ opacity: 0, x: 22 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.68, delay: 0.18 }}
+          className="relative"
         >
-          {[
-            { val: <NumberTicker value={10} suffix="+" />, label: "Production Systems" },
-            { val: <NumberTicker value={3} suffix="+" />, label: "Years Engineering" },
-            { val: "Precision-Driven", label: "Delivery" },
-          ].map((s) => (
-            <div key={s.label} className="text-center min-h-[72px] flex flex-col items-center justify-start">
-              <div className="font-cinzel font-black text-gold/88 leading-none" style={{ fontSize: "clamp(24px, 3.35vw, 34px)" }}>
-                {s.val}
-              </div>
-              <div className="font-rajdhani text-[9px] tracking-[2.1px] uppercase text-cream/44 mt-0.5">{s.label}</div>
+          <div className="rounded-[28px] border border-[rgb(var(--gold-rgb)/0.3)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.15),rgb(var(--surface-1-rgb)/0.86)_46%)] p-6 sm:p-7">
+            <p className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/72">Studio Command View</p>
+            <h3 className="mt-2 font-cinzel text-[34px] leading-[0.96] text-cream">Build Momentum</h3>
+            <div className="mt-6 grid gap-3">
+              {[
+                { label: "Systems Shipped", value: <NumberTicker value={10} suffix="+" /> },
+                { label: "Delivery Rhythm", value: "Weekly" },
+                { label: "Response Standard", value: "< 24h" },
+              ].map((row, index) => (
+                <motion.div
+                  key={row.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.3 + index * 0.08 }}
+                  className="rounded-2xl border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--gold-rgb)/0.08)] px-4 py-3"
+                >
+                  <p className="font-rajdhani text-[9px] tracking-[2.2px] uppercase text-cream/62">{row.label}</p>
+                  <p className="mt-1 font-cinzel text-[26px] text-cream">{row.value}</p>
+                </motion.div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2">
-        <div className="w-px h-10 overflow-hidden">
-          <div className="w-full h-full bg-gradient-to-b from-gold to-transparent animate-scroll-line" />
-        </div>
+          <motion.div
+            className="absolute -left-4 top-8 rounded-xl border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-2-rgb)/0.75)] px-3 py-2"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <p className="font-rajdhani text-[8px] tracking-[2px] uppercase text-gold/70">Strategy</p>
+          </motion.div>
+
+          <motion.div
+            className="absolute -right-4 bottom-10 rounded-xl border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-2-rgb)/0.75)] px-3 py-2"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+          >
+            <p className="font-rajdhani text-[8px] tracking-[2px] uppercase text-gold/70">Launch</p>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )
@@ -849,6 +771,4 @@ export default function StudioPage() {
     </>
   )
 }
-
-
 

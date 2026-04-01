@@ -1251,3 +1251,72 @@ select:focus-visible {
     transform: translate3d(20px, -16px, 0) scale(1.06);
   }
 }
+
+.studio-hero-mesh {
+  background-image:
+    linear-gradient(rgb(var(--gold-rgb) / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--gold-rgb) / 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 45% 40%, black 34%, transparent 78%);
+  opacity: 0.22;
+}
+
+.studio-hero-beam {
+  background:
+    linear-gradient(115deg, transparent 30%, rgb(var(--gold-rgb) / 0.14) 48%, transparent 66%);
+  transform: translateX(-70%);
+  animation: studioBeamSweep 8.5s ease-in-out infinite;
+  opacity: 0.36;
+}
+
+.studio-hero-ring {
+  width: 250px;
+  height: 250px;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--gold-rgb) / 0.2);
+  box-shadow: 0 0 0 1px rgb(var(--gold-rgb) / 0.08) inset;
+}
+
+.studio-hero-ring-a {
+  animation: studioRingSpin 22s linear infinite;
+}
+
+.studio-hero-ring-b {
+  width: 170px;
+  height: 170px;
+  border-style: dashed;
+  animation: studioRingSpinReverse 16s linear infinite;
+}
+
+@keyframes studioBeamSweep {
+  0% {
+    transform: translateX(-70%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.36;
+  }
+  50% {
+    transform: translateX(0%);
+    opacity: 0.24;
+  }
+  80% {
+    opacity: 0.36;
+  }
+  100% {
+    transform: translateX(70%);
+    opacity: 0;
+  }
+}
+
+@keyframes studioRingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes studioRingSpinReverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
