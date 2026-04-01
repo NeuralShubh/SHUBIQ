@@ -29,12 +29,9 @@ export default function About() {
               className={`reveal ${isInView ? "in-view" : ""} about-mobile-heading font-cinzel font-normal mb-4 sm:mb-6 md:mb-8 leading-[0.92] md:leading-[0.89] tracking-[0.35px] md:tracking-[0.5px]`}
               style={{ fontSize: "clamp(32px, 10vw, 78px)", animationDelay: "0.1s" }}
             >
-              <span className="text-cream/92 text-[0.9em]">About</span>
-              <br />
-              <span className="text-gold tracking-[1.4px] md:tracking-[1.8px] -mt-[5px] block">SHUBIQ</span>
+              <span className="text-cream/92 text-[0.9em]">About </span>
+              <span className="text-gold tracking-[1.4px] md:tracking-[1.8px]">SHUBIQ</span>
             </h2>
-
-            <div className="w-16 sm:w-24 h-px bg-gradient-to-r from-gold/90 via-gold/45 to-transparent mb-6 sm:mb-7 md:mb-9" />
 
             <div className="about-mobile-copy-wrap mt-6 sm:mt-7 md:mt-0 space-y-4 sm:space-y-5 md:space-y-5 max-w-[580px]">
               <p
@@ -89,14 +86,6 @@ export default function About() {
                   </StaggerItem>
                 ))}
               </StaggerContainer>
-              <div className="mt-6 border-t border-[rgb(var(--cream-rgb)/0.12)] pt-5">
-                <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-cream/50 mb-2">Execution Stack</div>
-                <div className="flex flex-wrap gap-2 text-[10px] font-rajdhani tracking-[2.2px] uppercase text-gold/70">
-                  {["Next.js", "TypeScript", "Supabase", "GSAP", "AI Systems", "Performance UX"].map((tag) => (
-                    <span key={tag} className="border border-gold/25 px-3 py-1">{tag}</span>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>
