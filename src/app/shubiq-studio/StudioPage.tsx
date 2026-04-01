@@ -595,6 +595,22 @@ function StudioPricing({ content }: { content: StudioContent }) {
             <div className="font-rajdhani text-[10px] sm:text-[11px] tracking-[2.8px] sm:tracking-[3.6px] uppercase text-gold/55">
               {pricingMode === "web" ? `${content.pricingMicroLabel} • India Market Adjusted` : "App Build Investment • India Market Adjusted"}
             </div>
+
+            <div className="mt-5 grid gap-2 sm:grid-cols-3">
+              {[
+                { label: "No Hidden Fees", icon: Shield },
+                { label: "Clear Scope First", icon: Layers },
+                { label: "Fast Start Window", icon: Rocket },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--cream-rgb)/0.04)] px-3 py-1.5"
+                >
+                  <item.icon size={12} className="text-gold/75" />
+                  <span className="font-rajdhani text-[9px] tracking-[2px] uppercase text-cream/66">{item.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
 
@@ -709,6 +725,21 @@ function StudioPricing({ content }: { content: StudioContent }) {
             </div>
           </button>
         </div>
+
+        <div className="mt-6 rounded-2xl border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--gold-rgb)/0.08)] p-4">
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[
+              { title: "Transparent Scope", copy: "Final quote is mapped to deliverables before execution begins." },
+              { title: "Execution Cadence", copy: "Milestones are tracked weekly with visible progress checkpoints." },
+              { title: "Outcome Priority", copy: "Design and engineering decisions are tied to growth outcomes." },
+            ].map((item) => (
+              <div key={item.title} className="rounded-xl border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgb(var(--gold-rgb)/0.06)] p-3">
+                <p className="font-cinzel text-[20px] text-cream">{item.title}</p>
+                <p className="mt-1 font-cormorant text-[16px] leading-[1.45] text-cream/76">{item.copy}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -822,6 +853,34 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
             <p className="font-cormorant text-cream/68 leading-[1.52] sm:leading-[1.65] max-w-[500px] mx-auto" style={{ fontSize: "clamp(14px, 1.3vw, 19px)" }}>
               {content.contactDescription}
             </p>
+          </div>
+
+          <div className="mb-6 grid gap-3 sm:grid-cols-3">
+            {[
+              { title: "Step 1", text: "Share your brief and goals." },
+              { title: "Step 2", text: "Get roadmap + exact scope." },
+              { title: "Step 3", text: "Kickoff in aligned timeline." },
+            ].map((item) => (
+              <div key={item.title} className="rounded-xl border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--cream-rgb)/0.03)] p-3 text-center">
+                <p className="font-rajdhani text-[9px] tracking-[2.2px] uppercase text-gold/70">{item.title}</p>
+                <p className="mt-1 font-cormorant text-[16px] leading-[1.4] text-cream/78">{item.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mb-6 flex flex-wrap justify-center gap-2">
+            <a
+              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Studio%20Project%20Inquiry"
+              className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
+            >
+              Email Directly
+            </a>
+            <a
+              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Studio%20Schedule%20Call"
+              className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
+            >
+              Request Call
+            </a>
           </div>
 
           {sent ? (
