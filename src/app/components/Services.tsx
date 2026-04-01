@@ -214,25 +214,19 @@ export default function Services({ initialServices }: ServicesProps = {}) {
       />
 
       <div className="max-w-6xl mx-auto w-full">
-        <div className="flex flex-col items-center gap-4 sm:gap-5 mb-10 sm:mb-12">
+        <div className="flex flex-col items-center gap-4 sm:gap-5 mb-6 sm:mb-8">
           <SectionLabel label="Services" centered />
+          <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(32px, 5vw, 62px)" }}>
+            <span className="text-cream/90">What We </span>
+            <span className="text-gold">Do</span>
+          </h2>
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
-        <div className="relative">
-          {/* Full-width horizontal rule at the row gap */}
-          <div className="absolute left-0 right-0 top-1/2 h-px bg-gold/22 z-10 pointer-events-none" />
-          <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-            <div className="relative px-8 sm:px-10 py-4 sm:py-5">
-              <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center whitespace-nowrap" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
-                <span className="text-cream/90">What We </span>
-                <span className="text-gold">Do</span>
-              </h2>
-            </div>
-          </div>
 
-          <div className="grid md:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
-            {items.map((service, i) => {
-              const offset = cardOffsets[i % cardOffsets.length]
-              return (
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
+          {items.map((service, i) => {
+            const offset = cardOffsets[i % cardOffsets.length]
+            return (
               <MotionServiceCard
                 key={service.title}
                 offset={offset}
@@ -243,7 +237,6 @@ export default function Services({ initialServices }: ServicesProps = {}) {
               </MotionServiceCard>
             )
           })}
-          </div>
         </div>
       </div>
     </section>
