@@ -860,16 +860,16 @@
   position: relative;
 }
 
-/* Tablet-only home hero alignment: keep desktop unchanged */
-@media (min-width: 768px) and (max-width: 1366px) and (hover: none) and (pointer: coarse) {
+/* Tablet-like viewport home hero alignment: keep large desktop unchanged */
+@media (min-width: 768px) and (max-width: 1300px) and (max-height: 1000px) {
   #home {
     align-items: flex-start !important;
-    padding-top: 5vh !important;
+    padding-top: 3.5vh !important;
     padding-bottom: 24px !important;
   }
 
   #home .hero-content {
-    transform: translateY(-2vh);
+    transform: translateY(-5vh);
   }
 }
 
