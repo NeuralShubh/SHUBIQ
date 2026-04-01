@@ -135,10 +135,10 @@ export default function Hero() {
         {/* SHUBIQ wordmark — blur + scale entrance */}
         <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em] relative">
           <div
-            className="absolute inset-0 -z-10 blur-2xl opacity-60"
+            className="absolute inset-0 -z-10 blur-2xl opacity-40"
             style={{
               background:
-                "radial-gradient(circle, rgb(var(--gold-rgb) / 0.35) 0%, transparent 70%)",
+                "radial-gradient(circle, rgb(var(--gold-rgb) / 0.22) 0%, transparent 70%)",
               transform: "translateY(6px)",
             }}
           />
