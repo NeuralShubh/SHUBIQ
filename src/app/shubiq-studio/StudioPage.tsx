@@ -36,6 +36,64 @@ const PRICING_ICON_MAP = {
   shield: Shield,
 } as const
 
+const APP_PLANS: StudioContent["plans"] = [
+  {
+    id: "app-basic",
+    tier: "BASIC",
+    tag: "APP BASIC",
+    bestFor: "Best for MVP app launches",
+    price: 29999,
+    meta: "One-time • Ready in 3-4 weeks",
+    features: [
+      "Android app (core screens)",
+      "Auth + profile setup",
+      "Basic admin-ready backend",
+      "Performance optimization baseline",
+      "1 month support",
+    ],
+    cta: "Get Started",
+    highlighted: false,
+    icon: "zap",
+  },
+  {
+    id: "app-standard",
+    tier: "STANDARD",
+    tag: "APP STANDARD",
+    bestFor: "Best for growth-stage product apps",
+    price: 59999,
+    meta: "One-time • Ready in 5-7 weeks",
+    features: [
+      "Advanced app flows + API integration",
+      "Analytics and event tracking",
+      "Push notification setup",
+      "Role-based dashboard",
+      "3 months support",
+    ],
+    cta: "Get Started",
+    highlighted: true,
+    icon: "trending",
+  },
+  {
+    id: "app-premium",
+    tier: "PREMIUM",
+    tag: "APP PREMIUM",
+    bestFor: "Best for full-scale app systems",
+    price: 89999,
+    priceSuffix: "+",
+    meta: "One-time • Ready in 7-10 weeks",
+    features: [
+      "Custom architecture + scalable modules",
+      "Payments / subscription integration",
+      "Advanced security and monitoring",
+      "Launch + store-readiness support",
+      "6 months support",
+    ],
+    cta: "Get Started",
+    highlighted: false,
+    icon: "shield",
+  },
+]
+
 // â”€â”€â”€ Section Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function SectionLabel({ label, centered = false }: { label: string; centered?: boolean }) {
@@ -139,7 +197,7 @@ function StudioHero() {
           initial={{ opacity: 0, x: 22 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.68, delay: 0.18 }}
-          className="relative"
+          className="relative mt-2 lg:mt-0"
         >
           <div className="rounded-[28px] border border-[rgb(var(--gold-rgb)/0.3)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.15),rgb(var(--surface-1-rgb)/0.86)_46%)] p-6 sm:p-7">
             <p className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/72">Studio Command View</p>
@@ -163,22 +221,6 @@ function StudioHero() {
               ))}
             </div>
           </div>
-
-          <motion.div
-            className="absolute -left-4 top-8 rounded-xl border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-2-rgb)/0.75)] px-3 py-2"
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <p className="font-rajdhani text-[8px] tracking-[2px] uppercase text-gold/70">Strategy</p>
-          </motion.div>
-
-          <motion.div
-            className="absolute -right-4 bottom-10 rounded-xl border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-2-rgb)/0.75)] px-3 py-2"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-          >
-            <p className="font-rajdhani text-[8px] tracking-[2px] uppercase text-gold/70">Launch</p>
-          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -369,8 +411,10 @@ function StudioPortfolio() {
 // â”€â”€â”€ Pricing Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StudioPricing({ content }: { content: StudioContent }) {
+  const [pricingMode, setPricingMode] = useState<"web" | "app">("web")
   const scrollToContact = () => document.getElementById("studio-contact-anchor")?.scrollIntoView({ behavior: "smooth" })
-  const pricingPlans = content.plans?.length ? content.plans : DEFAULT_STUDIO_CONTENT.plans
+  const webPlans = content.plans?.length ? content.plans : DEFAULT_STUDIO_CONTENT.plans
+  const pricingPlans = pricingMode === "web" ? webPlans : APP_PLANS
 
   return (
     <section id="studio-pricing" className="py-[96px] max-md:py-16 max-sm:py-14 px-5 max-sm:px-3.5 sm:px-6 relative overflow-hidden">
@@ -397,8 +441,30 @@ function StudioPricing({ content }: { content: StudioContent }) {
             <p className="font-cormorant text-cream/88 leading-[1.58] sm:leading-[1.62] max-w-[700px] mx-auto mb-4 sm:mb-5" style={{ fontSize: "clamp(15px, 1.1vw, 18px)" }}>
               {content.pricingDescription}
             </p>
+            <div className="mb-4 inline-flex rounded-full border border-[rgb(var(--cream-rgb)/0.18)] bg-[rgb(var(--surface-2-rgb)/0.65)] p-1">
+              <button
+                onClick={() => setPricingMode("web")}
+                className={`rounded-full px-4 py-2 font-rajdhani text-[10px] tracking-[2.4px] uppercase transition-colors ${
+                  pricingMode === "web"
+                    ? "bg-gold text-ink"
+                    : "text-cream/72 hover:text-gold"
+                }`}
+              >
+                Web Projects
+              </button>
+              <button
+                onClick={() => setPricingMode("app")}
+                className={`rounded-full px-4 py-2 font-rajdhani text-[10px] tracking-[2.4px] uppercase transition-colors ${
+                  pricingMode === "app"
+                    ? "bg-gold text-ink"
+                    : "text-cream/72 hover:text-gold"
+                }`}
+              >
+                App Projects
+              </button>
+            </div>
             <div className="font-rajdhani text-[10px] sm:text-[11px] tracking-[2.8px] sm:tracking-[3.6px] uppercase text-gold/55">
-              {content.pricingMicroLabel}
+              {pricingMode === "web" ? `${content.pricingMicroLabel} • India Market Adjusted` : "App Build Investment • India Market Adjusted"}
             </div>
           </div>
         </motion.div>
@@ -771,4 +837,3 @@ export default function StudioPage() {
     </>
   )
 }
-

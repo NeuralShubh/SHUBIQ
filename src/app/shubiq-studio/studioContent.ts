@@ -46,7 +46,7 @@ export const DEFAULT_STUDIO_CONTENT: StudioContent = {
       tier: "BASIC",
       tag: "BASIC",
       bestFor: "Best for first-phase businesses",
-      price: 19999,
+      price: 14999,
       meta: "One-time • Ready in 5-7 days",
       features: [
         "3 custom-designed pages",
@@ -64,7 +64,7 @@ export const DEFAULT_STUDIO_CONTENT: StudioContent = {
       tier: "STANDARD",
       tag: "STANDARD",
       bestFor: "Best for growing local businesses",
-      price: 39999,
+      price: 29999,
       meta: "One-time • Ready in 10-14 days",
       features: [
         "5 custom-designed pages",
@@ -82,7 +82,7 @@ export const DEFAULT_STUDIO_CONTENT: StudioContent = {
       tier: "PREMIUM",
       tag: "PREMIUM",
       bestFor: "Best for scale-focused businesses",
-      price: 59999,
+      price: 44999,
       priceSuffix: "+",
       meta: "One-time • Ready in 14-21 days",
       features: [

@@ -1270,11 +1270,12 @@ select:focus-visible {
 }
 
 .studio-hero-ring {
-  width: 250px;
-  height: 250px;
+  width: 210px;
+  height: 210px;
   border-radius: 999px;
-  border: 1px solid rgb(var(--gold-rgb) / 0.2);
+  border: 1px solid rgb(var(--gold-rgb) / 0.15);
   box-shadow: 0 0 0 1px rgb(var(--gold-rgb) / 0.08) inset;
+  opacity: 0.75;
 }
 
 .studio-hero-ring-a {
@@ -1282,8 +1283,8 @@ select:focus-visible {
 }
 
 .studio-hero-ring-b {
-  width: 170px;
-  height: 170px;
+  width: 150px;
+  height: 150px;
   border-style: dashed;
   animation: studioRingSpinReverse 16s linear infinite;
 }
@@ -1318,5 +1319,11 @@ select:focus-visible {
 @keyframes studioRingSpinReverse {
   to {
     transform: rotate(-360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .studio-hero-ring {
+    display: none;
   }
 }
