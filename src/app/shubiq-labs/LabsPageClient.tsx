@@ -155,8 +155,15 @@ export default function LabsPageClient() {
     { label: "Hotfix Target", value: "Same Day" },
   ]
 
+  const matrixRows = [
+    { category: "Stage", flow: "Live Beta", atlas: "In Dev", pulse: "Planned" },
+    { category: "Core Mode", flow: "Tasks + Habits + Focus", atlas: "Knowledge Graph", pulse: "Life Performance OS" },
+    { category: "Platform", flow: "Android", atlas: "Web App", pulse: "Cross Platform" },
+    { category: "Release Path", flow: "Play Store", atlas: "Private Alpha", pulse: "Concept Validation" },
+  ]
+
   return (
-    <main className="labs-premium-bg relative min-h-screen overflow-hidden text-cream">
+    <main className="labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
       <div className="labs-noise-layer pointer-events-none absolute inset-0" />
       <div className="labs-glow-orb pointer-events-none absolute -left-28 top-28 h-72 w-72 rounded-full" />
@@ -479,6 +486,44 @@ export default function LabsPageClient() {
               </p>
             </div>
           </motion.div>
+        </div>
+
+        <div className="mx-auto mb-10 max-w-6xl rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.94))] p-6 sm:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.24 }}
+            transition={{ duration: 0.55 }}
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Comparison Matrix</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(30px,4.2vw,54px)] leading-[0.95]">Choose Your Track</h3>
+          </motion.div>
+          <div className="mt-6 overflow-x-auto rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)]">
+            <table className="min-w-full border-collapse">
+              <thead className="bg-[rgb(var(--cream-rgb)/0.04)]">
+                <tr>
+                  {["Category", "SHUBIQ Flow", "SHUBIQ Atlas", "SHUBIQ Pulse"].map((head) => (
+                    <th
+                      key={head}
+                      className="border-b border-[rgb(var(--cream-rgb)/0.14)] px-4 py-3 text-left font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/66"
+                    >
+                      {head}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {matrixRows.map((row) => (
+                  <tr key={row.category} className="odd:bg-[rgb(var(--cream-rgb)/0.015)]">
+                    <td className="border-b border-[rgb(var(--cream-rgb)/0.12)] px-4 py-3 font-cinzel text-[19px] text-cream/90">{row.category}</td>
+                    <td className="border-b border-[rgb(var(--cream-rgb)/0.12)] px-4 py-3 font-cormorant text-[18px] text-cream/78">{row.flow}</td>
+                    <td className="border-b border-[rgb(var(--cream-rgb)/0.12)] px-4 py-3 font-cormorant text-[18px] text-cream/78">{row.atlas}</td>
+                    <td className="border-b border-[rgb(var(--cream-rgb)/0.12)] px-4 py-3 font-cormorant text-[18px] text-cream/78">{row.pulse}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="mx-auto max-w-6xl rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.94))] p-7 sm:p-10">

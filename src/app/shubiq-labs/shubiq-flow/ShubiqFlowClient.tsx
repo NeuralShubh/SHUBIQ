@@ -76,9 +76,15 @@ const PERMISSION_MATRIX = [
   },
 ]
 
+const BETA_TIMELINE = [
+  { date: "January 2026", title: "Closed Internal Preview", detail: "Core loops validated with early users and reliability telemetry." },
+  { date: "March 2026", title: "Private APK Channel", detail: "Public-facing download flow launched for trusted tester cohort." },
+  { date: "Q2 2026", title: "Play Store Release Window", detail: "Launch after stability threshold and onboarding validation." },
+]
+
 export default function ShubiqFlowDownloadPage() {
   return (
-    <main className="labs-premium-bg relative min-h-screen overflow-hidden text-cream">
+    <main className="labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
       <div className="labs-noise-layer pointer-events-none absolute inset-0" />
       <div className="labs-glow-orb pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full" />
@@ -360,6 +366,36 @@ export default function ShubiqFlowDownloadPage() {
               </a>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      <section className="relative px-5 pb-20 sm:px-8 sm:pb-24">
+        <div className="mx-auto max-w-6xl rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.94))] p-6 sm:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55 }}
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Release Timeline</p>
+            <h3 className="mt-2 font-shubiq-heading text-[clamp(30px,4.2vw,54px)] leading-[0.95]">Beta To Public Launch</h3>
+          </motion.div>
+          <div className="mt-6 grid gap-3">
+            {BETA_TIMELINE.map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, x: 10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, delay: index * 0.06 }}
+                className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] p-4"
+              >
+                <p className="font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/62">{item.date}</p>
+                <p className="mt-1 font-cinzel text-[22px] text-cream">{item.title}</p>
+                <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/77">{item.detail}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -1204,3 +1204,9 @@ select:focus-visible {
   background: rgb(var(--cream-rgb) / 0.06);
   color: rgb(var(--cream-rgb) / 0.88);
 }
+
+@media (max-width: 767px) {
+  .labs-dock-spacer {
+    padding-bottom: 86px;
+  }
+}
