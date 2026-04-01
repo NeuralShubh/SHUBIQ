@@ -242,9 +242,9 @@ export default function Hero() {
         {/* CTA Buttons */}
         <motion.div
           className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-12 sm:mt-14 mb-5 sm:mb-6"
-          initial={prefersReduced ? {} : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.45, ease: EASE_PREMIUM }}
+          initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
+          animate={wordmarkReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.55, delay: 0.85, ease: EASE_PREMIUM }}
         >
           <button
             type="button"
@@ -267,9 +267,9 @@ export default function Hero() {
         {/* Social links */}
         <motion.div
           className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-8 mt-6 sm:mt-8 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
-          initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.6, ease: EASE_PREMIUM }}
+          initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
+          animate={wordmarkReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.55, delay: 1.05, ease: EASE_PREMIUM }}
         >
           {SOCIAL_LINKS.map((s) => (
             <div key={s.label} className="flex items-center justify-center">
