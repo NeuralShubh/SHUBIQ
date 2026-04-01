@@ -26,8 +26,11 @@ export default function NumberTicker({
   const [display, setDisplay] = useState(prefersReduced ? value : 0)
   const ref = useRef<HTMLSpanElement>(null)
   const started = useRef(false)
+  const rafId = useRef<number | null>(null)
 
   useEffect(() => {
+    started.current = false
+
     if (prefersReduced) {
       setDisplay(value)
       return
@@ -48,22 +51,28 @@ export default function NumberTicker({
         const elapsed = Date.now() - startTime
         if (elapsed < scrambleDuration) {
           setDisplay(Math.floor(Math.random() * value * 1.3))
-          requestAnimationFrame(tick)
+          rafId.current = requestAnimationFrame(tick)
         } else if (elapsed < duration) {
           const countProgress = (elapsed - scrambleDuration) / countDuration
           const eased = 1 - Math.pow(1 - countProgress, 3)
           setDisplay(Math.round(eased * value))
-          requestAnimationFrame(tick)
+          rafId.current = requestAnimationFrame(tick)
         } else {
           setDisplay(value)
+          rafId.current = null
         }
       }
-      requestAnimationFrame(tick)
+      rafId.current = requestAnimationFrame(tick)
     }
 
     if (typeof start === "boolean") {
       if (start) run()
-      return
+      return () => {
+        if (rafId.current !== null) {
+          cancelAnimationFrame(rafId.current)
+          rafId.current = null
+        }
+      }
     }
 
     const el = ref.current
@@ -79,7 +88,13 @@ export default function NumberTicker({
     )
 
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current)
+        rafId.current = null
+      }
+    }
   }, [value, duration, prefersReduced, start])
 
   return (
