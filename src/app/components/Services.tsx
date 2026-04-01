@@ -198,8 +198,6 @@ export default function Services({ initialServices }: ServicesProps = {}) {
     target: sectionRef,
     offset: ["start 80%", "end 20%"],
   })
-  const headingOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0])
-  const headingY = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [24, 0, -24])
 
   useEffect(() => {
     setItems(initialServices?.length ? initialServices : SERVICES)
@@ -231,18 +229,8 @@ export default function Services({ initialServices }: ServicesProps = {}) {
           <SectionLabel label="Services" centered />
         </div>
         <div className="relative">
-          <motion.div
-            className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none"
-            style={
-              prefersReduced
-                ? undefined
-                : {
-                    opacity: headingOpacity,
-                    y: headingY,
-                  }
-            }
-          >
-            <div className="relative px-6 sm:px-8 py-5 sm:py-6 border border-gold/25 bg-[rgb(var(--ink-rgb))]">
+          <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+            <div className="relative px-6 sm:px-8 py-5 sm:py-6">
               <div className="absolute -left-6 top-1/2 h-px w-6 bg-gold/45" />
               <div className="absolute -right-6 top-1/2 h-px w-6 bg-gold/45" />
               <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
@@ -250,9 +238,9 @@ export default function Services({ initialServices }: ServicesProps = {}) {
                 <span className="text-gold">Do</span>
               </h2>
             </div>
-          </motion.div>
+          </div>
 
-          <div className="grid md:grid-cols-2 gap-3 sm:gap-4 lg:gap-5 pt-16 sm:pt-20">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
             {items.map((service, i) => {
               const offset = cardOffsets[i % cardOffsets.length]
               return (
