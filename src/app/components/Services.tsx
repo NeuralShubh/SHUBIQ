@@ -221,7 +221,6 @@ export default function Services({ initialServices }: ServicesProps = {}) {
             <span className="text-cream/90">What We </span>
             <span className="text-gold">Do</span>
           </h2>
-          <div className="w-16 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
 
         <div className="grid md:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
