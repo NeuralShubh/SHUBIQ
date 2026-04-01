@@ -142,15 +142,67 @@ export default function Hero() {
               transform: "translateY(6px)",
             }}
           />
-        <motion.h1
-          className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-0 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.16em] md:px-[0.26em] inline-block overflow-visible max-w-full break-normal whitespace-normal -mt-[10px]"
-          style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
-          initial={prefersReduced ? {} : { opacity: 0, scale: 0.98, filter: "blur(4px)", y: 16 }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }}
-          transition={{ duration: 0.6, ease: EASE_PREMIUM }}
-          >
-            SHUBIQ
-          </motion.h1>
+        {(() => {
+          const letters = ["S", "H", "U", "B", "I", "Q"]
+          const offsets = [
+            { x: -36, y: -28, rotate: -6 },
+            { x: 28, y: -32, rotate: 5 },
+            { x: -18, y: 26, rotate: -4 },
+            { x: 22, y: 18, rotate: 6 },
+            { x: -26, y: -10, rotate: -3 },
+            { x: 30, y: 10, rotate: 4 },
+          ]
+          const containerVariants = {
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.08,
+                delayChildren: 0.25,
+              },
+            },
+          }
+          const letterVariants = {
+            hidden: (i: number) =>
+              prefersReduced
+                ? { opacity: 1 }
+                : {
+                    opacity: 0,
+                    x: offsets[i].x,
+                    y: offsets[i].y,
+                    rotate: offsets[i].rotate,
+                    filter: "blur(6px)",
+                  },
+            visible: {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              rotate: 0,
+              filter: "blur(0px)",
+              transition: { duration: 0.7, ease: EASE_PREMIUM },
+            },
+          }
+
+          return (
+            <motion.h1
+              className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-0 text-gradient-gold perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.16em] md:px-[0.26em] inline-block overflow-visible max-w-full break-normal whitespace-normal -mt-[10px]"
+              style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {letters.map((letter, i) => (
+                <motion.span
+                  key={letter}
+                  custom={i}
+                  variants={letterVariants}
+                  className="inline-block"
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </motion.h1>
+          )
+        })()}
         </div>
 
         {/* Tagline with lines */}
