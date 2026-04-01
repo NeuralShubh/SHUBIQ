@@ -41,10 +41,26 @@ const SUPPORT_PROTOCOL = [
   "Critical issues: mark message subject with [Critical] for same-day triage.",
 ]
 
+const BETA_FAQ = [
+  {
+    q: "Will my beta data carry into the Play Store release?",
+    a: "Current plan is account continuity for qualified beta channels, with migration instructions shared before public launch.",
+  },
+  {
+    q: "How often are beta builds published?",
+    a: "Build cadence is typically weekly during active cycles, with additional hotfix pushes for blocking issues.",
+  },
+  {
+    q: "Can I suggest workflow-level features?",
+    a: "Yes. Product decisions in this phase are heavily feedback-driven, especially around task and focus rituals.",
+  },
+]
+
 export default function ShubiqFlowDownloadPage() {
   return (
     <main className="labs-premium-bg relative min-h-screen overflow-hidden text-cream">
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
+      <div className="labs-noise-layer pointer-events-none absolute inset-0" />
       <div className="labs-glow-orb pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full" />
 
       <section className="relative px-5 pb-14 pt-[120px] sm:px-8 sm:pt-[140px]">
@@ -89,7 +105,7 @@ export default function ShubiqFlowDownloadPage() {
           >
             <a
               href={APK_URL}
-              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
+              className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
             >
               <ArrowDownCircle size={16} />
               Download APK
@@ -258,11 +274,71 @@ export default function ShubiqFlowDownloadPage() {
 
             <a
               href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Flow%20Beta%20Feedback"
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
+              className="labs-sheen-btn mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
             >
               Send Beta Feedback
               <ArrowRight size={14} />
             </a>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="relative px-5 pb-20 sm:px-8 sm:pb-24">
+        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55 }}
+            className="rounded-[28px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.88),rgb(var(--surface-0-rgb)/0.92))] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Beta FAQ</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(28px,3.8vw,50px)] leading-[0.95]">Quick Answers</h3>
+            <div className="mt-6 space-y-3">
+              {BETA_FAQ.map((item, index) => (
+                <motion.div
+                  key={item.q}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                  className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] p-4"
+                >
+                  <p className="font-cinzel text-[20px] leading-[1.12] text-cream">{item.q}</p>
+                  <p className="mt-2 font-cormorant text-[18px] leading-[1.45] text-cream/77">{item.a}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55, delay: 0.05 }}
+            className="rounded-[28px] border border-[rgb(var(--gold-rgb)/0.32)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.18),rgb(var(--surface-1-rgb)/0.84)_44%)] p-6 sm:p-8"
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Priority Channel</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(28px,3.8vw,50px)] leading-[0.95]">Get Fast-Track Access</h3>
+            <p className="mt-4 font-cormorant text-[20px] leading-[1.45] text-cream/80">
+              If you want earliest builds and direct product feedback loops, request the priority beta channel.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a
+                href={APK_URL}
+                className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <ArrowDownCircle size={16} />
+                Download Latest APK
+              </a>
+              <a
+                href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Flow%20Priority%20Beta"
+                className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.28)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
+              >
+                Request Priority Invite
+                <ArrowRight size={14} />
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>

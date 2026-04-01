@@ -120,9 +120,16 @@ export default function LabsPageClient() {
     },
   ]
 
+  const signalBoard = [
+    { label: "Beta Throughput", value: "Weekly Drops", note: "New iterations shipped every week during private testing." },
+    { label: "Design Standard", value: "Premium-First", note: "All interaction surfaces are tuned for speed and clarity." },
+    { label: "Execution Goal", value: "Compounding", note: "Each release must increase focus quality over previous builds." },
+  ]
+
   return (
     <main className="labs-premium-bg relative min-h-screen overflow-hidden text-cream">
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
+      <div className="labs-noise-layer pointer-events-none absolute inset-0" />
       <div className="labs-glow-orb pointer-events-none absolute -left-28 top-28 h-72 w-72 rounded-full" />
       <div className="labs-glow-orb-2 pointer-events-none absolute right-[-110px] top-[420px] h-96 w-96 rounded-full" />
 
@@ -168,7 +175,7 @@ export default function LabsPageClient() {
           >
             <Link
               href="/shubiq-labs/shubiq-flow"
-              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
+              className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
             >
               Explore Flow Beta
               <ArrowRight size={14} />
@@ -342,12 +349,41 @@ export default function LabsPageClient() {
             </div>
             <a
               href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Track%20Request"
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
+              className="labs-sheen-btn mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
             >
               Request Track Access
               <ArrowUpRight size={14} />
             </a>
           </motion.div>
+        </div>
+
+        <div className="mx-auto mb-10 max-w-6xl rounded-[30px] border border-[rgb(var(--gold-rgb)/0.28)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.16),rgb(var(--surface-1-rgb)/0.86)_42%)] p-6 sm:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.24 }}
+            transition={{ duration: 0.55 }}
+          >
+            <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Signal Board</p>
+            <h3 className="mt-3 font-shubiq-heading text-[clamp(30px,4.1vw,54px)] leading-[0.95]">Execution Signals We Track</h3>
+          </motion.div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {signalBoard.map((signal, index) => (
+              <motion.div
+                key={signal.label}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, delay: index * 0.06 }}
+                className="rounded-2xl border border-[rgb(var(--gold-rgb)/0.25)] bg-[rgb(var(--gold-rgb)/0.08)] p-4"
+              >
+                <p className="font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/64">{signal.label}</p>
+                <p className="mt-2 font-cinzel text-[24px] leading-[1.05] text-cream">{signal.value}</p>
+                <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/77">{signal.note}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         <div className="mx-auto max-w-6xl rounded-[30px] border border-[rgb(var(--cream-rgb)/0.14)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.9),rgb(var(--surface-0-rgb)/0.94))] p-7 sm:p-10">
@@ -399,6 +435,38 @@ export default function LabsPageClient() {
             })}
           </div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.55, delay: 0.06 }}
+          className="mx-auto mt-10 max-w-6xl overflow-hidden rounded-[30px] border border-[rgb(var(--gold-rgb)/0.36)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.2),rgb(var(--surface-1-rgb)/0.84)_42%)] p-7 sm:p-10"
+        >
+          <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Phase Access</p>
+          <h3 className="mt-3 max-w-3xl font-shubiq-heading text-[clamp(32px,4.7vw,62px)] leading-[0.94]">
+            Want Direct Access To The Next SHUBIQ Labs Build?
+          </h3>
+          <p className="mt-4 max-w-3xl font-cormorant text-[20px] leading-[1.45] text-cream/80">
+            Join the private rollout and help shape features before public launch. Feedback loops are direct and implementation is fast.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a
+              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Priority%20Access"
+              className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              Request Priority Access
+              <ArrowUpRight size={14} />
+            </a>
+            <Link
+              href="/shubiq-labs/shubiq-flow"
+              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.28)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
+            >
+              View Live Beta
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+        </motion.div>
       </section>
     </main>
   )

@@ -1112,6 +1112,16 @@ select:focus-visible {
   mask-image: radial-gradient(circle at 50% 38%, black 36%, transparent 78%);
 }
 
+.labs-noise-layer {
+  opacity: 0.06;
+  background-image:
+    radial-gradient(rgb(var(--cream-rgb) / 0.8) 0.4px, transparent 0.4px),
+    radial-gradient(rgb(var(--cream-rgb) / 0.45) 0.4px, transparent 0.4px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 1px;
+  mix-blend-mode: soft-light;
+}
+
 .labs-glow-orb,
 .labs-glow-orb-2 {
   background: radial-gradient(circle, rgb(var(--gold-rgb) / 0.34) 0%, transparent 62%);
@@ -1130,4 +1140,24 @@ select:focus-visible {
   100% {
     transform: translate3d(24px, -18px, 0) scale(1.08);
   }
+}
+
+.labs-sheen-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.labs-sheen-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%) skewX(-20deg);
+  background: linear-gradient(100deg, transparent 15%, rgb(255 255 255 / 0.28), transparent 60%);
+  transition: transform 0.65s ease;
+  z-index: -1;
+}
+
+.labs-sheen-btn:hover::after {
+  transform: translateX(140%) skewX(-20deg);
 }
