@@ -1098,13 +1098,13 @@ select:focus-visible {
 /* Labs premium surface */
 .labs-premium-bg {
   background:
-    radial-gradient(75% 70% at 15% 12%, rgb(var(--gold-rgb) / 0.12), transparent 58%),
-    radial-gradient(80% 65% at 86% 28%, rgb(var(--gold-rgb) / 0.09), transparent 62%),
+    radial-gradient(75% 70% at 15% 12%, rgb(var(--gold-rgb) / 0.065), transparent 60%),
+    radial-gradient(80% 65% at 86% 28%, rgb(var(--gold-rgb) / 0.045), transparent 64%),
     linear-gradient(180deg, rgb(var(--surface-0-rgb)), rgb(var(--ink-rgb)));
 }
 
 .labs-grid-overlay {
-  opacity: 0.25;
+  opacity: 0.16;
   background-image:
     linear-gradient(rgb(var(--cream-rgb) / 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgb(var(--cream-rgb) / 0.06) 1px, transparent 1px);
@@ -1113,7 +1113,7 @@ select:focus-visible {
 }
 
 .labs-noise-layer {
-  opacity: 0.06;
+  opacity: 0.04;
   background-image:
     radial-gradient(rgb(var(--cream-rgb) / 0.8) 0.4px, transparent 0.4px),
     radial-gradient(rgb(var(--cream-rgb) / 0.45) 0.4px, transparent 0.4px);
@@ -1124,13 +1124,15 @@ select:focus-visible {
 
 .labs-glow-orb,
 .labs-glow-orb-2 {
-  background: radial-gradient(circle, rgb(var(--gold-rgb) / 0.34) 0%, transparent 62%);
-  filter: blur(18px);
-  animation: labsDrift 9s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgb(var(--gold-rgb) / 0.14) 0%, transparent 68%);
+  filter: blur(26px);
+  animation: labsDrift 12s ease-in-out infinite alternate;
+  opacity: 0.62;
 }
 
 .labs-glow-orb-2 {
-  animation-duration: 12s;
+  animation-duration: 15s;
+  opacity: 0.48;
 }
 
 @keyframes labsDrift {
