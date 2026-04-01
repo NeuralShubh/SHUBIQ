@@ -221,7 +221,7 @@ export default function Services({ initialServices }: ServicesProps = {}) {
           {/* Full-width horizontal rule at the row gap */}
           <div className="absolute left-0 right-0 top-1/2 h-px bg-gold/22 z-10 pointer-events-none" />
           <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-            <div className="relative px-8 sm:px-10 py-4 sm:py-5 bg-[rgb(var(--ink-rgb))]">
+            <div className="relative px-8 sm:px-10 py-4 sm:py-5">
               <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center whitespace-nowrap" style={{ fontSize: "clamp(28px, 5vw, 58px)" }}>
                 <span className="text-cream/90">What We </span>
                 <span className="text-gold">Do</span>
