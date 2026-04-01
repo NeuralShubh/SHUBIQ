@@ -1,7 +1,7 @@
 ﻿"use client"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { motion, useReducedMotion } from "framer-motion"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import StudioNavbar from "./StudioNavbar"
 import Footer from "../components/Footer"
 import ScrollReveal from "../components/ScrollReveal"
@@ -109,18 +109,41 @@ function SectionLabel({ label, centered = false }: { label: string; centered?: b
 // â”€â”€â”€ Hero Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StudioHero() {
+  const [wordIndex, setWordIndex] = useState(0)
+  const [signalIndex, setSignalIndex] = useState(0)
+  const focusWords = ["Conversion", "Authority", "Momentum"]
+  const signals = [
+    { label: "Current Lane", value: "Design + Engineering" },
+    { label: "Delivery Pulse", value: "Weekly Iteration" },
+    { label: "Outcome Target", value: "Higher Revenue Signal" },
+  ]
+
+  useEffect(() => {
+    const wordTimer = window.setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % focusWords.length)
+    }, 2600)
+    const signalTimer = window.setInterval(() => {
+      setSignalIndex((prev) => (prev + 1) % signals.length)
+    }, 2900)
+    return () => {
+      window.clearInterval(wordTimer)
+      window.clearInterval(signalTimer)
+    }
+  }, [focusWords.length, signals.length])
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
-    <section id="studio-hero" className="relative min-h-[100vh] overflow-hidden px-5 sm:px-6 pt-[7.25rem] pb-12 md:pb-14">
+    <section id="studio-hero" className="relative min-h-[100vh] overflow-hidden px-5 sm:px-6 pt-[7.2rem] pb-12 md:pb-14">
       <div className="studio-hero-mesh pointer-events-none absolute inset-0" />
       <div className="studio-hero-beam pointer-events-none absolute inset-0" />
+      <div className="studio-hero-aurora pointer-events-none absolute inset-0" />
       <div className="studio-hero-ring studio-hero-ring-a pointer-events-none absolute left-[14%] top-[18%]" />
       <div className="studio-hero-ring studio-hero-ring-b pointer-events-none absolute right-[12%] top-[20%]" />
 
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.04fr_0.96fr] lg:gap-12">
         <div>
           <motion.div
             initial={{ opacity: 0, y: 14 }}
@@ -153,6 +176,27 @@ function StudioHero() {
             SHUBIQ Studio helps ambitious brands launch premium digital systems with speed and precision. We combine strategy, design,
             and engineering into one outcome-driven build process.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.58, delay: 0.24 }}
+            className="mt-4 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--gold-rgb)/0.08)] px-3 py-1.5"
+          >
+            <span className="font-rajdhani text-[9px] tracking-[2.5px] uppercase text-cream/62">Built For</span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={focusWords[wordIndex]}
+                initial={{ opacity: 0, y: 8, filter: "blur(2px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -8, filter: "blur(2px)" }}
+                transition={{ duration: 0.35 }}
+                className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/80"
+              >
+                {focusWords[wordIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -199,14 +243,37 @@ function StudioHero() {
           transition={{ duration: 0.68, delay: 0.18 }}
           className="relative mt-2 lg:mt-0"
         >
-          <div className="rounded-[28px] border border-[rgb(var(--gold-rgb)/0.3)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.15),rgb(var(--surface-1-rgb)/0.86)_46%)] p-6 sm:p-7">
-            <p className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/72">Studio Command View</p>
+          <div className="studio-hero-panel rounded-[28px] border border-[rgb(var(--gold-rgb)/0.3)] bg-[linear-gradient(165deg,rgb(var(--gold-rgb)/0.15),rgb(var(--surface-1-rgb)/0.86)_46%)] p-6 sm:p-7">
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/72">Studio Command View</p>
+              <span className="rounded-full border border-[rgb(var(--gold-rgb)/0.26)] bg-[rgb(var(--gold-rgb)/0.08)] px-3 py-1 font-rajdhani text-[8px] tracking-[2.2px] uppercase text-cream/70">
+                Live Mode
+              </span>
+            </div>
             <h3 className="mt-2 font-cinzel text-[34px] leading-[0.96] text-cream">Build Momentum</h3>
+
+            <div className="mt-5 rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] p-4">
+              <p className="font-rajdhani text-[9px] tracking-[2.4px] uppercase text-cream/58">Signal Stream</p>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={signals[signalIndex].label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.35 }}
+                  className="mt-2"
+                >
+                  <p className="font-cinzel text-[22px] leading-[1.02] text-cream">{signals[signalIndex].value}</p>
+                  <p className="font-rajdhani text-[8px] tracking-[2.1px] uppercase text-gold/68">{signals[signalIndex].label}</p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
             <div className="mt-6 grid gap-3">
               {[
-                { label: "Systems Shipped", value: <NumberTicker value={10} suffix="+" /> },
-                { label: "Delivery Rhythm", value: "Weekly" },
-                { label: "Response Standard", value: "< 24h" },
+                { label: "Systems Shipped", value: <NumberTicker value={10} suffix="+" />, level: "84%" },
+                { label: "Delivery Rhythm", value: "Weekly", level: "73%" },
+                { label: "Response Standard", value: "< 24h", level: "91%" },
               ].map((row, index) => (
                 <motion.div
                   key={row.label}
@@ -215,14 +282,65 @@ function StudioHero() {
                   transition={{ duration: 0.45, delay: 0.3 + index * 0.08 }}
                   className="rounded-2xl border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--gold-rgb)/0.08)] px-4 py-3"
                 >
-                  <p className="font-rajdhani text-[9px] tracking-[2.2px] uppercase text-cream/62">{row.label}</p>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-rajdhani text-[9px] tracking-[2.2px] uppercase text-cream/62">{row.label}</p>
+                    <span className="font-rajdhani text-[8px] tracking-[2px] uppercase text-gold/70">{row.level}</span>
+                  </div>
                   <p className="mt-1 font-cinzel text-[26px] text-cream">{row.value}</p>
+                  <div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-[rgb(var(--cream-rgb)/0.14)]">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: row.level }}
+                      transition={{ duration: 1.1, delay: 0.45 + index * 0.08, ease: "easeOut" }}
+                      className="h-full bg-[linear-gradient(90deg,rgb(var(--gold-rgb)),rgb(var(--gold-light-rgb)))]"
+                    />
+                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
+
+          <motion.div
+            className="absolute -left-5 top-1/2 hidden -translate-y-1/2 rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--surface-2-rgb)/0.76)] px-3 py-1.5 lg:block"
+            animate={{ x: [0, 8, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <span className="font-rajdhani text-[8px] tracking-[2.2px] uppercase text-gold/72">Process Locked</span>
+          </motion.div>
+
+          <motion.div
+            className="absolute -right-4 bottom-8 hidden rounded-full border border-[rgb(var(--gold-rgb)/0.3)] bg-[rgb(var(--surface-2-rgb)/0.76)] px-3 py-1.5 lg:block"
+            animate={{ x: [0, -10, 0] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+          >
+            <span className="font-rajdhani text-[8px] tracking-[2.2px] uppercase text-gold/72">Launch Ready</span>
+          </motion.div>
         </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, delay: 0.5 }}
+        className="relative z-10 mx-auto mt-10 grid max-w-7xl gap-3 sm:grid-cols-3"
+      >
+        {[
+          { label: "Build Discipline", value: "Design + Code Parallel" },
+          { label: "Average Kickoff", value: "Within 72 Hours" },
+          { label: "Project Direction", value: "Outcome-First Execution" },
+        ].map((item, index) => (
+          <motion.div
+            key={item.label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.42, delay: 0.6 + index * 0.08 }}
+            className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] px-4 py-3"
+          >
+            <p className="font-rajdhani text-[9px] tracking-[2.3px] uppercase text-cream/60">{item.label}</p>
+            <p className="mt-1 font-cormorant text-[18px] text-cream/80">{item.value}</p>
+          </motion.div>
+        ))}
+      </motion.div>
     </section>
   )
 }
