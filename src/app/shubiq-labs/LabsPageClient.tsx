@@ -189,9 +189,9 @@ export default function LabsPageClient() {
                   <div
                     className={`group relative border rounded-sm p-6 sm:p-7 overflow-hidden transition-all duration-300 ${
                       isLive
-                        ? "gradient-border border-gold/45 bg-card-soft shadow-[0_28px_60px_rgb(0_0_0_/_0.34)] hover:shadow-[0_34px_70px_rgb(0_0_0_/_0.42)] hover:-translate-y-1"
+                        ? "gradient-border border-gold/45 bg-card-soft shadow-[0_24px_50px_rgb(0_0_0_/_0.32)] hover:shadow-[0_30px_60px_rgb(0_0_0_/_0.4)] hover:-translate-y-1"
                         : isInDev
-                          ? "border-[rgb(var(--cream-rgb)/0.2)] bg-[rgb(var(--surface-2-rgb)/0.6)] opacity-90 hover:-translate-y-0.5"
+                          ? "border-[rgb(var(--cream-rgb)/0.22)] bg-[rgb(var(--surface-2-rgb)/0.6)] opacity-90 hover:-translate-y-0.5"
                           : "border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.5)] opacity-65"
                     }`}
                     data-cursor={isLive ? "Open" : undefined}
@@ -204,40 +204,31 @@ export default function LabsPageClient() {
                           : "linear-gradient(160deg, rgb(var(--gold-rgb)/0.06), transparent 50%)",
                       }}
                     />
-                    {isPlanned && (
-                      <div className="absolute inset-0 flex items-center justify-center text-cream/10 font-rajdhani text-[32px] tracking-[6px] uppercase">
-                        Coming Soon
-                      </div>
-                    )}
-
-                    <div className="relative z-10">
-                      <div className="flex items-start justify-between mb-5">
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
-                          <div className={`w-12 h-12 border flex items-center justify-center ${isLive ? "border-gold/35 bg-gold/[0.12]" : "border-gold/25 bg-gold/[0.08]"}`}>
+                          <div className={`w-10 h-10 border flex items-center justify-center ${isLive ? "border-gold/35 bg-gold/[0.12]" : "border-gold/25 bg-gold/[0.08]"}`}>
                             <ProductIcon category={product.category} />
                           </div>
-                          <div>
-                            <div className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/70">{product.category}</div>
-                            <div className="mt-1">{badge}</div>
-                          </div>
+                          <div className="font-rajdhani text-[10px] tracking-[2.8px] uppercase text-gold/70">{product.category}</div>
                         </div>
-                        <div className="text-right">
-                          <div className="font-cinzel text-[20px] text-cream/90 flex items-center justify-end gap-2">
-                            {product.name}
-                            {isPlanned && <Lock size={14} className="text-cream/50" />}
-                            {isInDev && <Clock size={14} className="text-amber-400" />}
-                          </div>
-                          <div className="font-rajdhani text-[11px] tracking-[2px] uppercase text-gold/70">{product.subtitle}</div>
-                        </div>
+                        {badge}
                       </div>
 
-                      <p className="font-cormorant text-cream/75 leading-[1.6] mb-5">{product.desc}</p>
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <div className="font-cinzel text-[22px] sm:text-[20px] text-cream/92">{product.name}</div>
+                        <div className="font-rajdhani text-[11px] tracking-[2px] uppercase text-gold/70">{product.subtitle}</div>
+                      </div>
+
+                      <p className="font-cormorant text-cream/75 leading-[1.6] mb-5">
+                        {product.desc}
+                      </p>
 
                       <div className="flex flex-wrap gap-2 mb-6">
                         {product.highlights.map((h) => (
                           <span
                             key={h}
-                            className="px-3 py-1 text-[10px] tracking-[2px] uppercase font-rajdhani border border-gold/25 text-gold/75"
+                            className="px-3 py-1 text-[10px] tracking-[2px] uppercase font-rajdhani border border-gold/20 text-gold/75"
                           >
                             {h}
                           </span>
@@ -245,7 +236,7 @@ export default function LabsPageClient() {
                       </div>
 
                       {isInDev && (
-                        <div className="mb-5">
+                        <div className="mb-6">
                           <div className="flex items-center justify-between text-[10px] uppercase tracking-[2px] font-rajdhani text-amber-300/80 mb-2">
                             <span>Progress</span>
                             <span>40%</span>
@@ -256,22 +247,24 @@ export default function LabsPageClient() {
                         </div>
                       )}
 
-                      {product.disabled ? (
-                        <button
-                          className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.2)] px-5 py-3 text-cream/60 cursor-not-allowed"
-                          disabled
-                        >
-                          {product.cta}
-                        </button>
-                      ) : (
-                        <Link
-                          href={product.href}
-                          className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/60 px-5 py-3 text-cream hover:text-gold hover:border-gold transition-all duration-300"
-                        >
-                          {product.cta}
-                          <ArrowRight size={14} />
-                        </Link>
-                      )}
+                      <div className="mt-auto">
+                        {product.disabled ? (
+                          <button
+                            className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-[rgb(var(--cream-rgb)/0.2)] px-5 py-3 text-cream/60 cursor-not-allowed"
+                            disabled
+                          >
+                            {product.cta}
+                          </button>
+                        ) : (
+                          <Link
+                            href={product.href}
+                            className="inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase border border-gold/60 px-5 py-3 text-cream hover:text-gold hover:border-gold transition-all duration-300"
+                          >
+                            {product.cta}
+                            <ArrowRight size={14} />
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </StaggerItem>
