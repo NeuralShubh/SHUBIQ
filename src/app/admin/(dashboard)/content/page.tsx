@@ -110,6 +110,33 @@ export default function ContentControlPage() {
   const labsDirty = useMemo(() => JSON.stringify(labsContent) !== labsSnapshot, [labsContent, labsSnapshot])
   const hasUnsavedChanges = (activeTab === "studio" && studioDirty) || (activeTab === "home" && homeDirty) || (activeTab === "labs" && labsDirty)
 
+  function currentTabDirty(tab: "studio" | "home" | "labs" | "blog") {
+    if (tab === "studio") return studioDirty
+    if (tab === "home") return homeDirty
+    if (tab === "labs") return labsDirty
+    return false
+  }
+
+  function switchTabWithGuard(nextTab: "studio" | "home" | "labs" | "blog") {
+    if (nextTab === activeTab) return
+    if (currentTabDirty(activeTab)) {
+      const confirmed = window.confirm("You have unsaved changes in this tab. Switch anyway and keep changes unsaved?")
+      if (!confirmed) return
+    }
+    setActiveTab(nextTab)
+  }
+
+  async function guardedReload(tab: "studio" | "home" | "labs") {
+    if (currentTabDirty(tab)) {
+      const confirmed = window.confirm("This will reload from server and overwrite unsaved edits in this tab. Continue?")
+      if (!confirmed) return
+    }
+
+    if (tab === "studio") await loadStudioContent()
+    if (tab === "home") await loadHomeContent()
+    if (tab === "labs") await loadLabsContent()
+  }
+
   async function loadStudioContent() {
     setLoadingStudio(true)
     try {
@@ -362,16 +389,16 @@ export default function ContentControlPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <AdminButton variant={activeTab === "studio" ? "primary" : "secondary"} onClick={() => setActiveTab("studio")}>
+          <AdminButton variant={activeTab === "studio" ? "primary" : "secondary"} onClick={() => switchTabWithGuard("studio")}>
             Studio{studioDirty ? " *" : ""}
           </AdminButton>
-          <AdminButton variant={activeTab === "home" ? "primary" : "secondary"} onClick={() => setActiveTab("home")}>
+          <AdminButton variant={activeTab === "home" ? "primary" : "secondary"} onClick={() => switchTabWithGuard("home")}>
             Home{homeDirty ? " *" : ""}
           </AdminButton>
-          <AdminButton variant={activeTab === "labs" ? "primary" : "secondary"} onClick={() => setActiveTab("labs")}>
+          <AdminButton variant={activeTab === "labs" ? "primary" : "secondary"} onClick={() => switchTabWithGuard("labs")}>
             Labs{labsDirty ? " *" : ""}
           </AdminButton>
-          <AdminButton variant={activeTab === "blog" ? "primary" : "secondary"} onClick={() => setActiveTab("blog")}>
+          <AdminButton variant={activeTab === "blog" ? "primary" : "secondary"} onClick={() => switchTabWithGuard("blog")}>
             Blog
           </AdminButton>
         </div>
@@ -388,7 +415,7 @@ export default function ContentControlPage() {
               <p className="text-xs text-cream/50 mt-1">{studioLastUpdatedText}</p>
             </div>
             <div className="flex gap-2">
-              <AdminButton variant="secondary" onClick={loadStudioContent} disabled={loadingStudio}>
+              <AdminButton variant="secondary" onClick={() => guardedReload("studio")} disabled={loadingStudio}>
                 <RefreshCw size={14} />
                 Reload
               </AdminButton>
@@ -471,7 +498,7 @@ export default function ContentControlPage() {
               <p className="text-xs text-cream/50 mt-1">Controls Home hero, about, and services content.</p>
             </div>
             <div className="flex gap-2">
-              <AdminButton variant="secondary" onClick={loadHomeContent} disabled={loadingHome}>
+              <AdminButton variant="secondary" onClick={() => guardedReload("home")} disabled={loadingHome}>
                 <RefreshCw size={14} />
                 Reload
               </AdminButton>
@@ -657,7 +684,7 @@ export default function ContentControlPage() {
               <p className="text-xs text-cream/50 mt-1">Controls the hero badge, heading, description, and CTA text on /shubiq-labs.</p>
             </div>
             <div className="flex gap-2">
-              <AdminButton variant="secondary" onClick={loadLabsContent} disabled={loadingLabs}>
+              <AdminButton variant="secondary" onClick={() => guardedReload("labs")} disabled={loadingLabs}>
                 <RefreshCw size={14} />
                 Reload
               </AdminButton>
