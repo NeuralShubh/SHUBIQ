@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Mail, Settings, LogOut, FileText, Activity, Home } from 'lucide-react'
+import { Settings, LogOut, FileText, Activity, Home } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { logout } from '../login/actions'
 import type { AdminRole } from '@/lib/admin-auth'
@@ -19,7 +19,6 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: 'Home', href: '/admin', icon: Home, roles: ['owner', 'admin', 'editor', 'viewer'] as AdminRole[] },
-  { label: 'Inbox', href: '/admin', icon: Mail, roles: ['owner', 'admin', 'editor', 'viewer'] as AdminRole[] },
   { label: 'Activity', href: '/admin/activity', icon: Activity, roles: ['owner', 'admin', 'editor', 'viewer'] as AdminRole[] },
   { label: 'Content', href: '/admin/content', icon: FileText, roles: ['owner', 'admin', 'editor'] as AdminRole[] },
   { label: 'Settings', href: '/admin/settings', icon: Settings, roles: ['owner', 'admin'] as AdminRole[] },
@@ -89,17 +88,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen bg-[rgb(var(--surface-0-rgb))] text-cream font-inter selection:bg-gold/30">
       <Toaster theme="dark" position="bottom-right" />
 
-      <header className="sticky top-0 z-50 border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-0-rgb))/0.94] backdrop-blur">
-        <div className="px-6 py-3 flex items-center gap-4 justify-between">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="font-cinzel font-black tracking-widest text-[16px] whitespace-nowrap">SHUBIQ <span className="text-gold">Admin</span></span>
-            <span className="rounded-full border border-gold/35 bg-gold/10 px-2 py-0.5 text-[10px] font-rajdhani uppercase tracking-[2px] text-gold">
+      <header className="sticky top-0 z-50 border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.96),rgb(var(--surface-0-rgb)/0.94))] backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-[1480px] items-center gap-6 px-7 py-4 xl:px-10">
+          <div className="flex min-w-[210px] items-center gap-3">
+            <span className="font-cinzel font-black tracking-[2px] text-[19px] whitespace-nowrap">SHUBIQ <span className="text-gold">Admin</span></span>
+            <span className="rounded-full border border-gold/35 bg-gold/10 px-2.5 py-1 text-[10px] font-rajdhani uppercase tracking-[2.2px] text-gold">
               {roleLabel}
             </span>
           </div>
 
-          <nav className="flex-1 overflow-x-auto custom-scrollbar px-1">
-            <div className="inline-flex items-center gap-2 min-w-max">
+          <nav className="flex-1 overflow-x-auto custom-scrollbar">
+            <div className="inline-flex min-w-max items-center gap-2.5 rounded-xl border border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-1-rgb)/0.35)] px-2 py-1.5">
               {visibleNavItems.map((item) => {
                 const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))
                 const Icon = item.icon
@@ -107,13 +106,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <Link
                     key={`${item.label}-${item.href}`}
                     href={item.href}
-                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[12px] tracking-[1.6px] uppercase font-rajdhani border transition-colors ${
+                    className={`inline-flex items-center gap-2.5 rounded-lg border px-4 py-2 text-[12px] tracking-[2px] uppercase font-rajdhani font-semibold transition-all ${
                       isActive
-                        ? 'bg-[rgb(var(--surface-2-rgb))] text-cream border-gold/45 shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.15)_inset]'
-                        : 'bg-[rgb(var(--surface-1-rgb))] text-cream/70 border-[rgb(var(--cream-rgb)/0.14)] hover:text-cream hover:border-gold/40'
+                        ? 'bg-[linear-gradient(180deg,rgb(var(--surface-2-rgb)/0.95),rgb(var(--surface-1-rgb)/0.92))] text-cream border-gold/50 shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.18)_inset,0_0_26px_rgb(var(--gold-rgb)/0.14)]'
+                        : 'bg-[rgb(var(--surface-1-rgb)/0.7)] text-cream/70 border-[rgb(var(--cream-rgb)/0.12)] hover:text-cream hover:border-gold/45'
                     }`}
                   >
-                    <Icon size={13} className={isActive ? 'text-gold' : ''} />
+                    <Icon size={14} className={isActive ? 'text-gold' : 'text-cream/70'} />
                     {item.label}
                   </Link>
                 )
@@ -121,15 +120,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </nav>
 
-          <div className="flex items-center gap-2">
-            <span className="hidden md:inline-flex text-[11px] tracking-[1.4px] uppercase text-cream/55 border border-[rgb(var(--cream-rgb)/0.16)] rounded-md px-2.5 py-1 font-rajdhani whitespace-nowrap">
+          <div className="flex items-center gap-3">
+            <span className="hidden md:inline-flex whitespace-nowrap rounded-lg border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-1-rgb)/0.7)] px-3 py-2 text-[11px] tracking-[1.8px] uppercase text-cream/55 font-rajdhani">
               {sessionLabel}
             </span>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-2 text-[12px] font-semibold tracking-wider font-rajdhani uppercase text-cream/70 hover:text-cream transition-colors bg-[rgb(var(--surface-1-rgb))] px-3 py-1.5 rounded-lg border border-[rgb(var(--cream-rgb)/0.12)] hover:border-gold/40"
+              className="inline-flex items-center gap-2.5 rounded-lg border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--surface-1-rgb)/0.72)] px-3.5 py-2 text-[12px] font-semibold tracking-[1.8px] font-rajdhani uppercase text-cream/70 hover:text-cream transition-all hover:border-gold/45"
             >
-              <span className="w-5 h-5 rounded-sm bg-gold/10 text-gold border border-gold/20 flex items-center justify-center text-[10px] font-bold">
+              <span className="flex h-5 w-5 items-center justify-center rounded-sm border border-gold/20 bg-gold/10 text-[10px] font-bold text-gold">
                 {displayName.slice(0, 1).toUpperCase()}
               </span>
               Logout
@@ -139,7 +138,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </header>
 
-      <main className="min-h-[calc(100vh-74px)] overflow-y-auto bg-[rgb(var(--surface-0-rgb))] p-6 custom-scrollbar admin-readable">
+      <main className="min-h-[calc(100vh-88px)] overflow-y-auto bg-[rgb(var(--surface-0-rgb))] p-6 custom-scrollbar admin-readable">
         <div className="max-w-6xl mx-auto">{children}</div>
       </main>
     </div>
