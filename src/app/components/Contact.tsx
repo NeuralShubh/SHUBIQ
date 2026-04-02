@@ -65,7 +65,7 @@ export default function Contact() {
     "rounded-sm border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft p-6 sm:p-7 transition-all duration-[380ms] ease-out hover:border-gold/26 relative overflow-hidden hover:bg-card-soft-hover hover:shadow-[0_16px_36px_rgb(var(--ink-rgb)_/_0.36),0_0_0_1px_rgb(var(--gold-rgb)_/_0.18)]"
 
   return (
-    <section id="contact" ref={sectionRef} className="cv-auto min-h-screen flex items-center py-[104px] px-4 sm:px-6 relative overflow-hidden">
+    <section id="contact" ref={sectionRef} className="cv-auto py-[96px] max-md:py-16 px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 60%, rgb(var(--gold-rgb) / 0.05) 0%, transparent 65%)" }}
