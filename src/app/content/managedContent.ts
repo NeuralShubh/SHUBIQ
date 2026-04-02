@@ -12,6 +12,11 @@ export type HomeManagedContent = {
   servicesHeadingPrefix: string
   servicesHeadingAccent: string
   servicesCards: HomeServiceCard[]
+  projectsLabel: string
+  projectsHeadingPrefix: string
+  projectsHeadingAccent: string
+  projectsCtaText: string
+  projectsFeaturedSlugs: string[]
 }
 
 export type HomeServiceCard = {
@@ -72,6 +77,11 @@ export const DEFAULT_HOME_CONTENT: HomeManagedContent = {
       tag: "Product",
     },
   ],
+  projectsLabel: "Portfolio",
+  projectsHeadingPrefix: "Engineered",
+  projectsHeadingAccent: "Systems",
+  projectsCtaText: "View All Projects",
+  projectsFeaturedSlugs: ["pragati-finance", "bramha-urban-performance", "shubiq-os"],
 }
 
 export const DEFAULT_LABS_CONTENT: LabsManagedContent = {
@@ -93,7 +103,11 @@ export function mergeHomeManagedContent(input: unknown): HomeManagedContent {
           ...card,
         }))
       : DEFAULT_HOME_CONTENT.servicesCards
-  return { ...DEFAULT_HOME_CONTENT, ...content, servicesCards: mergedCards }
+  const mergedFeaturedSlugs =
+    Array.isArray(content.projectsFeaturedSlugs) && content.projectsFeaturedSlugs.length > 0
+      ? content.projectsFeaturedSlugs.filter((slug): slug is string => typeof slug === "string" && slug.trim().length > 0)
+      : DEFAULT_HOME_CONTENT.projectsFeaturedSlugs
+  return { ...DEFAULT_HOME_CONTENT, ...content, servicesCards: mergedCards, projectsFeaturedSlugs: mergedFeaturedSlugs }
 }
 
 export function mergeLabsManagedContent(input: unknown): LabsManagedContent {

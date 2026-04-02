@@ -1,11 +1,12 @@
 "use client"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import ProjectCardShowcase from "./ProjectCardShowcase"
 import SectionLabel from "./SectionLabel"
 import { projects as fallbackProjects } from "../data-projects"
+import { DEFAULT_HOME_CONTENT, mergeHomeManagedContent } from "@/app/content/managedContent"
 
 interface ProjectsProps {
   initialProjects: any[]
@@ -14,6 +15,11 @@ interface ProjectsProps {
 export default function Projects({ initialProjects }: ProjectsProps) {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("160px 0px")
   const headingRef = useRef<HTMLDivElement>(null)
+  const [sectionLabel, setSectionLabel] = useState(DEFAULT_HOME_CONTENT.projectsLabel)
+  const [headingPrefix, setHeadingPrefix] = useState(DEFAULT_HOME_CONTENT.projectsHeadingPrefix)
+  const [headingAccent, setHeadingAccent] = useState(DEFAULT_HOME_CONTENT.projectsHeadingAccent)
+  const [ctaText, setCtaText] = useState(DEFAULT_HOME_CONTENT.projectsCtaText)
+  const [featuredSlugs, setFeaturedSlugs] = useState<string[]>(DEFAULT_HOME_CONTENT.projectsFeaturedSlugs)
   
   const slugify = (value: string) =>
     value
@@ -23,7 +29,7 @@ export default function Projects({ initialProjects }: ProjectsProps) {
 
   const sourceItems = initialProjects?.length ? initialProjects : fallbackProjects
 
-  const items = sourceItems
+  const normalizedItems = sourceItems
     .map((item: any, index: number) => {
       if (item?.slug) return item
       const rawTag = typeof item?.tag === "string" ? item.tag : ""
@@ -47,7 +53,36 @@ export default function Projects({ initialProjects }: ProjectsProps) {
         year: item?.year ?? "2026",
       }
     })
-    .slice(0, 3)
+
+  const itemsBySlug = new Map(normalizedItems.map((item: any) => [item.slug, item]))
+  const featuredItems = featuredSlugs.map((slug) => itemsBySlug.get(slug)).filter(Boolean)
+  const items = (featuredItems.length > 0 ? featuredItems : normalizedItems).slice(0, 3)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadManagedContent() {
+      try {
+        const res = await fetch("/api/content?key=home_content", { cache: "no-store" })
+        if (!res.ok) return
+        const json = await res.json()
+        const merged = mergeHomeManagedContent(json?.content)
+        if (cancelled) return
+        setSectionLabel(merged.projectsLabel)
+        setHeadingPrefix(merged.projectsHeadingPrefix)
+        setHeadingAccent(merged.projectsHeadingAccent)
+        setCtaText(merged.projectsCtaText)
+        setFeaturedSlugs(merged.projectsFeaturedSlugs)
+      } catch {
+        // Keep defaults if managed content fails.
+      }
+    }
+
+    loadManagedContent()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <section id="projects" ref={sectionRef} className="cv-auto py-[96px] max-md:py-16 px-4 sm:px-6 relative overflow-hidden">
@@ -61,14 +96,14 @@ export default function Projects({ initialProjects }: ProjectsProps) {
       />
       <div className="max-w-7xl mx-auto w-full">
         <div ref={headingRef} className="mb-10 sm:mb-12 md:mb-14 text-center">
-          <SectionLabel label="Portfolio" centered />
+          <SectionLabel label={sectionLabel} centered />
           <div className={`reveal ${isInView ? "in-view" : ""} mt-4 flex flex-col items-center gap-4`} style={{ animationDelay: "0.1s" }}>
             <h2
               className="font-shubiq-heading font-normal leading-[0.92]"
               style={{ fontSize: "clamp(30px, 5.5vw, 62px)" }}
             >
-              <span className="text-cream/90">Engineered </span>
-              <span className="text-gold">Systems</span>
+              <span className="text-cream/90">{headingPrefix} </span>
+              <span className="text-gold">{headingAccent}</span>
             </h2>
           </div>
         </div>
@@ -86,7 +121,7 @@ export default function Projects({ initialProjects }: ProjectsProps) {
             href="/projects"
             className="group inline-flex items-center gap-2 font-rajdhani text-[12px] tracking-[3px] uppercase text-cream/70 hover:text-gold transition-colors"
           >
-            View All Projects
+            {ctaText}
             <span className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
           </Link>
         </div>
@@ -94,5 +129,4 @@ export default function Projects({ initialProjects }: ProjectsProps) {
     </section>
   )
 }
-
 

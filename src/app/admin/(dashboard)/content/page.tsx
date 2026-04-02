@@ -504,6 +504,42 @@ export default function ContentControlPage() {
                 </div>
               ))}
             </div>
+            <AdminInput
+              label="Projects Label"
+              value={homeContent.projectsLabel}
+              onChange={(e) => setHomeContent((p) => ({ ...p, projectsLabel: e.target.value }))}
+            />
+            <AdminInput
+              label="Projects Heading Prefix"
+              value={homeContent.projectsHeadingPrefix}
+              onChange={(e) => setHomeContent((p) => ({ ...p, projectsHeadingPrefix: e.target.value }))}
+            />
+            <AdminInput
+              label="Projects Heading Accent"
+              value={homeContent.projectsHeadingAccent}
+              onChange={(e) => setHomeContent((p) => ({ ...p, projectsHeadingAccent: e.target.value }))}
+            />
+            <AdminInput
+              label="Projects CTA Text"
+              value={homeContent.projectsCtaText}
+              onChange={(e) => setHomeContent((p) => ({ ...p, projectsCtaText: e.target.value }))}
+            />
+            <div className="lg:col-span-2">
+              <AdminTextarea
+                label="Featured Project Slugs (comma separated)"
+                rows={2}
+                value={homeContent.projectsFeaturedSlugs.join(", ")}
+                onChange={(e) =>
+                  setHomeContent((prev) => ({
+                    ...prev,
+                    projectsFeaturedSlugs: e.target.value
+                      .split(",")
+                      .map((slug) => slug.trim())
+                      .filter(Boolean),
+                  }))
+                }
+              />
+            </div>
           </div>
         </AdminCard>
       )}
