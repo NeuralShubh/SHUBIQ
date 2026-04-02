@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AdminButton, AdminCard, ConfirmModal } from '@/components/admin/AdminUI'
 import { Trash2, Search, X, MailOpen, Mail, RefreshCw, CheckSquare, Square, Download, ChartNoAxesColumn, Activity } from 'lucide-react'
 import { toast } from 'sonner'
@@ -37,6 +37,13 @@ type DashboardStats = {
   recentContent: Array<{ key: string; updatedAt: string | null }>
 }
 
+type InboxPagination = {
+  page: number
+  pageSize: number
+  total: number
+  totalPages: number
+}
+
 const STATUS_OPTIONS = ['New', 'In Progress', 'Responded', 'Closed']
 
 export default function FormSubmissionsDashboard() {
@@ -49,10 +56,27 @@ export default function FormSubmissionsDashboard() {
   const [filter, setFilter] = useState<'all' | 'unread' | 'new' | 'in-progress' | 'responded' | 'closed'>('all')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState<10 | 20 | 50>(20)
+  const [pagination, setPagination] = useState<InboxPagination>({ page: 1, pageSize: 20, total: 0, totalPages: 1 })
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [viewingInquiry, setViewingInquiry] = useState<Inquiry | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [deletingIds, setDeletingIds] = useState<string[]>([])
+
+  function getServerFilters() {
+    const params = new URLSearchParams()
+    params.set('page', String(page))
+    params.set('pageSize', String(pageSize))
+    if (search.trim()) params.set('q', search.trim())
+
+    if (filter === 'unread') {
+      params.set('status', 'all')
+      params.set('read', 'unread')
+    } else {
+      params.set('read', 'all')
+      params.set('status', filter)
+    }
+    return params
+  }
 
   async function fetchInquiries(silent = false) {
     if (silent) {
@@ -62,10 +86,19 @@ export default function FormSubmissionsDashboard() {
     }
 
     try {
-      const res = await fetch('/api/admin/contact-submissions', { cache: 'no-store' })
+      const params = getServerFilters()
+      const res = await fetch(`/api/admin/contact-submissions?${params.toString()}`, { cache: 'no-store' })
       const json = await res.json()
       if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to fetch inquiries')
       setInquiries(Array.isArray(json.submissions) ? json.submissions : [])
+      if (json.pagination) {
+        setPagination({
+          page: Number(json.pagination.page || 1),
+          pageSize: Number(json.pagination.pageSize || pageSize),
+          total: Number(json.pagination.total || 0),
+          totalPages: Number(json.pagination.totalPages || 1),
+        })
+      }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to fetch inquiries')
     } finally {
@@ -88,7 +121,6 @@ export default function FormSubmissionsDashboard() {
   }
 
   useEffect(() => {
-    fetchInquiries()
     fetchStats()
     const match = document.cookie.match(/(?:^|;\s*)shubiq_admin_role=([^;]+)/)
     const role = match ? decodeURIComponent(match[1]) : 'viewer'
@@ -96,6 +128,10 @@ export default function FormSubmissionsDashboard() {
       setActiveRole(role)
     }
   }, [])
+
+  useEffect(() => {
+    fetchInquiries()
+  }, [search, filter, page, pageSize])
 
   async function markAsRead(id: string) {
     try {
@@ -165,34 +201,10 @@ export default function FormSubmissionsDashboard() {
     }
   }
 
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    const bySearch = inquiries.filter((item) => {
-      if (!term) return true
-      return [item.name, item.email, item.phone, item.message]
-        .map((value) => String(value || '').toLowerCase())
-        .some((value) => value.includes(term))
-    })
-
-    if (filter === 'all') return bySearch
-    if (filter === 'unread') return bySearch.filter((item) => !item.read)
-    if (filter === 'new') return bySearch.filter((item) => item.status === 'New')
-    if (filter === 'in-progress') return bySearch.filter((item) => item.status === 'In Progress')
-    if (filter === 'responded') return bySearch.filter((item) => item.status === 'Responded')
-    return bySearch.filter((item) => item.status === 'Closed')
-  }, [inquiries, search, filter])
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
-  const safePage = Math.min(page, totalPages)
-  const visibleItems = useMemo(() => {
-    const start = (safePage - 1) * pageSize
-    return filtered.slice(start, start + pageSize)
-  }, [filtered, safePage, pageSize])
-
-  const unreadCount = inquiries.filter((item) => !item.read).length
+  const unreadCount = stats?.totals.unread ?? inquiries.filter((item) => !item.read).length
   const canEdit = activeRole === 'owner' || activeRole === 'admin' || activeRole === 'editor'
   const canDelete = activeRole === 'owner' || activeRole === 'admin'
-  const allVisibleSelected = visibleItems.length > 0 && visibleItems.every((item) => selectedIds.includes(item.id))
+  const allVisibleSelected = inquiries.length > 0 && inquiries.every((item) => selectedIds.includes(item.id))
 
   useEffect(() => {
     setPage(1)
@@ -204,12 +216,12 @@ export default function FormSubmissionsDashboard() {
 
   function toggleSelectVisible() {
     if (allVisibleSelected) {
-      setSelectedIds((prev) => prev.filter((id) => !visibleItems.some((item) => item.id === id)))
+      setSelectedIds((prev) => prev.filter((id) => !inquiries.some((item) => item.id === id)))
       return
     }
 
     const next = new Set(selectedIds)
-    for (const item of visibleItems) next.add(item.id)
+    for (const item of inquiries) next.add(item.id)
     setSelectedIds(Array.from(next))
   }
 
@@ -248,28 +260,60 @@ export default function FormSubmissionsDashboard() {
   }
 
   function exportFilteredCsv() {
-    const rows = filtered.map((item) => [
-      item.name,
-      item.email,
-      item.phone,
-      item.business_type,
-      item.status,
-      item.source,
-      item.created_at || '',
-      (item.message || '').replace(/\n/g, ' '),
-    ])
-    const header = ['Name', 'Email', 'Phone', 'Business Type', 'Status', 'Source', 'Created At', 'Message']
-    const csv = [header, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(','))
-      .join('\n')
+    const rows: string[][] = []
+    const baseParams = getServerFilters()
+    baseParams.set('page', '1')
+    baseParams.set('pageSize', '100')
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `shubiq-leads-${new Date().toISOString().slice(0, 10)}.csv`
-    link.click()
-    URL.revokeObjectURL(url)
+    const fetchAll = async () => {
+      let currentPage = 1
+      let totalPages = 1
+      while (currentPage <= totalPages) {
+        baseParams.set('page', String(currentPage))
+        const res = await fetch(`/api/admin/contact-submissions?${baseParams.toString()}`, { cache: 'no-store' })
+        const json = await res.json()
+        if (!res.ok || !json?.ok) throw new Error(json?.error || 'Export failed')
+        const pageItems = Array.isArray(json.submissions) ? json.submissions : []
+        for (const item of pageItems) {
+          rows.push([
+            item.name,
+            item.email,
+            item.phone,
+            item.business_type,
+            item.status,
+            item.source,
+            item.created_at || '',
+            String(item.message || '').replace(/\n/g, ' '),
+          ])
+        }
+        totalPages = Number(json?.pagination?.totalPages || 1)
+        currentPage += 1
+      }
+    }
+
+    const run = async () => {
+      try {
+        await fetchAll()
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : 'Failed to export CSV')
+        return
+      }
+
+      const header = ['Name', 'Email', 'Phone', 'Business Type', 'Status', 'Source', 'Created At', 'Message']
+      const csv = [header, ...rows]
+        .map((row) => row.map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(','))
+        .join('\n')
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `shubiq-leads-${new Date().toISOString().slice(0, 10)}.csv`
+      link.click()
+      URL.revokeObjectURL(url)
+      toast.success('CSV export downloaded')
+    }
+    void run()
   }
 
   return (
@@ -439,7 +483,7 @@ export default function FormSubmissionsDashboard() {
           <div className="flex-1 flex items-center justify-center p-12 bg-[rgb(var(--surface-0-rgb))]">
             <div className="w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin" />
           </div>
-        ) : filtered.length === 0 ? (
+        ) : inquiries.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-12 text-cream/40 bg-[rgb(var(--surface-0-rgb))] text-center">
             <Mail size={32} className="mb-4 opacity-50 text-gold" />
             <p className="font-cinzel text-lg tracking-wider text-cream">Inbox Empty</p>
@@ -449,7 +493,7 @@ export default function FormSubmissionsDashboard() {
           <div className="overflow-x-auto bg-[rgb(var(--surface-0-rgb))] pb-10">
             <div className="px-6 py-3 border-b border-[rgb(var(--cream-rgb)/0.08)] flex flex-wrap items-center gap-3 bg-[rgb(var(--surface-1-rgb))]">
               <span className="text-xs text-cream/60">
-                Showing {(safePage - 1) * pageSize + 1}-{Math.min(safePage * pageSize, filtered.length)} of {filtered.length}
+                Showing {(pagination.page - 1) * pagination.pageSize + 1}-{Math.min(pagination.page * pagination.pageSize, pagination.total)} of {pagination.total}
               </span>
               <div className="flex items-center gap-2 ml-auto">
                 <label className="text-xs text-cream/50">Rows</label>
@@ -484,7 +528,7 @@ export default function FormSubmissionsDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[rgb(var(--cream-rgb)/0.05)]">
-                {visibleItems.map((item) => (
+                {inquiries.map((item) => (
                   <tr
                     key={item.id}
                     onClick={() => handleOpenModal(item)}
@@ -550,17 +594,17 @@ export default function FormSubmissionsDashboard() {
               </tbody>
             </table>
             <div className="px-6 py-3 border-t border-[rgb(var(--cream-rgb)/0.08)] flex items-center justify-end gap-2 bg-[rgb(var(--surface-1-rgb))]">
-              <AdminButton variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage <= 1}>
+              <AdminButton variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={pagination.page <= 1}>
                 Prev
               </AdminButton>
               <span className="text-xs text-cream/60 px-2">
-                Page {safePage} / {totalPages}
+                Page {pagination.page} / {pagination.totalPages}
               </span>
               <AdminButton
                 variant="secondary"
                 className="px-3 py-1.5 text-xs"
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={safePage >= totalPages}
+                onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
+                disabled={pagination.page >= pagination.totalPages}
               >
                 Next
               </AdminButton>

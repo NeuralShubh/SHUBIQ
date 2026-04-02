@@ -47,22 +47,66 @@ export async function GET(request: Request) {
   if (!auth.ok) return auth.response
 
   try {
+    const { searchParams } = new URL(request.url)
+    const query = (searchParams.get("q") || "").trim().toLowerCase()
+    const statusFilter = (searchParams.get("status") || "all").trim()
+    const readFilter = (searchParams.get("read") || "all").trim()
+    const page = Math.max(1, Number(searchParams.get("page") || 1))
+    const pageSize = Math.min(100, Math.max(10, Number(searchParams.get("pageSize") || 20)))
+
     const table = await resolveContactTable()
     if (!table) {
       return NextResponse.json({ ok: false, error: "No contact submissions table found" }, { status: 500 })
     }
 
     const supabase = getSupabaseAdmin()
-    const { data, error } = await supabase.from(table).select("*").order("created_at", { ascending: false }).limit(500)
+    const { data, error } = await supabase.from(table).select("*").order("created_at", { ascending: false }).limit(5000)
 
     if (error) {
       return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
     }
 
+    const all = (data ?? []).map((row) => normalizeSubmission(row as Record<string, any>))
+    const filtered = all.filter((item) => {
+      if (statusFilter !== "all") {
+        if (statusFilter === "new" && item.status !== "New") return false
+        if (statusFilter === "in-progress" && item.status !== "In Progress") return false
+        if (statusFilter === "responded" && item.status !== "Responded") return false
+        if (statusFilter === "closed" && item.status !== "Closed") return false
+      }
+
+      if (readFilter !== "all") {
+        if (readFilter === "read" && !item.read) return false
+        if (readFilter === "unread" && item.read) return false
+      }
+
+      if (!query) return true
+      return [item.name, item.email, item.phone, item.message, item.source, item.business_type]
+        .map((value) => String(value || "").toLowerCase())
+        .some((value) => value.includes(query))
+    })
+
+    const total = filtered.length
+    const totalPages = Math.max(1, Math.ceil(total / pageSize))
+    const safePage = Math.min(page, totalPages)
+    const start = (safePage - 1) * pageSize
+    const submissions = filtered.slice(start, start + pageSize)
+
     return NextResponse.json({
       ok: true,
       table,
-      submissions: (data ?? []).map((row) => normalizeSubmission(row as Record<string, any>)),
+      submissions,
+      pagination: {
+        page: safePage,
+        pageSize,
+        total,
+        totalPages,
+      },
+      filters: {
+        q: query,
+        status: statusFilter,
+        read: readFilter,
+      },
     })
   } catch (error) {
     return NextResponse.json(
