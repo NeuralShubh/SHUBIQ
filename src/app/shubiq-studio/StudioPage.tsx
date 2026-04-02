@@ -1016,6 +1016,7 @@ export default function StudioPage() {
         <StudioPortfolio />
         <StudioTransitionRibbon />
         <StudioDeliveryProcess />
+        <StudioTransitionRibbon />
         <div id="studio-pricing-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
         <StudioPricing content={studioContent} />
         <StudioTransitionRibbon />
