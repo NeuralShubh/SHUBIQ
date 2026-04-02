@@ -19,7 +19,25 @@ export default function LoadingScreen() {
 
     Promise.all([minTime, pageLoad]).then(() => {
       setLoading(false)
+      window.sessionStorage.setItem("shubiq-loaded", "1")
     })
+  }, [])
+
+  useEffect(() => {
+    let timeoutId: number | undefined
+
+    const handleNavLoading = () => {
+      setLoading(true)
+      timeoutId = window.setTimeout(() => {
+        setLoading(false)
+      }, 900)
+    }
+
+    window.addEventListener("shubiq-nav-loading", handleNavLoading)
+    return () => {
+      window.removeEventListener("shubiq-nav-loading", handleNavLoading)
+      if (timeoutId) window.clearTimeout(timeoutId)
+    }
   }, [])
 
   return (
