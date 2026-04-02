@@ -249,53 +249,55 @@ export default function Hero() {
         </motion.div>
 
         {/* Spacing before CTAs */}
-        <div className="h-4 sm:h-10 max-[768px]:h-2" />
+        <div className="h-4 sm:h-10 max-[768px]:h-8" />
 
-        {/* CTA Buttons */}
-        <motion.div
-          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-3 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-center max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-8 max-[768px]:mt-5 sm:mt-14 mb-5 max-[768px]:mb-3 sm:mb-6"
-          initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
-          animate={ctaReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-          transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
-        >
-          <button
-            type="button"
-            onClick={() => scrollTo("projects")}
-            data-cursor="View"
-            className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[82%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[280px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[11px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
+        <div className="max-[768px]:mx-auto max-[768px]:w-full max-[768px]:max-w-[342px] max-[768px]:rounded-[18px] max-[768px]:border max-[768px]:border-[rgb(var(--gold-rgb)/0.2)] max-[768px]:bg-[rgb(var(--surface-1-rgb)/0.42)] max-[768px]:px-3 max-[768px]:pt-4 max-[768px]:pb-2">
+          {/* CTA Buttons */}
+          <motion.div
+            className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-2.5 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-center max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-8 max-[768px]:mt-0 sm:mt-14 mb-5 max-[768px]:mb-3 sm:mb-6"
+            initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
+            animate={ctaReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
           >
-            <span className="relative z-[1]">Explore Work</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollTo("contact")}
-            data-cursor="Hire"
-            className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[82%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[280px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[11px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
-          >
-            <span className="relative z-[1]">Hire Us</span>
-          </button>
-        </motion.div>
+            <button
+              type="button"
+              onClick={() => scrollTo("projects")}
+              data-cursor="View"
+              className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[86%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[286px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[10px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
+            >
+              <span className="relative z-[1]">Explore Work</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTo("contact")}
+              data-cursor="Hire"
+              className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[86%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[286px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[10px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
+            >
+              <span className="relative z-[1]">Hire Us</span>
+            </button>
+          </motion.div>
 
-        {/* Social links */}
-        <motion.div
-          className="mx-auto w-full max-[768px]:max-w-[320px] sm:w-fit border-t border-gold/15 max-[768px]:border-t-0 pt-4 sm:pt-5 max-[768px]:pt-1 grid grid-cols-2 sm:flex max-[768px]:gap-x-5 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-2 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-0 sm:mb-8 mt-6 max-[768px]:mt-1 sm:mt-8 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
-          initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
-          animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
-        >
-          {SOCIAL_LINKS.map((s) => (
-            <div key={s.label} className="flex items-center justify-center">
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noreferrer"
-                className="site-hero-social font-rajdhani text-[11px] sm:text-[13px] tracking-[1.45px] sm:tracking-[3.1px] text-cream/68 uppercase hover:text-gold transition-colors duration-300 text-center whitespace-nowrap"
-              >
-                {s.label}
-              </a>
-            </div>
-          ))}
-        </motion.div>
+          {/* Social links */}
+          <motion.div
+            className="mx-auto w-full max-[768px]:max-w-[320px] sm:w-fit border-t border-gold/15 max-[768px]:border-t-0 pt-4 sm:pt-5 max-[768px]:pt-0 grid max-[768px]:grid-cols-3 grid-cols-2 sm:flex max-[768px]:gap-x-2 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-2 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-1 sm:mb-8 mt-6 max-[768px]:mt-2 sm:mt-8"
+            initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
+            animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
+          >
+            {SOCIAL_LINKS.map((s) => (
+              <div key={s.label} className="flex items-center justify-center">
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="site-hero-social font-rajdhani text-[11px] sm:text-[13px] tracking-[1.2px] sm:tracking-[3.1px] text-cream/70 uppercase hover:text-gold transition-colors duration-300 text-center whitespace-nowrap"
+                >
+                  {s.label}
+                </a>
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator with bounce */}
