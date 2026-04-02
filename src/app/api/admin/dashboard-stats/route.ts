@@ -4,6 +4,20 @@ import { getSupabaseAdmin } from "@/lib/supabase-admin"
 
 const CONTACT_TABLES = ["contact_submissions", "contacts", "messages"] as const
 
+function normalizeLeadStatus(input: unknown): "New" | "In Progress" | "Responded" | "Closed" {
+  const value = String(input ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[_\s-]+/g, " ")
+
+  if (!value) return "New"
+  if (value === "new") return "New"
+  if (value === "in progress" || value === "inprogress" || value === "progress") return "In Progress"
+  if (value === "responded" || value === "response" || value === "replied") return "Responded"
+  if (value === "closed" || value === "done" || value === "completed") return "Closed"
+  return "New"
+}
+
 async function resolveContactTable() {
   const supabase = getSupabaseAdmin()
   for (const table of CONTACT_TABLES) {
@@ -40,7 +54,7 @@ export async function GET(request: Request) {
     const isUnread = (item: Record<string, unknown>) => !(item.read ?? item.is_read ?? item.viewed ?? false)
 
     const byStatus = contacts.reduce<Record<string, number>>((acc, item) => {
-      const key = String(item.status ?? "New")
+      const key = normalizeLeadStatus((item as Record<string, unknown>).status)
       acc[key] = (acc[key] || 0) + 1
       return acc
     }, {})
@@ -90,4 +104,3 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : "Unknown error" }, { status: 500 })
   }
 }
-

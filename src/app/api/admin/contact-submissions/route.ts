@@ -4,6 +4,20 @@ import { getSupabaseAdmin } from "@/lib/supabase-admin"
 
 const CONTACT_TABLES = ["contact_submissions", "contacts", "messages"] as const
 
+function normalizeLeadStatus(input: unknown): "New" | "In Progress" | "Responded" | "Closed" {
+  const value = String(input ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[_\s-]+/g, " ")
+
+  if (!value) return "New"
+  if (value === "new") return "New"
+  if (value === "in progress" || value === "inprogress" || value === "progress") return "In Progress"
+  if (value === "responded" || value === "response" || value === "replied") return "Responded"
+  if (value === "closed" || value === "done" || value === "completed") return "Closed"
+  return "New"
+}
+
 type ContactSubmission = {
   id: string
   name: string
@@ -36,7 +50,7 @@ function normalizeSubmission(row: Record<string, any>): ContactSubmission {
     business_type: String(row.business_type ?? ""),
     message: String(row.message ?? ""),
     source: String(row.source ?? "website"),
-    status: String(row.status ?? "New"),
+    status: normalizeLeadStatus(row.status),
     created_at: row.created_at ? String(row.created_at) : null,
     read: Boolean(rawRead),
   }
@@ -141,7 +155,8 @@ export async function PATCH(req: Request) {
     const supabase = getSupabaseAdmin()
 
     if (wantsStatus) {
-      const { error } = await supabase.from(table).update({ status: body.status }).in("id", ids)
+      const normalized = normalizeLeadStatus(body.status)
+      const { error } = await supabase.from(table).update({ status: normalized }).in("id", ids)
       if (!error) return NextResponse.json({ ok: true })
     }
 
