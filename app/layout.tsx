@@ -7,7 +7,6 @@ import LoadingScreen from "../src/app/components/LoadingScreen"
 import MagneticCursor from "../src/app/components/MagneticCursor"
 import ScrollProgress from "../src/app/components/ScrollProgress"
 import BackToTop from "../src/app/components/BackToTop"
-import BackButton from "../src/app/components/BackButton"
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"] })
 const cinzelDecorative = Cinzel_Decorative({ subsets: ["latin"], variable: "--font-cinzel-decorative", weight: ["400", "700", "900"] })
@@ -109,7 +108,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MagneticCursor />
         <ScrollProgress />
         <SmoothScroll>{children}</SmoothScroll>
-        <BackButton />
         <BackToTop />
       </body>
     </html>
