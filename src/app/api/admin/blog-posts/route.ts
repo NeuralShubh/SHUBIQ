@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { requireAdminRole } from "@/lib/admin-request-auth"
 import { getSupabaseAdmin } from "@/lib/supabase-admin"
 
 const TABLE = "blog_posts"
@@ -16,7 +17,10 @@ type BlogBody = {
   content?: unknown[]
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const auth = await requireAdminRole(request, "viewer")
+  if (!auth.ok) return auth.response
+
   try {
     const supabase = getSupabaseAdmin()
     const { data, error } = await supabase
@@ -32,6 +36,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const auth = await requireAdminRole(request, "editor")
+  if (!auth.ok) return auth.response
+
   try {
     const body = (await request.json()) as BlogBody
     const slug = String(body.slug || "").trim()
@@ -63,6 +70,9 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const auth = await requireAdminRole(request, "editor")
+  if (!auth.ok) return auth.response
+
   try {
     const body = (await request.json()) as BlogBody
     if (!body.id) return NextResponse.json({ error: "Missing id" }, { status: 400 })
@@ -90,6 +100,9 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const auth = await requireAdminRole(request, "editor")
+  if (!auth.ok) return auth.response
+
   const { searchParams } = new URL(request.url)
   const id = searchParams.get("id")
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 })
@@ -103,4 +116,3 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unexpected error" }, { status: 500 })
   }
 }
-

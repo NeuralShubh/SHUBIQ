@@ -1,9 +1,13 @@
 import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
+import { requireAdminRole } from "@/lib/admin-request-auth"
 
 const DEFAULT_PATHS = ["/", "/blog", "/projects", "/shubiq-studio", "/shubiq-labs", "/founder"]
 
 export async function POST(request: Request) {
+  const auth = await requireAdminRole(request, "admin")
+  if (!auth.ok) return auth.response
+
   try {
     const body = (await request.json().catch(() => ({}))) as { paths?: unknown }
     const requestedPaths = Array.isArray(body.paths) ? body.paths.filter((path): path is string => typeof path === "string") : []
@@ -24,4 +28,3 @@ export async function POST(request: Request) {
     )
   }
 }
-

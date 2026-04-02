@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { requireAdminRole } from "@/lib/admin-request-auth"
 import { getSupabaseAdmin } from "@/lib/supabase-admin"
 
 const CONTACT_TABLES = ["contact_submissions", "contacts", "messages"] as const
@@ -19,7 +20,10 @@ async function countRows(table: string) {
   return typeof count === "number" ? count : null
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const auth = await requireAdminRole(request, "admin")
+  if (!auth.ok) return auth.response
+
   const hasSinglePassword = Boolean(process.env.ADMIN_PASSWORD)
   const rolePasswords = {
     owner: Boolean(process.env.ADMIN_OWNER_PASSWORD),
@@ -64,4 +68,3 @@ export async function GET() {
     )
   }
 }
-

@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server"
+import { requireAdminRole } from "@/lib/admin-request-auth"
 import { getSupabaseAdmin } from "@/lib/supabase-admin"
 
 const TABLE = "site_content"
 const SUPPORTED_KEYS = new Set(["studio_content", "home_content", "labs_content"])
 
 export async function GET(request: Request) {
+  const auth = await requireAdminRole(request, "viewer")
+  if (!auth.ok) return auth.response
+
   const { searchParams } = new URL(request.url)
   const key = searchParams.get("key")
 
@@ -27,6 +31,9 @@ export async function GET(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  const auth = await requireAdminRole(request, "editor")
+  if (!auth.ok) return auth.response
+
   try {
     const body = await request.json()
     const key = String(body?.key || "")

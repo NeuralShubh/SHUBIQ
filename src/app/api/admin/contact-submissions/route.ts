@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { requireAdminRole } from "@/lib/admin-request-auth"
 import { getSupabaseAdmin } from "@/lib/supabase-admin"
 
 const CONTACT_TABLES = ["contact_submissions", "contacts", "messages"] as const
@@ -41,7 +42,10 @@ function normalizeSubmission(row: Record<string, any>): ContactSubmission {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const auth = await requireAdminRole(request, "viewer")
+  if (!auth.ok) return auth.response
+
   try {
     const table = await resolveContactTable()
     if (!table) {
@@ -69,6 +73,9 @@ export async function GET() {
 }
 
 export async function PATCH(req: Request) {
+  const auth = await requireAdminRole(req, "editor")
+  if (!auth.ok) return auth.response
+
   try {
     const body = (await req.json()) as { id?: string; read?: boolean; status?: string }
     if (!body.id) {
@@ -116,6 +123,9 @@ export async function PATCH(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const auth = await requireAdminRole(req, "admin")
+  if (!auth.ok) return auth.response
+
   try {
     const { searchParams } = new URL(req.url)
     const id = searchParams.get("id")

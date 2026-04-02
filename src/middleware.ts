@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { ADMIN_AUTH_COOKIE, verifyAdminSessionToken } from '@/lib/admin-auth'
 
+const SETTINGS_ALLOWED = new Set(['owner', 'admin'])
+const CONTENT_ALLOWED = new Set(['owner', 'admin', 'editor'])
+
 export async function middleware(request: NextRequest) {
   const isAdminPage = request.nextUrl.pathname.startsWith('/admin')
   const isAdminLogin = request.nextUrl.pathname.startsWith('/admin/login')
@@ -21,10 +24,24 @@ export async function middleware(request: NextRequest) {
         url.searchParams.set('next', request.nextUrl.pathname)
         return NextResponse.redirect(url)
       }
-    } else if (isAdminLogin) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/admin'
-      return NextResponse.redirect(url)
+    } else {
+      if (isAdminLogin) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/admin'
+        return NextResponse.redirect(url)
+      }
+
+      if (isAdminPage && request.nextUrl.pathname.startsWith('/admin/settings') && !SETTINGS_ALLOWED.has(session.role)) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/admin'
+        return NextResponse.redirect(url)
+      }
+
+      if (isAdminPage && request.nextUrl.pathname.startsWith('/admin/content') && !CONTENT_ALLOWED.has(session.role)) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/admin'
+        return NextResponse.redirect(url)
+      }
     }
   }
 
