@@ -110,7 +110,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate min-h-screen flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[12vh] pb-10 sm:pb-16"
+      className="relative isolate min-h-screen max-[768px]:min-h-[92svh] flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[8.5vh] pb-10 max-[768px]:pb-6 sm:pb-16"
     >
       {/* Background grid */}
       <div
@@ -132,7 +132,7 @@ export default function Hero() {
       {/* Animated rings (CSS-based, keep existing) */}
       <div
         ref={ring1Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView && ringsReady ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 max-[768px]:scale-[0.86] ${isInView && ringsReady ? "in-view" : ""}`}
         style={{ width: 720, height: 720, marginLeft: -360, marginTop: -360, opacity: 0, animationDelay: "0.1s" }}
       >
         <div className="hero-ring-1-border absolute inset-0 rounded-full border border-[rgb(var(--gold-rgb)/0.14)]" />
@@ -142,7 +142,7 @@ export default function Hero() {
       </div>
       <div
         ref={ring2Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView && ringsReady ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 max-[768px]:scale-[0.86] ${isInView && ringsReady ? "in-view" : ""}`}
         style={{ width: 460, height: 460, marginLeft: -230, marginTop: -230, opacity: 0, animationDelay: "0.28s" }}
       >
         <div className="hero-ring-2-border absolute inset-0 rounded-full" style={{ border: "1px dashed rgb(var(--gold-rgb) / 0.12)" }} />
@@ -150,14 +150,14 @@ export default function Hero() {
       </div>
       <div
         ref={ring3Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 ${isInView && ringsReady ? "in-view" : ""}`}
+        className={`hero-bg hero-ring absolute top-1/2 left-1/2 max-[768px]:scale-[0.86] ${isInView && ringsReady ? "in-view" : ""}`}
         style={{ width: 270, height: 270, marginLeft: -135, marginTop: -135, opacity: 0, animationDelay: "0.46s" }}
       >
         <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
       </div>
 
       {/* Main content — cinematic entrance */}
-      <div className="hero-content relative z-20 text-center w-full mx-auto md:-translate-y-10 overflow-visible">
+      <div className="hero-content relative z-20 text-center w-full mx-auto md:-translate-y-10 max-[768px]:-translate-y-3 overflow-visible">
 
         {/* SHUBIQ wordmark — blur + scale entrance */}
         <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em] relative">
@@ -213,7 +213,7 @@ export default function Hero() {
 
           return (
             <motion.h1
-              className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(77px,24.5vw,114px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.1] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[1.1px] md:tracking-[1.6px] mb-0 perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.16em] md:px-[0.26em] inline-block overflow-visible whitespace-nowrap -mt-[10px]"
+              className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(72px,23vw,104px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.04] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[0.9px] md:tracking-[1.6px] mb-0 perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.1em] md:px-[0.26em] inline-block overflow-visible whitespace-nowrap -mt-[10px]"
               style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
               variants={containerVariants}
               initial="hidden"
@@ -236,7 +236,7 @@ export default function Hero() {
 
         {/* Tagline with lines */}
         <motion.div
-          className="hero-tagline-row mb-2 max-[768px]:mb-1.5 md:mb-3 -mt-12 max-[768px]:-mt-9 md:-mt-16"
+          className="hero-tagline-row mb-2 max-[768px]:mb-1 md:mb-3 -mt-12 max-[768px]:-mt-5 md:-mt-16"
           initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
           animate={taglineReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
@@ -249,11 +249,11 @@ export default function Hero() {
         </motion.div>
 
         {/* Spacing before CTAs */}
-        <div className="h-8 sm:h-10" />
+        <div className="h-4 sm:h-10 max-[768px]:h-2" />
 
         {/* CTA Buttons */}
         <motion.div
-          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-4 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-12 sm:mt-14 mb-5 sm:mb-6"
+          className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-3 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-stretch max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-8 max-[768px]:mt-6 sm:mt-14 mb-5 max-[768px]:mb-4 sm:mb-6"
           initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
           animate={ctaReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
           transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
@@ -262,7 +262,7 @@ export default function Hero() {
             type="button"
             onClick={() => scrollTo("projects")}
             data-cursor="View"
-            className="hero-cta cta-ghost w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
+            className="hero-cta cta-ghost w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[12px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
           >
             <span className="relative z-[1]">Explore Work</span>
           </button>
@@ -270,7 +270,7 @@ export default function Hero() {
             type="button"
             onClick={() => scrollTo("contact")}
             data-cursor="Hire"
-            className="hero-cta cta-ghost w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
+            className="hero-cta cta-ghost w-full sm:w-auto min-w-0 sm:min-w-[220px] max-w-none sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[12px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
           >
             <span className="relative z-[1]">Hire Us</span>
           </button>
@@ -278,7 +278,7 @@ export default function Hero() {
 
         {/* Social links */}
         <motion.div
-          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-4 gap-y-3 sm:gap-8 justify-center items-center mb-6 sm:mb-8 mt-6 sm:mt-8 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
+          className="mx-auto w-full max-[768px]:max-w-[360px] sm:w-fit border-t border-gold/15 pt-4 sm:pt-5 max-[768px]:pt-3 grid grid-cols-2 sm:flex max-[768px]:gap-x-6 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-3 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-3 sm:mb-8 mt-6 max-[768px]:mt-3 sm:mt-8 max-[768px]:[&>*:nth-child(3)]:col-span-2 max-[768px]:[&>*:nth-child(3)]:justify-center"
           initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
           animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
