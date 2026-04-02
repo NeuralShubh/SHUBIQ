@@ -18,6 +18,13 @@ export async function GET(request: Request) {
   if (!auth.ok) return auth.response
 
   try {
+    const { searchParams } = new URL(request.url)
+    const typeFilter = searchParams.get("type")
+    const query = (searchParams.get("q") || "").trim().toLowerCase()
+    const days = Number(searchParams.get("days") || 30)
+    const limit = Math.min(200, Math.max(10, Number(searchParams.get("limit") || 60)))
+    const minTs = Date.now() - (Number.isFinite(days) ? days : 30) * 24 * 60 * 60 * 1000
+
     const supabase = getSupabaseAdmin()
     const contactTable = await resolveContactTable()
     if (!contactTable) return NextResponse.json({ ok: false, error: "No contact table found" }, { status: 500 })
@@ -56,12 +63,25 @@ export async function GET(request: Request) {
       })),
     ]
       .filter((item) => Boolean(item.at))
+      .filter((item) => {
+        if (typeFilter && typeFilter !== "all" && item.type !== typeFilter) return false
+        const ts = new Date(item.at || 0).getTime()
+        if (Number.isFinite(ts) && ts < minTs) return false
+        if (!query) return true
+        return `${item.title} ${item.description} ${item.type}`.toLowerCase().includes(query)
+      })
       .sort((a, b) => new Date(b.at || 0).getTime() - new Date(a.at || 0).getTime())
-      .slice(0, 60)
+      .slice(0, limit)
 
     return NextResponse.json({
       ok: true,
       checkedAt: new Date().toISOString(),
+      filters: {
+        type: typeFilter || "all",
+        q: query,
+        days: Number.isFinite(days) ? days : 30,
+        limit,
+      },
       items,
     })
   } catch (error) {
@@ -74,4 +94,3 @@ export async function GET(request: Request) {
     )
   }
 }
-
