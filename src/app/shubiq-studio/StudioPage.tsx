@@ -326,29 +326,6 @@ function StudioHero() {
         </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, delay: 0.5 }}
-        className="relative z-10 mx-auto mt-10 grid max-w-7xl gap-3 sm:grid-cols-3"
-      >
-        {[
-          { label: "Build Discipline", value: "Design + Code Parallel" },
-          { label: "Average Kickoff", value: "Within 72 Hours" },
-          { label: "Project Direction", value: "Outcome-First Execution" },
-        ].map((item, index) => (
-          <motion.div
-            key={item.label}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.42, delay: 0.6 + index * 0.08 }}
-            className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.14)] bg-[rgb(var(--cream-rgb)/0.03)] px-4 py-3"
-          >
-            <p className="font-rajdhani text-[9px] tracking-[2.3px] uppercase text-cream/60">{item.label}</p>
-            <p className="mt-1 font-cormorant text-[18px] text-cream/80">{item.value}</p>
-          </motion.div>
-        ))}
-      </motion.div>
     </section>
   )
 }
