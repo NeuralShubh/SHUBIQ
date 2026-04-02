@@ -976,7 +976,7 @@ export default function StudioPage() {
 
     async function loadManagedContent() {
       try {
-        const res = await fetch("/api/admin/content?key=studio_content", { cache: "no-store" })
+        const res = await fetch("/api/content?key=studio_content", { cache: "no-store" })
         if (!res.ok) return
         const json = await res.json()
         const remote = (json?.content && typeof json.content === "object" ? json.content : {}) as Partial<StudioContent>

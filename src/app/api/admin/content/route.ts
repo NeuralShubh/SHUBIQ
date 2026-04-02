@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { getSupabaseAdmin } from "@/lib/supabase-admin"
 
 const TABLE = "site_content"
-const SUPPORTED_KEYS = new Set(["studio_content"])
+const SUPPORTED_KEYS = new Set(["studio_content", "home_content", "labs_content"])
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -58,4 +58,3 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unexpected error" }, { status: 500 })
   }
 }
-

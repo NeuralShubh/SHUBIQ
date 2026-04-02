@@ -3,6 +3,14 @@
 import { useEffect, useMemo, useState } from "react"
 import { AdminButton, AdminCard, AdminInput, AdminTextarea } from "@/components/admin/AdminUI"
 import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "@/app/shubiq-studio/studioContent"
+import {
+  DEFAULT_HOME_CONTENT,
+  DEFAULT_LABS_CONTENT,
+  mergeHomeManagedContent,
+  mergeLabsManagedContent,
+  type HomeManagedContent,
+  type LabsManagedContent,
+} from "@/app/content/managedContent"
 import { toast } from "sonner"
 import { FileEdit, Plus, RefreshCw, Save, Trash2 } from "lucide-react"
 
@@ -36,10 +44,16 @@ function slugify(title: string) {
 }
 
 export default function ContentControlPage() {
-  const [activeTab, setActiveTab] = useState<"studio" | "blog">("studio")
+  const [activeTab, setActiveTab] = useState<"studio" | "home" | "labs" | "blog">("studio")
   const [loadingStudio, setLoadingStudio] = useState(true)
   const [savingStudio, setSavingStudio] = useState(false)
   const [studioContent, setStudioContent] = useState<StudioContent>(DEFAULT_STUDIO_CONTENT)
+  const [loadingHome, setLoadingHome] = useState(true)
+  const [savingHome, setSavingHome] = useState(false)
+  const [homeContent, setHomeContent] = useState<HomeManagedContent>(DEFAULT_HOME_CONTENT)
+  const [loadingLabs, setLoadingLabs] = useState(true)
+  const [savingLabs, setSavingLabs] = useState(false)
+  const [labsContent, setLabsContent] = useState<LabsManagedContent>(DEFAULT_LABS_CONTENT)
 
   const [blogLoading, setBlogLoading] = useState(true)
   const [blogItems, setBlogItems] = useState<BlogItem[]>([])
@@ -89,6 +103,72 @@ export default function ContentControlPage() {
       toast.error(error instanceof Error ? error.message : "Failed to save studio content")
     } finally {
       setSavingStudio(false)
+    }
+  }
+
+  async function loadHomeContent() {
+    setLoadingHome(true)
+    try {
+      const res = await fetch("/api/admin/content?key=home_content", { cache: "no-store" })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || "Failed to load home content")
+      setHomeContent(mergeHomeManagedContent(json.content))
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to load home content")
+      setHomeContent(DEFAULT_HOME_CONTENT)
+    } finally {
+      setLoadingHome(false)
+    }
+  }
+
+  async function saveHomeContent() {
+    setSavingHome(true)
+    try {
+      const res = await fetch("/api/admin/content", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: "home_content", content: homeContent }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || "Save failed")
+      toast.success("Home content saved")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to save home content")
+    } finally {
+      setSavingHome(false)
+    }
+  }
+
+  async function loadLabsContent() {
+    setLoadingLabs(true)
+    try {
+      const res = await fetch("/api/admin/content?key=labs_content", { cache: "no-store" })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || "Failed to load labs content")
+      setLabsContent(mergeLabsManagedContent(json.content))
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to load labs content")
+      setLabsContent(DEFAULT_LABS_CONTENT)
+    } finally {
+      setLoadingLabs(false)
+    }
+  }
+
+  async function saveLabsContent() {
+    setSavingLabs(true)
+    try {
+      const res = await fetch("/api/admin/content", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: "labs_content", content: labsContent }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || "Save failed")
+      toast.success("Labs content saved")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to save labs content")
+    } finally {
+      setSavingLabs(false)
     }
   }
 
@@ -167,6 +247,8 @@ export default function ContentControlPage() {
 
   useEffect(() => {
     loadStudioContent()
+    loadHomeContent()
+    loadLabsContent()
     loadBlogItems()
   }, [])
 
@@ -175,11 +257,17 @@ export default function ContentControlPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-cream font-cinzel tracking-wide">Content Control</h1>
-          <p className="text-[14px] text-cream/70 mt-1 font-medium">Manage Studio content and blog publishing from one panel.</p>
+          <p className="text-[14px] text-cream/70 mt-1 font-medium">Manage Home, Studio, Labs copy and blog publishing from one panel.</p>
         </div>
         <div className="flex items-center gap-2">
           <AdminButton variant={activeTab === "studio" ? "primary" : "secondary"} onClick={() => setActiveTab("studio")}>
             Studio
+          </AdminButton>
+          <AdminButton variant={activeTab === "home" ? "primary" : "secondary"} onClick={() => setActiveTab("home")}>
+            Home
+          </AdminButton>
+          <AdminButton variant={activeTab === "labs" ? "primary" : "secondary"} onClick={() => setActiveTab("labs")}>
+            Labs
           </AdminButton>
           <AdminButton variant={activeTab === "blog" ? "primary" : "secondary"} onClick={() => setActiveTab("blog")}>
             Blog
@@ -264,6 +352,108 @@ export default function ContentControlPage() {
                 rows={3}
                 value={studioContent.contactDescription}
                 onChange={(e) => setStudioContent((p) => ({ ...p, contactDescription: e.target.value }))}
+              />
+            </div>
+          </div>
+        </AdminCard>
+      )}
+
+      {activeTab === "home" && (
+        <AdminCard className="space-y-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-cream flex items-center gap-2">
+                <FileEdit size={16} className="text-gold" />
+                Home Hero Content
+              </h2>
+              <p className="text-xs text-cream/50 mt-1">Controls tagline and CTA text on the home hero section.</p>
+            </div>
+            <div className="flex gap-2">
+              <AdminButton variant="secondary" onClick={loadHomeContent} disabled={loadingHome}>
+                <RefreshCw size={14} />
+                Reload
+              </AdminButton>
+              <AdminButton onClick={saveHomeContent} disabled={loadingHome || savingHome}>
+                <Save size={14} />
+                Save
+              </AdminButton>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <AdminInput
+              label="Hero Tagline"
+              value={homeContent.heroTagline}
+              onChange={(e) => setHomeContent((p) => ({ ...p, heroTagline: e.target.value }))}
+            />
+            <AdminInput
+              label="Explore CTA"
+              value={homeContent.heroExploreCta}
+              onChange={(e) => setHomeContent((p) => ({ ...p, heroExploreCta: e.target.value }))}
+            />
+            <AdminInput
+              label="Hire CTA"
+              value={homeContent.heroHireCta}
+              onChange={(e) => setHomeContent((p) => ({ ...p, heroHireCta: e.target.value }))}
+            />
+          </div>
+        </AdminCard>
+      )}
+
+      {activeTab === "labs" && (
+        <AdminCard className="space-y-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-cream flex items-center gap-2">
+                <FileEdit size={16} className="text-gold" />
+                Labs Hero Content
+              </h2>
+              <p className="text-xs text-cream/50 mt-1">Controls the hero badge, heading, description, and CTA text on /shubiq-labs.</p>
+            </div>
+            <div className="flex gap-2">
+              <AdminButton variant="secondary" onClick={loadLabsContent} disabled={loadingLabs}>
+                <RefreshCw size={14} />
+                Reload
+              </AdminButton>
+              <AdminButton onClick={saveLabsContent} disabled={loadingLabs || savingLabs}>
+                <Save size={14} />
+                Save
+              </AdminButton>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <AdminInput
+              label="Badge Label"
+              value={labsContent.badgeLabel}
+              onChange={(e) => setLabsContent((p) => ({ ...p, badgeLabel: e.target.value }))}
+            />
+            <AdminInput
+              label="Hero Title Line 1"
+              value={labsContent.heroTitleLine1}
+              onChange={(e) => setLabsContent((p) => ({ ...p, heroTitleLine1: e.target.value }))}
+            />
+            <AdminInput
+              label="Hero Title Line 2"
+              value={labsContent.heroTitleLine2}
+              onChange={(e) => setLabsContent((p) => ({ ...p, heroTitleLine2: e.target.value }))}
+            />
+            <AdminInput
+              label="Primary CTA"
+              value={labsContent.primaryCta}
+              onChange={(e) => setLabsContent((p) => ({ ...p, primaryCta: e.target.value }))}
+            />
+            <AdminInput
+              label="Secondary CTA"
+              value={labsContent.secondaryCta}
+              onChange={(e) => setLabsContent((p) => ({ ...p, secondaryCta: e.target.value }))}
+            />
+            <div className="lg:col-span-2">
+              <AdminTextarea
+                label="Hero Description"
+                rows={4}
+                value={labsContent.heroDescription}
+                onChange={(e) => setLabsContent((p) => ({ ...p, heroDescription: e.target.value }))}
               />
             </div>
           </div>
@@ -388,4 +578,3 @@ export default function ContentControlPage() {
     </div>
   )
 }
-

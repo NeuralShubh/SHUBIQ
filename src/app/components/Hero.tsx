@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { SOCIAL_LINKS } from "../data"
 import { useInViewOnce } from "../lib/gsap-hooks"
+import { DEFAULT_HOME_CONTENT, mergeHomeManagedContent } from "../content/managedContent"
 
 const EASE_PREMIUM = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -17,6 +18,7 @@ export default function Hero() {
   const [taglineReady, setTaglineReady] = useState(false)
   const [ctaReady, setCtaReady] = useState(false)
   const [socialReady, setSocialReady] = useState(false)
+  const [homeContent, setHomeContent] = useState(DEFAULT_HOME_CONTENT)
 
   // Ring rotation RAF
   useEffect(() => {
@@ -83,6 +85,26 @@ export default function Hero() {
       window.clearTimeout(t3)
       window.clearTimeout(t4)
       window.clearTimeout(t5)
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadHomeContent() {
+      try {
+        const res = await fetch("/api/content?key=home_content", { cache: "no-store" })
+        if (!res.ok) return
+        const json = await res.json()
+        if (!cancelled) {
+          setHomeContent(mergeHomeManagedContent(json?.content))
+        }
+      } catch {
+        // keep defaults
+      }
+    }
+    loadHomeContent()
+    return () => {
+      cancelled = true
     }
   }, [])
 
@@ -243,7 +265,7 @@ export default function Hero() {
         >
           <span className="hero-tagline-line" />
           <span className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase tracking-[3.6px] md:tracking-[7px]">
-            Intelligence That Wins
+            {homeContent.heroTagline}
           </span>
           <span className="hero-tagline-line" />
         </motion.div>
@@ -265,7 +287,7 @@ export default function Hero() {
               data-cursor="View"
               className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[76%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[252px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[10px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
             >
-              <span className="relative z-[1]">Explore Work</span>
+              <span className="relative z-[1]">{homeContent.heroExploreCta}</span>
             </button>
             <button
               type="button"
@@ -273,7 +295,7 @@ export default function Hero() {
               data-cursor="Hire"
               className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[76%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[252px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[10px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
             >
-              <span className="relative z-[1]">Hire Us</span>
+              <span className="relative z-[1]">{homeContent.heroHireCta}</span>
             </button>
           </motion.div>
 

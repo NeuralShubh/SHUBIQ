@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import {
@@ -20,6 +20,7 @@ import {
 } from "lucide-react"
 import { LAB_PRODUCTS } from "../data-labs"
 import SectionDivider from "../components/SectionDivider"
+import { DEFAULT_LABS_CONTENT, mergeLabsManagedContent } from "../content/managedContent"
 
 function ProductIcon({ category }: { category: string }) {
   if (category === "Mobile App") return <Smartphone size={18} className="text-[rgb(var(--gold-rgb))]" />
@@ -55,6 +56,26 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export default function LabsPageClient() {
+  const [labsContent, setLabsContent] = useState(DEFAULT_LABS_CONTENT)
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadLabsContent() {
+      try {
+        const res = await fetch("/api/content?key=labs_content", { cache: "no-store" })
+        if (!res.ok) return
+        const json = await res.json()
+        if (!cancelled) setLabsContent(mergeLabsManagedContent(json?.content))
+      } catch {
+        // fallback to defaults
+      }
+    }
+    loadLabsContent()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const orderedProducts = useMemo(() => {
     const flow = LAB_PRODUCTS.find((product) => product.id === "shubiq-flow")
     const atlas = LAB_PRODUCTS.find((product) => product.id === "future-web")
@@ -180,7 +201,7 @@ export default function LabsPageClient() {
           >
             <Sparkles size={14} className="text-[rgb(var(--gold-rgb))]" />
             <span className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">
-              SHUBIQ Labs Product Division
+              {labsContent.badgeLabel}
             </span>
           </motion.div>
 
@@ -190,8 +211,8 @@ export default function LabsPageClient() {
             transition={{ duration: 0.8, delay: 0.08 }}
             className="mt-6 max-w-5xl font-shubiq-heading text-[clamp(40px,7vw,92px)] leading-[0.92] text-cream"
           >
-            Systems For
-            <span className="block text-[rgb(var(--gold-rgb))]">Elite Execution</span>
+            {labsContent.heroTitleLine1}
+            <span className="block text-[rgb(var(--gold-rgb))]">{labsContent.heroTitleLine2}</span>
           </motion.h1>
 
           <motion.p
@@ -200,8 +221,7 @@ export default function LabsPageClient() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="mt-6 max-w-3xl font-cormorant text-[clamp(17px,2.1vw,25px)] leading-[1.48] text-cream/78"
           >
-            SHUBIQ Labs builds precision products for people who treat performance as craft. Every app is engineered to remove noise,
-            accelerate decisions, and compound execution quality over time.
+            {labsContent.heroDescription}
           </motion.p>
 
           <motion.div
@@ -214,14 +234,14 @@ export default function LabsPageClient() {
               href="/shubiq-labs/shubiq-flow"
               className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
             >
-              Explore Flow Beta
+              {labsContent.primaryCta}
               <ArrowRight size={14} />
             </Link>
             <a
               href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Early%20Access"
               className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.24)] bg-[rgb(var(--cream-rgb)/0.02)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
             >
-              Join Early Access
+              {labsContent.secondaryCta}
               <ArrowUpRight size={14} />
             </a>
           </motion.div>
