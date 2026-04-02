@@ -39,6 +39,8 @@ export default function UnifiedNavbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeTheme, setActiveTheme] = useState<Theme>("gold")
 
+  if (pathname.startsWith("/admin")) return null
+
   useEffect(() => {
     const syncTheme = () => setActiveTheme(getCurrentTheme())
     syncTheme()
