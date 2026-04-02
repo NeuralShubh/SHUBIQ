@@ -8,6 +8,7 @@ export async function middleware(request: NextRequest) {
   const isAdminPage = request.nextUrl.pathname.startsWith('/admin')
   const isAdminLogin = request.nextUrl.pathname.startsWith('/admin/login')
   const isAdminApi = request.nextUrl.pathname.startsWith('/api/admin')
+  const requestedPath = `${request.nextUrl.pathname}${request.nextUrl.search || ''}`
 
   if (isAdminPage || isAdminApi) {
     const sessionToken = request.cookies.get(ADMIN_AUTH_COOKIE)?.value
@@ -21,13 +22,16 @@ export async function middleware(request: NextRequest) {
       if (!isAdminLogin) {
         const url = request.nextUrl.clone()
         url.pathname = '/admin/login'
-        url.searchParams.set('next', request.nextUrl.pathname)
+        url.searchParams.set('next', requestedPath)
         return NextResponse.redirect(url)
       }
     } else {
       if (isAdminLogin) {
+        const next = request.nextUrl.searchParams.get('next')
+        const safeNext = next && next.startsWith('/admin') && !next.startsWith('//') ? next : '/admin'
         const url = request.nextUrl.clone()
-        url.pathname = '/admin'
+        url.pathname = safeNext
+        url.search = ''
         return NextResponse.redirect(url)
       }
 

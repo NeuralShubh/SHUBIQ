@@ -2,6 +2,7 @@ export type AdminRole = "owner" | "admin" | "editor" | "viewer"
 
 export const ADMIN_AUTH_COOKIE = "shubiq_admin_session"
 export const ADMIN_ROLE_COOKIE = "shubiq_admin_role"
+export const ADMIN_LOGIN_LOCK_COOKIE = "shubiq_admin_login_lock"
 const TOKEN_VERSION = "v1"
 const DEFAULT_SESSION_DAYS = 30
 
@@ -23,12 +24,27 @@ async function sha256Hex(input: string) {
   return toHex(new Uint8Array(digest))
 }
 
+function constantTimeEqual(a: string, b: string) {
+  if (a.length !== b.length) return false
+  let result = 0
+  for (let i = 0; i < a.length; i += 1) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  }
+  return result === 0
+}
+
 function isValidRole(role: string): role is AdminRole {
   return VALID_ROLES.includes(role as AdminRole)
 }
 
 export function getExpiryTimestamp(days = DEFAULT_SESSION_DAYS) {
   return Date.now() + days * 24 * 60 * 60 * 1000
+}
+
+export function normalizeSessionDays(value: unknown) {
+  const num = Number(value)
+  if (Number.isFinite(num) && num >= 1 && num <= 90) return Math.round(num)
+  return DEFAULT_SESSION_DAYS
 }
 
 export async function createAdminSessionToken(role: AdminRole, displayName = "Shubham", expiresAt = getExpiryTimestamp()) {
@@ -52,7 +68,7 @@ export async function verifyAdminSessionToken(token: string | undefined | null) 
 
   const payload = `${version}.${roleRaw}.${expiresRaw}.${safeName}`
   const expectedSig = await sha256Hex(`${payload}.${getSecret()}`)
-  if (signature !== expectedSig) return null
+  if (!constantTimeEqual(signature, expectedSig)) return null
 
   return {
     role: roleRaw,

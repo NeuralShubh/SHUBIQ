@@ -1,18 +1,21 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { loginWithPassword } from './actions'
 
 const initialState: any = {}
 
 export default function AdminLogin() {
+  const searchParams = useSearchParams()
+  const nextPath = searchParams.get('next') || '/admin'
   const [state, formAction, isPending] = useActionState(loginWithPassword, initialState)
   
-  if (state?.success) {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/admin'
+  useEffect(() => {
+    if (state?.success && typeof window !== 'undefined') {
+      window.location.href = state.redirectTo || '/admin'
     }
-  }
+  }, [state])
   
   return (
     <div className="relative min-h-screen bg-[rgb(var(--ink-rgb))] flex items-center justify-center px-4 font-inter selection:bg-gold/30">
@@ -24,6 +27,7 @@ export default function AdminLogin() {
         </div>
         
         <form action={formAction} className="space-y-4">
+          <input type="hidden" name="next" value={nextPath} />
           {state?.error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-300 text-sm px-4 py-3 rounded-lg">
               {state.error}
@@ -37,6 +41,19 @@ export default function AdminLogin() {
             className="w-full bg-[rgb(var(--surface-1-rgb))] border border-[rgb(var(--cream-rgb)/0.16)] rounded-lg px-4 py-3 text-sm text-cream placeholder:text-cream/45 focus:outline-none focus:border-gold/60 transition-colors"
             required
           />
+
+          <div className="space-y-1.5">
+            <label className="text-[11px] text-cream/55 tracking-[0.12em] uppercase font-rajdhani">Session Duration</label>
+            <select
+              name="sessionDays"
+              defaultValue="30"
+              className="w-full bg-[rgb(var(--surface-1-rgb))] border border-[rgb(var(--cream-rgb)/0.16)] rounded-lg px-4 py-3 text-sm text-cream focus:outline-none focus:border-gold/60 transition-colors"
+            >
+              <option value="1">1 day</option>
+              <option value="7">7 days</option>
+              <option value="30">30 days</option>
+            </select>
+          </div>
           
           <button
             type="submit"
@@ -48,7 +65,7 @@ export default function AdminLogin() {
         </form>
 
         <p className="mt-4 text-center text-[11px] text-cream/45 tracking-[0.08em] uppercase font-rajdhani">
-          Role-based secure session
+          Role-based secure session with attempt protection
         </p>
       </div>
     </div>
