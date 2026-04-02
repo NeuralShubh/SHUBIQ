@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { AdminButton, AdminCard, ConfirmModal } from '@/components/admin/AdminUI'
-import { Trash2, Search, X, MailOpen, Mail, RefreshCw } from 'lucide-react'
+import { Trash2, Search, X, MailOpen, Mail, RefreshCw, CheckSquare, Square, Download } from 'lucide-react'
 import { toast } from 'sonner'
 
 type Inquiry = {
@@ -24,11 +24,13 @@ export default function FormSubmissionsDashboard() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [activeRole, setActiveRole] = useState<'owner' | 'admin' | 'editor' | 'viewer'>('viewer')
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'unread' | 'new' | 'in-progress' | 'responded' | 'closed'>('all')
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [viewingInquiry, setViewingInquiry] = useState<Inquiry | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [deletingIds, setDeletingIds] = useState<string[]>([])
 
   async function fetchInquiries(silent = false) {
     if (silent) {
@@ -52,6 +54,11 @@ export default function FormSubmissionsDashboard() {
 
   useEffect(() => {
     fetchInquiries()
+    const match = document.cookie.match(/(?:^|;\s*)shubiq_admin_role=([^;]+)/)
+    const role = match ? decodeURIComponent(match[1]) : 'viewer'
+    if (role === 'owner' || role === 'admin' || role === 'editor' || role === 'viewer') {
+      setActiveRole(role)
+    }
   }, [])
 
   async function markAsRead(id: string) {
@@ -75,6 +82,10 @@ export default function FormSubmissionsDashboard() {
   }
 
   const handleStatusChange = async (id: string, newStatus: string) => {
+    if (!canEdit) {
+      toast.error('Your role cannot update lead status')
+      return
+    }
     try {
       const res = await fetch('/api/admin/contact-submissions', {
         method: 'PATCH',
@@ -94,25 +105,26 @@ export default function FormSubmissionsDashboard() {
 
   const confirmDelete = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation()
-    setDeletingId(id)
+    setDeletingIds([id])
     setIsDeleteModalOpen(true)
   }
 
   const handleDelete = async () => {
-    if (!deletingId) return
+    if (deletingIds.length === 0) return
     try {
-      const res = await fetch(`/api/admin/contact-submissions?id=${encodeURIComponent(deletingId)}`, { method: 'DELETE' })
+      const res = await fetch(`/api/admin/contact-submissions?ids=${encodeURIComponent(deletingIds.join(','))}`, { method: 'DELETE' })
       const json = await res.json()
       if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to delete inquiry')
 
-      toast.success('Inquiry deleted')
-      setInquiries((prev) => prev.filter((item) => item.id !== deletingId))
-      if (viewingInquiry?.id === deletingId) setViewingInquiry(null)
+      toast.success(deletingIds.length === 1 ? 'Inquiry deleted' : 'Selected inquiries deleted')
+      setInquiries((prev) => prev.filter((item) => !deletingIds.includes(item.id)))
+      setSelectedIds((prev) => prev.filter((id) => !deletingIds.includes(id)))
+      if (viewingInquiry && deletingIds.includes(viewingInquiry.id)) setViewingInquiry(null)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error deleting inquiry')
     } finally {
       setIsDeleteModalOpen(false)
-      setDeletingId(null)
+      setDeletingIds([])
     }
   }
 
@@ -134,6 +146,82 @@ export default function FormSubmissionsDashboard() {
   }, [inquiries, search, filter])
 
   const unreadCount = inquiries.filter((item) => !item.read).length
+  const canEdit = activeRole === 'owner' || activeRole === 'admin' || activeRole === 'editor'
+  const canDelete = activeRole === 'owner' || activeRole === 'admin'
+  const allFilteredSelected = filtered.length > 0 && filtered.every((item) => selectedIds.includes(item.id))
+
+  function toggleSelectOne(id: string) {
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((value) => value !== id) : [...prev, id]))
+  }
+
+  function toggleSelectFiltered() {
+    if (allFilteredSelected) {
+      setSelectedIds((prev) => prev.filter((id) => !filtered.some((item) => item.id === id)))
+      return
+    }
+
+    const next = new Set(selectedIds)
+    for (const item of filtered) next.add(item.id)
+    setSelectedIds(Array.from(next))
+  }
+
+  async function bulkUpdate(payload: { read?: boolean; status?: string }) {
+    if (selectedIds.length === 0) return
+    if (!canEdit) {
+      toast.error('Your role cannot update lead status')
+      return
+    }
+
+    try {
+      const res = await fetch('/api/admin/contact-submissions', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: selectedIds, ...payload }),
+      })
+      const json = await res.json()
+      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Bulk update failed')
+      toast.success('Bulk update completed')
+      await fetchInquiries(true)
+      setSelectedIds([])
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Bulk update failed')
+    }
+  }
+
+  function confirmDeleteMany() {
+    if (!canDelete) {
+      toast.error('Only admin or owner can delete submissions')
+      return
+    }
+    if (selectedIds.length === 0) return
+    setDeletingIds(selectedIds)
+    setIsDeleteModalOpen(true)
+  }
+
+  function exportFilteredCsv() {
+    const rows = filtered.map((item) => [
+      item.name,
+      item.email,
+      item.phone,
+      item.business_type,
+      item.status,
+      item.source,
+      item.created_at || '',
+      (item.message || '').replace(/\n/g, ' '),
+    ])
+    const header = ['Name', 'Email', 'Phone', 'Business Type', 'Status', 'Source', 'Created At', 'Message']
+    const csv = [header, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `shubiq-leads-${new Date().toISOString().slice(0, 10)}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className="space-y-6 pb-20 animate-in fade-in duration-300">
@@ -149,10 +237,16 @@ export default function FormSubmissionsDashboard() {
           </h1>
           <p className="text-[14px] font-medium text-cream/70 mt-1">Manage contact inquiries and studio leads from one queue.</p>
         </div>
-        <AdminButton variant="secondary" onClick={() => fetchInquiries(true)} disabled={refreshing}>
-          <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
-          Refresh
-        </AdminButton>
+        <div className="flex items-center gap-2">
+          <AdminButton variant="secondary" onClick={exportFilteredCsv}>
+            <Download size={14} />
+            Export CSV
+          </AdminButton>
+          <AdminButton variant="secondary" onClick={() => fetchInquiries(true)} disabled={refreshing}>
+            <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
+            Refresh
+          </AdminButton>
+        </div>
       </div>
 
       <AdminCard className="p-0 overflow-hidden flex flex-col min-h-[400px]">
@@ -189,6 +283,23 @@ export default function FormSubmissionsDashboard() {
               </button>
             ))}
           </div>
+          {selectedIds.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-[11px] uppercase tracking-[2px] text-gold/80 font-rajdhani">{selectedIds.length} selected</span>
+              <AdminButton variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => bulkUpdate({ read: true })} disabled={!canEdit}>
+                Mark Read
+              </AdminButton>
+              <AdminButton variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => bulkUpdate({ status: 'In Progress' })} disabled={!canEdit}>
+                Set In Progress
+              </AdminButton>
+              <AdminButton variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => bulkUpdate({ status: 'Responded' })} disabled={!canEdit}>
+                Set Responded
+              </AdminButton>
+              <AdminButton variant="danger" className="px-3 py-1.5 text-xs" onClick={confirmDeleteMany} disabled={!canDelete}>
+                Delete Selected
+              </AdminButton>
+            </div>
+          )}
         </div>
 
         {loading ? (
@@ -206,7 +317,16 @@ export default function FormSubmissionsDashboard() {
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-[#09090b]/50 text-cream/50 text-[10px] uppercase font-bold tracking-[0.1em] font-rajdhani">
                 <tr className="border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-1-rgb))]">
-                  <th className="px-6 py-4 font-bold w-8"></th>
+                  <th className="px-6 py-4 font-bold w-8">
+                    <button
+                      type="button"
+                      onClick={toggleSelectFiltered}
+                      className="text-cream/60 hover:text-gold transition-colors"
+                      title={allFilteredSelected ? 'Unselect all' : 'Select all filtered'}
+                    >
+                      {allFilteredSelected ? <CheckSquare size={14} /> : <Square size={14} />}
+                    </button>
+                  </th>
                   <th className="px-6 py-4 font-bold">Contact</th>
                   <th className="px-6 py-4 font-bold">Status / Source</th>
                   <th className="px-6 py-4 font-bold">Received</th>
@@ -220,7 +340,22 @@ export default function FormSubmissionsDashboard() {
                     onClick={() => handleOpenModal(item)}
                     className={`hover:bg-[rgb(var(--surface-1-rgb))] transition-colors group cursor-pointer ${!item.read ? 'bg-gold/5 border-l-2 border-l-gold' : 'border-l-2 border-l-transparent'}`}
                   >
-                    <td className="px-6 py-5">{!item.read ? <Mail size={16} className="text-gold" /> : <MailOpen size={16} className="text-cream/30" />}</td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleSelectOne(item.id)
+                          }}
+                          className="text-cream/60 hover:text-gold transition-colors"
+                          title={selectedIds.includes(item.id) ? 'Unselect' : 'Select'}
+                        >
+                          {selectedIds.includes(item.id) ? <CheckSquare size={14} /> : <Square size={14} />}
+                        </button>
+                        {!item.read ? <Mail size={16} className="text-gold" /> : <MailOpen size={16} className="text-cream/30" />}
+                      </div>
+                    </td>
                     <td className="px-6 py-5">
                       <p className={`font-semibold ${!item.read ? 'text-cream' : 'text-cream/70'}`}>{item.name || 'Anonymous'}</p>
                       <p className="text-[12px] text-cream/40 mt-1">{item.email}</p>
@@ -249,14 +384,16 @@ export default function FormSubmissionsDashboard() {
                         : '-'}
                     </td>
                     <td className="px-6 py-5 text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={(e) => confirmDelete(item.id, e)}
-                          className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
+                      {canDelete && (
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => confirmDelete(item.id, e)}
+                            className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -330,11 +467,12 @@ export default function FormSubmissionsDashboard() {
                     <button
                       key={status}
                       onClick={() => handleStatusChange(viewingInquiry.id, status)}
+                      disabled={!canEdit}
                       className={`px-4 py-2 rounded-full text-[12px] font-bold tracking-wide transition-all uppercase ${
                         viewingInquiry.status === status
                           ? 'bg-gold text-[rgb(var(--surface-0-rgb))] shadow-[0_0_15px_rgba(var(--gold-rgb),0.3)]'
                           : 'bg-[rgb(var(--surface-2-rgb))] text-cream/50 hover:text-cream border border-[rgb(var(--cream-rgb)/0.1)]'
-                      }`}
+                      } ${!canEdit ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       {status}
                     </button>
@@ -344,12 +482,16 @@ export default function FormSubmissionsDashboard() {
             </div>
 
             <div className="p-5 border-t border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-1-rgb))] flex items-center justify-between shrink-0">
-              <button
-                onClick={() => confirmDelete(viewingInquiry.id)}
-                className="text-xs font-bold uppercase tracking-wider text-red-500/80 hover:text-red-400 flex items-center gap-2 hover:bg-red-500/10 px-3 py-2 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
-              >
-                <Trash2 size={14} /> Delete
-              </button>
+              {canDelete ? (
+                <button
+                  onClick={() => confirmDelete(viewingInquiry.id)}
+                  className="text-xs font-bold uppercase tracking-wider text-red-500/80 hover:text-red-400 flex items-center gap-2 hover:bg-red-500/10 px-3 py-2 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
+                >
+                  <Trash2 size={14} /> Delete
+                </button>
+              ) : (
+                <span className="text-xs text-cream/40 uppercase tracking-[2px]">Read Only</span>
+              )}
               <AdminButton variant="secondary" onClick={() => setViewingInquiry(null)}>
                 Close Window
               </AdminButton>

@@ -77,8 +77,10 @@ export async function PATCH(req: Request) {
   if (!auth.ok) return auth.response
 
   try {
-    const body = (await req.json()) as { id?: string; read?: boolean; status?: string }
-    if (!body.id) {
+    const body = (await req.json()) as { id?: string; ids?: string[]; read?: boolean; status?: string }
+    const ids = Array.isArray(body.ids) ? body.ids.filter((id): id is string => typeof id === "string" && id.trim().length > 0) : []
+    if (body.id && !ids.includes(body.id)) ids.push(body.id)
+    if (ids.length === 0) {
       return NextResponse.json({ ok: false, error: "Missing id payload" }, { status: 400 })
     }
     const wantsRead = typeof body.read === "boolean"
@@ -95,7 +97,7 @@ export async function PATCH(req: Request) {
     const supabase = getSupabaseAdmin()
 
     if (wantsStatus) {
-      const { error } = await supabase.from(table).update({ status: body.status }).eq("id", body.id)
+      const { error } = await supabase.from(table).update({ status: body.status }).in("id", ids)
       if (!error) return NextResponse.json({ ok: true })
     }
 
@@ -108,7 +110,7 @@ export async function PATCH(req: Request) {
 
     let lastError = "Unable to update read state"
     for (const patch of attempts) {
-      const { error } = await supabase.from(table).update(patch).eq("id", body.id)
+      const { error } = await supabase.from(table).update(patch).in("id", ids)
       if (!error) return NextResponse.json({ ok: true })
       lastError = error.message
     }
@@ -129,7 +131,16 @@ export async function DELETE(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
     const id = searchParams.get("id")
-    if (!id) {
+    const idsParam = searchParams.get("ids")
+    const ids = idsParam
+      ? idsParam
+          .split(",")
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : []
+    if (id) ids.push(id)
+
+    if (ids.length === 0) {
       return NextResponse.json({ ok: false, error: "Missing id" }, { status: 400 })
     }
 
@@ -139,7 +150,7 @@ export async function DELETE(req: Request) {
     }
 
     const supabase = getSupabaseAdmin()
-    const { error } = await supabase.from(table).delete().eq("id", id)
+    const { error } = await supabase.from(table).delete().in("id", ids)
     if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
 
     return NextResponse.json({ ok: true })
