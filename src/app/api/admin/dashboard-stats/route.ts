@@ -40,7 +40,8 @@ export async function GET(request: Request) {
 
     const [{ data: contactRows, error: contactError }, { data: blogRows, error: blogError }, { data: contentRows, error: contentError }] =
       await Promise.all([
-        supabase.from(contactTable).select("id, status, source, created_at, read, is_read, viewed").order("created_at", { ascending: false }).limit(300),
+        // Use schema-safe select because different deployments may have `read`, `is_read`, or `viewed`.
+        supabase.from(contactTable).select("*").order("created_at", { ascending: false }).limit(300),
         supabase.from("blog_posts").select("id, title, slug, updated_at").order("updated_at", { ascending: false }).limit(5),
         supabase.from("site_content").select("key, updated_at").order("updated_at", { ascending: false }).limit(5),
       ])
