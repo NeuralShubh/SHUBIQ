@@ -6,6 +6,7 @@ import ScrollReveal from "../../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../../components/StaggerContainer"
 import VideoPlayer from "../../components/VideoPlayer"
 import BackLink from "../../components/BackLink"
+import UnifiedNavbar from "../../components/UnifiedNavbar"
 import type { Project } from "../../data-projects"
 
 interface ProjectPageClientProps {
@@ -25,8 +26,10 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
   const statusDot = statusStyles[statusKey] ?? "bg-gold"
 
   return (
-    <div className="min-h-screen px-4 sm:px-6 pt-28 pb-24">
-      <div className="max-w-6xl mx-auto">
+    <>
+      <UnifiedNavbar />
+      <div className="min-h-screen px-4 sm:px-6 pt-28 pb-24">
+        <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -238,9 +241,9 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
             </Link>
           </div>
         </ScrollReveal>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
-
 

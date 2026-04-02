@@ -7,6 +7,7 @@ import TextReveal from "../components/TextReveal"
 import ProjectCard from "../components/ProjectCard"
 import type { Project } from "../data-projects"
 import BackLink from "../components/BackLink"
+import UnifiedNavbar from "../components/UnifiedNavbar"
 
 interface ProjectsIndexClientProps {
   projects: Project[]
@@ -18,8 +19,10 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
   const filtered = filter === "All" ? projects : projects.filter((project) => project.category === filter)
 
   return (
-    <div className="min-h-screen px-4 sm:px-6 pt-28 pb-24">
-      <div className="max-w-6xl mx-auto">
+    <>
+      <UnifiedNavbar />
+      <div className="min-h-screen px-4 sm:px-6 pt-28 pb-24">
+        <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <div>
             <BackLink href="/" label="Back to Home" className="mb-6" />
@@ -79,8 +82,8 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
             ))}
           </motion.div>
         </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
-
