@@ -984,6 +984,7 @@ export default function StudioPage() {
         <div className="studio-glow-orb pointer-events-none absolute -left-20 top-28 h-72 w-72 rounded-full" />
         <div className="studio-glow-orb-2 pointer-events-none absolute right-[-100px] top-[420px] h-96 w-96 rounded-full" />
         <StudioHero />
+        <StudioTransitionRibbon />
         <StudioExecutionGrid />
         <div id="studio-services-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
         <StudioTransitionRibbon />
