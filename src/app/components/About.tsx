@@ -1,6 +1,7 @@
 "use client"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
+import SectionLabel from "./SectionLabel"
 
 export default function About() {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("120px 0px")
@@ -17,10 +18,14 @@ export default function About() {
       />
 
       <div className="about-container">
-        <div className="flex items-center gap-2.5 sm:gap-3 mb-5 max-[768px]:justify-center">
+        <div className="sm:hidden mb-5">
+          <SectionLabel label="About" centered />
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2.5 sm:gap-3 mb-5">
           <span className="w-1 h-1 rounded-full bg-gold/80" />
           <div className="font-rajdhani text-[14px] tracking-[7px] text-gold/85 uppercase">About</div>
-          <span className="w-14 h-px bg-gradient-to-r from-gold/60 to-transparent max-[768px]:hidden sm:block" />
+          <span className="w-14 h-px bg-gradient-to-r from-gold/60 to-transparent" />
         </div>
 
         <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 sm:gap-16 lg:gap-28 xl:gap-32 items-start">
