@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { AdminButton, AdminCard, AdminInput } from '@/components/admin/AdminUI'
-import { Shield, Database, Globe, Bell, RefreshCw, CircleCheck, CircleAlert, Key, Server } from 'lucide-react'
+import { Shield, Database, Globe, Bell, RefreshCw, CircleCheck, CircleAlert, Key, Server, Download } from 'lucide-react'
 import { toast } from 'sonner'
 
 type SystemStatus = {
@@ -37,6 +37,7 @@ export default function SettingsAdminPage() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [revalidating, setRevalidating] = useState(false)
+  const [exportingType, setExportingType] = useState<string | null>(null)
 
   async function loadStatus(silent = false) {
     if (silent) {
@@ -73,6 +74,28 @@ export default function SettingsAdminPage() {
       toast.error(error instanceof Error ? error.message : 'Revalidate failed')
     } finally {
       setRevalidating(false)
+    }
+  }
+
+  async function exportData(type: 'leads' | 'blog' | 'content' | 'all') {
+    setExportingType(type)
+    try {
+      const res = await fetch(`/api/admin/export?type=${encodeURIComponent(type)}`, { cache: 'no-store' })
+      const json = await res.json()
+      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Export failed')
+
+      const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `shubiq-${type}-backup-${new Date().toISOString().slice(0, 10)}.json`
+      link.click()
+      URL.revokeObjectURL(url)
+      toast.success(`Exported ${type} backup`)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Export failed')
+    } finally {
+      setExportingType(null)
     }
   }
 
@@ -209,6 +232,32 @@ export default function SettingsAdminPage() {
               <RefreshCw size={14} className={revalidating ? 'animate-spin' : ''} />
               Revalidate Website Cache
             </AdminButton>
+          </AdminCard>
+
+          <AdminCard className="space-y-4">
+            <div className="flex items-center gap-2 text-cream mb-2">
+              <Download className="text-gold" size={18} />
+              <h3 className="font-bold font-cinzel">Data Export</h3>
+            </div>
+            <p className="text-xs text-cream/55">Download JSON backups for operational safety and audits.</p>
+            <div className="grid grid-cols-1 gap-2">
+              <AdminButton variant="secondary" onClick={() => exportData('leads')} disabled={exportingType !== null}>
+                <Download size={14} className={exportingType === 'leads' ? 'animate-pulse' : ''} />
+                Export Leads
+              </AdminButton>
+              <AdminButton variant="secondary" onClick={() => exportData('blog')} disabled={exportingType !== null}>
+                <Download size={14} className={exportingType === 'blog' ? 'animate-pulse' : ''} />
+                Export Blog
+              </AdminButton>
+              <AdminButton variant="secondary" onClick={() => exportData('content')} disabled={exportingType !== null}>
+                <Download size={14} className={exportingType === 'content' ? 'animate-pulse' : ''} />
+                Export Content
+              </AdminButton>
+              <AdminButton onClick={() => exportData('all')} disabled={exportingType !== null}>
+                <Download size={14} className={exportingType === 'all' ? 'animate-pulse' : ''} />
+                Export Full Backup
+              </AdminButton>
+            </div>
           </AdminCard>
 
           <AdminCard className="space-y-4">
