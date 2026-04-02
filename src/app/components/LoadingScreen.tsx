@@ -3,11 +3,28 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
+import type { Theme } from "./ThemeToggle"
 
-const LOGO_URL = "/shubiq-icons/themes/shubiq-signature-gold.svg"
+const THEME_LOGOS: Record<Theme, string> = {
+  gold: "/shubiq-icons/themes/shubiq-signature-gold.svg",
+  cobalt: "/shubiq-icons/themes/shubiq-cobalt-noir.svg",
+  emerald: "/shubiq-icons/themes/shubiq-emerald-core.svg",
+  violet: "/shubiq-icons/themes/shubiq-violet-dusk.svg",
+  crimson: "/shubiq-icons/themes/shubiq-crimson-noir.svg",
+  silver: "/shubiq-icons/themes/shubiq-silver-alloy.svg",
+  amber: "/shubiq-icons/themes/shubiq-amber-smoke.svg",
+}
+
+function getCurrentTheme(): Theme {
+  if (typeof document === "undefined") return "gold"
+  const attr = document.documentElement.getAttribute("data-theme")
+  const validThemes = new Set<Theme>(["gold", "cobalt", "emerald", "violet", "crimson", "silver", "amber"])
+  return attr && validThemes.has(attr as Theme) ? (attr as Theme) : "gold"
+}
 
 export default function LoadingScreen() {
   const [loading, setLoading] = useState(true)
+  const [activeTheme, setActiveTheme] = useState<Theme>("gold")
 
   useEffect(() => {
     const minTime = new Promise((resolve) => setTimeout(resolve, 2000))
@@ -20,6 +37,17 @@ export default function LoadingScreen() {
       setLoading(false)
       window.sessionStorage.setItem("shubiq-loaded", "1")
     })
+  }, [])
+
+  useEffect(() => {
+    const syncTheme = () => setActiveTheme(getCurrentTheme())
+    syncTheme()
+    window.addEventListener("shubiq-theme-change", syncTheme as EventListener)
+    window.addEventListener("storage", syncTheme)
+    return () => {
+      window.removeEventListener("shubiq-theme-change", syncTheme as EventListener)
+      window.removeEventListener("storage", syncTheme)
+    }
   }, [])
 
   useEffect(() => {
@@ -55,7 +83,14 @@ export default function LoadingScreen() {
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <Image src={LOGO_URL} alt="SHUBIQ" width={512} height={512} priority className="h-24 md:h-28 w-auto object-contain" />
+              <Image
+                src={THEME_LOGOS[activeTheme]}
+                alt="SHUBIQ"
+                width={512}
+                height={512}
+                priority
+                className="h-24 md:h-28 w-auto object-contain"
+              />
             </motion.div>
 
             <motion.p
