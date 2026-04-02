@@ -19,14 +19,14 @@ export default function SettingsAdminPage() {
             </div>
             <div className="p-6 space-y-6 bg-[rgb(var(--surface-0-rgb))]">
               <p className="text-sm text-cream/60 font-medium">
-                The SHUBIQ Administrator portal is secured behind Next.js server actions and an HTTP-only 
-                encrypted cookie. Update the <code className="bg-[rgb(var(--surface-1-rgb))] text-gold px-1.5 py-0.5 rounded border border-[rgb(var(--cream-rgb)/0.1)]">ADMIN_PASSWORD</code> environment variable to change credentials.
+                The SHUBIQ Administrator portal uses server actions with a signed HTTP-only session token.
+                Configure <code className="bg-[rgb(var(--surface-1-rgb))] text-gold px-1.5 py-0.5 rounded border border-[rgb(var(--cream-rgb)/0.1)]">ADMIN_SESSION_SECRET</code> and role passwords to manage access securely.
               </p>
               
               <div className="space-y-4 pt-4 border-t border-[rgb(var(--cream-rgb)/0.08)]">
                 <AdminInput label="Current Origin Domain" defaultValue="https://shubiq.com" disabled />
-                <AdminInput label="Admin Password" type="password" value="********" disabled />
-                <p className="text-xs text-cream/40 italic">Passwords cannot be changed via the browser to maintain root security.</p>
+                <AdminInput label="Owner Password" type="password" value="********" disabled />
+                <p className="text-xs text-cream/40 italic">Use env vars: ADMIN_OWNER_PASSWORD, ADMIN_ADMIN_PASSWORD, ADMIN_EDITOR_PASSWORD, ADMIN_VIEWER_PASSWORD.</p>
               </div>
             </div>
           </AdminCard>

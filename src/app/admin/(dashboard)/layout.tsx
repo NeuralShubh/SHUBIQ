@@ -1,35 +1,58 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Mail, Settings, PanelLeftClose, PanelLeftOpen, LogOut, ArrowUpRight } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { logout } from '../login/actions'
+import type { AdminRole } from '@/lib/admin-auth'
 
 const navItems = [
   {
     group: 'Inbox',
     items: [
-      { label: 'Form Submissions', href: '/admin', icon: Mail },
+      { label: 'Form Submissions', href: '/admin', icon: Mail, roles: ['owner', 'admin', 'editor', 'viewer'] as AdminRole[] },
     ],
   },
   {
     group: 'System',
     items: [
-      { label: 'Settings', href: '/admin/settings', icon: Settings },
+      { label: 'Settings', href: '/admin/settings', icon: Settings, roles: ['owner', 'admin'] as AdminRole[] },
     ],
   },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
+  const [activeRole, setActiveRole] = useState<AdminRole>('viewer')
 
+  useEffect(() => {
+    const match = document.cookie.match(/(?:^|;\s*)shubiq_admin_role=([^;]+)/)
+    const role = (match ? decodeURIComponent(match[1]) : 'viewer') as AdminRole
+    if (['owner', 'admin', 'editor', 'viewer'].includes(role)) {
+      setActiveRole(role)
+    }
+  }, [])
 
   const handleLogout = async () => {
     await logout()
+    router.push('/admin/login')
+    router.refresh()
   }
+
+  const visibleNavItems = useMemo(() => {
+    return navItems
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) => item.roles.includes(activeRole)),
+      }))
+      .filter((section) => section.items.length > 0)
+  }, [activeRole])
+
+  const roleLabel = activeRole.charAt(0).toUpperCase() + activeRole.slice(1)
 
   return (
     <div className="min-h-screen bg-[rgb(var(--surface-0-rgb))] text-cream flex font-inter selection:bg-gold/30">
@@ -42,7 +65,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       >
         {/* Logo */}
         <div className="h-14 flex items-center px-4 border-b border-[rgb(var(--cream-rgb)/0.08)] shrink-0 overflow-hidden">
-          {!collapsed && <span className="font-cinzel font-black tracking-widest text-[16px] whitespace-nowrap">SHUBIQ <span className="text-gold">Admin</span></span>}
+          {!collapsed && (
+            <div className="flex items-center gap-2">
+              <span className="font-cinzel font-black tracking-widest text-[16px] whitespace-nowrap">SHUBIQ <span className="text-gold">Admin</span></span>
+              <span className="rounded-full border border-gold/35 bg-gold/10 px-2 py-0.5 text-[10px] font-rajdhani uppercase tracking-[2px] text-gold">
+                {roleLabel}
+              </span>
+            </div>
+          )}
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="ml-auto p-1.5 rounded-md hover:bg-[rgb(var(--surface-1-rgb))] transition-colors shrink-0 outline-none text-cream/70 hover:text-cream"
@@ -53,7 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-4 px-2 custom-scrollbar">
-          {navItems.map((section, si) => (
+          {visibleNavItems.map((section, si) => (
             <div key={si} className="mb-6">
               {section.group && !collapsed && (
                 <p className="px-3 mb-2 text-[10px] uppercase tracking-[0.15em] text-cream/50 font-semibold whitespace-nowrap font-rajdhani">
