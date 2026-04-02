@@ -236,7 +236,7 @@ export default function Hero() {
 
         {/* Tagline with lines */}
         <motion.div
-          className="hero-tagline-row mb-2 max-[768px]:mb-1 md:mb-3 -mt-12 max-[768px]:-mt-5 md:-mt-16"
+          className="hero-tagline-row mb-2 max-[768px]:mb-1 md:mb-3 -mt-12 max-[768px]:mt-4 md:-mt-16"
           initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
           animate={taglineReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
@@ -279,7 +279,7 @@ export default function Hero() {
 
           {/* Social links */}
           <motion.div
-            className="mx-auto w-full max-[768px]:max-w-[320px] sm:w-fit border-t border-gold/15 max-[768px]:border-t-0 pt-4 sm:pt-5 max-[768px]:pt-0 grid max-[768px]:grid-cols-3 grid-cols-2 sm:flex max-[768px]:gap-x-2 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-2 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-0 sm:mb-8 mt-6 max-[768px]:mt-10 sm:mt-8"
+            className="mx-auto w-full max-[768px]:max-w-[320px] sm:w-fit border-t border-gold/15 max-[768px]:border-t-0 pt-4 sm:pt-5 max-[768px]:pt-0 grid max-[768px]:grid-cols-3 grid-cols-2 sm:flex max-[768px]:gap-x-2 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-2 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-0 sm:mb-8 mt-6 max-[768px]:mt-14 sm:mt-8"
             initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
             animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
             transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
