@@ -12,7 +12,7 @@ import {
   type LabsManagedContent,
 } from "@/app/content/managedContent"
 import { toast } from "sonner"
-import { FileEdit, Plus, RefreshCw, Save, Trash2 } from "lucide-react"
+import { AlertTriangle, CheckCircle2, FileEdit, FileJson, ListPlus, Plus, RefreshCw, Save, Sparkles, Trash2, Type } from "lucide-react"
 
 type BlogItem = {
   id: string
@@ -26,6 +26,67 @@ type BlogItem = {
   tags: string[]
   content: unknown[]
 }
+
+type BlogEditorTemplate = {
+  id: string
+  name: string
+  description: string
+  content: unknown[]
+}
+
+type ParsedContentResult = {
+  blocks: unknown[] | null
+  error: string | null
+}
+
+const BLOG_EDITOR_TEMPLATES: BlogEditorTemplate[] = [
+  {
+    id: "insight-brief",
+    name: "Insight Brief",
+    description: "Fast publish format for one big idea with clear takeaways.",
+    content: [
+      { type: "h2", content: "The Core Insight" },
+      { type: "p", content: "Start with the strongest idea in one clear paragraph." },
+      { type: "blockquote", content: "Simple systems create predictable outcomes." },
+      { type: "h3", content: "Why It Matters" },
+      { type: "p", content: "Explain practical impact in your audience context." },
+      { type: "ul", content: ["Decision speed improves", "Team execution aligns", "Output quality gets consistent"] },
+      { type: "h3", content: "What To Do Next" },
+      { type: "ol", content: ["Audit your current process", "Remove one friction point", "Ship one tighter iteration this week"] },
+    ],
+  },
+  {
+    id: "case-note",
+    name: "Case Note",
+    description: "Structured narrative for project breakdown and results.",
+    content: [
+      { type: "h2", content: "Context" },
+      { type: "p", content: "Describe the business context and project goal in plain language." },
+      { type: "h3", content: "Challenge" },
+      { type: "p", content: "Explain constraints, blockers, and quality risks before execution." },
+      { type: "h3", content: "Build Moves" },
+      { type: "ul", content: ["Prioritized highest-leverage workflow", "Reduced handoff friction", "Shipped in focused weekly cycles"] },
+      { type: "h3", content: "Outcome" },
+      { type: "pullquote", content: "Tighter systems improved shipping speed and user trust." },
+      { type: "p", content: "Close with metrics and what changed after launch." },
+    ],
+  },
+  {
+    id: "playbook",
+    name: "Playbook",
+    description: "Step-by-step tactical format for educational posts.",
+    content: [
+      { type: "h2", content: "Playbook Objective" },
+      { type: "p", content: "Set the target outcome and timeframe." },
+      { type: "h3", content: "Step 1: Define Signal" },
+      { type: "p", content: "Choose the metric that tells you if progress is real." },
+      { type: "h3", content: "Step 2: Build Cadence" },
+      { type: "p", content: "Run short delivery loops with clear review checkpoints." },
+      { type: "h3", content: "Step 3: Tighten System" },
+      { type: "ol", content: ["Keep only useful rituals", "Document decisions", "Convert wins into reusable checklists"] },
+    ],
+  },
+]
 
 function ensureUniqueSlug(base: string, existing: string[]) {
   const source = base.trim() || "post"
@@ -54,8 +115,78 @@ function parseContentJson(input: string): unknown[] {
   return parsed
 }
 
+function parseContentJsonSafe(input: string): ParsedContentResult {
+  try {
+    const parsed = parseContentJson(input)
+    return { blocks: parsed, error: validateBlogBlocks(parsed) }
+  } catch (error) {
+    return { blocks: null, error: error instanceof Error ? error.message : "Invalid JSON" }
+  }
+}
+
+function validateBlogBlocks(blocks: unknown[]): string | null {
+  const textTypes = new Set(["h2", "h3", "p", "blockquote", "pullquote"])
+  const listTypes = new Set(["ul", "ol"])
+
+  for (let i = 0; i < blocks.length; i += 1) {
+    const block = blocks[i]
+    if (!block || typeof block !== "object") return `Block ${i + 1} must be an object`
+    const row = block as { type?: unknown; content?: unknown }
+    if (typeof row.type !== "string") return `Block ${i + 1} must include a string type`
+    if (!textTypes.has(row.type) && !listTypes.has(row.type)) {
+      return `Block ${i + 1} has unsupported type "${row.type}"`
+    }
+    if (textTypes.has(row.type) && typeof row.content !== "string") {
+      return `Block ${i + 1} content must be a string for type "${row.type}"`
+    }
+    if (listTypes.has(row.type)) {
+      if (!Array.isArray(row.content)) return `Block ${i + 1} content must be an array for type "${row.type}"`
+      if (row.content.some((item) => typeof item !== "string")) return `Block ${i + 1} list items must be strings`
+    }
+  }
+
+  return null
+}
+
 function formatContentJson(content: unknown[] | undefined): string {
   return JSON.stringify(Array.isArray(content) ? content : [], null, 2)
+}
+
+function wordsFromBlogBlocks(blocks: unknown[]): number {
+  const tokens = blocks.flatMap((block) => {
+    if (!block || typeof block !== "object") return []
+    const row = block as { content?: unknown }
+    if (typeof row.content === "string") return [row.content]
+    if (Array.isArray(row.content)) return row.content.filter((item): item is string => typeof item === "string")
+    return []
+  })
+
+  return tokens
+    .join(" ")
+    .split(/\s+/)
+    .map((item) => item.trim())
+    .filter(Boolean).length
+}
+
+function estimateReadingMinutes(blocks: unknown[]): number {
+  return Math.max(1, Math.ceil(wordsFromBlogBlocks(blocks) / 200))
+}
+
+function buildExcerptFromBlocks(blocks: unknown[]): string {
+  const text = blocks
+    .flatMap((block) => {
+      if (!block || typeof block !== "object") return []
+      const row = block as { content?: unknown }
+      if (typeof row.content === "string") return [row.content]
+      if (Array.isArray(row.content)) return row.content.filter((item): item is string => typeof item === "string")
+      return []
+    })
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim()
+
+  if (!text) return ""
+  return `${text.slice(0, 170).trim().replace(/[.,;:]?$/, "")}...`
 }
 
 function mergeStudioContent(input: unknown): StudioContent {
@@ -110,6 +241,8 @@ export default function ContentControlPage() {
   })
   const [blogTagsInput, setBlogTagsInput] = useState("")
   const [blogContentJson, setBlogContentJson] = useState("[]")
+  const [blogTemplateId, setBlogTemplateId] = useState(BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief")
+  const [editingTemplateId, setEditingTemplateId] = useState(BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief")
 
   const studioLastUpdatedText = useMemo(() => {
     return savingStudio ? "Saving..." : "Studio content controls pricing + CTA copy on /shubiq-studio"
@@ -119,6 +252,18 @@ export default function ContentControlPage() {
   const homeDirty = useMemo(() => JSON.stringify(homeContent) !== homeSnapshot, [homeContent, homeSnapshot])
   const labsDirty = useMemo(() => JSON.stringify(labsContent) !== labsSnapshot, [labsContent, labsSnapshot])
   const hasUnsavedChanges = (activeTab === "studio" && studioDirty) || (activeTab === "home" && homeDirty) || (activeTab === "labs" && labsDirty)
+  const createContentState = useMemo(() => parseContentJsonSafe(blogContentJson), [blogContentJson])
+  const editContentState = useMemo(() => parseContentJsonSafe(editingContentJson), [editingContentJson])
+  const createBlockCount = createContentState.blocks?.length ?? 0
+  const editBlockCount = editContentState.blocks?.length ?? 0
+  const createReadingSuggestion = useMemo(
+    () => (createContentState.blocks ? estimateReadingMinutes(createContentState.blocks) : null),
+    [createContentState],
+  )
+  const editReadingSuggestion = useMemo(
+    () => (editContentState.blocks ? estimateReadingMinutes(editContentState.blocks) : null),
+    [editContentState],
+  )
 
   function currentTabDirty(tab: "studio" | "home" | "labs" | "blog") {
     if (tab === "studio") return studioDirty
@@ -288,7 +433,10 @@ export default function ContentControlPage() {
     if (!blogForm.title.trim()) return toast.error("Title is required")
     const payload = { ...blogForm, slug: blogForm.slug.trim() || slugify(blogForm.title) }
     try {
-      const parsedContent = parseContentJson(blogContentJson)
+      if (!createContentState.blocks || createContentState.error) {
+        throw new Error(createContentState.error || "Invalid content JSON")
+      }
+      const parsedContent = createContentState.blocks
       const res = await fetch("/api/admin/blog-posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -320,7 +468,10 @@ export default function ContentControlPage() {
   async function updateBlogPost() {
     if (!editingBlog) return
     try {
-      const parsedContent = parseContentJson(editingContentJson)
+      if (!editContentState.blocks || editContentState.error) {
+        throw new Error(editContentState.error || "Invalid content JSON")
+      }
+      const parsedContent = editContentState.blocks
       const res = await fetch("/api/admin/blog-posts", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -342,6 +493,57 @@ export default function ContentControlPage() {
     setEditingBlog(item)
     setEditingTagsInput(formatTagsInput(item.tags))
     setEditingContentJson(formatContentJson(item.content))
+    setEditingTemplateId(BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief")
+  }
+
+  function formatCreateContentJson() {
+    if (!createContentState.blocks) return toast.error(createContentState.error || "Invalid content JSON")
+    setBlogContentJson(formatContentJson(createContentState.blocks))
+    toast.success("Create content JSON formatted")
+  }
+
+  function formatEditContentJson() {
+    if (!editContentState.blocks) return toast.error(editContentState.error || "Invalid content JSON")
+    setEditingContentJson(formatContentJson(editContentState.blocks))
+    toast.success("Edit content JSON formatted")
+  }
+
+  function insertCreateBlock(type: "p" | "h2" | "ul" | "blockquote") {
+    if (!createContentState.blocks) return toast.error(createContentState.error || "Fix JSON first")
+    const next = [...createContentState.blocks]
+    if (type === "p") next.push({ type: "p", content: "Write paragraph text here." })
+    if (type === "h2") next.push({ type: "h2", content: "Section heading" })
+    if (type === "ul") next.push({ type: "ul", content: ["First point", "Second point"] })
+    if (type === "blockquote") next.push({ type: "blockquote", content: "Insight quote" })
+    setBlogContentJson(formatContentJson(next))
+  }
+
+  function insertEditBlock(type: "p" | "h2" | "ul" | "blockquote") {
+    if (!editContentState.blocks) return toast.error(editContentState.error || "Fix JSON first")
+    const next = [...editContentState.blocks]
+    if (type === "p") next.push({ type: "p", content: "Write paragraph text here." })
+    if (type === "h2") next.push({ type: "h2", content: "Section heading" })
+    if (type === "ul") next.push({ type: "ul", content: ["First point", "Second point"] })
+    if (type === "blockquote") next.push({ type: "blockquote", content: "Insight quote" })
+    setEditingContentJson(formatContentJson(next))
+  }
+
+  function applyTemplateToCreate() {
+    const template = BLOG_EDITOR_TEMPLATES.find((entry) => entry.id === blogTemplateId)
+    if (!template) return
+    const shouldReplace = window.confirm("Replace current create content with selected template?")
+    if (!shouldReplace) return
+    setBlogContentJson(formatContentJson(template.content))
+    toast.success(`Applied template: ${template.name}`)
+  }
+
+  function applyTemplateToEdit() {
+    const template = BLOG_EDITOR_TEMPLATES.find((entry) => entry.id === editingTemplateId)
+    if (!template) return
+    const shouldReplace = window.confirm("Replace current editor content with selected template?")
+    if (!shouldReplace) return
+    setEditingContentJson(formatContentJson(template.content))
+    toast.success(`Applied template: ${template.name}`)
   }
 
   async function deleteBlogPost(id: string) {
@@ -796,20 +998,115 @@ export default function ContentControlPage() {
                   value={blogForm.readingTime}
                   onChange={(e) => setBlogForm((p) => ({ ...p, readingTime: Number(e.target.value || 0) }))}
                 />
+                <div className="space-y-2">
+                  <p className="text-[13px] text-cream/70 font-semibold uppercase tracking-wider font-rajdhani">Reading Time Suggestion</p>
+                  <div className="h-[42px] px-3 rounded-lg border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb))] flex items-center justify-between">
+                    <span className="text-sm text-cream/75">
+                      {createReadingSuggestion ? `${createReadingSuggestion} min from content` : "Add valid content JSON first"}
+                    </span>
+                    <AdminButton
+                      type="button"
+                      variant="secondary"
+                      className="px-3 py-1.5 text-[11px]"
+                      disabled={!createReadingSuggestion}
+                      onClick={() => setBlogForm((p) => ({ ...p, readingTime: createReadingSuggestion ?? p.readingTime }))}
+                    >
+                      <Sparkles size={12} />
+                      Apply
+                    </AdminButton>
+                  </div>
+                </div>
                 <AdminInput label="Tags (comma separated)" value={blogTagsInput} onChange={(e) => setBlogTagsInput(e.target.value)} />
-                <div className="lg:col-span-2">
-                  <AdminTextarea label="Excerpt" rows={3} value={blogForm.excerpt} onChange={(e) => setBlogForm((p) => ({ ...p, excerpt: e.target.value }))} />
+                <div className="space-y-2">
+                  <p className="text-[13px] text-cream/70 font-semibold uppercase tracking-wider font-rajdhani">Slug Helper</p>
+                  <div className="h-[42px] px-3 rounded-lg border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb))] flex items-center justify-between">
+                    <span className="text-sm text-cream/75 truncate pr-3">{blogForm.slug || slugify(blogForm.title || "post-title")}</span>
+                    <AdminButton
+                      type="button"
+                      variant="secondary"
+                      className="px-3 py-1.5 text-[11px]"
+                      onClick={() => setBlogForm((p) => ({ ...p, slug: slugify(p.title || p.slug || "post-title") }))}
+                    >
+                      <FileJson size={12} />
+                      Auto
+                    </AdminButton>
+                  </div>
                 </div>
                 <div className="lg:col-span-2">
+                  <AdminTextarea label="Excerpt" rows={3} value={blogForm.excerpt} onChange={(e) => setBlogForm((p) => ({ ...p, excerpt: e.target.value }))} />
+                  <div className="mt-2 flex justify-end">
+                    <AdminButton
+                      type="button"
+                      variant="secondary"
+                      className="px-3 py-1.5"
+                      disabled={!createContentState.blocks}
+                      onClick={() => {
+                        const blocks = createContentState.blocks
+                        if (!blocks) return
+                        setBlogForm((p) => ({ ...p, excerpt: buildExcerptFromBlocks(blocks) || p.excerpt }))
+                      }}
+                    >
+                      <Sparkles size={12} />
+                      Auto Excerpt
+                    </AdminButton>
+                  </div>
+                </div>
+                <div className="lg:col-span-2">
+                  <div className="mb-2 grid grid-cols-1 lg:grid-cols-[1fr_auto_auto] gap-2">
+                    <select
+                      className="w-full bg-[rgb(var(--surface-2-rgb))] border border-[rgb(var(--cream-rgb)/0.12)] rounded-lg px-3 py-2.5 text-sm text-cream focus:outline-none focus:border-gold/60"
+                      value={blogTemplateId}
+                      onChange={(e) => setBlogTemplateId(e.target.value)}
+                    >
+                      {BLOG_EDITOR_TEMPLATES.map((template) => (
+                        <option key={template.id} value={template.id}>
+                          {template.name} - {template.description}
+                        </option>
+                      ))}
+                    </select>
+                    <AdminButton type="button" variant="secondary" className="px-3 py-2" onClick={applyTemplateToCreate}>
+                      <ListPlus size={13} />
+                      Apply Template
+                    </AdminButton>
+                    <AdminButton type="button" variant="secondary" className="px-3 py-2" onClick={formatCreateContentJson}>
+                      <Type size={13} />
+                      Format JSON
+                    </AdminButton>
+                  </div>
                   <AdminTextarea
                     label='Content JSON (array of blocks, e.g. [{"type":"p","content":"Text"}])'
                     rows={10}
                     value={blogContentJson}
                     onChange={(e) => setBlogContentJson(e.target.value)}
                   />
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertCreateBlock("h2")}>
+                      Add H2
+                    </AdminButton>
+                    <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertCreateBlock("p")}>
+                      Add Paragraph
+                    </AdminButton>
+                    <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertCreateBlock("ul")}>
+                      Add List
+                    </AdminButton>
+                    <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertCreateBlock("blockquote")}>
+                      Add Quote
+                    </AdminButton>
+                    {!createContentState.error ? (
+                      <span className="ml-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs border border-emerald-500/30 bg-emerald-500/10 text-emerald-300">
+                        <CheckCircle2 size={12} />
+                        Valid JSON • {createBlockCount} blocks
+                      </span>
+                    ) : (
+                      <span className="ml-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs border border-red-500/30 bg-red-500/10 text-red-300">
+                        <AlertTriangle size={12} />
+                        {createContentState.error}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="lg:col-span-2 flex justify-end">
-                  <AdminButton onClick={createBlogPost}>
+                  <AdminButton onClick={createBlogPost} disabled={!!createContentState.error}>
                     <Save size={14} />
                     Create Post
                   </AdminButton>
@@ -879,6 +1176,24 @@ export default function ContentControlPage() {
                 value={editingBlog.readingTime}
                 onChange={(e) => setEditingBlog((p) => (p ? { ...p, readingTime: Number(e.target.value || 0) } : p))}
               />
+              <div className="space-y-2">
+                <p className="text-[13px] text-cream/70 font-semibold uppercase tracking-wider font-rajdhani">Reading Time Suggestion</p>
+                <div className="h-[42px] px-3 rounded-lg border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb))] flex items-center justify-between">
+                  <span className="text-sm text-cream/75">
+                    {editReadingSuggestion ? `${editReadingSuggestion} min from content` : "Add valid content JSON first"}
+                  </span>
+                  <AdminButton
+                    type="button"
+                    variant="secondary"
+                    className="px-3 py-1.5 text-[11px]"
+                    disabled={!editReadingSuggestion}
+                    onClick={() => setEditingBlog((p) => (p ? { ...p, readingTime: editReadingSuggestion ?? p.readingTime } : p))}
+                  >
+                    <Sparkles size={12} />
+                    Apply
+                  </AdminButton>
+                </div>
+              </div>
               <AdminInput label="Tags (comma separated)" value={editingTagsInput} onChange={(e) => setEditingTagsInput(e.target.value)} />
               <div className="lg:col-span-2">
                 <AdminTextarea
@@ -887,14 +1202,76 @@ export default function ContentControlPage() {
                   value={editingBlog.excerpt}
                   onChange={(e) => setEditingBlog((p) => (p ? { ...p, excerpt: e.target.value } : p))}
                 />
+                <div className="mt-2 flex justify-end">
+                  <AdminButton
+                    type="button"
+                    variant="secondary"
+                    className="px-3 py-1.5"
+                    disabled={!editContentState.blocks}
+                    onClick={() => {
+                      const blocks = editContentState.blocks
+                      if (!blocks) return
+                      setEditingBlog((p) => (p ? { ...p, excerpt: buildExcerptFromBlocks(blocks) || p.excerpt } : p))
+                    }}
+                  >
+                    <Sparkles size={12} />
+                    Auto Excerpt
+                  </AdminButton>
+                </div>
               </div>
               <div className="lg:col-span-2">
+                <div className="mb-2 grid grid-cols-1 lg:grid-cols-[1fr_auto_auto] gap-2">
+                  <select
+                    className="w-full bg-[rgb(var(--surface-2-rgb))] border border-[rgb(var(--cream-rgb)/0.12)] rounded-lg px-3 py-2.5 text-sm text-cream focus:outline-none focus:border-gold/60"
+                    value={editingTemplateId}
+                    onChange={(e) => setEditingTemplateId(e.target.value)}
+                  >
+                    {BLOG_EDITOR_TEMPLATES.map((template) => (
+                      <option key={template.id} value={template.id}>
+                        {template.name} - {template.description}
+                      </option>
+                    ))}
+                  </select>
+                  <AdminButton type="button" variant="secondary" className="px-3 py-2" onClick={applyTemplateToEdit}>
+                    <ListPlus size={13} />
+                    Apply Template
+                  </AdminButton>
+                  <AdminButton type="button" variant="secondary" className="px-3 py-2" onClick={formatEditContentJson}>
+                    <Type size={13} />
+                    Format JSON
+                  </AdminButton>
+                </div>
                 <AdminTextarea
                   label='Content JSON (array of blocks, e.g. [{"type":"p","content":"Text"}])'
                   rows={12}
                   value={editingContentJson}
                   onChange={(e) => setEditingContentJson(e.target.value)}
                 />
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertEditBlock("h2")}>
+                    Add H2
+                  </AdminButton>
+                  <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertEditBlock("p")}>
+                    Add Paragraph
+                  </AdminButton>
+                  <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertEditBlock("ul")}>
+                    Add List
+                  </AdminButton>
+                  <AdminButton type="button" variant="secondary" className="px-3 py-1.5" onClick={() => insertEditBlock("blockquote")}>
+                    Add Quote
+                  </AdminButton>
+                  {!editContentState.error ? (
+                    <span className="ml-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs border border-emerald-500/30 bg-emerald-500/10 text-emerald-300">
+                      <CheckCircle2 size={12} />
+                      Valid JSON • {editBlockCount} blocks
+                    </span>
+                  ) : (
+                    <span className="ml-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs border border-red-500/30 bg-red-500/10 text-red-300">
+                      <AlertTriangle size={12} />
+                      {editContentState.error}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex justify-end gap-2">
@@ -908,7 +1285,7 @@ export default function ContentControlPage() {
               >
                 Cancel
               </AdminButton>
-              <AdminButton onClick={updateBlogPost}>
+              <AdminButton onClick={updateBlogPost} disabled={!!editContentState.error}>
                 Save
               </AdminButton>
             </div>
