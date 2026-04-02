@@ -39,6 +39,26 @@ type ParsedContentResult = {
   error: string | null
 }
 
+type BlogCreateDraft = {
+  form: Omit<BlogItem, "id">
+  tagsInput: string
+  contentJson: string
+  templateId: string
+  savedAt: number
+}
+
+type BlogEditDraft = {
+  id: string
+  blog: BlogItem
+  tagsInput: string
+  contentJson: string
+  templateId: string
+  savedAt: number
+}
+
+const BLOG_CREATE_DRAFT_KEY = "shubiq_admin_blog_create_draft_v1"
+const BLOG_EDIT_DRAFT_KEY = "shubiq_admin_blog_edit_draft_v1"
+
 const BLOG_EDITOR_TEMPLATES: BlogEditorTemplate[] = [
   {
     id: "insight-brief",
@@ -189,6 +209,25 @@ function buildExcerptFromBlocks(blocks: unknown[]): string {
   return `${text.slice(0, 170).trim().replace(/[.,;:]?$/, "")}...`
 }
 
+function readStorageJson<T>(key: string): T | null {
+  if (typeof window === "undefined") return null
+  const raw = window.localStorage.getItem(key)
+  if (!raw) return null
+  try {
+    return JSON.parse(raw) as T
+  } catch {
+    return null
+  }
+}
+
+function isDefaultCreateDraft(form: Omit<BlogItem, "id">, tagsInput: string, contentJson: string) {
+  const hasTitle = form.title.trim().length > 0
+  const hasExcerpt = form.excerpt.trim().length > 0
+  const hasTags = tagsInput.trim().length > 0
+  const hasCustomContent = contentJson.trim() !== "[]"
+  return !hasTitle && !hasExcerpt && !hasTags && !hasCustomContent
+}
+
 function mergeStudioContent(input: unknown): StudioContent {
   const content = (input && typeof input === "object" ? input : {}) as Partial<StudioContent>
   return {
@@ -205,6 +244,20 @@ function slugify(title: string) {
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
+}
+
+function getInitialBlogForm(): Omit<BlogItem, "id"> {
+  return {
+    slug: "",
+    title: "",
+    excerpt: "",
+    category: "Productivity",
+    date: new Date().toISOString().slice(0, 10),
+    author: "Shubham",
+    readingTime: 5,
+    tags: [],
+    content: [],
+  }
 }
 
 export default function ContentControlPage() {
@@ -228,21 +281,13 @@ export default function ContentControlPage() {
   const [editingTagsInput, setEditingTagsInput] = useState("")
   const [editingContentJson, setEditingContentJson] = useState("[]")
   const [creatingBlog, setCreatingBlog] = useState(false)
-  const [blogForm, setBlogForm] = useState<Omit<BlogItem, "id">>({
-    slug: "",
-    title: "",
-    excerpt: "",
-    category: "Productivity",
-    date: new Date().toISOString().slice(0, 10),
-    author: "Shubham",
-    readingTime: 5,
-    tags: [],
-    content: [],
-  })
+  const [blogForm, setBlogForm] = useState<Omit<BlogItem, "id">>(getInitialBlogForm())
   const [blogTagsInput, setBlogTagsInput] = useState("")
   const [blogContentJson, setBlogContentJson] = useState("[]")
   const [blogTemplateId, setBlogTemplateId] = useState(BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief")
   const [editingTemplateId, setEditingTemplateId] = useState(BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief")
+  const [createDraftSavedAt, setCreateDraftSavedAt] = useState<number | null>(null)
+  const [editDraftSavedAt, setEditDraftSavedAt] = useState<number | null>(null)
 
   const studioLastUpdatedText = useMemo(() => {
     return savingStudio ? "Saving..." : "Studio content controls pricing + CTA copy on /shubiq-studio"
@@ -446,19 +491,11 @@ export default function ContentControlPage() {
       if (!res.ok) throw new Error(json?.error || "Create failed")
       toast.success("Blog post created")
       setCreatingBlog(false)
-      setBlogForm({
-        slug: "",
-        title: "",
-        excerpt: "",
-        category: "Productivity",
-        date: new Date().toISOString().slice(0, 10),
-        author: "Shubham",
-        readingTime: 5,
-        tags: [],
-        content: [],
-      })
+      setBlogForm(getInitialBlogForm())
       setBlogTagsInput("")
       setBlogContentJson("[]")
+      setCreateDraftSavedAt(null)
+      if (typeof window !== "undefined") window.localStorage.removeItem(BLOG_CREATE_DRAFT_KEY)
       await loadBlogItems()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Create failed")
@@ -483,6 +520,8 @@ export default function ContentControlPage() {
       setEditingBlog(null)
       setEditingTagsInput("")
       setEditingContentJson("[]")
+      setEditDraftSavedAt(null)
+      if (typeof window !== "undefined") window.localStorage.removeItem(BLOG_EDIT_DRAFT_KEY)
       await loadBlogItems()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Update failed")
@@ -490,10 +529,40 @@ export default function ContentControlPage() {
   }
 
   function openBlogEditor(item: BlogItem) {
+    const saved = readStorageJson<BlogEditDraft>(BLOG_EDIT_DRAFT_KEY)
+    if (saved?.id === item.id && saved.blog) {
+      const shouldRestore = window.confirm("Unsaved draft found for this post. Restore draft content?")
+      if (shouldRestore) {
+        setEditingBlog(saved.blog)
+        setEditingTagsInput(saved.tagsInput || "")
+        setEditingContentJson(saved.contentJson || "[]")
+        setEditingTemplateId(saved.templateId || (BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief"))
+        setEditDraftSavedAt(saved.savedAt || Date.now())
+        return
+      }
+    }
     setEditingBlog(item)
     setEditingTagsInput(formatTagsInput(item.tags))
     setEditingContentJson(formatContentJson(item.content))
     setEditingTemplateId(BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief")
+    setEditDraftSavedAt(null)
+  }
+
+  function toggleCreateBlogPanel() {
+    setCreatingBlog((prev) => {
+      const next = !prev
+      if (next) {
+        const saved = readStorageJson<BlogCreateDraft>(BLOG_CREATE_DRAFT_KEY)
+        if (saved) {
+          setBlogForm(saved.form || getInitialBlogForm())
+          setBlogTagsInput(saved.tagsInput || "")
+          setBlogContentJson(saved.contentJson || "[]")
+          setBlogTemplateId(saved.templateId || (BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief"))
+          setCreateDraftSavedAt(saved.savedAt || Date.now())
+        }
+      }
+      return next
+    })
   }
 
   function formatCreateContentJson() {
@@ -594,6 +663,40 @@ export default function ContentControlPage() {
     loadLabsContent()
     loadBlogItems()
   }, [])
+
+  useEffect(() => {
+    if (activeTab !== "blog" || !creatingBlog) return
+    if (isDefaultCreateDraft(blogForm, blogTagsInput, blogContentJson)) return
+    if (typeof window === "undefined") return
+
+    const savedAt = Date.now()
+    const payload: BlogCreateDraft = {
+      form: blogForm,
+      tagsInput: blogTagsInput,
+      contentJson: blogContentJson,
+      templateId: blogTemplateId,
+      savedAt,
+    }
+    window.localStorage.setItem(BLOG_CREATE_DRAFT_KEY, JSON.stringify(payload))
+    setCreateDraftSavedAt(savedAt)
+  }, [activeTab, creatingBlog, blogForm, blogTagsInput, blogContentJson, blogTemplateId])
+
+  useEffect(() => {
+    if (!editingBlog) return
+    if (typeof window === "undefined") return
+
+    const savedAt = Date.now()
+    const payload: BlogEditDraft = {
+      id: editingBlog.id,
+      blog: editingBlog,
+      tagsInput: editingTagsInput,
+      contentJson: editingContentJson,
+      templateId: editingTemplateId,
+      savedAt,
+    }
+    window.localStorage.setItem(BLOG_EDIT_DRAFT_KEY, JSON.stringify(payload))
+    setEditDraftSavedAt(savedAt)
+  }, [editingBlog, editingTagsInput, editingContentJson, editingTemplateId])
 
   useEffect(() => {
     const onBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -978,8 +1081,17 @@ export default function ContentControlPage() {
         <div className="space-y-5">
           <AdminCard className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-cream">Blog Manager</h2>
-              <AdminButton variant={creatingBlog ? "secondary" : "primary"} onClick={() => setCreatingBlog((v) => !v)}>
+              <div>
+                <h2 className="text-lg font-semibold text-cream">Blog Manager</h2>
+                {(createDraftSavedAt || editDraftSavedAt) && (
+                  <p className="text-xs text-cream/55 mt-1">
+                    Draft autosave active
+                    {createDraftSavedAt ? ` • Create: ${new Date(createDraftSavedAt).toLocaleTimeString()}` : ""}
+                    {editDraftSavedAt ? ` • Edit: ${new Date(editDraftSavedAt).toLocaleTimeString()}` : ""}
+                  </p>
+                )}
+              </div>
+              <AdminButton variant={creatingBlog ? "secondary" : "primary"} onClick={toggleCreateBlogPanel}>
                 <Plus size={14} />
                 {creatingBlog ? "Close" : "New Post"}
               </AdminButton>
@@ -987,6 +1099,28 @@ export default function ContentControlPage() {
 
             {creatingBlog && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border border-[rgb(var(--cream-rgb)/0.12)] rounded-xl p-4">
+                <div className="lg:col-span-2 flex justify-between items-center rounded-lg border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb))] px-3 py-2">
+                  <p className="text-xs text-cream/65">
+                    Drafts save automatically in this browser.
+                    {createDraftSavedAt ? ` Last save: ${new Date(createDraftSavedAt).toLocaleTimeString()}` : ""}
+                  </p>
+                  <AdminButton
+                    type="button"
+                    variant="secondary"
+                    className="px-3 py-1.5 text-[11px]"
+                    onClick={() => {
+                      if (typeof window !== "undefined") window.localStorage.removeItem(BLOG_CREATE_DRAFT_KEY)
+                      setBlogForm(getInitialBlogForm())
+                      setBlogTagsInput("")
+                      setBlogContentJson("[]")
+                      setBlogTemplateId(BLOG_EDITOR_TEMPLATES[0]?.id ?? "insight-brief")
+                      setCreateDraftSavedAt(null)
+                      toast.success("Create draft discarded")
+                    }}
+                  >
+                    Discard Draft
+                  </AdminButton>
+                </div>
                 <AdminInput label="Title" value={blogForm.title} onChange={(e) => setBlogForm((p) => ({ ...p, title: e.target.value }))} />
                 <AdminInput label="Slug" value={blogForm.slug} onChange={(e) => setBlogForm((p) => ({ ...p, slug: e.target.value }))} />
                 <AdminInput label="Category" value={blogForm.category} onChange={(e) => setBlogForm((p) => ({ ...p, category: e.target.value }))} />
@@ -1163,7 +1297,13 @@ export default function ContentControlPage() {
       {editingBlog && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-3xl rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] bg-[rgb(var(--surface-0-rgb))] p-5 space-y-4">
-            <h3 className="text-lg font-semibold text-cream">Edit Blog Post</h3>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-lg font-semibold text-cream">Edit Blog Post</h3>
+              <p className="text-xs text-cream/55">
+                Draft autosave
+                {editDraftSavedAt ? ` • ${new Date(editDraftSavedAt).toLocaleTimeString()}` : ""}
+              </p>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <AdminInput label="Title" value={editingBlog.title} onChange={(e) => setEditingBlog((p) => (p ? { ...p, title: e.target.value } : p))} />
               <AdminInput label="Slug" value={editingBlog.slug} onChange={(e) => setEditingBlog((p) => (p ? { ...p, slug: e.target.value } : p))} />
@@ -1275,6 +1415,17 @@ export default function ContentControlPage() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
+              <AdminButton
+                variant="secondary"
+                onClick={() => {
+                  if (!window.confirm("Discard saved edit draft for this post?")) return
+                  if (typeof window !== "undefined") window.localStorage.removeItem(BLOG_EDIT_DRAFT_KEY)
+                  setEditDraftSavedAt(null)
+                  toast.success("Edit draft discarded")
+                }}
+              >
+                Discard Draft
+              </AdminButton>
               <AdminButton
                 variant="secondary"
                 onClick={() => {
