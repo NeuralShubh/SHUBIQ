@@ -110,7 +110,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate min-h-screen max-[768px]:min-h-[66svh] flex items-center max-[768px]:items-start justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[8.5vh] pb-10 max-[768px]:pb-0 sm:pb-16"
+      className="relative isolate min-h-screen max-[768px]:min-h-[66svh] flex items-center max-[768px]:items-start justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[12vh] pb-10 max-[768px]:pb-0 sm:pb-16"
     >
       {/* Background grid */}
       <div
