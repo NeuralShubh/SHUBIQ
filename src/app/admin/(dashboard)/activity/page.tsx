@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { AdminButton, AdminCard } from '@/components/admin/AdminUI'
 import { Activity, RefreshCw, Newspaper, Database, Mail, Download } from 'lucide-react'
 import { toast } from 'sonner'
+import { AdminApiError, adminFetchJson, adminLoginRedirectPath } from '@/lib/admin-api-client'
 
 type ActivityItem = {
   id: string
@@ -14,12 +16,24 @@ type ActivityItem = {
 }
 
 export default function AdminActivityPage() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [items, setItems] = useState<ActivityItem[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [filter, setFilter] = useState<'all' | 'lead' | 'blog' | 'content'>('all')
   const [days, setDays] = useState<7 | 30 | 90>(30)
   const [query, setQuery] = useState('')
+
+  function handleApiError(error: unknown, fallback: string) {
+    if (error instanceof AdminApiError && error.unauthorized) {
+      const nextSearch = searchParams?.toString() ? `?${searchParams.toString()}` : ''
+      router.push(adminLoginRedirectPath(pathname || '/admin/activity', nextSearch))
+      return
+    }
+    toast.error(error instanceof Error ? error.message : fallback)
+  }
 
   async function loadActivity(silent = false) {
     if (silent) {
@@ -34,12 +48,11 @@ export default function AdminActivityPage() {
       params.set('limit', '120')
       if (query.trim()) params.set('q', query.trim())
 
-      const res = await fetch(`/api/admin/activity?${params.toString()}`, { cache: 'no-store' })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to load activity')
+      const json = await adminFetchJson<any>(`/api/admin/activity?${params.toString()}`)
+      if (!json?.ok) throw new Error(json?.error || 'Failed to load activity')
       setItems(Array.isArray(json.items) ? json.items : [])
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to load activity')
+      handleApiError(error, 'Failed to load activity')
     } finally {
       setLoading(false)
       setRefreshing(false)

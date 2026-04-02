@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { AdminButton, AdminCard, ConfirmModal } from '@/components/admin/AdminUI'
 import { Trash2, Search, X, MailOpen, Mail, RefreshCw, CheckSquare, Square, Download, ChartNoAxesColumn, Activity } from 'lucide-react'
 import { toast } from 'sonner'
 import type { AdminRole } from '@/lib/admin-auth'
 import { fetchAdminSessionInfo } from '@/lib/admin-session-client'
+import { AdminApiError, adminFetchJson, adminLoginRedirectPath } from '@/lib/admin-api-client'
 
 type Inquiry = {
   id: string
@@ -49,6 +51,9 @@ type InboxPagination = {
 const STATUS_OPTIONS = ['New', 'In Progress', 'Responded', 'Closed']
 
 export default function FormSubmissionsDashboard() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [inquiries, setInquiries] = useState<Inquiry[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -63,6 +68,15 @@ export default function FormSubmissionsDashboard() {
   const [viewingInquiry, setViewingInquiry] = useState<Inquiry | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [deletingIds, setDeletingIds] = useState<string[]>([])
+
+  function handleApiError(error: unknown, fallback: string, showToast = true) {
+    if (error instanceof AdminApiError && error.unauthorized) {
+      const nextSearch = searchParams?.toString() ? `?${searchParams.toString()}` : ''
+      router.push(adminLoginRedirectPath(pathname || '/admin', nextSearch))
+      return
+    }
+    if (showToast) toast.error(error instanceof Error ? error.message : fallback)
+  }
 
   function getServerFilters() {
     const params = new URLSearchParams()
@@ -89,9 +103,8 @@ export default function FormSubmissionsDashboard() {
 
     try {
       const params = getServerFilters()
-      const res = await fetch(`/api/admin/contact-submissions?${params.toString()}`, { cache: 'no-store' })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to fetch inquiries')
+      const json = await adminFetchJson<any>(`/api/admin/contact-submissions?${params.toString()}`)
+      if (!json?.ok) throw new Error(json?.error || 'Failed to fetch inquiries')
       setInquiries(Array.isArray(json.submissions) ? json.submissions : [])
       if (json.pagination) {
         setPagination({
@@ -102,7 +115,7 @@ export default function FormSubmissionsDashboard() {
         })
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to fetch inquiries')
+      handleApiError(error, 'Failed to fetch inquiries')
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -111,14 +124,11 @@ export default function FormSubmissionsDashboard() {
 
   async function fetchStats(silent = false) {
     try {
-      const res = await fetch('/api/admin/dashboard-stats', { cache: 'no-store' })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to load dashboard stats')
+      const json = await adminFetchJson<any>('/api/admin/dashboard-stats')
+      if (!json?.ok) throw new Error(json?.error || 'Failed to load dashboard stats')
       setStats(json)
     } catch (error) {
-      if (!silent) {
-        toast.error(error instanceof Error ? error.message : 'Failed to load dashboard stats')
-      }
+      handleApiError(error, 'Failed to load dashboard stats', !silent)
     }
   }
 
@@ -139,15 +149,16 @@ export default function FormSubmissionsDashboard() {
 
   async function markAsRead(id: string) {
     try {
-      const res = await fetch('/api/admin/contact-submissions', {
+      const json = await adminFetchJson<any>('/api/admin/contact-submissions', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, read: true }),
       })
-      if (!res.ok) return
+      if (!json?.ok) return
       setInquiries((prev) => prev.map((item) => (item.id === id ? { ...item, read: true } : item)))
       setViewingInquiry((prev) => (prev && prev.id === id ? { ...prev, read: true } : prev))
-    } catch {
+    } catch (error) {
+      handleApiError(error, 'Failed to mark as read', false)
       // Non-blocking.
     }
   }
@@ -163,19 +174,18 @@ export default function FormSubmissionsDashboard() {
       return
     }
     try {
-      const res = await fetch('/api/admin/contact-submissions', {
+      const json = await adminFetchJson<any>('/api/admin/contact-submissions', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, status: newStatus }),
       })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to update status')
+      if (!json?.ok) throw new Error(json?.error || 'Failed to update status')
 
       toast.success('Status updated')
       setInquiries((prev) => prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item)))
       setViewingInquiry((prev) => (prev && prev.id === id ? { ...prev, status: newStatus } : prev))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update status')
+      handleApiError(error, 'Failed to update status')
     }
   }
 
@@ -188,9 +198,8 @@ export default function FormSubmissionsDashboard() {
   const handleDelete = async () => {
     if (deletingIds.length === 0) return
     try {
-      const res = await fetch(`/api/admin/contact-submissions?ids=${encodeURIComponent(deletingIds.join(','))}`, { method: 'DELETE' })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to delete inquiry')
+      const json = await adminFetchJson<any>(`/api/admin/contact-submissions?ids=${encodeURIComponent(deletingIds.join(','))}`, { method: 'DELETE' })
+      if (!json?.ok) throw new Error(json?.error || 'Failed to delete inquiry')
 
       toast.success(deletingIds.length === 1 ? 'Inquiry deleted' : 'Selected inquiries deleted')
       setInquiries((prev) => prev.filter((item) => !deletingIds.includes(item.id)))
@@ -198,7 +207,7 @@ export default function FormSubmissionsDashboard() {
       if (viewingInquiry && deletingIds.includes(viewingInquiry.id)) setViewingInquiry(null)
       await fetchStats(true)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Error deleting inquiry')
+      handleApiError(error, 'Error deleting inquiry')
     } finally {
       setIsDeleteModalOpen(false)
       setDeletingIds([])
@@ -237,19 +246,18 @@ export default function FormSubmissionsDashboard() {
     }
 
     try {
-      const res = await fetch('/api/admin/contact-submissions', {
+      const json = await adminFetchJson<any>('/api/admin/contact-submissions', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: selectedIds, ...payload }),
       })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Bulk update failed')
+      if (!json?.ok) throw new Error(json?.error || 'Bulk update failed')
       toast.success('Bulk update completed')
       await fetchInquiries(true)
       await fetchStats(true)
       setSelectedIds([])
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Bulk update failed')
+      handleApiError(error, 'Bulk update failed')
     }
   }
 
@@ -274,9 +282,8 @@ export default function FormSubmissionsDashboard() {
       let totalPages = 1
       while (currentPage <= totalPages) {
         baseParams.set('page', String(currentPage))
-        const res = await fetch(`/api/admin/contact-submissions?${baseParams.toString()}`, { cache: 'no-store' })
-        const json = await res.json()
-        if (!res.ok || !json?.ok) throw new Error(json?.error || 'Export failed')
+        const json = await adminFetchJson<any>(`/api/admin/contact-submissions?${baseParams.toString()}`)
+        if (!json?.ok) throw new Error(json?.error || 'Export failed')
         const pageItems = Array.isArray(json.submissions) ? json.submissions : []
         for (const item of pageItems) {
           rows.push([
@@ -299,7 +306,7 @@ export default function FormSubmissionsDashboard() {
       try {
         await fetchAll()
       } catch (error) {
-        toast.error(error instanceof Error ? error.message : 'Failed to export CSV')
+        handleApiError(error, 'Failed to export CSV')
         return
       }
 

@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { AdminButton, AdminCard, AdminInput } from '@/components/admin/AdminUI'
 import { Shield, Database, Globe, Bell, RefreshCw, CircleCheck, CircleAlert, Key, Server, Download } from 'lucide-react'
 import { toast } from 'sonner'
+import { AdminApiError, adminFetchJson, adminLoginRedirectPath } from '@/lib/admin-api-client'
 
 type SystemStatus = {
   ok: boolean
@@ -33,11 +35,23 @@ type SystemStatus = {
 }
 
 export default function SettingsAdminPage() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [status, setStatus] = useState<SystemStatus | null>(null)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [revalidating, setRevalidating] = useState(false)
   const [exportingType, setExportingType] = useState<string | null>(null)
+
+  function handleApiError(error: unknown, fallback: string) {
+    if (error instanceof AdminApiError && error.unauthorized) {
+      const nextSearch = searchParams?.toString() ? `?${searchParams.toString()}` : ''
+      router.push(adminLoginRedirectPath(pathname || '/admin/settings', nextSearch))
+      return
+    }
+    toast.error(error instanceof Error ? error.message : fallback)
+  }
 
   async function loadStatus(silent = false) {
     if (silent) {
@@ -47,12 +61,10 @@ export default function SettingsAdminPage() {
     }
 
     try {
-      const res = await fetch('/api/admin/system-status', { cache: 'no-store' })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json?.error || 'Failed to load system status')
+      const json = await adminFetchJson<SystemStatus>('/api/admin/system-status')
       setStatus(json)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to load system status')
+      handleApiError(error, 'Failed to load system status')
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -62,16 +74,15 @@ export default function SettingsAdminPage() {
   async function revalidateSiteCache() {
     setRevalidating(true)
     try {
-      const res = await fetch('/api/admin/revalidate', {
+      const json = await adminFetchJson<any>('/api/admin/revalidate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({}),
       })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Revalidate failed')
+      if (!json?.ok) throw new Error(json?.error || 'Revalidate failed')
       toast.success('Site cache revalidated')
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Revalidate failed')
+      handleApiError(error, 'Revalidate failed')
     } finally {
       setRevalidating(false)
     }
@@ -80,9 +91,8 @@ export default function SettingsAdminPage() {
   async function exportData(type: 'leads' | 'blog' | 'content' | 'all') {
     setExportingType(type)
     try {
-      const res = await fetch(`/api/admin/export?type=${encodeURIComponent(type)}`, { cache: 'no-store' })
-      const json = await res.json()
-      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Export failed')
+      const json = await adminFetchJson<any>(`/api/admin/export?type=${encodeURIComponent(type)}`)
+      if (!json?.ok) throw new Error(json?.error || 'Export failed')
 
       const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json;charset=utf-8;' })
       const url = URL.createObjectURL(blob)
@@ -93,7 +103,7 @@ export default function SettingsAdminPage() {
       URL.revokeObjectURL(url)
       toast.success(`Exported ${type} backup`)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Export failed')
+      handleApiError(error, 'Export failed')
     } finally {
       setExportingType(null)
     }

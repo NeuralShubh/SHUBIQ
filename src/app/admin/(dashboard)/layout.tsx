@@ -8,6 +8,7 @@ import { Toaster } from 'sonner'
 import { logout } from '../login/actions'
 import type { AdminRole } from '@/lib/admin-auth'
 import { fetchAdminSessionInfo } from '@/lib/admin-session-client'
+import { adminLoginRedirectPath } from '@/lib/admin-api-client'
 
 const navItems = [
   {
@@ -61,9 +62,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         setSessionRemaining(session.expiresInSeconds)
       } catch {
         if (!alive) return
-        setActiveRole('viewer')
-        setDisplayName('Admin')
-        setSessionRemaining(null)
+        router.push(adminLoginRedirectPath(pathname || '/admin'))
       }
     }
 
