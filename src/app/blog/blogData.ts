@@ -30,7 +30,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "p",
         content:
-          "A real productivity system is not a list of hacks. It is an operating system you trust when life gets loud. In 2026, the difference between shipping consistently and drowning in noise is your system's ability to capture decisions, protect focus, and keep energy sustainable over months—not just one week.",
+          "A real productivity system is not a list of hacks. It is an operating system you trust when life gets loud. In 2026, the difference between shipping consistently and drowning in noise is your system's ability to capture decisions, protect focus, and keep energy sustainable over months, not just one week.",
       },
       {
         type: "p",
@@ -57,7 +57,7 @@ const BLOG_POSTS: BlogPostBase[] = [
         type: "pullquote",
         content: "A productivity system should reduce decisions, not add them.",
       },
-      { type: "h2", content: "The Three Pillars — Tasks, Habits, Focus" },
+      { type: "h2", content: "The Three Pillars: Tasks, Habits, Focus" },
       {
         type: "p",
         content:
@@ -120,7 +120,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "p",
         content:
-          "A good rule: if a tool forces you to manage the tool itself, it is a distraction. Favor tools that provide one clear action—capture, review, or focus—without asking you to configure every step.",
+          "A good rule: if a tool forces you to manage the tool itself, it is a distraction. Favor tools that provide one clear action: capture, review, or focus, without asking you to configure every step.",
       },
       {
         type: "p",
@@ -141,7 +141,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "p",
         content:
-          "When the system feels heavy, reduce inputs. Fewer tasks, fewer habits, fewer tools. The aim is to protect clarity. The system is not a cage—it is a structure that gives you control when pressure rises.",
+          "When the system feels heavy, reduce inputs. Fewer tasks, fewer habits, fewer tools. The aim is to protect clarity. The system is not a cage, it is a structure that gives you control when pressure rises.",
       },
       {
         type: "blockquote",
@@ -203,7 +203,7 @@ const BLOG_POSTS: BlogPostBase[] = [
         type: "pullquote",
         content: "Focus isn't about willpower. It's about architecture.",
       },
-      { type: "h2", content: "Environment Design — Your First Lever" },
+      { type: "h2", content: "Environment Design: Your First Lever" },
       {
         type: "p",
         content:
@@ -312,7 +312,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "p",
         content:
-          "Small teams win by speed and clarity. AI can amplify both—but only if it is applied in the right places. The goal is not to replace judgment. The goal is to remove the noise around it.",
+          "Small teams win by speed and clarity. AI can amplify both, but only if it is applied in the right places. The goal is not to replace judgment. The goal is to remove the noise around it.",
       },
       {
         type: "p",
@@ -366,11 +366,11 @@ const BLOG_POSTS: BlogPostBase[] = [
           "Feedback classifier: tag user feedback by theme and urgency.",
         ],
       },
-      { type: "h2", content: "Common Mistakes — Overautomating Too Early" },
+      { type: "h2", content: "Common Mistakes: Overautomating Too Early" },
       {
         type: "p",
         content:
-          "The fastest way to fail is to automate chaotic processes. If the underlying workflow is broken, AI will only make it faster—and more confusing. Fix the workflow first, then automate.",
+          "The fastest way to fail is to automate chaotic processes. If the underlying workflow is broken, AI will only make it faster, and more confusing. Fix the workflow first, then automate.",
       },
       {
         type: "p",
@@ -391,7 +391,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "p",
         content:
-          "SHUBIQ Studio builds AI workflows around existing tooling, so teams do not need to rebuild their entire stack. The best AI implementation is often invisible—just a smoother day.",
+          "SHUBIQ Studio builds AI workflows around existing tooling, so teams do not need to rebuild their entire stack. The best AI implementation is often invisible, just a smoother day.",
       },
       { type: "h2", content: "Building an AI-First Team Culture" },
       {
@@ -407,7 +407,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "blockquote",
         content:
-          "Treat AI as a colleague who drafts quickly and needs review—not as an oracle.",
+          "Treat AI as a colleague who drafts quickly and needs review, not as an oracle.",
       },
       { type: "h2", content: "Summary: Keep It Simple" },
       {

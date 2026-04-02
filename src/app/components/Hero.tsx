@@ -156,10 +156,10 @@ export default function Hero() {
         <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
       </div>
 
-      {/* Main content — cinematic entrance */}
+      {/* Main content, cinematic entrance */}
       <div className="hero-content relative z-20 text-center w-full mx-auto md:-translate-y-10 max-[768px]:translate-y-0 overflow-visible">
 
-        {/* SHUBIQ wordmark — blur + scale entrance */}
+        {/* SHUBIQ wordmark, blur + scale entrance */}
         <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em] relative">
           <div
             className="absolute inset-0 -z-10 blur-2xl opacity-40"
