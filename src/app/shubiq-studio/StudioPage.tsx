@@ -551,7 +551,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 50%, rgb(var(--gold-rgb) / 0.04) 0%, transparent 65%)" }}
       />
-      <div className="max-w-[1180px] mx-auto rounded-[30px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.84),rgb(var(--surface-0-rgb)/0.9))] p-6 sm:p-8">
+      <div className="max-w-7xl mx-auto rounded-[30px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.84),rgb(var(--surface-0-rgb)/0.9))] p-6 sm:p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -834,7 +834,7 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
         style={{ background: "radial-gradient(ellipse at 50% 70%, rgb(var(--gold-rgb) / 0.05) 0%, transparent 60%)" }}
       />
 
-      <div className="max-w-5xl mx-auto rounded-[30px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.84),rgb(var(--surface-0-rgb)/0.9))] p-6 sm:p-8">
+      <div className="max-w-7xl mx-auto rounded-[30px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.84),rgb(var(--surface-0-rgb)/0.9))] p-6 sm:p-8">
         <div ref={contentRef} style={{ opacity: 0 }}>
           <div id="studio-contact-anchor" className="text-center mb-8 sm:mb-12 scroll-mt-24 sm:scroll-mt-28">
             <SectionLabel label={content.contactSectionLabel} centered />
