@@ -972,7 +972,29 @@ export default function StudioPage() {
   const [studioContent, setStudioContent] = useState<StudioContent>(DEFAULT_STUDIO_CONTENT)
 
   useEffect(() => {
-    setStudioContent(DEFAULT_STUDIO_CONTENT)
+    let cancelled = false
+
+    async function loadManagedContent() {
+      try {
+        const res = await fetch("/api/admin/content?key=studio_content", { cache: "no-store" })
+        if (!res.ok) return
+        const json = await res.json()
+        const remote = (json?.content && typeof json.content === "object" ? json.content : {}) as Partial<StudioContent>
+        const merged: StudioContent = {
+          ...DEFAULT_STUDIO_CONTENT,
+          ...remote,
+          plans: Array.isArray(remote.plans) && remote.plans.length > 0 ? remote.plans : DEFAULT_STUDIO_CONTENT.plans,
+        }
+        if (!cancelled) setStudioContent(merged)
+      } catch {
+        if (!cancelled) setStudioContent(DEFAULT_STUDIO_CONTENT)
+      }
+    }
+
+    loadManagedContent()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   return (

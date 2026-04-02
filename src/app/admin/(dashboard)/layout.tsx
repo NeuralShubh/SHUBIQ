@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Mail, Settings, PanelLeftClose, PanelLeftOpen, LogOut, ArrowUpRight } from 'lucide-react'
+import { Mail, Settings, PanelLeftClose, PanelLeftOpen, LogOut, ArrowUpRight, FileText } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { logout } from '../login/actions'
 import type { AdminRole } from '@/lib/admin-auth'
@@ -13,6 +13,12 @@ const navItems = [
     group: 'Inbox',
     items: [
       { label: 'Form Submissions', href: '/admin', icon: Mail, roles: ['owner', 'admin', 'editor', 'viewer'] as AdminRole[] },
+    ],
+  },
+  {
+    group: 'Content',
+    items: [
+      { label: 'Content Control', href: '/admin/content', icon: FileText, roles: ['owner', 'admin', 'editor'] as AdminRole[] },
     ],
   },
   {
