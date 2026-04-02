@@ -62,8 +62,13 @@ export async function verifyAdminSessionToken(token: string | undefined | null) 
 }
 
 export function resolveRoleFromPassword(password: string) {
+  const singlePassword = process.env.ADMIN_PASSWORD
+  if (singlePassword && password === singlePassword) {
+    return { role: "owner" as AdminRole, displayName: "Owner" }
+  }
+
   const rolePasswords: Array<{ role: AdminRole; value?: string }> = [
-    { role: "owner", value: process.env.ADMIN_OWNER_PASSWORD || process.env.ADMIN_PASSWORD },
+    { role: "owner", value: process.env.ADMIN_OWNER_PASSWORD },
     { role: "admin", value: process.env.ADMIN_ADMIN_PASSWORD },
     { role: "editor", value: process.env.ADMIN_EDITOR_PASSWORD },
     { role: "viewer", value: process.env.ADMIN_VIEWER_PASSWORD },
@@ -81,4 +86,3 @@ export function resolveRoleFromPassword(password: string) {
 
   return { role: match.role, displayName: namesByRole[match.role] }
 }
-
