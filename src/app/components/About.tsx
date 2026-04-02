@@ -17,10 +17,10 @@ export default function About() {
       />
 
       <div className="about-container">
-        <div className="flex items-center gap-2.5 sm:gap-3 mb-5">
+        <div className="flex items-center gap-2.5 sm:gap-3 mb-5 max-[768px]:justify-center">
           <span className="w-1 h-1 rounded-full bg-gold/80" />
           <div className="font-rajdhani text-[14px] tracking-[7px] text-gold/85 uppercase">About</div>
-          <span className="hidden sm:block w-14 h-px bg-gradient-to-r from-gold/60 to-transparent" />
+          <span className="w-14 h-px bg-gradient-to-r from-gold/60 to-transparent max-[768px]:hidden sm:block" />
         </div>
 
         <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 sm:gap-16 lg:gap-28 xl:gap-32 items-start">
@@ -56,7 +56,7 @@ export default function About() {
                 The SHUBIQ system blends strategy, engineering, and premium design to turn ambitious ideas into durable platforms that earn trust and compound value.
               </p>
 
-              <div className="mt-[104px]">
+              <div className="mt-[104px] max-[768px]:mt-12 max-[768px]:flex max-[768px]:justify-center">
                 <a
                   href="/founder"
                   data-cursor="View"

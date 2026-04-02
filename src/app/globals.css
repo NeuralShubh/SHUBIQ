@@ -302,6 +302,7 @@
       font-size: clamp(29px, 9.1vw, 46px) !important;
       line-height: 0.9 !important;
       letter-spacing: 0.28px !important;
+      text-align: center !important;
     }
 
     .about-mobile-heading span:last-child {
@@ -349,16 +350,17 @@
     }
 
     .about-mobile-copy-wrap {
-      max-width: 94% !important;
-      gap: 24px !important;
+      max-width: 100% !important;
+      gap: 18px !important;
     }
 
     .about-mobile-copy {
-      font-size: clamp(16px, 4.35vw, 18px) !important;
-      line-height: 1.88 !important;
-      max-width: 32ch;
-      margin-left: 0;
+      font-size: clamp(16px, 4.2vw, 18px) !important;
+      line-height: 1.72 !important;
+      max-width: 100%;
+      margin-left: auto;
       margin-right: auto;
+      text-wrap: pretty;
     }
 
     .about-mobile-quote {
