@@ -7,6 +7,7 @@ import { Mail, Settings, PanelLeftClose, PanelLeftOpen, LogOut, ArrowUpRight, Fi
 import { Toaster } from 'sonner'
 import { logout } from '../login/actions'
 import type { AdminRole } from '@/lib/admin-auth'
+import { fetchAdminSessionInfo } from '@/lib/admin-session-client'
 
 const navItems = [
   {
@@ -41,16 +42,39 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
   const [activeRole, setActiveRole] = useState<AdminRole>('viewer')
+  const [displayName, setDisplayName] = useState('Admin')
+  const [sessionRemaining, setSessionRemaining] = useState<number | null>(null)
   const [commandQuery, setCommandQuery] = useState('')
   const [commandOpen, setCommandOpen] = useState(false)
   const commandRef = useRef<HTMLDivElement>(null)
   const commandInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    const match = document.cookie.match(/(?:^|;\s*)shubiq_admin_role=([^;]+)/)
-    const role = (match ? decodeURIComponent(match[1]) : 'viewer') as AdminRole
-    if (['owner', 'admin', 'editor', 'viewer'].includes(role)) {
-      setActiveRole(role)
+    let alive = true
+
+    const syncSession = async () => {
+      try {
+        const session = await fetchAdminSessionInfo()
+        if (!alive) return
+        setActiveRole(session.role)
+        setDisplayName(session.displayName)
+        setSessionRemaining(session.expiresInSeconds)
+      } catch {
+        if (!alive) return
+        setActiveRole('viewer')
+        setDisplayName('Admin')
+        setSessionRemaining(null)
+      }
+    }
+
+    void syncSession()
+    const interval = window.setInterval(() => {
+      setSessionRemaining((prev) => (typeof prev === 'number' ? Math.max(0, prev - 1) : prev))
+    }, 1000)
+
+    return () => {
+      alive = false
+      window.clearInterval(interval)
     }
   }, [])
 
@@ -92,6 +116,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [commandItems, commandQuery])
 
   const roleLabel = activeRole.charAt(0).toUpperCase() + activeRole.slice(1)
+  const sessionLabel = useMemo(() => {
+    if (typeof sessionRemaining !== 'number') return 'Session'
+    const hours = Math.floor(sessionRemaining / 3600)
+    const minutes = Math.floor((sessionRemaining % 3600) / 60)
+    if (hours > 0) return `${hours}h ${minutes}m left`
+    return `${Math.max(0, minutes)}m left`
+  }, [sessionRemaining])
 
   useEffect(() => {
     setCommandOpen(false)
@@ -201,9 +232,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="border-t border-[rgb(var(--cream-rgb)/0.08)] p-3 shrink-0">
           <button onClick={handleLogout} className="flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-[rgb(var(--surface-1-rgb))] text-sm text-cream/70 hover:text-cream transition-colors overflow-hidden">
             <div className="w-7 h-7 rounded-sm bg-gold/10 text-gold border border-gold/20 flex items-center justify-center text-xs font-bold shrink-0">
-              S
+              {displayName.slice(0, 1).toUpperCase()}
             </div>
-            {!collapsed && <span className="flex-1 text-left whitespace-nowrap font-medium">Shubham</span>}
+            {!collapsed && <span className="flex-1 text-left whitespace-nowrap font-medium">{displayName}</span>}
             {!collapsed && <LogOut size={14} className="opacity-50 hover:opacity-100" />}
           </button>
         </div>
@@ -258,6 +289,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* Right side: quick actions */}
           <div className="flex items-center gap-4 ml-auto">
+            <span className="hidden md:inline-flex text-[11px] tracking-[1.4px] uppercase text-cream/55 border border-[rgb(var(--cream-rgb)/0.16)] rounded-md px-2.5 py-1 font-rajdhani">
+              {sessionLabel}
+            </span>
             <a
               href="/"
               target="_blank"

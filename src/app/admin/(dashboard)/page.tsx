@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { AdminButton, AdminCard, ConfirmModal } from '@/components/admin/AdminUI'
 import { Trash2, Search, X, MailOpen, Mail, RefreshCw, CheckSquare, Square, Download, ChartNoAxesColumn, Activity } from 'lucide-react'
 import { toast } from 'sonner'
+import type { AdminRole } from '@/lib/admin-auth'
+import { fetchAdminSessionInfo } from '@/lib/admin-session-client'
 
 type Inquiry = {
   id: string
@@ -51,7 +53,7 @@ export default function FormSubmissionsDashboard() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [activeRole, setActiveRole] = useState<'owner' | 'admin' | 'editor' | 'viewer'>('viewer')
+  const [activeRole, setActiveRole] = useState<AdminRole>('viewer')
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'unread' | 'new' | 'in-progress' | 'responded' | 'closed'>('all')
   const [page, setPage] = useState(1)
@@ -122,11 +124,13 @@ export default function FormSubmissionsDashboard() {
 
   useEffect(() => {
     fetchStats()
-    const match = document.cookie.match(/(?:^|;\s*)shubiq_admin_role=([^;]+)/)
-    const role = match ? decodeURIComponent(match[1]) : 'viewer'
-    if (role === 'owner' || role === 'admin' || role === 'editor' || role === 'viewer') {
-      setActiveRole(role)
-    }
+    void fetchAdminSessionInfo()
+      .then((session) => {
+        setActiveRole(session.role)
+      })
+      .catch(() => {
+        setActiveRole('viewer')
+      })
   }, [])
 
   useEffect(() => {
