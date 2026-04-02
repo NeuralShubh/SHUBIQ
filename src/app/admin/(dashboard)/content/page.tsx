@@ -27,6 +27,16 @@ type BlogItem = {
   content: unknown[]
 }
 
+function ensureUniqueSlug(base: string, existing: string[]) {
+  const source = base.trim() || "post"
+  if (!existing.includes(source)) return source
+  let index = 2
+  while (existing.includes(`${source}-copy-${index}`)) {
+    index += 1
+  }
+  return `${source}-copy-${index}`
+}
+
 function parseTagsInput(input: string): string[] {
   return input
     .split(",")
@@ -344,6 +354,35 @@ export default function ContentControlPage() {
       await loadBlogItems()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Delete failed")
+    }
+  }
+
+  async function duplicateBlogPost(item: BlogItem) {
+    try {
+      const existingSlugs = blogItems.map((entry) => entry.slug)
+      const payload = {
+        slug: ensureUniqueSlug(`${item.slug}-copy`, existingSlugs),
+        title: `${item.title} (Copy)`,
+        excerpt: item.excerpt,
+        category: item.category,
+        date: new Date().toISOString().slice(0, 10),
+        author: item.author,
+        readingTime: item.readingTime,
+        tags: item.tags,
+        content: item.content,
+      }
+
+      const res = await fetch("/api/admin/blog-posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || "Duplicate failed")
+      toast.success("Blog post duplicated")
+      await loadBlogItems()
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Duplicate failed")
     }
   }
 
@@ -803,6 +842,9 @@ export default function ContentControlPage() {
                         <td className="py-3 pr-3">{item.date}</td>
                         <td className="py-3 text-right">
                           <div className="flex justify-end gap-2">
+                            <AdminButton variant="secondary" className="px-3 py-1.5" onClick={() => duplicateBlogPost(item)}>
+                              Duplicate
+                            </AdminButton>
                             <AdminButton variant="secondary" className="px-3 py-1.5" onClick={() => openBlogEditor(item)}>
                               Edit
                             </AdminButton>
