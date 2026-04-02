@@ -96,7 +96,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="sticky top-0 z-50 border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[linear-gradient(180deg,rgb(var(--surface-1-rgb)/0.96),rgb(var(--surface-0-rgb)/0.94))] backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-[1480px] items-center gap-6 px-7 py-4 xl:px-10">
           <div className="flex min-w-[210px] items-center gap-3">
-            <span className="font-cinzel font-black tracking-[2px] text-[19px] whitespace-nowrap">SHUBIQ <span className="text-gold">Admin</span></span>
+            <Link
+              href="/"
+              className="font-cinzel font-black tracking-[2px] text-[19px] whitespace-nowrap text-cream hover:text-[rgb(var(--gold-light-rgb))] transition-colors"
+            >
+              SHUBIQ <span className="text-gold">Admin</span>
+            </Link>
             <span className="rounded-full border border-gold/35 bg-gold/10 px-2.5 py-1 text-[10px] font-rajdhani uppercase tracking-[2.2px] text-gold">
               {roleLabel}
             </span>
