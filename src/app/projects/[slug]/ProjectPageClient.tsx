@@ -6,7 +6,6 @@ import ScrollReveal from "../../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../../components/StaggerContainer"
 import VideoPlayer from "../../components/VideoPlayer"
 import BackLink from "../../components/BackLink"
-import UnifiedNavbar from "../../components/UnifiedNavbar"
 import type { Project } from "../../data-projects"
 
 interface ProjectPageClientProps {
@@ -27,7 +26,6 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
 
   return (
     <>
-      <UnifiedNavbar />
       <div className="min-h-screen px-4 sm:px-6 pt-28 pb-24">
         <div className="max-w-6xl mx-auto">
         <motion.div
@@ -246,4 +244,3 @@ export default function ProjectPageClient({ project, prevProject, nextProject }:
     </>
   )
 }
-

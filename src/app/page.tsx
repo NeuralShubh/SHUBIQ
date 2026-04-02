@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import About from "./components/About"
 import Services from "./components/Services"
@@ -23,7 +22,6 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <Navbar />
       <main>
         <div className="hero-sticky">
           <Hero />

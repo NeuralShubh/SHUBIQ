@@ -4,7 +4,6 @@ import { useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
-import UnifiedNavbar from "../components/UnifiedNavbar"
 import { BlogBlock, BlogPost, getBlogPosts } from "./blogData"
 
 function renderBlock(block: BlogBlock, index: number) {
@@ -139,7 +138,6 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
 
   return (
     <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
-      <UnifiedNavbar />
       {!prefersReduced && (
         <motion.div
           className="fixed top-0 left-0 right-0 h-[2px] z-[9999] origin-left"

@@ -7,7 +7,6 @@ import TextReveal from "../components/TextReveal"
 import ProjectCard from "../components/ProjectCard"
 import type { Project } from "../data-projects"
 import BackLink from "../components/BackLink"
-import UnifiedNavbar from "../components/UnifiedNavbar"
 
 interface ProjectsIndexClientProps {
   projects: Project[]
@@ -20,7 +19,6 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
 
   return (
     <>
-      <UnifiedNavbar />
       <div className="min-h-screen px-4 sm:px-6 pt-28 pb-24">
         <div className="max-w-6xl mx-auto">
         <ScrollReveal>

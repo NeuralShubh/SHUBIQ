@@ -4,7 +4,6 @@ import "./globals.css"
 import SmoothScroll from "./components/SmoothScroll"
 import ThemeInit from "./components/ThemeInit"
 import LayoutShell from "./components/LayoutShell"
-import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import ScrollProgress from "./components/ScrollProgress"
 import BackToTop from "./components/BackToTop"
@@ -89,7 +88,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LoadingScreen />
         <CustomCursor />
         <ScrollProgress />
-        <Navbar />
         <SmoothScroll>
           <AnimationGate>
             <LayoutShell>

@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
-import StudioNavbar from "./StudioNavbar"
 import Footer from "../components/Footer"
 import ScrollReveal from "../components/ScrollReveal"
 import SectionDivider from "../components/SectionDivider"
@@ -978,7 +977,6 @@ export default function StudioPage() {
 
   return (
     <>
-      <StudioNavbar />
       <main className="studio-premium-bg relative overflow-hidden">
         <div className="studio-grid-overlay pointer-events-none absolute inset-0" />
         <div className="studio-glow-orb pointer-events-none absolute -left-20 top-28 h-72 w-72 rounded-full" />
