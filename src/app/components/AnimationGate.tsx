@@ -20,6 +20,8 @@ export default function AnimationGate({ children }: { children: React.ReactNode 
     }
   }, [])
 
-  if (!ready) return null
+  if (!ready) {
+    return <div className="min-h-screen w-full bg-[rgb(var(--ink-rgb))]" aria-hidden="true" />
+  }
   return <>{children}</>
 }

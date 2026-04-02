@@ -83,7 +83,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable}`}>
+      <body className={`${cinzel.variable} ${cormorant.variable} ${rajdhani.variable} bg-[rgb(var(--ink-rgb))] text-cream`}>
         <ThemeInit />
         <LoadingScreen />
         <CustomCursor />

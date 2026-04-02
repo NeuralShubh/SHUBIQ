@@ -106,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en">
-      <body className={`${cinzel.variable} ${cinzelDecorative.variable} ${cormorant.variable} ${rajdhani.variable} ${orbitron.variable}`}>
+      <body className={`${cinzel.variable} ${cinzelDecorative.variable} ${cormorant.variable} ${rajdhani.variable} ${orbitron.variable} bg-[rgb(var(--ink-rgb))] text-cream`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <ThemeInit />
