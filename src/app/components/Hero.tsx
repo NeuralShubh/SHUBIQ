@@ -110,7 +110,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate min-h-screen max-[768px]:min-h-[72svh] flex items-center justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[8.5vh] pb-10 max-[768px]:pb-0 sm:pb-16"
+      className="relative isolate min-h-screen max-[768px]:min-h-[66svh] flex items-center max-[768px]:items-start justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[8.5vh] pb-10 max-[768px]:pb-0 sm:pb-16"
     >
       {/* Background grid */}
       <div
@@ -249,12 +249,12 @@ export default function Hero() {
         </motion.div>
 
         {/* Spacing before CTAs */}
-        <div className="h-4 sm:h-10 max-[768px]:h-14" />
+        <div className="h-4 sm:h-10 max-[768px]:h-20" />
 
-        <div className="max-[768px]:mx-auto max-[768px]:w-full max-[768px]:max-w-[342px] max-[768px]:px-1 max-[768px]:pt-0 max-[768px]:pb-0">
+        <div className="max-[768px]:mx-auto max-[768px]:w-full max-[768px]:max-w-[342px] max-[768px]:rounded-[16px] max-[768px]:bg-[linear-gradient(180deg,rgb(var(--gold-rgb)/0.06),rgb(var(--surface-1-rgb)/0.04))] max-[768px]:px-1 max-[768px]:pt-1 max-[768px]:pb-0">
           {/* CTA Buttons */}
           <motion.div
-            className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-2.5 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-center max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-8 max-[768px]:mt-0 sm:mt-14 mb-5 max-[768px]:mb-4 sm:mb-6"
+            className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-2.5 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-center max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-8 max-[768px]:mt-0 sm:mt-14 mb-5 max-[768px]:mb-3 sm:mb-6"
             initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
             animate={ctaReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
             transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
@@ -279,7 +279,7 @@ export default function Hero() {
 
           {/* Social links */}
           <motion.div
-            className="mx-auto w-full max-[768px]:max-w-[320px] sm:w-fit border-t border-gold/15 max-[768px]:border-t-0 pt-4 sm:pt-5 max-[768px]:pt-0 grid max-[768px]:grid-cols-3 grid-cols-2 sm:flex max-[768px]:gap-x-2 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-2 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-0 sm:mb-8 mt-6 max-[768px]:mt-5 sm:mt-8"
+            className="mx-auto w-full max-[768px]:max-w-[320px] sm:w-fit border-t border-gold/15 max-[768px]:border-t-0 pt-4 sm:pt-5 max-[768px]:pt-0 grid max-[768px]:grid-cols-3 grid-cols-2 sm:flex max-[768px]:gap-x-2 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-2 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-0 sm:mb-8 mt-6 max-[768px]:mt-10 sm:mt-8"
             initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
             animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
             transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
