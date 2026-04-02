@@ -6,6 +6,7 @@ import { ArrowRight, Bot, Code2, Cpu, Globe, Layers, LayoutDashboard, Smartphone
 import type { LucideIcon } from "lucide-react"
 import { SERVICES } from "../data"
 import SectionLabel from "./SectionLabel"
+import { DEFAULT_HOME_CONTENT, mergeHomeManagedContent } from "@/app/content/managedContent"
 
 const SERVICE_ICONS = [Code2, LayoutDashboard, Bot, Smartphone]
 const MAIN_SERVICE_ICON_MAP: Record<string, LucideIcon> = {
@@ -176,6 +177,9 @@ export default function Services({ initialServices }: ServicesProps = {}) {
   const sectionRef = useRef<HTMLElement>(null)
   const prefersReduced = !!useReducedMotion()
   const [items, setItems] = useState<MainService[]>(initialServices?.length ? initialServices : SERVICES)
+  const [sectionLabel, setSectionLabel] = useState(DEFAULT_HOME_CONTENT.servicesLabel)
+  const [headingPrefix, setHeadingPrefix] = useState(DEFAULT_HOME_CONTENT.servicesHeadingPrefix)
+  const [headingAccent, setHeadingAccent] = useState(DEFAULT_HOME_CONTENT.servicesHeadingAccent)
   const [isMobile, setIsMobile] = useState(false)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -192,6 +196,33 @@ export default function Services({ initialServices }: ServicesProps = {}) {
   useEffect(() => {
     setItems(initialServices?.length ? initialServices : SERVICES)
   }, [initialServices])
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadManagedContent() {
+      try {
+        const res = await fetch("/api/content?key=home_content", { cache: "no-store" })
+        if (!res.ok) return
+        const json = await res.json()
+        const merged = mergeHomeManagedContent(json?.content)
+        if (cancelled) return
+        setSectionLabel(merged.servicesLabel)
+        setHeadingPrefix(merged.servicesHeadingPrefix)
+        setHeadingAccent(merged.servicesHeadingAccent)
+        if (Array.isArray(merged.servicesCards) && merged.servicesCards.length > 0) {
+          setItems(merged.servicesCards)
+        }
+      } catch {
+        // Keep defaults if managed content fails.
+      }
+    }
+
+    loadManagedContent()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const cardOffsets = useMemo(
     () => [
@@ -216,10 +247,10 @@ export default function Services({ initialServices }: ServicesProps = {}) {
 
       <div className="max-w-6xl mx-auto w-full">
         <div className="flex flex-col items-center gap-4 sm:gap-5 mb-6 sm:mb-8">
-          <SectionLabel label="Services" centered />
+          <SectionLabel label={sectionLabel} centered />
           <h2 className="font-shubiq-heading font-normal leading-[0.92] text-center" style={{ fontSize: "clamp(32px, 5vw, 62px)" }}>
-            <span className="text-cream/90">Systems We </span>
-            <span className="text-gold">Engineer</span>
+            <span className="text-cream/90">{headingPrefix} </span>
+            <span className="text-gold">{headingAccent}</span>
           </h2>
         </div>
 

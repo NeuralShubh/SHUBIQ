@@ -364,9 +364,9 @@ export default function ContentControlPage() {
             <div>
               <h2 className="text-lg font-semibold text-cream flex items-center gap-2">
                 <FileEdit size={16} className="text-gold" />
-                Home Hero Content
+                Home Content
               </h2>
-              <p className="text-xs text-cream/50 mt-1">Controls tagline and CTA text on the home hero section.</p>
+              <p className="text-xs text-cream/50 mt-1">Controls Home hero, about, and services content.</p>
             </div>
             <div className="flex gap-2">
               <AdminButton variant="secondary" onClick={loadHomeContent} disabled={loadingHome}>
@@ -435,6 +435,75 @@ export default function ContentControlPage() {
               value={homeContent.aboutFounderCta}
               onChange={(e) => setHomeContent((p) => ({ ...p, aboutFounderCta: e.target.value }))}
             />
+            <AdminInput
+              label="Services Label"
+              value={homeContent.servicesLabel}
+              onChange={(e) => setHomeContent((p) => ({ ...p, servicesLabel: e.target.value }))}
+            />
+            <AdminInput
+              label="Services Heading Prefix"
+              value={homeContent.servicesHeadingPrefix}
+              onChange={(e) => setHomeContent((p) => ({ ...p, servicesHeadingPrefix: e.target.value }))}
+            />
+            <AdminInput
+              label="Services Heading Accent"
+              value={homeContent.servicesHeadingAccent}
+              onChange={(e) => setHomeContent((p) => ({ ...p, servicesHeadingAccent: e.target.value }))}
+            />
+            <div className="lg:col-span-2 space-y-3 rounded-xl border border-[rgb(var(--cream-rgb)/0.12)] p-4">
+              <h3 className="text-sm font-semibold text-cream/90">Services Cards</h3>
+              <p className="text-xs text-cream/50">Edit icon key, title, description, and tag for each card.</p>
+              {homeContent.servicesCards.map((card, index) => (
+                <div key={`${card.title}-${index}`} className="space-y-3 rounded-lg border border-[rgb(var(--cream-rgb)/0.08)] p-3">
+                  <p className="text-xs font-semibold uppercase tracking-[2px] text-gold/80">Card {index + 1}</p>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                    <AdminInput
+                      label="Icon Key"
+                      value={card.icon}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          servicesCards: prev.servicesCards.map((item, i) => (i === index ? { ...item, icon: e.target.value } : item)),
+                        }))
+                      }
+                    />
+                    <AdminInput
+                      label="Tag"
+                      value={card.tag}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          servicesCards: prev.servicesCards.map((item, i) => (i === index ? { ...item, tag: e.target.value } : item)),
+                        }))
+                      }
+                    />
+                    <AdminInput
+                      label="Title"
+                      value={card.title}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          servicesCards: prev.servicesCards.map((item, i) => (i === index ? { ...item, title: e.target.value } : item)),
+                        }))
+                      }
+                    />
+                    <div className="lg:col-span-2">
+                      <AdminTextarea
+                        label="Description"
+                        rows={3}
+                        value={card.desc}
+                        onChange={(e) =>
+                          setHomeContent((prev) => ({
+                            ...prev,
+                            servicesCards: prev.servicesCards.map((item, i) => (i === index ? { ...item, desc: e.target.value } : item)),
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </AdminCard>
       )}
