@@ -58,7 +58,7 @@ export default function UnifiedNavbar() {
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
-            className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.32)] bg-[rgb(var(--cream-rgb)/0.04)] text-cream/80"
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.42)] bg-[linear-gradient(145deg,rgb(var(--surface-2-rgb)/0.95),rgb(var(--surface-1-rgb)/0.9))] text-cream/85 shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.08)_inset]"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
@@ -69,7 +69,7 @@ export default function UnifiedNavbar() {
           </button>
           <Link
             href="/#contact"
-            className="labs-sheen-btn inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-3 sm:px-4 py-2 font-rajdhani text-[9px] sm:text-[10px] uppercase tracking-[2.1px] sm:tracking-[2.4px] text-[rgb(var(--ink-rgb))] transition-colors hover:bg-[rgb(var(--gold-light-rgb))]"
+            className="labs-sheen-btn hidden md:inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-3 sm:px-4 py-2 font-rajdhani text-[9px] sm:text-[10px] uppercase tracking-[2.1px] sm:tracking-[2.4px] text-[rgb(var(--ink-rgb))] transition-colors hover:bg-[rgb(var(--gold-light-rgb))]"
             onClick={() => setMenuOpen(false)}
           >
             Hire Us
@@ -105,6 +105,13 @@ export default function UnifiedNavbar() {
                 )
               })}
             </nav>
+            <Link
+              href="/#contact"
+              onClick={() => setMenuOpen(false)}
+              className="mt-2 inline-flex w-full items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-4 py-2.5 font-rajdhani text-[10px] uppercase tracking-[2.2px] text-[rgb(var(--ink-rgb))]"
+            >
+              Hire Us
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
