@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import LabsNavbar from "../LabsNavbar"
+import BackLink from "../../components/BackLink"
 
 const APK_URL = "https://flow.shubiq.com/downloads/SHUBIQ-Flow.apk"
 const BUILD_VERSION = "0.9.0-beta"
@@ -93,6 +94,7 @@ export default function ShubiqFlowDownloadPage() {
 
       <section className="relative px-5 pb-14 pt-[120px] sm:px-8 sm:pt-[140px]">
         <div className="mx-auto max-w-6xl">
+          <BackLink href="/shubiq-labs" label="Back to Labs" className="mb-6" />
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
