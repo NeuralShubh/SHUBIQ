@@ -11,6 +11,7 @@ import BackToTop from "./components/BackToTop"
 import LoadingScreen from "./components/LoadingScreen"
 import CustomCursor from "./components/CustomCursor"
 import MobileNav from "./components/MobileNav"
+import AnimationGate from "./components/AnimationGate"
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"], display: "swap" })
 const cormorant = Cormorant_Garamond({
@@ -90,9 +91,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollProgress />
         <Navbar />
         <SmoothScroll>
-          <LayoutShell>
-            {children}
-          </LayoutShell>
+          <AnimationGate>
+            <LayoutShell>
+              {children}
+            </LayoutShell>
+          </AnimationGate>
         </SmoothScroll>
         <MobileNav />
         <BackToTop />

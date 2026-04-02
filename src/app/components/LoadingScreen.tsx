@@ -51,6 +51,17 @@ export default function LoadingScreen() {
   }, [])
 
   useEffect(() => {
+    if (loading) {
+      window.dispatchEvent(new Event("shubiq-loading-start"))
+      return
+    }
+    const doneId = window.setTimeout(() => {
+      window.dispatchEvent(new Event("shubiq-loading-complete"))
+    }, 520)
+    return () => window.clearTimeout(doneId)
+  }, [loading])
+
+  useEffect(() => {
     let timeoutId: number | undefined
 
     const handleNavLoading = () => {
