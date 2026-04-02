@@ -118,7 +118,7 @@ export default function FounderPageClient() {
               "radial-gradient(ellipse at 35% 18%, rgb(var(--gold-rgb) / 0.1) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgb(var(--gold-light-rgb) / 0.08) 0%, transparent 55%)",
           }}
         />
-        <div className="max-w-5xl mx-auto relative grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-center">
+        <div className="max-w-5xl mx-auto relative grid lg:grid-cols-[0.9fr_1.1fr] gap-x-10 gap-y-4 sm:gap-y-6 items-center">
           <div className="lg:col-span-2">
             <BackLink href="/" label="Back to Home" className="mb-2" />
           </div>
