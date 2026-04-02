@@ -12,6 +12,7 @@ const LINKS = [
   { href: "/projects", label: "Projects" },
   { href: "/shubiq-studio", label: "Studio" },
   { href: "/shubiq-labs", label: "Labs" },
+  { href: "/blog", label: "Blog" },
   { href: "/founder", label: "Founder" },
 ]
 

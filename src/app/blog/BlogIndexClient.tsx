@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 import TextReveal from "../components/TextReveal"
+import UnifiedNavbar from "../components/UnifiedNavbar"
 import { getBlogPosts } from "./blogData"
 
 export default function BlogIndexClient() {
@@ -26,6 +27,7 @@ export default function BlogIndexClient() {
 
   return (
     <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
+      <UnifiedNavbar />
       <section className="relative pt-[120px] sm:pt-[140px] pb-14 px-5 sm:px-8 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
