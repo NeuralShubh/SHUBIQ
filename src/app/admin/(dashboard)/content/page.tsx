@@ -23,6 +23,29 @@ type BlogItem = {
   date: string
   author: string
   readingTime: number
+  tags: string[]
+  content: unknown[]
+}
+
+function parseTagsInput(input: string): string[] {
+  return input
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+}
+
+function formatTagsInput(tags: string[] | undefined): string {
+  return Array.isArray(tags) ? tags.join(", ") : ""
+}
+
+function parseContentJson(input: string): unknown[] {
+  const parsed = JSON.parse(input)
+  if (!Array.isArray(parsed)) throw new Error("Content JSON must be an array")
+  return parsed
+}
+
+function formatContentJson(content: unknown[] | undefined): string {
+  return JSON.stringify(Array.isArray(content) ? content : [], null, 2)
 }
 
 function mergeStudioContent(input: unknown): StudioContent {
@@ -58,6 +81,8 @@ export default function ContentControlPage() {
   const [blogLoading, setBlogLoading] = useState(true)
   const [blogItems, setBlogItems] = useState<BlogItem[]>([])
   const [editingBlog, setEditingBlog] = useState<BlogItem | null>(null)
+  const [editingTagsInput, setEditingTagsInput] = useState("")
+  const [editingContentJson, setEditingContentJson] = useState("[]")
   const [creatingBlog, setCreatingBlog] = useState(false)
   const [blogForm, setBlogForm] = useState<Omit<BlogItem, "id">>({
     slug: "",
@@ -67,7 +92,11 @@ export default function ContentControlPage() {
     date: new Date().toISOString().slice(0, 10),
     author: "Shubham",
     readingTime: 5,
+    tags: [],
+    content: [],
   })
+  const [blogTagsInput, setBlogTagsInput] = useState("")
+  const [blogContentJson, setBlogContentJson] = useState("[]")
 
   const studioLastUpdatedText = useMemo(() => {
     return savingStudio ? "Saving..." : "Studio content controls pricing + CTA copy on /shubiq-studio"
@@ -178,7 +207,22 @@ export default function ContentControlPage() {
       const res = await fetch("/api/admin/blog-posts", { cache: "no-store" })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Failed to load blog posts")
-      setBlogItems(Array.isArray(json.items) ? json.items : [])
+      setBlogItems(
+        Array.isArray(json.items)
+          ? json.items.map((item: Partial<BlogItem>) => ({
+              id: String(item.id || ""),
+              slug: String(item.slug || ""),
+              title: String(item.title || ""),
+              excerpt: String(item.excerpt || ""),
+              category: String(item.category || "General"),
+              date: String(item.date || ""),
+              author: String(item.author || "Shubham"),
+              readingTime: Number(item.readingTime || 4),
+              tags: Array.isArray(item.tags) ? item.tags : [],
+              content: Array.isArray(item.content) ? item.content : [],
+            }))
+          : [],
+      )
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to load blog posts")
     } finally {
@@ -190,10 +234,11 @@ export default function ContentControlPage() {
     if (!blogForm.title.trim()) return toast.error("Title is required")
     const payload = { ...blogForm, slug: blogForm.slug.trim() || slugify(blogForm.title) }
     try {
+      const parsedContent = parseContentJson(blogContentJson)
       const res = await fetch("/api/admin/blog-posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, content: [] }),
+        body: JSON.stringify({ ...payload, tags: parseTagsInput(blogTagsInput), content: parsedContent }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Create failed")
@@ -207,7 +252,11 @@ export default function ContentControlPage() {
         date: new Date().toISOString().slice(0, 10),
         author: "Shubham",
         readingTime: 5,
+        tags: [],
+        content: [],
       })
+      setBlogTagsInput("")
+      setBlogContentJson("[]")
       await loadBlogItems()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Create failed")
@@ -217,19 +266,28 @@ export default function ContentControlPage() {
   async function updateBlogPost() {
     if (!editingBlog) return
     try {
+      const parsedContent = parseContentJson(editingContentJson)
       const res = await fetch("/api/admin/blog-posts", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...editingBlog, content: [] }),
+        body: JSON.stringify({ ...editingBlog, tags: parseTagsInput(editingTagsInput), content: parsedContent }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Update failed")
       toast.success("Blog post updated")
       setEditingBlog(null)
+      setEditingTagsInput("")
+      setEditingContentJson("[]")
       await loadBlogItems()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Update failed")
     }
+  }
+
+  function openBlogEditor(item: BlogItem) {
+    setEditingBlog(item)
+    setEditingTagsInput(formatTagsInput(item.tags))
+    setEditingContentJson(formatContentJson(item.content))
   }
 
   async function deleteBlogPost(id: string) {
@@ -628,8 +686,17 @@ export default function ContentControlPage() {
                   value={blogForm.readingTime}
                   onChange={(e) => setBlogForm((p) => ({ ...p, readingTime: Number(e.target.value || 0) }))}
                 />
+                <AdminInput label="Tags (comma separated)" value={blogTagsInput} onChange={(e) => setBlogTagsInput(e.target.value)} />
                 <div className="lg:col-span-2">
                   <AdminTextarea label="Excerpt" rows={3} value={blogForm.excerpt} onChange={(e) => setBlogForm((p) => ({ ...p, excerpt: e.target.value }))} />
+                </div>
+                <div className="lg:col-span-2">
+                  <AdminTextarea
+                    label='Content JSON (array of blocks, e.g. [{"type":"p","content":"Text"}])'
+                    rows={10}
+                    value={blogContentJson}
+                    onChange={(e) => setBlogContentJson(e.target.value)}
+                  />
                 </div>
                 <div className="lg:col-span-2 flex justify-end">
                   <AdminButton onClick={createBlogPost}>
@@ -665,7 +732,7 @@ export default function ContentControlPage() {
                         <td className="py-3 pr-3">{item.date}</td>
                         <td className="py-3 text-right">
                           <div className="flex justify-end gap-2">
-                            <AdminButton variant="secondary" className="px-3 py-1.5" onClick={() => setEditingBlog(item)}>
+                            <AdminButton variant="secondary" className="px-3 py-1.5" onClick={() => openBlogEditor(item)}>
                               Edit
                             </AdminButton>
                             <AdminButton variant="danger" className="px-3 py-1.5" onClick={() => deleteBlogPost(item.id)}>
@@ -699,6 +766,7 @@ export default function ContentControlPage() {
                 value={editingBlog.readingTime}
                 onChange={(e) => setEditingBlog((p) => (p ? { ...p, readingTime: Number(e.target.value || 0) } : p))}
               />
+              <AdminInput label="Tags (comma separated)" value={editingTagsInput} onChange={(e) => setEditingTagsInput(e.target.value)} />
               <div className="lg:col-span-2">
                 <AdminTextarea
                   label="Excerpt"
@@ -707,9 +775,24 @@ export default function ContentControlPage() {
                   onChange={(e) => setEditingBlog((p) => (p ? { ...p, excerpt: e.target.value } : p))}
                 />
               </div>
+              <div className="lg:col-span-2">
+                <AdminTextarea
+                  label='Content JSON (array of blocks, e.g. [{"type":"p","content":"Text"}])'
+                  rows={12}
+                  value={editingContentJson}
+                  onChange={(e) => setEditingContentJson(e.target.value)}
+                />
+              </div>
             </div>
             <div className="flex justify-end gap-2">
-              <AdminButton variant="secondary" onClick={() => setEditingBlog(null)}>
+              <AdminButton
+                variant="secondary"
+                onClick={() => {
+                  setEditingBlog(null)
+                  setEditingTagsInput("")
+                  setEditingContentJson("[]")
+                }}
+              >
                 Cancel
               </AdminButton>
               <AdminButton onClick={updateBlogPost}>

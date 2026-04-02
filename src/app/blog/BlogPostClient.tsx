@@ -121,20 +121,21 @@ function ShareButtons({ title, slug }: { title: string; slug: string }) {
   )
 }
 
-export default function BlogPostClient({ post }: { post: BlogPost }) {
+export default function BlogPostClient({ post, allPosts }: { post: BlogPost; allPosts?: BlogPost[] }) {
   const prefersReduced = useReducedMotion()
   const articleRef = useRef<HTMLElement>(null)
+  const sourcePosts = allPosts?.length ? allPosts : getBlogPosts()
   const { scrollYProgress } = useScroll({
     target: articleRef,
     offset: ["start start", "end end"],
   })
 
   const relatedPosts = useMemo(() => {
-    const all = getBlogPosts().filter((item) => item.slug !== post.slug)
+    const all = sourcePosts.filter((item) => item.slug !== post.slug)
     const sameCategory = all.filter((item) => item.category === post.category)
     const others = all.filter((item) => item.category !== post.category)
     return [...sameCategory, ...others].slice(0, 2)
-  }, [post.slug, post.category])
+  }, [sourcePosts, post.slug, post.category])
 
   return (
     <main className="section-rhythm min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">

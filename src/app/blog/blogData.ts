@@ -6,7 +6,7 @@ export interface BlogPostBase {
   slug: string
   title: string
   excerpt?: string
-  category: "Productivity" | "Focus" | "AI Systems"
+  category: string
   date: string
   author?: string
   tags?: string[]
@@ -442,6 +442,52 @@ function extractText(blocks: BlogBlock[]): string {
 function getWordCount(text: string) {
   if (!text) return 0
   return text.split(/\s+/).filter(Boolean).length
+}
+
+function normalizeBlogBlock(input: unknown): BlogBlock | null {
+  if (!input || typeof input !== "object") return null
+  const block = input as { type?: unknown; content?: unknown }
+  if (typeof block.type !== "string") return null
+
+  const textTypes = new Set(["h2", "h3", "p", "blockquote", "pullquote"])
+  if (textTypes.has(block.type)) {
+    if (typeof block.content !== "string") return null
+    return { type: block.type as "h2" | "h3" | "p" | "blockquote" | "pullquote", content: block.content }
+  }
+
+  if (block.type === "ul" || block.type === "ol") {
+    if (!Array.isArray(block.content)) return null
+    const items = block.content.filter((item): item is string => typeof item === "string")
+    return { type: block.type, content: items }
+  }
+
+  return null
+}
+
+export function normalizeBlogPost(input: unknown): BlogPost | null {
+  if (!input || typeof input !== "object") return null
+  const row = input as Record<string, unknown>
+  const slug = typeof row.slug === "string" ? row.slug.trim() : ""
+  const title = typeof row.title === "string" ? row.title.trim() : ""
+  if (!slug || !title) return null
+
+  const rawContent = Array.isArray(row.content) ? row.content : []
+  const content = rawContent.map(normalizeBlogBlock).filter((block): block is BlogBlock => !!block)
+  const fullText = extractText(content)
+  const fallbackExcerpt = `${fullText.slice(0, 180).trim().replace(/[.,;:]?$/, "")}...`
+  const readingTimeFromText = Math.max(1, Math.ceil(getWordCount(fullText) / 200))
+
+  return {
+    slug,
+    title,
+    category: typeof row.category === "string" && row.category.trim() ? row.category : "General",
+    date: typeof row.date === "string" && row.date.trim() ? row.date : new Date().toISOString().slice(0, 10),
+    author: typeof row.author === "string" && row.author.trim() ? row.author : "Shubham",
+    tags: Array.isArray(row.tags) ? row.tags.filter((item): item is string => typeof item === "string") : [],
+    content,
+    excerpt: typeof row.excerpt === "string" && row.excerpt.trim() ? row.excerpt : fallbackExcerpt,
+    readingTime: Number.isFinite(Number(row.readingTime)) ? Math.max(1, Number(row.readingTime)) : readingTimeFromText,
+  }
 }
 
 export function getBlogPosts(): BlogPost[] {

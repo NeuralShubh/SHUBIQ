@@ -1,16 +1,37 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollReveal from "../components/ScrollReveal"
 import StaggerContainer, { StaggerItem } from "../components/StaggerContainer"
 import TextReveal from "../components/TextReveal"
-import { getBlogPosts } from "./blogData"
+import { getBlogPosts, normalizeBlogPost, type BlogPost } from "./blogData"
 
 export default function BlogIndexClient() {
-  const posts = useMemo(() => getBlogPosts(), [])
+  const [posts, setPosts] = useState<BlogPost[]>(() => getBlogPosts())
   const [activeCategory, setActiveCategory] = useState("All")
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadPosts() {
+      try {
+        const res = await fetch("/api/blog-posts", { cache: "no-store" })
+        if (!res.ok) return
+        const json = await res.json()
+        const incoming = Array.isArray(json?.items) ? json.items.map(normalizeBlogPost).filter((item: BlogPost | null): item is BlogPost => !!item) : []
+        if (!cancelled && incoming.length > 0) setPosts(incoming)
+      } catch {
+        // Keep static fallback posts.
+      }
+    }
+
+    loadPosts()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const categories = useMemo(() => {
     const unique = Array.from(new Set(posts.map((post) => post.category)))
@@ -23,6 +44,8 @@ export default function BlogIndexClient() {
     activeCategory === "All"
       ? regularPosts
       : regularPosts.filter((post) => post.category === activeCategory)
+
+  if (!featuredPost) return null
 
   return (
     <main className="section-rhythm min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
