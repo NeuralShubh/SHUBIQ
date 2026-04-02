@@ -1,0 +1,54 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <radialGradient id="hubBg" cx="40%" cy="35%" r="70%">
+    <stop offset="0%" stop-color="#1c1608"/>
+    <stop offset="100%" stop-color="#050508"/>
+  </radialGradient>
+  <linearGradient id="acGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#fff0a0"/>
+    <stop offset="45%" stop-color="#c9a84c"/>
+    <stop offset="100%" stop-color="#050508"/>
+  </linearGradient>
+  <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.06"/>
+    <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<!-- ambient glow -->
+<circle cx="32" cy="32" r="31" fill="url(#bgGlow)"/>
+<!-- ghost outer ring -->
+<circle cx="32" cy="32" r="28" fill="none" stroke="#c9a84c" stroke-width="0.6" stroke-opacity="0.15"/>
+<!-- orbit ring -->
+<circle cx="32" cy="32" r="24.96" fill="none" stroke="url(#acGrad)" stroke-width="1.6"/>
+<!-- spokes -->
+<line x1="32" y1="32" x2="32" y2="7.04" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.55"/>
+<line x1="32" y1="32" x2="53.6" y2="19.5" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.55"/>
+<line x1="32" y1="32" x2="53.6" y2="44.5" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.55"/>
+<line x1="32" y1="32" x2="32" y2="56.96" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.55"/>
+<line x1="32" y1="32" x2="10.4" y2="44.5" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.55"/>
+<line x1="32" y1="32" x2="10.4" y2="19.5" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.55"/>
+<!-- nodes -->
+<circle cx="32" cy="7.04" r="3.520" fill="#09090f" stroke="url(#acGrad)" stroke-width="1.6"/>
+<circle cx="32" cy="7.04" r="1.92" fill="none" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.5"/>
+<circle cx="32" cy="7.04" r=".704" fill="#fff0a0"/>
+<circle cx="53.6" cy="19.5" r="3.520" fill="#09090f" stroke="url(#acGrad)" stroke-width="1.6"/>
+<circle cx="53.6" cy="19.5" r="1.92" fill="none" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.5"/>
+<circle cx="53.6" cy="19.5" r=".704" fill="#fff0a0"/>
+<circle cx="53.6" cy="44.5" r="3.520" fill="#09090f" stroke="url(#acGrad)" stroke-width="1.6"/>
+<circle cx="53.6" cy="44.5" r="1.92" fill="none" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.5"/>
+<circle cx="53.6" cy="44.5" r=".704" fill="#c9a84c"/>
+<circle cx="32" cy="56.96" r="3.520" fill="#09090f" stroke="url(#acGrad)" stroke-width="1.6"/>
+<circle cx="32" cy="56.96" r="1.92" fill="none" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.5"/>
+<circle cx="32" cy="56.96" r=".704" fill="#c9a84c"/>
+<circle cx="10.4" cy="44.5" r="3.520" fill="#09090f" stroke="url(#acGrad)" stroke-width="1.6"/>
+<circle cx="10.4" cy="44.5" r="1.92" fill="none" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.5"/>
+<circle cx="10.4" cy="44.5" r=".704" fill="#c9a84c"/>
+<circle cx="10.4" cy="19.5" r="3.520" fill="#09090f" stroke="url(#acGrad)" stroke-width="1.6"/>
+<circle cx="10.4" cy="19.5" r="1.92" fill="none" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.5"/>
+<circle cx="10.4" cy="19.5" r=".704" fill="#fff0a0"/>
+<!-- hub -->
+<circle cx="32" cy="32" r="11.52" fill="url(#hubBg)" stroke="url(#acGrad)" stroke-width="2.2"/>
+<circle cx="32" cy="32" r="8.96" fill="none" stroke="#c9a84c" stroke-width="0.8" stroke-opacity="0.35"/>
+<!-- SQ text -->
+<text x="32" y="34.2" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="6.4" font-weight="700" fill="url(#acGrad)" letter-spacing="2">SQ</text>
+</svg>

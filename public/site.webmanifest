@@ -3,14 +3,28 @@
   "short_name": "SHUBIQ",
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "/shubiq-icons/sizes/shubiq-gold-96.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "/shubiq-icons/sizes/shubiq-gold-200.svg",
+      "sizes": "200x200",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/shubiq-icons/sizes/shubiq-gold-256.svg",
+      "sizes": "256x256",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/shubiq-icons/sizes/shubiq-gold-512.svg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "theme_color": "#0b0f16",

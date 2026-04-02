@@ -4,8 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 
-const LOGO_URL =
-  "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Logo/SHUBIQ.png"
+const LOGO_URL = "/shubiq-icons/themes/shubiq-signature-gold.svg"
 
 export default function LoadingScreen() {
   const [loading, setLoading] = useState(true)
@@ -56,7 +55,7 @@ export default function LoadingScreen() {
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <Image src={LOGO_URL} alt="SHUBIQ" width={720} height={288} priority className="h-40 md:h-48 w-auto object-contain" />
+              <Image src={LOGO_URL} alt="SHUBIQ" width={512} height={512} priority className="h-24 md:h-28 w-auto object-contain" />
             </motion.div>
 
             <motion.p

@@ -25,12 +25,12 @@ export default function UnifiedNavbar() {
       <div className="mx-auto flex h-[68px] w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
         <Link href="/" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
           <Image
-            src="https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Logo/SHUBIQ.png"
+            src="/shubiq-icons/themes/shubiq-signature-gold.svg"
             alt="SHUBIQ"
-            width={120}
-            height={48}
+            width={32}
+            height={32}
             priority
-            className="h-8 w-auto object-contain transition-opacity duration-200 group-hover:opacity-95"
+            className="h-8 w-8 object-contain transition-opacity duration-200 group-hover:opacity-95"
           />
           <span className="font-cinzel text-[21px] tracking-[1px] text-cream/92 transition-colors group-hover:text-[rgb(var(--gold-light-rgb))]">
             SHUBIQ

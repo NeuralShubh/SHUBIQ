@@ -38,12 +38,16 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-      { url: "/favicon-48x48.png", type: "image/png", sizes: "48x48" },
+      { url: "/shubiq-icons/sizes/shubiq-gold-16.svg", type: "image/svg+xml", sizes: "16x16" },
+      { url: "/shubiq-icons/sizes/shubiq-gold-32.svg", type: "image/svg+xml", sizes: "32x32" },
+      { url: "/shubiq-icons/sizes/shubiq-gold-48.svg", type: "image/svg+xml", sizes: "48x48" },
+      { url: "/shubiq-icons/sizes/shubiq-gold-64.svg", type: "image/svg+xml", sizes: "64x64" },
+      { url: "/shubiq-icons/sizes/shubiq-gold-96.svg", type: "image/svg+xml", sizes: "96x96" },
+      { url: "/shubiq-icons/sizes/shubiq-gold-256.svg", type: "image/svg+xml", sizes: "256x256" },
+      { url: "/shubiq-icons/sizes/shubiq-gold-512.svg", type: "image/svg+xml", sizes: "512x512" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/shubiq-icons/sizes/shubiq-gold-200.svg", sizes: "200x200", type: "image/svg+xml" }],
+    shortcut: ["/shubiq-icons/sizes/shubiq-gold-32.svg"],
   },
   manifest: "/site.webmanifest",
   openGraph: {
