@@ -19,6 +19,7 @@ import {
   Zap,
 } from "lucide-react"
 import { LAB_PRODUCTS } from "../data-labs"
+import SectionDivider from "../components/SectionDivider"
 
 function ProductIcon({ category }: { category: string }) {
   if (category === "Mobile App") return <Smartphone size={18} className="text-[rgb(var(--gold-rgb))]" />
@@ -245,6 +246,8 @@ export default function LabsPageClient() {
         </div>
       </section>
 
+      <SectionDivider />
+
       <section className="relative px-5 py-14 sm:px-8 sm:py-16">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -330,6 +333,8 @@ export default function LabsPageClient() {
           </div>
         </div>
       </section>
+
+      <SectionDivider />
 
       <section className="relative px-5 pb-20 pt-10 sm:px-8 sm:pb-24">
         <div className="mx-auto mb-10 grid max-w-6xl gap-6 lg:grid-cols-2">
