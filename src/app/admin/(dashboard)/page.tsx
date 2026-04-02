@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { AdminButton, AdminCard, ConfirmModal } from '@/components/admin/AdminUI'
-import { Trash2, Search, X, MailOpen, Mail, RefreshCw, CheckSquare, Square, Download } from 'lucide-react'
+import { Trash2, Search, X, MailOpen, Mail, RefreshCw, CheckSquare, Square, Download, ChartNoAxesColumn, Activity } from 'lucide-react'
 import { toast } from 'sonner'
 
 type Inquiry = {
@@ -18,12 +18,32 @@ type Inquiry = {
   created_at: string | null
 }
 
+type DashboardStats = {
+  ok: boolean
+  totals: {
+    leads: number
+    unread: number
+    newToday: number
+    blogPosts: number
+  }
+  leadStatus: {
+    new: number
+    inProgress: number
+    responded: number
+    closed: number
+  }
+  topSources: Array<{ source: string; count: number }>
+  recentBlog: Array<{ id: string; title: string; slug: string; updatedAt: string | null }>
+  recentContent: Array<{ key: string; updatedAt: string | null }>
+}
+
 const STATUS_OPTIONS = ['New', 'In Progress', 'Responded', 'Closed']
 
 export default function FormSubmissionsDashboard() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [stats, setStats] = useState<DashboardStats | null>(null)
   const [activeRole, setActiveRole] = useState<'owner' | 'admin' | 'editor' | 'viewer'>('viewer')
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'unread' | 'new' | 'in-progress' | 'responded' | 'closed'>('all')
@@ -52,8 +72,22 @@ export default function FormSubmissionsDashboard() {
     }
   }
 
+  async function fetchStats(silent = false) {
+    try {
+      const res = await fetch('/api/admin/dashboard-stats', { cache: 'no-store' })
+      const json = await res.json()
+      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Failed to load dashboard stats')
+      setStats(json)
+    } catch (error) {
+      if (!silent) {
+        toast.error(error instanceof Error ? error.message : 'Failed to load dashboard stats')
+      }
+    }
+  }
+
   useEffect(() => {
     fetchInquiries()
+    fetchStats()
     const match = document.cookie.match(/(?:^|;\s*)shubiq_admin_role=([^;]+)/)
     const role = match ? decodeURIComponent(match[1]) : 'viewer'
     if (role === 'owner' || role === 'admin' || role === 'editor' || role === 'viewer') {
@@ -120,6 +154,7 @@ export default function FormSubmissionsDashboard() {
       setInquiries((prev) => prev.filter((item) => !deletingIds.includes(item.id)))
       setSelectedIds((prev) => prev.filter((id) => !deletingIds.includes(id)))
       if (viewingInquiry && deletingIds.includes(viewingInquiry.id)) setViewingInquiry(null)
+      await fetchStats(true)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error deleting inquiry')
     } finally {
@@ -182,6 +217,7 @@ export default function FormSubmissionsDashboard() {
       if (!res.ok || !json?.ok) throw new Error(json?.error || 'Bulk update failed')
       toast.success('Bulk update completed')
       await fetchInquiries(true)
+      await fetchStats(true)
       setSelectedIds([])
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Bulk update failed')
@@ -242,11 +278,95 @@ export default function FormSubmissionsDashboard() {
             <Download size={14} />
             Export CSV
           </AdminButton>
-          <AdminButton variant="secondary" onClick={() => fetchInquiries(true)} disabled={refreshing}>
+          <AdminButton
+            variant="secondary"
+            onClick={async () => {
+              await fetchInquiries(true)
+              await fetchStats(true)
+            }}
+            disabled={refreshing}
+          >
             <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
             Refresh
           </AdminButton>
         </div>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: 'Total Leads', value: stats?.totals.leads ?? inquiries.length, icon: ChartNoAxesColumn },
+          { label: 'Unread', value: stats?.totals.unread ?? unreadCount, icon: Mail },
+          { label: 'Today', value: stats?.totals.newToday ?? '-', icon: Activity },
+          { label: 'Blog Posts', value: stats?.totals.blogPosts ?? '-', icon: Download },
+        ].map((metric) => (
+          <AdminCard key={metric.label} className="p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] uppercase tracking-[2px] text-cream/50">{metric.label}</p>
+              <metric.icon size={14} className="text-gold/80" />
+            </div>
+            <p className="text-2xl font-semibold text-cream mt-2">{metric.value}</p>
+          </AdminCard>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <AdminCard className="p-4 space-y-3">
+          <h3 className="text-sm uppercase tracking-[2px] text-cream/70">Lead Pipeline</h3>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="rounded border border-[rgb(var(--cream-rgb)/0.12)] p-3 bg-[rgb(var(--surface-1-rgb))]">
+              <p className="text-cream/60 text-xs uppercase tracking-[2px]">New</p>
+              <p className="text-cream text-lg mt-1">{stats?.leadStatus.new ?? 0}</p>
+            </div>
+            <div className="rounded border border-[rgb(var(--cream-rgb)/0.12)] p-3 bg-[rgb(var(--surface-1-rgb))]">
+              <p className="text-cream/60 text-xs uppercase tracking-[2px]">In Progress</p>
+              <p className="text-cream text-lg mt-1">{stats?.leadStatus.inProgress ?? 0}</p>
+            </div>
+            <div className="rounded border border-[rgb(var(--cream-rgb)/0.12)] p-3 bg-[rgb(var(--surface-1-rgb))]">
+              <p className="text-cream/60 text-xs uppercase tracking-[2px]">Responded</p>
+              <p className="text-cream text-lg mt-1">{stats?.leadStatus.responded ?? 0}</p>
+            </div>
+            <div className="rounded border border-[rgb(var(--cream-rgb)/0.12)] p-3 bg-[rgb(var(--surface-1-rgb))]">
+              <p className="text-cream/60 text-xs uppercase tracking-[2px]">Closed</p>
+              <p className="text-cream text-lg mt-1">{stats?.leadStatus.closed ?? 0}</p>
+            </div>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-[2px] text-cream/55 mb-2">Top Sources</p>
+            <div className="flex flex-wrap gap-2">
+              {(stats?.topSources ?? []).map((source) => (
+                <span key={source.source} className="text-xs px-2 py-1 rounded border border-[rgb(var(--cream-rgb)/0.14)] text-cream/75">
+                  {source.source}: {source.count}
+                </span>
+              ))}
+            </div>
+          </div>
+        </AdminCard>
+
+        <AdminCard className="p-4 space-y-3">
+          <h3 className="text-sm uppercase tracking-[2px] text-cream/70">Recent Updates</h3>
+          <div>
+            <p className="text-xs uppercase tracking-[2px] text-gold/80 mb-2">Blog</p>
+            <div className="space-y-2">
+              {(stats?.recentBlog ?? []).slice(0, 3).map((post) => (
+                <div key={post.id} className="text-xs border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-1-rgb))] rounded px-3 py-2">
+                  <p className="text-cream/90">{post.title}</p>
+                  <p className="text-cream/50 mt-1">{post.updatedAt ? new Date(post.updatedAt).toLocaleString() : '-'}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-[2px] text-gold/80 mb-2">Content</p>
+            <div className="space-y-2">
+              {(stats?.recentContent ?? []).slice(0, 3).map((item) => (
+                <div key={item.key} className="text-xs border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-1-rgb))] rounded px-3 py-2 flex items-center justify-between">
+                  <p className="text-cream/90">{item.key}</p>
+                  <p className="text-cream/50">{item.updatedAt ? new Date(item.updatedAt).toLocaleDateString() : '-'}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AdminCard>
       </div>
 
       <AdminCard className="p-0 overflow-hidden flex flex-col min-h-[400px]">
