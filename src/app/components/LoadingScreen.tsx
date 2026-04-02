@@ -77,19 +77,31 @@ export default function LoadingScreen() {
           className="fixed inset-0 z-[99999] flex items-center justify-center"
           style={{ backgroundColor: "rgb(var(--ink-rgb))" }}
         >
-          <div className="flex flex-col items-center gap-6">
+          <div className="relative flex flex-col items-center justify-center gap-6">
             <motion.div
+              className="relative flex h-[260px] w-[260px] items-center justify-center md:h-[340px] md:w-[340px]"
               initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, rgb(var(--gold-rgb)/0.95), rgb(var(--gold-rgb)/0.2) 35%, rgb(var(--gold-rgb)/0.06) 62%, transparent 80%)",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1.4, ease: "linear", repeat: Infinity }}
+              />
+              <div className="absolute inset-[7px] rounded-full bg-[rgb(var(--ink-rgb))]" />
+              <div className="absolute inset-[22px] rounded-full border border-[rgb(var(--gold-rgb)/0.24)]" />
               <Image
                 src={THEME_LOGOS[activeTheme]}
                 alt="SHUBIQ"
                 width={512}
                 height={512}
                 priority
-                className="h-24 md:h-28 w-auto object-contain"
+                className="relative z-10 h-44 w-44 object-contain md:h-56 md:w-56"
               />
             </motion.div>
 
@@ -101,21 +113,6 @@ export default function LoadingScreen() {
             >
               Intelligence That Wins
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="w-32 h-[2px] bg-[rgb(var(--cream-rgb)/0.18)] rounded-full overflow-hidden mt-1"
-            >
-              <motion.div
-                className="h-full rounded-full"
-                style={{ backgroundColor: "rgb(var(--gold-rgb))" }}
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 0.8, delay: 0.5, ease: "easeInOut" }}
-              />
-            </motion.div>
           </div>
         </motion.div>
       )}
