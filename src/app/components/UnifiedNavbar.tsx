@@ -37,7 +37,7 @@ export default function UnifiedNavbar() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-5 lg:gap-7">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
           {LINKS.map((link) => {
             const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
             return (
@@ -59,7 +59,7 @@ export default function UnifiedNavbar() {
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
-            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.42)] bg-[linear-gradient(145deg,rgb(var(--surface-2-rgb)/0.95),rgb(var(--surface-1-rgb)/0.9))] text-cream/85 shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.08)_inset]"
+            className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.42)] bg-[linear-gradient(145deg,rgb(var(--surface-2-rgb)/0.95),rgb(var(--surface-1-rgb)/0.9))] text-cream/85 shadow-[0_0_0_1px_rgb(var(--gold-rgb)/0.08)_inset]"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
@@ -70,7 +70,7 @@ export default function UnifiedNavbar() {
           </button>
           <Link
             href="/#contact"
-            className="labs-sheen-btn hidden md:inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-3 sm:px-4 py-2 font-rajdhani text-[9px] sm:text-[10px] uppercase tracking-[2.1px] sm:tracking-[2.4px] text-[rgb(var(--ink-rgb))] transition-colors hover:bg-[rgb(var(--gold-light-rgb))]"
+            className="labs-sheen-btn hidden lg:inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-3 sm:px-4 py-2 font-rajdhani text-[9px] sm:text-[10px] uppercase tracking-[2.1px] sm:tracking-[2.4px] text-[rgb(var(--ink-rgb))] transition-colors hover:bg-[rgb(var(--gold-light-rgb))]"
             onClick={() => setMenuOpen(false)}
           >
             Hire Us
@@ -85,7 +85,7 @@ export default function UnifiedNavbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-[rgb(var(--gold-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.96)] px-4 pb-4 pt-3"
+            className="lg:hidden border-t border-[rgb(var(--gold-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.96)] px-4 pb-4 pt-3"
           >
             <nav className="grid grid-cols-2 gap-2">
               {LINKS.map((link) => {
