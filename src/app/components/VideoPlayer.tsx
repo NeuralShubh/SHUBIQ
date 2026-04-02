@@ -19,6 +19,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   const [showControls, setShowControls] = useState(true)
   const [showPlayButton, setShowPlayButton] = useState(true)
   const [showEmbed, setShowEmbed] = useState(false)
+  const [embedAutoPlay, setEmbedAutoPlay] = useState(false)
 
   const isYouTube = src.includes("youtube.com") || src.includes("youtu.be")
   const isVimeo = src.includes("vimeo.com")
@@ -31,11 +32,11 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
       const videoId = src.includes("youtu.be")
         ? src.split("youtu.be/")[1]?.split("?")[0]
         : src.split("v=")[1]?.split("&")[0]
-      return `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`
+      return `https://www.youtube.com/embed/${videoId}?autoplay=${embedAutoPlay ? 1 : 0}&mute=${embedAutoPlay ? 1 : 0}&playsinline=1&rel=0&modestbranding=1`
     }
     if (isVimeo) {
       const videoId = src.split("vimeo.com/")[1]?.split("?")[0]
-      return `https://player.vimeo.com/video/${videoId}?autoplay=0`
+      return `https://player.vimeo.com/video/${videoId}?autoplay=${embedAutoPlay ? 1 : 0}&muted=${embedAutoPlay ? 1 : 0}`
     }
     if (isDrive) {
       if (src.includes("/preview")) return src
@@ -189,7 +190,10 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             />
             <button
               type="button"
-              onClick={() => setShowEmbed(true)}
+              onClick={() => {
+                setEmbedAutoPlay(true)
+                setShowEmbed(true)
+              }}
               aria-label="Play video"
               className="absolute inset-0 flex items-center justify-center bg-black/35 hover:bg-black/45 transition-colors"
             >
