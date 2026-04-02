@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Mail, Settings, PanelLeftClose, PanelLeftOpen, LogOut, ArrowUpRight, FileText, Activity } from 'lucide-react'
+import { Mail, Settings, PanelLeftClose, PanelLeftOpen, LogOut, ArrowUpRight, FileText, Activity, Search } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { logout } from '../login/actions'
 import type { AdminRole } from '@/lib/admin-auth'
@@ -30,11 +30,21 @@ const navItems = [
   },
 ]
 
+type CommandItem = {
+  label: string
+  href: string
+  group: string
+}
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
   const [activeRole, setActiveRole] = useState<AdminRole>('viewer')
+  const [commandQuery, setCommandQuery] = useState('')
+  const [commandOpen, setCommandOpen] = useState(false)
+  const commandRef = useRef<HTMLDivElement>(null)
+  const commandInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const match = document.cookie.match(/(?:^|;\s*)shubiq_admin_role=([^;]+)/)
@@ -59,7 +69,71 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       .filter((section) => section.items.length > 0)
   }, [activeRole])
 
+  const commandItems = useMemo<CommandItem[]>(() => {
+    const navCommands = visibleNavItems.flatMap((section) =>
+      section.items.map((item) => ({
+        label: item.label,
+        href: item.href,
+        group: section.group,
+      })),
+    )
+    return [
+      ...navCommands,
+      { label: 'Open Public Site', href: '/', group: 'Quick Actions' },
+    ]
+  }, [visibleNavItems])
+
+  const filteredCommands = useMemo(() => {
+    const q = commandQuery.trim().toLowerCase()
+    if (!q) return commandItems.slice(0, 8)
+    return commandItems
+      .filter((item) => item.label.toLowerCase().includes(q) || item.href.toLowerCase().includes(q) || item.group.toLowerCase().includes(q))
+      .slice(0, 8)
+  }, [commandItems, commandQuery])
+
   const roleLabel = activeRole.charAt(0).toUpperCase() + activeRole.slice(1)
+
+  useEffect(() => {
+    setCommandOpen(false)
+    setCommandQuery('')
+  }, [pathname])
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setCommandOpen(true)
+        commandInputRef.current?.focus()
+        commandInputRef.current?.select()
+      }
+      if (event.key === 'Escape') {
+        setCommandOpen(false)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      if (!commandRef.current) return
+      if (!commandRef.current.contains(event.target as Node)) {
+        setCommandOpen(false)
+      }
+    }
+    window.addEventListener('mousedown', onClick)
+    return () => window.removeEventListener('mousedown', onClick)
+  }, [])
+
+  const runCommand = (href: string) => {
+    setCommandOpen(false)
+    setCommandQuery('')
+    if (href === '/') {
+      window.open('/', '_blank', 'noopener,noreferrer')
+      return
+    }
+    router.push(href)
+  }
 
   return (
     <div className="min-h-screen bg-[rgb(var(--surface-0-rgb))] text-cream flex font-inter selection:bg-gold/30">
@@ -140,12 +214,46 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Top bar */}
         <header className="h-14 border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-0-rgb))]/80 backdrop-blur flex items-center px-6 gap-4 shrink-0 z-40 sticky top-0">
           {/* Search */}
-          <div className="relative flex-1 max-w-md">
+          <div ref={commandRef} className="relative flex-1 max-w-md">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-cream/40 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search projects, posts, inquiries..."
-              className="w-full bg-[rgb(var(--surface-1-rgb))] border border-[rgb(var(--cream-rgb)/0.1)] rounded-lg px-4 py-1.5 text-[13px] text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold/50 transition-colors"
+              ref={commandInputRef}
+              value={commandQuery}
+              onFocus={() => setCommandOpen(true)}
+              onChange={(e) => {
+                setCommandQuery(e.target.value)
+                setCommandOpen(true)
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && filteredCommands.length > 0) {
+                  e.preventDefault()
+                  runCommand(filteredCommands[0].href)
+                }
+              }}
+              placeholder="Search admin pages... (Ctrl/Cmd + K)"
+              className="w-full bg-[rgb(var(--surface-1-rgb))] border border-[rgb(var(--cream-rgb)/0.1)] rounded-lg pl-9 pr-4 py-1.5 text-[13px] text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold/50 transition-colors"
             />
+            {commandOpen && (
+              <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-[rgb(var(--surface-1-rgb))] border border-[rgb(var(--cream-rgb)/0.12)] rounded-lg overflow-hidden shadow-[0_12px_32px_rgb(0_0_0_/_0.35)]">
+                {filteredCommands.length > 0 ? (
+                  <div className="max-h-72 overflow-auto custom-scrollbar">
+                    {filteredCommands.map((item) => (
+                      <button
+                        key={`${item.group}-${item.href}`}
+                        onClick={() => runCommand(item.href)}
+                        className="w-full text-left px-3 py-2.5 hover:bg-[rgb(var(--surface-2-rgb))] transition-colors border-b border-[rgb(var(--cream-rgb)/0.08)] last:border-b-0"
+                      >
+                        <p className="text-sm text-cream">{item.label}</p>
+                        <p className="text-[11px] text-cream/45 uppercase tracking-[1.6px] mt-0.5">{item.group} • {item.href}</p>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-3 py-3 text-xs text-cream/50">No matching admin command found.</div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right side: quick actions */}
