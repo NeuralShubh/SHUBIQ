@@ -6,6 +6,7 @@ import ScrollReveal from "../../components/ScrollReveal"
 import ProcessTimeline from "../../components/ProcessTimeline"
 import FAQ from "../../components/FAQ"
 import PricingTeaser from "../../components/PricingTeaser"
+import BackLink from "../../components/BackLink"
 
 const deliverables = [
   "MVP scoping and product definition",
@@ -74,6 +75,7 @@ export default function AppBuildingServicePage() {
     <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
       <section className="relative pt-[120px] sm:pt-[140px] pb-12 px-5 sm:px-8 overflow-hidden">
         <div className="max-w-5xl mx-auto relative">
+          <BackLink href="/" label="Back to Home" className="mb-6" />
           <ScrollReveal>
             <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-3">Service</div>
             <h1 className="font-cinzel font-black leading-[1.05] text-[clamp(30px,5.6vw,62px)] mb-4">App Building</h1>
@@ -166,5 +168,3 @@ export default function AppBuildingServicePage() {
     </main>
   )
 }
-import BackLink from "../../components/BackLink"
-            <BackLink href="/#services" label="Back to Services" className="mb-6" />
