@@ -25,7 +25,7 @@ export default function BlogIndexClient() {
       : regularPosts.filter((post) => post.category === activeCategory)
 
   return (
-    <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
+    <main className="section-rhythm min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
       <section className="relative pt-[120px] sm:pt-[140px] pb-14 px-5 sm:px-8 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"

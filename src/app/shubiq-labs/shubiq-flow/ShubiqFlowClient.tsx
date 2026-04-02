@@ -85,7 +85,7 @@ const BETA_TIMELINE = [
 
 export default function ShubiqFlowDownloadPage() {
   return (
-    <main className="labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
+    <main className="section-rhythm labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
       <div className="labs-noise-layer pointer-events-none absolute inset-0" />
       <div className="labs-glow-orb pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full" />

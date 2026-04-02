@@ -977,7 +977,7 @@ export default function StudioPage() {
 
   return (
     <>
-      <main className="studio-premium-bg relative overflow-hidden">
+      <main className="section-rhythm studio-premium-bg relative overflow-hidden">
         <div className="studio-grid-overlay pointer-events-none absolute inset-0" />
         <div className="studio-glow-orb pointer-events-none absolute -left-20 top-28 h-72 w-72 rounded-full" />
         <div className="studio-glow-orb-2 pointer-events-none absolute right-[-100px] top-[420px] h-96 w-96 rounded-full" />

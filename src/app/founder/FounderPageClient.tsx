@@ -109,7 +109,7 @@ export default function FounderPageClient() {
   const currentYear = "2026"
 
   return (
-    <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
+    <main className="section-rhythm min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
       <section className="relative pt-[80px] sm:pt-[104px] pb-12 px-5 sm:px-8 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"

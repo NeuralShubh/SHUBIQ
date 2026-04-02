@@ -1349,3 +1349,13 @@ select:focus-visible {
     display: none;
   }
 }
+
+/* Shared section rhythm for non-home pages */
+.section-rhythm > section {
+  padding-top: clamp(3.5rem, 6vw, 5.5rem) !important;
+  padding-bottom: clamp(3.5rem, 6vw, 5.5rem) !important;
+}
+
+.section-rhythm > section:first-of-type {
+  padding-top: clamp(7rem, 10vw, 8.75rem) !important;
+}

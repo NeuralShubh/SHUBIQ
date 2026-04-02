@@ -137,7 +137,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
   }, [post.slug, post.category])
 
   return (
-    <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
+    <main className="section-rhythm min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
       {!prefersReduced && (
         <motion.div
           className="fixed top-0 left-0 right-0 h-[2px] z-[9999] origin-left"

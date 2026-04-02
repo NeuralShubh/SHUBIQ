@@ -72,7 +72,7 @@ export const metadata: Metadata = {
 
 export default function AiIntegrationServicePage() {
   return (
-    <main className="min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
+    <main className="section-rhythm min-h-screen bg-[rgb(var(--ink-rgb))] text-cream">
       <section className="relative pt-[120px] sm:pt-[140px] pb-12 px-5 sm:px-8 overflow-hidden">
         <div className="max-w-5xl mx-auto relative">
           <BackLink href="/shubiq-studio#studio-services-anchor" label="Back to Studio" className="mb-6" />
