@@ -396,6 +396,45 @@ export default function ContentControlPage() {
               value={homeContent.heroHireCta}
               onChange={(e) => setHomeContent((p) => ({ ...p, heroHireCta: e.target.value }))}
             />
+            <AdminInput
+              label="About Heading Prefix"
+              value={homeContent.aboutHeadingPrefix}
+              onChange={(e) => setHomeContent((p) => ({ ...p, aboutHeadingPrefix: e.target.value }))}
+            />
+            <AdminInput
+              label="About Heading Accent"
+              value={homeContent.aboutHeadingAccent}
+              onChange={(e) => setHomeContent((p) => ({ ...p, aboutHeadingAccent: e.target.value }))}
+            />
+            <div className="lg:col-span-2">
+              <AdminTextarea
+                label="About Paragraph 1"
+                rows={3}
+                value={homeContent.aboutParagraph1}
+                onChange={(e) => setHomeContent((p) => ({ ...p, aboutParagraph1: e.target.value }))}
+              />
+            </div>
+            <div className="lg:col-span-2">
+              <AdminTextarea
+                label="About Paragraph 2"
+                rows={3}
+                value={homeContent.aboutParagraph2}
+                onChange={(e) => setHomeContent((p) => ({ ...p, aboutParagraph2: e.target.value }))}
+              />
+            </div>
+            <div className="lg:col-span-2">
+              <AdminTextarea
+                label="About Paragraph 3"
+                rows={3}
+                value={homeContent.aboutParagraph3}
+                onChange={(e) => setHomeContent((p) => ({ ...p, aboutParagraph3: e.target.value }))}
+              />
+            </div>
+            <AdminInput
+              label="About Founder CTA"
+              value={homeContent.aboutFounderCta}
+              onChange={(e) => setHomeContent((p) => ({ ...p, aboutFounderCta: e.target.value }))}
+            />
           </div>
         </AdminCard>
       )}

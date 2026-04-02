@@ -1,10 +1,33 @@
 "use client"
+import { useEffect, useState } from "react"
 import { useInViewOnce } from "../lib/gsap-hooks"
 import StaggerContainer, { StaggerItem } from "./StaggerContainer"
 import SectionLabel from "./SectionLabel"
+import { DEFAULT_HOME_CONTENT, mergeHomeManagedContent } from "../content/managedContent"
 
 export default function About() {
   const [sectionRef, isInView] = useInViewOnce<HTMLElement>("120px 0px")
+  const [homeContent, setHomeContent] = useState(DEFAULT_HOME_CONTENT)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadHomeContent() {
+      try {
+        const res = await fetch("/api/content?key=home_content", { cache: "no-store" })
+        if (!res.ok) return
+        const json = await res.json()
+        if (!cancelled) setHomeContent(mergeHomeManagedContent(json?.content))
+      } catch {
+        // fallback to defaults
+      }
+    }
+
+    loadHomeContent()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <section id="about" ref={sectionRef} className="cv-auto pt-[96px] pb-[120px] px-4 sm:px-6 relative overflow-hidden">
@@ -34,8 +57,8 @@ export default function About() {
               className={`reveal ${isInView ? "in-view" : ""} about-mobile-heading font-cinzel font-normal mb-4 sm:mb-6 md:mb-8 leading-[0.92] md:leading-[0.89] tracking-[0.35px] md:tracking-[0.5px]`}
               style={{ fontSize: "clamp(32px, 10vw, 78px)", animationDelay: "0.1s" }}
             >
-              <span className="text-cream/92 text-[0.9em]">About </span>
-              <span className="text-gold tracking-[1.4px] md:tracking-[1.8px]">SHUBIQ</span>
+              <span className="text-cream/92 text-[0.9em]">{homeContent.aboutHeadingPrefix} </span>
+              <span className="text-gold tracking-[1.4px] md:tracking-[1.8px]">{homeContent.aboutHeadingAccent}</span>
             </h2>
 
             <div className="about-mobile-copy-wrap mt-6 sm:mt-7 md:mt-0 space-y-4 sm:space-y-5 md:space-y-5 max-w-[580px]">
@@ -43,22 +66,21 @@ export default function About() {
                 className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left`}
                 style={{ fontSize: "clamp(17px, 4.6vw, 22px)", animationDelay: "0.25s" }}
               >
-                <span className="font-semibold text-cream">SHUBIQ</span> is a premium digital engineering brand crafting high-performance web platforms, productivity
-                apps, and intelligent systems for ambitious founders and teams.
+                {homeContent.aboutParagraph1}
               </p>
 
               <p
                 className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left`}
                 style={{ fontSize: "clamp(17px, 4.6vw, 22px)", animationDelay: "0.38s" }}
               >
-                We deliver conversion-first websites and AI-integrated product systems built for clarity, speed, and long-term scale, not just a good launch.
+                {homeContent.aboutParagraph2}
               </p>
 
               <p
                 className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/82 leading-[1.75] tracking-[0.1px] text-left`}
                 style={{ fontSize: "clamp(15.5px, 4.2vw, 20px)", animationDelay: "0.5s" }}
               >
-                The SHUBIQ system blends strategy, engineering, and premium design to turn ambitious ideas into durable platforms that earn trust and compound value.
+                {homeContent.aboutParagraph3}
               </p>
 
               <div className="mt-[104px] max-[768px]:mt-12 max-[768px]:flex max-[768px]:justify-center">
@@ -67,7 +89,7 @@ export default function About() {
                   data-cursor="View"
                   className="hero-cta cta-ghost inline-flex items-center justify-center min-w-[220px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
                 >
-                  <span className="relative z-[1]">Meet the Founder</span>
+                  <span className="relative z-[1]">{homeContent.aboutFounderCta}</span>
                 </a>
               </div>
             </div>

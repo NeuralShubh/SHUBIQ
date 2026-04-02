@@ -2,6 +2,12 @@ export type HomeManagedContent = {
   heroTagline: string
   heroExploreCta: string
   heroHireCta: string
+  aboutHeadingPrefix: string
+  aboutHeadingAccent: string
+  aboutParagraph1: string
+  aboutParagraph2: string
+  aboutParagraph3: string
+  aboutFounderCta: string
 }
 
 export type LabsManagedContent = {
@@ -17,6 +23,15 @@ export const DEFAULT_HOME_CONTENT: HomeManagedContent = {
   heroTagline: "Intelligence That Wins",
   heroExploreCta: "Explore Work",
   heroHireCta: "Hire Us",
+  aboutHeadingPrefix: "About",
+  aboutHeadingAccent: "SHUBIQ",
+  aboutParagraph1:
+    "SHUBIQ is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems for ambitious founders and teams.",
+  aboutParagraph2:
+    "We deliver conversion-first websites and AI-integrated product systems built for clarity, speed, and long-term scale, not just a good launch.",
+  aboutParagraph3:
+    "The SHUBIQ system blends strategy, engineering, and premium design to turn ambitious ideas into durable platforms that earn trust and compound value.",
+  aboutFounderCta: "Meet the Founder",
 }
 
 export const DEFAULT_LABS_CONTENT: LabsManagedContent = {
@@ -38,4 +53,3 @@ export function mergeLabsManagedContent(input: unknown): LabsManagedContent {
   const content = (input && typeof input === "object" ? input : {}) as Partial<LabsManagedContent>
   return { ...DEFAULT_LABS_CONTENT, ...content }
 }
-
