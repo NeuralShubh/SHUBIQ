@@ -47,6 +47,8 @@ export default function FormSubmissionsDashboard() {
   const [activeRole, setActiveRole] = useState<'owner' | 'admin' | 'editor' | 'viewer'>('viewer')
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'unread' | 'new' | 'in-progress' | 'responded' | 'closed'>('all')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState<10 | 20 | 50>(20)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [viewingInquiry, setViewingInquiry] = useState<Inquiry | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -180,23 +182,34 @@ export default function FormSubmissionsDashboard() {
     return bySearch.filter((item) => item.status === 'Closed')
   }, [inquiries, search, filter])
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
+  const safePage = Math.min(page, totalPages)
+  const visibleItems = useMemo(() => {
+    const start = (safePage - 1) * pageSize
+    return filtered.slice(start, start + pageSize)
+  }, [filtered, safePage, pageSize])
+
   const unreadCount = inquiries.filter((item) => !item.read).length
   const canEdit = activeRole === 'owner' || activeRole === 'admin' || activeRole === 'editor'
   const canDelete = activeRole === 'owner' || activeRole === 'admin'
-  const allFilteredSelected = filtered.length > 0 && filtered.every((item) => selectedIds.includes(item.id))
+  const allVisibleSelected = visibleItems.length > 0 && visibleItems.every((item) => selectedIds.includes(item.id))
+
+  useEffect(() => {
+    setPage(1)
+  }, [filter, search, pageSize])
 
   function toggleSelectOne(id: string) {
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((value) => value !== id) : [...prev, id]))
   }
 
-  function toggleSelectFiltered() {
-    if (allFilteredSelected) {
-      setSelectedIds((prev) => prev.filter((id) => !filtered.some((item) => item.id === id)))
+  function toggleSelectVisible() {
+    if (allVisibleSelected) {
+      setSelectedIds((prev) => prev.filter((id) => !visibleItems.some((item) => item.id === id)))
       return
     }
 
     const next = new Set(selectedIds)
-    for (const item of filtered) next.add(item.id)
+    for (const item of visibleItems) next.add(item.id)
     setSelectedIds(Array.from(next))
   }
 
@@ -434,17 +447,34 @@ export default function FormSubmissionsDashboard() {
           </div>
         ) : (
           <div className="overflow-x-auto bg-[rgb(var(--surface-0-rgb))] pb-10">
+            <div className="px-6 py-3 border-b border-[rgb(var(--cream-rgb)/0.08)] flex flex-wrap items-center gap-3 bg-[rgb(var(--surface-1-rgb))]">
+              <span className="text-xs text-cream/60">
+                Showing {(safePage - 1) * pageSize + 1}-{Math.min(safePage * pageSize, filtered.length)} of {filtered.length}
+              </span>
+              <div className="flex items-center gap-2 ml-auto">
+                <label className="text-xs text-cream/50">Rows</label>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value) as 10 | 20 | 50)}
+                  className="bg-[rgb(var(--surface-0-rgb))] border border-[rgb(var(--cream-rgb)/0.16)] rounded px-2 py-1 text-xs text-cream"
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+            </div>
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-[#09090b]/50 text-cream/50 text-[10px] uppercase font-bold tracking-[0.1em] font-rajdhani">
                 <tr className="border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-1-rgb))]">
                   <th className="px-6 py-4 font-bold w-8">
                     <button
                       type="button"
-                      onClick={toggleSelectFiltered}
+                      onClick={toggleSelectVisible}
                       className="text-cream/60 hover:text-gold transition-colors"
-                      title={allFilteredSelected ? 'Unselect all' : 'Select all filtered'}
+                      title={allVisibleSelected ? 'Unselect visible' : 'Select visible'}
                     >
-                      {allFilteredSelected ? <CheckSquare size={14} /> : <Square size={14} />}
+                      {allVisibleSelected ? <CheckSquare size={14} /> : <Square size={14} />}
                     </button>
                   </th>
                   <th className="px-6 py-4 font-bold">Contact</th>
@@ -454,7 +484,7 @@ export default function FormSubmissionsDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[rgb(var(--cream-rgb)/0.05)]">
-                {filtered.map((item) => (
+                {visibleItems.map((item) => (
                   <tr
                     key={item.id}
                     onClick={() => handleOpenModal(item)}
@@ -519,6 +549,22 @@ export default function FormSubmissionsDashboard() {
                 ))}
               </tbody>
             </table>
+            <div className="px-6 py-3 border-t border-[rgb(var(--cream-rgb)/0.08)] flex items-center justify-end gap-2 bg-[rgb(var(--surface-1-rgb))]">
+              <AdminButton variant="secondary" className="px-3 py-1.5 text-xs" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage <= 1}>
+                Prev
+              </AdminButton>
+              <span className="text-xs text-cream/60 px-2">
+                Page {safePage} / {totalPages}
+              </span>
+              <AdminButton
+                variant="secondary"
+                className="px-3 py-1.5 text-xs"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={safePage >= totalPages}
+              >
+                Next
+              </AdminButton>
+            </div>
           </div>
         )}
       </AdminCard>
