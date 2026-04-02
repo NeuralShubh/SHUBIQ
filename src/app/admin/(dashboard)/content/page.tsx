@@ -71,12 +71,15 @@ export default function ContentControlPage() {
   const [loadingStudio, setLoadingStudio] = useState(true)
   const [savingStudio, setSavingStudio] = useState(false)
   const [studioContent, setStudioContent] = useState<StudioContent>(DEFAULT_STUDIO_CONTENT)
+  const [studioSnapshot, setStudioSnapshot] = useState(JSON.stringify(DEFAULT_STUDIO_CONTENT))
   const [loadingHome, setLoadingHome] = useState(true)
   const [savingHome, setSavingHome] = useState(false)
   const [homeContent, setHomeContent] = useState<HomeManagedContent>(DEFAULT_HOME_CONTENT)
+  const [homeSnapshot, setHomeSnapshot] = useState(JSON.stringify(DEFAULT_HOME_CONTENT))
   const [loadingLabs, setLoadingLabs] = useState(true)
   const [savingLabs, setSavingLabs] = useState(false)
   const [labsContent, setLabsContent] = useState<LabsManagedContent>(DEFAULT_LABS_CONTENT)
+  const [labsSnapshot, setLabsSnapshot] = useState(JSON.stringify(DEFAULT_LABS_CONTENT))
 
   const [blogLoading, setBlogLoading] = useState(true)
   const [blogItems, setBlogItems] = useState<BlogItem[]>([])
@@ -102,13 +105,20 @@ export default function ContentControlPage() {
     return savingStudio ? "Saving..." : "Studio content controls pricing + CTA copy on /shubiq-studio"
   }, [savingStudio])
 
+  const studioDirty = useMemo(() => JSON.stringify(studioContent) !== studioSnapshot, [studioContent, studioSnapshot])
+  const homeDirty = useMemo(() => JSON.stringify(homeContent) !== homeSnapshot, [homeContent, homeSnapshot])
+  const labsDirty = useMemo(() => JSON.stringify(labsContent) !== labsSnapshot, [labsContent, labsSnapshot])
+  const hasUnsavedChanges = (activeTab === "studio" && studioDirty) || (activeTab === "home" && homeDirty) || (activeTab === "labs" && labsDirty)
+
   async function loadStudioContent() {
     setLoadingStudio(true)
     try {
       const res = await fetch("/api/admin/content?key=studio_content", { cache: "no-store" })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Failed to load studio content")
-      setStudioContent(mergeStudioContent(json.content))
+      const merged = mergeStudioContent(json.content)
+      setStudioContent(merged)
+      setStudioSnapshot(JSON.stringify(merged))
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to load studio content")
       setStudioContent(DEFAULT_STUDIO_CONTENT)
@@ -127,6 +137,7 @@ export default function ContentControlPage() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Save failed")
+      setStudioSnapshot(JSON.stringify(studioContent))
       toast.success("Studio content saved")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to save studio content")
@@ -141,7 +152,9 @@ export default function ContentControlPage() {
       const res = await fetch("/api/admin/content?key=home_content", { cache: "no-store" })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Failed to load home content")
-      setHomeContent(mergeHomeManagedContent(json.content))
+      const merged = mergeHomeManagedContent(json.content)
+      setHomeContent(merged)
+      setHomeSnapshot(JSON.stringify(merged))
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to load home content")
       setHomeContent(DEFAULT_HOME_CONTENT)
@@ -160,6 +173,7 @@ export default function ContentControlPage() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Save failed")
+      setHomeSnapshot(JSON.stringify(homeContent))
       toast.success("Home content saved")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to save home content")
@@ -174,7 +188,9 @@ export default function ContentControlPage() {
       const res = await fetch("/api/admin/content?key=labs_content", { cache: "no-store" })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Failed to load labs content")
-      setLabsContent(mergeLabsManagedContent(json.content))
+      const merged = mergeLabsManagedContent(json.content)
+      setLabsContent(merged)
+      setLabsSnapshot(JSON.stringify(merged))
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to load labs content")
       setLabsContent(DEFAULT_LABS_CONTENT)
@@ -193,6 +209,7 @@ export default function ContentControlPage() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || "Save failed")
+      setLabsSnapshot(JSON.stringify(labsContent))
       toast.success("Labs content saved")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to save labs content")
@@ -310,22 +327,49 @@ export default function ContentControlPage() {
     loadBlogItems()
   }, [])
 
+  useEffect(() => {
+    const onBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!studioDirty && !homeDirty && !labsDirty) return
+      event.preventDefault()
+      event.returnValue = ""
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
+        event.preventDefault()
+        if (activeTab === "studio" && !loadingStudio && !savingStudio) void saveStudioContent()
+        if (activeTab === "home" && !loadingHome && !savingHome) void saveHomeContent()
+        if (activeTab === "labs" && !loadingLabs && !savingLabs) void saveLabsContent()
+      }
+    }
+
+    window.addEventListener("beforeunload", onBeforeUnload)
+    window.addEventListener("keydown", onKeyDown)
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload)
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [activeTab, loadingStudio, savingStudio, loadingHome, savingHome, loadingLabs, savingLabs, studioDirty, homeDirty, labsDirty, studioContent, homeContent, labsContent])
+
   return (
     <div className="space-y-6 pb-20 animate-in fade-in duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-cream font-cinzel tracking-wide">Content Control</h1>
-          <p className="text-[14px] text-cream/70 mt-1 font-medium">Manage Home, Studio, Labs copy and blog publishing from one panel.</p>
+          <p className="text-[14px] text-cream/70 mt-1 font-medium">
+            Manage Home, Studio, Labs copy and blog publishing from one panel.
+            {hasUnsavedChanges ? " Unsaved changes in current tab." : " Press Ctrl/Cmd+S to save active tab quickly."}
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <AdminButton variant={activeTab === "studio" ? "primary" : "secondary"} onClick={() => setActiveTab("studio")}>
-            Studio
+            Studio{studioDirty ? " *" : ""}
           </AdminButton>
           <AdminButton variant={activeTab === "home" ? "primary" : "secondary"} onClick={() => setActiveTab("home")}>
-            Home
+            Home{homeDirty ? " *" : ""}
           </AdminButton>
           <AdminButton variant={activeTab === "labs" ? "primary" : "secondary"} onClick={() => setActiveTab("labs")}>
-            Labs
+            Labs{labsDirty ? " *" : ""}
           </AdminButton>
           <AdminButton variant={activeTab === "blog" ? "primary" : "secondary"} onClick={() => setActiveTab("blog")}>
             Blog
