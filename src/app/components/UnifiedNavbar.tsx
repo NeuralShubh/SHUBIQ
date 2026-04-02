@@ -23,18 +23,15 @@ export default function UnifiedNavbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-[rgb(var(--gold-rgb)/0.18)] bg-[linear-gradient(to_bottom,rgb(var(--surface-2-rgb)/0.94),rgb(var(--surface-1-rgb)/0.86))] backdrop-blur-xl">
       <div className="mx-auto flex h-[68px] w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
-        <Link href="/" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+        <Link href="/" className="group flex items-center" onClick={() => setMenuOpen(false)}>
           <Image
             src="/shubiq-icons/themes/shubiq-signature-gold.svg"
             alt="SHUBIQ"
-            width={32}
-            height={32}
+            width={56}
+            height={56}
             priority
-            className="h-8 w-8 object-contain transition-opacity duration-200 group-hover:opacity-95"
+            className="h-11 w-11 sm:h-12 sm:w-12 object-contain transition-opacity duration-200 group-hover:opacity-95"
           />
-          <span className="font-cinzel text-[21px] tracking-[1px] text-cream/92 transition-colors group-hover:text-[rgb(var(--gold-light-rgb))]">
-            SHUBIQ
-          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
