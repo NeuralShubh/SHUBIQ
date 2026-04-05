@@ -4,6 +4,8 @@
 
 SHUBIQ is a digital engineering brand focused on building high-performance digital systems for ambitious brands and founders.
 
+This repository contains the active SHUBIQ website and application codebase.
+
 ## What We Build
 
 - Conversion-focused websites
