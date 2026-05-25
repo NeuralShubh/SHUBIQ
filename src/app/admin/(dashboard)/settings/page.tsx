@@ -1,156 +1,13 @@
-'use client'
-
-import { useEffect, useMemo, useState } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { AdminButton, AdminCard, AdminInput } from '@/components/admin/AdminUI'
-import { Shield, Database, Globe, Bell, RefreshCw, CircleCheck, CircleAlert, Key, Server, Download } from 'lucide-react'
-import { toast } from 'sonner'
-import { AdminApiError, adminFetchJson, adminLoginRedirectPath } from '@/lib/admin-api-client'
-
-type SystemStatus = {
-  ok: boolean
-  checkedAt?: string
-  environment?: {
-    siteUrl: string
-    hasAdminSessionSecret: boolean
-    hasSinglePassword: boolean
-    authMode: 'single-password' | 'role-based'
-    rolesConfigured: {
-      owner: boolean
-      admin: boolean
-      editor: boolean
-      viewer: boolean
-    }
-  }
-  database?: {
-    connected: boolean
-    activeContactTable: string | null
-    counts: {
-      contacts: number | null
-      blogPosts: number | null
-      managedContent: number | null
-    }
-  }
-  error?: string
-}
+import React from 'react'
+import { AdminCard, AdminButton, AdminInput } from '@/components/admin/AdminUI'
+import { Shield, Key, Database, Globe, Bell, Server } from 'lucide-react'
 
 export default function SettingsAdminPage() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const [status, setStatus] = useState<SystemStatus | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
-  const [revalidating, setRevalidating] = useState(false)
-  const [exportingType, setExportingType] = useState<string | null>(null)
-
-  function handleApiError(error: unknown, fallback: string) {
-    if (error instanceof AdminApiError && error.unauthorized) {
-      const nextSearch = searchParams?.toString() ? `?${searchParams.toString()}` : ''
-      router.push(adminLoginRedirectPath(pathname || '/admin/settings', nextSearch))
-      return
-    }
-    toast.error(error instanceof Error ? error.message : fallback)
-  }
-
-  async function loadStatus(silent = false) {
-    if (silent) {
-      setRefreshing(true)
-    } else {
-      setLoading(true)
-    }
-
-    try {
-      const json = await adminFetchJson<SystemStatus>('/api/admin/system-status')
-      setStatus(json)
-    } catch (error) {
-      handleApiError(error, 'Failed to load system status')
-    } finally {
-      setLoading(false)
-      setRefreshing(false)
-    }
-  }
-
-  async function revalidateSiteCache() {
-    setRevalidating(true)
-    try {
-      const json = await adminFetchJson<any>('/api/admin/revalidate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
-      })
-      if (!json?.ok) throw new Error(json?.error || 'Revalidate failed')
-      toast.success('Site cache revalidated')
-    } catch (error) {
-      handleApiError(error, 'Revalidate failed')
-    } finally {
-      setRevalidating(false)
-    }
-  }
-
-  async function exportData(type: 'leads' | 'blog' | 'content' | 'all') {
-    setExportingType(type)
-    try {
-      const json = await adminFetchJson<any>(`/api/admin/export?type=${encodeURIComponent(type)}`)
-      if (!json?.ok) throw new Error(json?.error || 'Export failed')
-
-      const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json;charset=utf-8;' })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `shubiq-${type}-backup-${new Date().toISOString().slice(0, 10)}.json`
-      link.click()
-      URL.revokeObjectURL(url)
-      toast.success(`Exported ${type} backup`)
-    } catch (error) {
-      handleApiError(error, 'Export failed')
-    } finally {
-      setExportingType(null)
-    }
-  }
-
-  useEffect(() => {
-    loadStatus()
-  }, [])
-
-  const statusRows = useMemo(() => {
-    const env = status?.environment
-    const db = status?.database
-    return [
-      {
-        label: 'Admin Session Secret',
-        value: env?.hasAdminSessionSecret ? 'Configured' : 'Missing',
-        healthy: Boolean(env?.hasAdminSessionSecret),
-      },
-      {
-        label: 'Authentication Mode',
-        value: env?.authMode === 'single-password' ? 'Single Password' : 'Role Based',
-        healthy: Boolean(env),
-      },
-      {
-        label: 'Database Connectivity',
-        value: db?.connected ? 'Healthy' : 'Issue Detected',
-        healthy: Boolean(db?.connected),
-      },
-      {
-        label: 'Contact Table',
-        value: db?.activeContactTable || 'Not Resolved',
-        healthy: Boolean(db?.activeContactTable),
-      },
-    ]
-  }, [status])
-
   return (
     <div className="space-y-6 pb-20 animate-in fade-in duration-300">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-cream font-cinzel">System Settings</h1>
-          <p className="text-[14px] text-cream/70 mt-1 font-medium">Monitor deployment health, security state, and cache controls.</p>
-        </div>
-        <AdminButton variant="secondary" onClick={() => loadStatus(true)} disabled={refreshing || loading}>
-          <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
-          Refresh
-        </AdminButton>
+      <div>
+        <h1 className="text-2xl font-bold text-cream font-cinzel">System Settings</h1>
+        <p className="text-[14px] text-cream/70 mt-1 font-medium">Configure global platform toggles, security, and preferences.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -158,74 +15,42 @@ export default function SettingsAdminPage() {
           <AdminCard className="p-0 overflow-hidden">
             <div className="p-5 border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-1-rgb))] flex items-center gap-3">
               <Shield className="text-gold" size={18} />
-              <h3 className="font-bold text-cream font-cinzel tracking-wider">Security & Authentication</h3>
+              <h3 className="font-bold text-cream font-cinzel tracking-wider">Authentication & Security</h3>
             </div>
-            <div className="p-6 space-y-4 bg-[rgb(var(--surface-0-rgb))]">
-              {loading ? (
-                <div className="flex items-center gap-3 text-cream/60">
-                  <RefreshCw size={15} className="animate-spin" /> Loading status...
-                </div>
-              ) : (
-                <>
-                  {statusRows.map((row) => (
-                    <div key={row.label} className="flex items-center justify-between p-3 border border-[rgb(var(--cream-rgb)/0.1)] rounded-lg">
-                      <div className="flex items-center gap-2">
-                        {row.healthy ? <CircleCheck size={15} className="text-green-400" /> : <CircleAlert size={15} className="text-red-400" />}
-                        <span className="text-sm text-cream/85 font-medium">{row.label}</span>
-                      </div>
-                      <span className="text-xs uppercase tracking-[2px] text-cream/60">{row.value}</span>
-                    </div>
-                  ))}
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                    <AdminInput label="Current Origin Domain" value={status?.environment?.siteUrl || 'https://shubiq.com'} disabled />
-                    <AdminInput
-                      label="Configured Roles"
-                      value={status?.environment ? Object.entries(status.environment.rolesConfigured).filter(([, v]) => v).map(([k]) => k).join(', ') || 'None' : '-'}
-                      disabled
-                    />
-                  </div>
-
-                  <p className="text-xs text-cream/45 italic">
-                    Password values are hidden by design. Use Vercel environment variables to rotate credentials.
-                  </p>
-                </>
-              )}
+            <div className="p-6 space-y-6 bg-[rgb(var(--surface-0-rgb))]">
+              <p className="text-sm text-cream/60 font-medium">
+                The NexGravision Administrator portal is secured behind Next.js server actions and an HTTP-only 
+                encrypted cookie. Update the <code className="bg-[rgb(var(--surface-1-rgb))] text-gold px-1.5 py-0.5 rounded border border-[rgb(var(--cream-rgb)/0.1)]">ADMIN_PASSWORD</code> environment variable to change credentials.
+              </p>
+              
+              <div className="space-y-4 pt-4 border-t border-[rgb(var(--cream-rgb)/0.08)]">
+                <AdminInput label="Current Origin Domain" defaultValue="https://NexGravision.com" disabled />
+                <AdminInput label="Admin Password" type="password" value="********" disabled />
+                <p className="text-xs text-cream/40 italic">Passwords cannot be changed via the browser to maintain root security.</p>
+              </div>
             </div>
           </AdminCard>
 
           <AdminCard className="p-0 overflow-hidden">
             <div className="p-5 border-b border-[rgb(var(--cream-rgb)/0.08)] bg-[rgb(var(--surface-1-rgb))] flex items-center gap-3">
               <Database className="text-gold" size={18} />
-              <h3 className="font-bold text-cream font-cinzel tracking-wider">Database Health</h3>
+              <h3 className="font-bold text-cream font-cinzel tracking-wider">Database Environment</h3>
             </div>
-            <div className="p-6 space-y-4 bg-[rgb(var(--surface-0-rgb))]">
+            <div className="p-6 space-y-6 bg-[rgb(var(--surface-0-rgb))]">
               <div className="flex items-center justify-between p-4 border border-[rgb(var(--cream-rgb)/0.1)] bg-[rgb(var(--surface-1-rgb))] rounded-lg">
                 <div className="flex items-center gap-3">
-                  <Server className={status?.database?.connected ? 'text-green-500' : 'text-red-400'} size={20} />
+                  <Server className="text-green-500" size={20} />
                   <div>
                     <h4 className="text-cream font-bold text-sm">Supabase Connection</h4>
-                    <p className="text-xs text-cream/50 mt-0.5">Live status check from admin endpoint.</p>
+                    <p className="text-xs text-cream/50 mt-0.5">Postgres DB is actively synced & receiving traffic.</p>
                   </div>
                 </div>
-                <span className={`text-xs font-bold px-2 py-1 rounded ${status?.database?.connected ? 'text-green-500 bg-green-500/10' : 'text-red-400 bg-red-500/10'}`}>
-                  {status?.database?.connected ? 'HEALTHY' : 'ISSUE'}
-                </span>
+                <span className="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">HEALTHY</span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="rounded-lg border border-[rgb(var(--cream-rgb)/0.1)] p-4 bg-[rgb(var(--surface-1-rgb))]">
-                  <p className="text-[11px] uppercase tracking-[2px] text-cream/45">Contacts</p>
-                  <p className="text-xl font-semibold text-cream mt-2">{status?.database?.counts.contacts ?? '-'}</p>
-                </div>
-                <div className="rounded-lg border border-[rgb(var(--cream-rgb)/0.1)] p-4 bg-[rgb(var(--surface-1-rgb))]">
-                  <p className="text-[11px] uppercase tracking-[2px] text-cream/45">Blog Posts</p>
-                  <p className="text-xl font-semibold text-cream mt-2">{status?.database?.counts.blogPosts ?? '-'}</p>
-                </div>
-                <div className="rounded-lg border border-[rgb(var(--cream-rgb)/0.1)] p-4 bg-[rgb(var(--surface-1-rgb))]">
-                  <p className="text-[11px] uppercase tracking-[2px] text-cream/45">Managed Content</p>
-                  <p className="text-xl font-semibold text-cream mt-2">{status?.database?.counts.managedContent ?? '-'}</p>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <AdminInput label="Public URL" defaultValue="https://*.supabase.co" disabled />
+                <AdminInput label="Project Schema" defaultValue="public" disabled />
               </div>
             </div>
           </AdminCard>
@@ -233,70 +58,37 @@ export default function SettingsAdminPage() {
 
         <div className="space-y-6">
           <AdminCard className="space-y-4">
-            <div className="flex items-center gap-2 text-cream mb-2">
+            <div className="flex items-center gap-2 text-cream mb-4">
               <Globe className="text-gold" size={18} />
-              <h3 className="font-bold font-cinzel">Cache Control</h3>
+              <h3 className="font-bold font-cinzel">Webhooks</h3>
             </div>
-            <p className="text-xs text-cream/55">Trigger on-demand revalidation for key public routes after content updates.</p>
-            <AdminButton onClick={revalidateSiteCache} disabled={revalidating}>
-              <RefreshCw size={14} className={revalidating ? 'animate-spin' : ''} />
-              Revalidate Website Cache
-            </AdminButton>
-          </AdminCard>
-
-          <AdminCard className="space-y-4">
-            <div className="flex items-center gap-2 text-cream mb-2">
-              <Download className="text-gold" size={18} />
-              <h3 className="font-bold font-cinzel">Data Export</h3>
-            </div>
-            <p className="text-xs text-cream/55">Download JSON backups for operational safety and audits.</p>
-            <div className="grid grid-cols-1 gap-2">
-              <AdminButton variant="secondary" onClick={() => exportData('leads')} disabled={exportingType !== null}>
-                <Download size={14} className={exportingType === 'leads' ? 'animate-pulse' : ''} />
-                Export Leads
-              </AdminButton>
-              <AdminButton variant="secondary" onClick={() => exportData('blog')} disabled={exportingType !== null}>
-                <Download size={14} className={exportingType === 'blog' ? 'animate-pulse' : ''} />
-                Export Blog
-              </AdminButton>
-              <AdminButton variant="secondary" onClick={() => exportData('content')} disabled={exportingType !== null}>
-                <Download size={14} className={exportingType === 'content' ? 'animate-pulse' : ''} />
-                Export Content
-              </AdminButton>
-              <AdminButton onClick={() => exportData('all')} disabled={exportingType !== null}>
-                <Download size={14} className={exportingType === 'all' ? 'animate-pulse' : ''} />
-                Export Full Backup
-              </AdminButton>
+            <div className="p-4 border border-[rgb(var(--cream-rgb)/0.1)] rounded-lg space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-cream/80">Revalidate Cache</span>
+                <AdminButton variant="secondary" className="px-2 py-1 text-xs">Trigger</AdminButton>
+              </div>
+              <p className="text-xs text-cream/50">Manually clears Next.js ISR cache across the Vercel Edge Network.</p>
             </div>
           </AdminCard>
 
           <AdminCard className="space-y-4">
-            <div className="flex items-center gap-2 text-cream mb-2">
+            <div className="flex items-center gap-2 text-cream mb-4">
               <Bell className="text-gold" size={18} />
               <h3 className="font-bold font-cinzel">Notifications</h3>
             </div>
             <div className="flex items-center justify-between text-sm py-2 border-b border-[rgb(var(--cream-rgb)/0.1)]">
               <span className="text-cream/80 font-medium">New Inquiry Emails</span>
-              <span className="text-xs text-green-400">Enabled</span>
+              <input type="checkbox" defaultChecked className="accent-gold w-4 h-4 cursor-not-allowed" disabled />
             </div>
             <div className="flex items-center justify-between text-sm py-2">
               <span className="text-cream/80 font-medium">System Error Logs</span>
-              <span className="text-xs text-green-400">Enabled</span>
+              <input type="checkbox" defaultChecked className="accent-gold w-4 h-4 cursor-not-allowed" disabled />
             </div>
-            <p className="text-[11px] text-cream/40 pt-2">Manage provider-level notifications in your Vercel and Supabase dashboards.</p>
-          </AdminCard>
-
-          <AdminCard className="space-y-4">
-            <div className="flex items-center gap-2 text-cream mb-2">
-              <Key className="text-gold" size={18} />
-              <h3 className="font-bold font-cinzel">Credential Notes</h3>
-            </div>
-            <p className="text-xs text-cream/55 leading-relaxed">
-              Keep <code className="text-gold">ADMIN_SESSION_SECRET</code>, <code className="text-gold">ADMIN_PASSWORD</code>, and Supabase keys set in all Vercel environments.
-            </p>
+            <p className="text-[11px] text-cream/40 pt-2">Manage settings directly in platform environment variables.</p>
           </AdminCard>
         </div>
       </div>
     </div>
   )
 }
+

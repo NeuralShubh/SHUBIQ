@@ -15,12 +15,12 @@ import {
 } from "lucide-react"
 import BackLink from "../../components/BackLink"
 
-const APK_URL = "https://flow.shubiq.com/downloads/SHUBIQ-Flow.apk"
+const APK_URL = "https://flow.NexGravision.com/downloads/shubiq-Flow.apk"
 const BUILD_VERSION = "0.9.0-beta"
 const BUILD_DATE = "March 2026"
 
 const RELEASE_NOTES = [
-  "New SHUBIQ Labs download hub for smoother beta distribution.",
+  "New NexGravision Labs download hub for smoother beta distribution.",
   "Stability and interaction polish across tasks, habits, and focus.",
   "Improved sync-ready architecture for upcoming Pro rollout.",
 ]
@@ -83,7 +83,7 @@ const BETA_TIMELINE = [
   { date: "Q2 2026", title: "Play Store Release Window", detail: "Launch after stability threshold and onboarding validation." },
 ]
 
-export default function ShubiqFlowDownloadPage() {
+export default function NexGravisionFlowDownloadPage() {
   return (
     <main className="section-rhythm labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
@@ -101,7 +101,7 @@ export default function ShubiqFlowDownloadPage() {
           >
             <Smartphone size={14} className="text-[rgb(var(--gold-rgb))]" />
             <span className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">
-              SHUBIQ Flow Android Beta
+              NexGravision Flow Android Beta
             </span>
           </motion.div>
 
@@ -121,7 +121,7 @@ export default function ShubiqFlowDownloadPage() {
             transition={{ duration: 0.65, delay: 0.16 }}
             className="mt-6 max-w-3xl font-cormorant text-[clamp(17px,2vw,24px)] leading-[1.5] text-cream/78"
           >
-            SHUBIQ Flow is a premium execution app unifying tasks, habits, and deep work sessions in one ritual-driven workspace.
+            NexGravision Flow is a premium execution app unifying tasks, habits, and deep work sessions in one ritual-driven workspace.
             This page gives you direct access to the latest beta build.
           </motion.p>
 
@@ -301,7 +301,7 @@ export default function ShubiqFlowDownloadPage() {
             </ul>
 
             <a
-              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Flow%20Beta%20Feedback"
+              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Flow%20Beta%20Feedback"
               className="labs-sheen-btn mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
             >
               Send Beta Feedback
@@ -360,7 +360,7 @@ export default function ShubiqFlowDownloadPage() {
                 Download Latest APK
               </a>
               <a
-                href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Flow%20Priority%20Beta"
+                href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Flow%20Priority%20Beta"
                 className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.28)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
               >
                 Request Priority Invite
@@ -453,7 +453,7 @@ export default function ShubiqFlowDownloadPage() {
               <p className="font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/70">Privacy Note</p>
             </div>
             <p className="mt-2 font-cormorant text-[17px] leading-[1.45] text-cream/78">
-              SHUBIQ Flow beta requests only what is needed for core workflows and reliability. Permissions remain user-controlled.
+              NexGravision Flow beta requests only what is needed for core workflows and reliability. Permissions remain user-controlled.
             </p>
           </motion.div>
         </div>
@@ -461,7 +461,7 @@ export default function ShubiqFlowDownloadPage() {
 
       <div className="labs-mobile-dock md:hidden">
         <div className="labs-mobile-dock-inner">
-          <a href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Flow%20Priority%20Beta" className="labs-mobile-dock-btn labs-mobile-dock-btn-muted">
+          <a href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Flow%20Priority%20Beta" className="labs-mobile-dock-btn labs-mobile-dock-btn-muted">
             Priority Invite
           </a>
           <a href={APK_URL} className="labs-mobile-dock-btn labs-mobile-dock-btn-primary">
@@ -472,3 +472,4 @@ export default function ShubiqFlowDownloadPage() {
     </main>
   )
 }
+

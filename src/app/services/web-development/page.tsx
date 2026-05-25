@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 import Link from "next/link"
 
 import GoldLine from "../../components/GoldLine"
@@ -96,7 +96,7 @@ export default function WebDevelopmentServicePage() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-8">
           <div className="space-y-5 font-cormorant text-cream/80 leading-[1.75] text-[18px]">
             <p>
-              SHUBIQ builds websites and web apps that load fast, convert visitors, and scale with your business. We pair premium design with clean engineering to create a polished product experience.
+              NexGravision builds websites and web apps that load fast, convert visitors, and scale with your business. We pair premium design with clean engineering to create a polished product experience.
             </p>
             <p>
               Our process includes performance budgets, conversion-first UX, and production-grade deployment so your site stays fast and stable long term.
@@ -107,9 +107,9 @@ export default function WebDevelopmentServicePage() {
             <div className="pt-1">
               <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-2">What You Get</div>
               <ul className="space-y-2 text-[15px] text-cream/70">
-                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Performance budget + Lighthouse targets</li>
-                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Conversion-ready IA and CTA hierarchy</li>
-                <li className="flex items-start gap-2"><span className="text-gold mt-1">•</span>Clean handoff docs + launch checklist</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">�</span>Performance budget + Lighthouse targets</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">�</span>Conversion-ready IA and CTA hierarchy</li>
+                <li className="flex items-start gap-2"><span className="text-gold mt-1">�</span>Clean handoff docs + launch checklist</li>
               </ul>
             </div>
           </div>
@@ -155,7 +155,7 @@ export default function WebDevelopmentServicePage() {
 
       <section className="py-10 sm:py-12 px-5 sm:px-8">
         <div className="max-w-5xl mx-auto">
-          <PricingTeaser startingPrice="₹19,999" note="One-time • 5-21 day delivery" />
+          <PricingTeaser startingPrice="?19,999" note="One-time � 5-21 day delivery" />
         </div>
       </section>
 
@@ -172,3 +172,4 @@ export default function WebDevelopmentServicePage() {
     </main>
   )
 }
+

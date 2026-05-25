@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { motion } from 'framer-motion'
 import { ArrowRight, Rocket, Sparkles, TrendingUp, Zap } from 'lucide-react'
 
@@ -34,7 +34,7 @@ export default function Hero() {
               <br />
               With{" "}
               <span className="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-500 bg-clip-text text-transparent">
-                SHUBIQ Studio
+                NexGravision Studio
               </span>
             </h1>
 
@@ -61,7 +61,7 @@ export default function Hero() {
 
             <div className="flex items-center gap-4 pt-6 border-t border-slate-200">
               <p className="text-sm text-slate-600">
-                <strong className="text-slate-900">Part of the SHUBIQ Ecosystem</strong> with structured delivery and
+                <strong className="text-slate-900">Part of the NexGravision Ecosystem</strong> with structured delivery and
                 measurable digital outcomes
               </p>
             </div>
@@ -131,3 +131,4 @@ export default function Hero() {
     </section>
   )
 }
+

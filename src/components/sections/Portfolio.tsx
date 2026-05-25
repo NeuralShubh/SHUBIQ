@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { motion } from 'framer-motion'
 import { ArrowRight, ExternalLink, Scale, Stethoscope, UtensilsCrossed } from 'lucide-react'
 
@@ -49,7 +49,7 @@ export default function Portfolio() {
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">Studio Portfolio</h2>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            Selected project systems delivered under SHUBIQ Studio with performance, conversion, and clarity as core priorities.
+            Selected project systems delivered under NexGravision Studio with performance, conversion, and clarity as core priorities.
           </p>
         </motion.div>
 
@@ -107,3 +107,4 @@ export default function Portfolio() {
     </section>
   )
 }
+

@@ -1,14 +1,14 @@
 import type { Metadata } from "next"
 import FounderPageClient from "./FounderPageClient"
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://NexGravision.com"
 
 export const metadata: Metadata = {
-  title: "Shubham | Founder of SHUBIQ",
-  description: "Shubham leads SHUBIQ Studio and SHUBIQ Labs, building high-performance digital platforms and productivity systems.",
+  title: "Shubham | Founder of NexGravision",
+  description: "Shubham leads NexGravision Studio and NexGravision Labs, building high-performance digital platforms and productivity systems.",
   openGraph: {
-    title: "Shubham | Founder of SHUBIQ",
-    description: "Shubham leads SHUBIQ Studio and SHUBIQ Labs, building high-performance digital platforms and productivity systems.",
+    title: "Shubham | Founder of NexGravision",
+    description: "Shubham leads NexGravision Studio and NexGravision Labs, building high-performance digital platforms and productivity systems.",
     url: `${siteUrl}/founder`,
   },
 }
@@ -21,7 +21,7 @@ export default function FounderPage() {
     jobTitle: "Founder",
     worksFor: {
       "@type": "Organization",
-      name: "SHUBIQ",
+      name: "NexGravision",
       url: siteUrl,
     },
     url: `${siteUrl}/founder`,
@@ -40,3 +40,4 @@ export default function FounderPage() {
     </>
   )
 }
+

@@ -1,6 +1,6 @@
 {
-  "name": "SHUBIQ",
-  "short_name": "SHUBIQ",
+  "name": "NexGravision",
+  "short_name": "NexGravision",
   "icons": [
     {
       "src": "/shubiq-icons/sizes/shubiq-gold-96.svg",
@@ -31,3 +31,4 @@
   "background_color": "#0b0f16",
   "display": "standalone"
 }
+

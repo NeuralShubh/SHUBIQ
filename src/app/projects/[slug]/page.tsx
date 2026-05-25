@@ -17,13 +17,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   return {
-    title: `${project.title} | SHUBIQ Projects`,
+    title: `${project.title} | NexGravision Projects`,
     description: project.subtitle,
     alternates: {
       canonical: `/projects/${project.slug}`,
     },
     openGraph: {
-      title: `${project.title} | SHUBIQ`,
+      title: `${project.title} | NexGravision`,
       description: project.subtitle,
       url: `${siteUrl}/projects/${project.slug}`,
       images: project.videoPoster ? [project.videoPoster] : [],

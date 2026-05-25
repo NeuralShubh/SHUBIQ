@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { motion, useReducedMotion } from "framer-motion"
 import ScrollReveal from "./ScrollReveal"
@@ -21,7 +21,7 @@ export default function Roadmap({ items }: { items: RoadmapItem[] }) {
           <p className="text-xs uppercase tracking-[0.2em] text-cream/60 mb-2 font-rajdhani">Roadmap</p>
           <h2 className="text-2xl md:text-3xl font-cinzel text-cream">Product Roadmap</h2>
           <p className="text-cream/70 font-cormorant mt-2">
-            From concept to launch, the SHUBIQ Labs timeline.
+            From concept to launch, the NexGravision Labs timeline.
           </p>
         </div>
       </ScrollReveal>
@@ -81,3 +81,4 @@ export default function Roadmap({ items }: { items: RoadmapItem[] }) {
     </section>
   )
 }
+

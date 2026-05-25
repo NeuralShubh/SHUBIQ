@@ -1,4 +1,4 @@
--- SHUBIQ: Full card CMS schema (main + studio) for admin panel integration
+-- NexGravision: Full card CMS schema (main + studio) for admin panel integration
 -- Run this in Supabase SQL editor.
 
 create extension if not exists pgcrypto;
@@ -202,3 +202,4 @@ for all to anon using (true) with check (true);
 drop policy if exists "Anon write studio_pricing_plans" on public.studio_pricing_plans;
 create policy "Anon write studio_pricing_plans" on public.studio_pricing_plans
 for all to anon using (true) with check (true);
+

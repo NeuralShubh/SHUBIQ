@@ -1,4 +1,4 @@
-﻿export interface LabProduct {
+export interface LabProduct {
   id: string
   name: string
   subtitle: string
@@ -14,7 +14,7 @@
 export const LAB_PRODUCTS: LabProduct[] = [
   {
     id: "shubiq-flow",
-    name: "SHUBIQ Flow",
+    name: "NexGravision Flow",
     subtitle: "Tasks, Habits & Focus",
     status: "Live Beta",
     category: "Mobile App",
@@ -25,7 +25,7 @@ export const LAB_PRODUCTS: LabProduct[] = [
   },
   {
     id: "future-suite",
-    name: "SHUBIQ Pulse",
+    name: "NexGravision Pulse",
     subtitle: "Performance OS (Coming Soon)",
     status: "Planned",
     category: "System",
@@ -37,7 +37,7 @@ export const LAB_PRODUCTS: LabProduct[] = [
   },
   {
     id: "future-web",
-    name: "SHUBIQ Atlas",
+    name: "NexGravision Atlas",
     subtitle: "Knowledge System (Coming Soon)",
     status: "In Dev",
     category: "Web App",
@@ -48,3 +48,4 @@ export const LAB_PRODUCTS: LabProduct[] = [
     disabled: true,
   },
 ]
+

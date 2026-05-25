@@ -1,8 +1,8 @@
-# SHUBIQ
+# NexGravision
  
 **Intelligence That Wins**
 
-SHUBIQ is a digital engineering brand focused on building high-performance digital systems for ambitious brands and founders.
+NexGravision is a digital engineering brand focused on building high-performance digital systems for ambitious brands and founders.
 
 This repository contains the active SHUBIQ website and application codebase.
 
@@ -21,14 +21,15 @@ This repository contains the active SHUBIQ website and application codebase.
 
 ## Ecosystem
 
-- **SHUBIQ Studio**: Client services and delivery
-- **SHUBIQ Labs**: In-house product development
+- **NexGravision Studio**: Client services and delivery
+- **NexGravision Labs**: In-house product development
 
 ## Connect
 
-- Website: `https://shubiq.com/`
-- Email: `shubiqofficial@gmail.com`
-- GitHub: `https://github.com/shubiqofficial`
-- X: `https://x.com/shubiqofficial`
-- LinkedIn: `https://www.linkedin.com/in/shubiq/`
-- Instagram: `https://www.instagram.com/shubiqofficial/`
+- Website: `https://NexGravision.com/`
+- Email: `NexGravisionofficial@gmail.com`
+- GitHub: `https://github.com/NexGravisionofficial`
+- X: `https://x.com/NexGravisionofficial`
+- LinkedIn: `https://www.linkedin.com/in/NexGravision/`
+- Instagram: `https://www.instagram.com/NexGravisionofficial/`
+

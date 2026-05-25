@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { projects, getProjectBySlug } from "../../data-projects"
 import ProjectPageClient from "../../../src/app/projects/[slug]/ProjectPageClient"
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://NexGravision.com"
 
 export async function generateMetadata(): Promise<Metadata> {
   const project = getProjectBySlug("bramha-urban-performance")
@@ -15,13 +15,13 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
-    title: `${project.title} | SHUBIQ Projects`,
+    title: `${project.title} | NexGravision Projects`,
     description: project.subtitle,
     alternates: {
       canonical: `/projects/${project.slug}`,
     },
     openGraph: {
-      title: `${project.title} | SHUBIQ`,
+      title: `${project.title} | NexGravision`,
       description: project.subtitle,
       url: `${siteUrl}/projects/${project.slug}`,
       images: project.videoPoster ? [project.videoPoster] : [],
@@ -41,3 +41,4 @@ export default function BramhaUrbanPerformancePage() {
 
   return <ProjectPageClient project={project} prevProject={prevProject} nextProject={nextProject} />
 }
+

@@ -1,12 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import ThemeToggle from "./ThemeToggle"
 import { AnimatePresence, motion } from "framer-motion"
-import type { Theme } from "./ThemeToggle"
 
 const LINKS = [
   { href: "/", label: "Home" },
@@ -17,53 +16,25 @@ const LINKS = [
   { href: "/founder", label: "Founder" },
 ]
 
-const THEME_LOGOS: Record<Theme, string> = {
-  gold: "/shubiq-icons/themes/shubiq-signature-gold.svg",
-  cobalt: "/shubiq-icons/themes/shubiq-cobalt-noir.svg",
-  emerald: "/shubiq-icons/themes/shubiq-emerald-core.svg",
-  violet: "/shubiq-icons/themes/shubiq-violet-dusk.svg",
-  crimson: "/shubiq-icons/themes/shubiq-crimson-noir.svg",
-  silver: "/shubiq-icons/themes/shubiq-silver-alloy.svg",
-  amber: "/shubiq-icons/themes/shubiq-amber-smoke.svg",
-}
-
-function getCurrentTheme(): Theme {
-  if (typeof document === "undefined") return "gold"
-  const attr = document.documentElement.getAttribute("data-theme")
-  const validThemes = new Set<Theme>(["gold", "cobalt", "emerald", "violet", "crimson", "silver", "amber"])
-  return attr && validThemes.has(attr as Theme) ? (attr as Theme) : "gold"
-}
-
 export default function UnifiedNavbar() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [activeTheme, setActiveTheme] = useState<Theme>("gold")
-
-  if (pathname.startsWith("/admin")) return null
-
-  useEffect(() => {
-    const syncTheme = () => setActiveTheme(getCurrentTheme())
-    syncTheme()
-    window.addEventListener("shubiq-theme-change", syncTheme as EventListener)
-    window.addEventListener("storage", syncTheme)
-    return () => {
-      window.removeEventListener("shubiq-theme-change", syncTheme as EventListener)
-      window.removeEventListener("storage", syncTheme)
-    }
-  }, [])
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-[rgb(var(--gold-rgb)/0.18)] bg-[linear-gradient(to_bottom,rgb(var(--surface-2-rgb)/0.94),rgb(var(--surface-1-rgb)/0.86))] backdrop-blur-xl">
       <div className="mx-auto flex h-[68px] w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
-        <Link href="/" className="group flex items-center" onClick={() => setMenuOpen(false)}>
+        <Link href="/" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
           <Image
-            src={THEME_LOGOS[activeTheme]}
-            alt="SHUBIQ"
-            width={56}
-            height={56}
+            src="/nexgravision-mark.svg"
+            alt="NexGravision"
+            width={44}
+            height={44}
             priority
-            className="h-11 w-11 sm:h-12 sm:w-12 object-contain transition-opacity duration-200 group-hover:opacity-95"
+            className="h-9 w-9 object-contain transition-transform duration-200 group-hover:scale-[1.03]"
           />
+          <span className="font-cinzel text-[21px] tracking-[1px] text-cream/92 transition-colors group-hover:text-[rgb(var(--gold-light-rgb))]">
+            NexGravision
+          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
@@ -102,7 +73,7 @@ export default function UnifiedNavbar() {
             className="labs-sheen-btn hidden lg:inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-3 sm:px-4 py-2 font-rajdhani text-[9px] sm:text-[10px] uppercase tracking-[2.1px] sm:tracking-[2.4px] text-[rgb(var(--ink-rgb))] transition-colors hover:bg-[rgb(var(--gold-light-rgb))]"
             onClick={() => setMenuOpen(false)}
           >
-            Hire Us
+            Start Project
           </Link>
         </div>
       </div>
@@ -140,7 +111,7 @@ export default function UnifiedNavbar() {
               onClick={() => setMenuOpen(false)}
               className="mt-2 inline-flex w-full items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-4 py-2.5 font-rajdhani text-[10px] uppercase tracking-[2.2px] text-[rgb(var(--ink-rgb))]"
             >
-              Hire Us
+              Start Project
             </Link>
           </motion.div>
         )}
@@ -148,3 +119,4 @@ export default function UnifiedNavbar() {
     </header>
   )
 }
+

@@ -79,12 +79,12 @@ function EcoCard({ item }: { item: typeof ECOSYSTEM_ITEMS[0] }) {
   const isPlaceholderCard = isComingSoon && !item.subtitle && !item.desc && item.tags.length === 0 && !item.link
   const [titleMain, ...titleRest] = item.title.split(" ")
   const titleSecondary = titleRest.join(" ")
-  const ctaHref = item.title === "SHUBIQ Studio" ? "/shubiq-studio" : item.link
+  const ctaHref = item.title === "NexGravision Studio" ? "/shubiq-studio" : item.link
   const isInternalHref = !!ctaHref && ctaHref.startsWith("/")
   const ctaLabel =
-    item.title === "SHUBIQ Studio"
+    item.title === "NexGravision Studio"
       ? "EXPLORE STUDIO"
-      : item.title === "SHUBIQ Labs"
+      : item.title === "NexGravision Labs"
         ? "EXPLORE PRODUCTS"
         : "LEARN MORE"
 
@@ -353,3 +353,4 @@ export default function Ecosystem({ initialEcosystem }: EcosystemProps = {}) {
     </section>
   )
 }
+

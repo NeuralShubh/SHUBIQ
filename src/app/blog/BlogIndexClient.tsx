@@ -66,7 +66,7 @@ export default function BlogIndexClient() {
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <h1 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6vw,64px)] mb-4">
-              <TextReveal text="SHUBIQ" as="span" mode="chars" className="inline-block" />
+              <TextReveal text="NexGravision" as="span" mode="chars" className="inline-block" />
               <span className="text-gold"> Field Notes</span>
             </h1>
           </ScrollReveal>
@@ -174,3 +174,4 @@ export default function BlogIndexClient() {
     </main>
   )
 }
+

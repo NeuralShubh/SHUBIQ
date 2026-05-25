@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { motion } from 'framer-motion'
 import { BadgeDollarSign, Rocket, Smartphone, Target, Headset, Gauge } from 'lucide-react'
 
@@ -69,10 +69,10 @@ export default function WhyChoose() {
           className="text-center mb-14"
         >
           <span className="inline-flex items-center text-xs font-bold tracking-widest text-blue-600 bg-blue-50 border border-blue-100 rounded-full px-4 py-2 mb-4">
-            WHY SHUBIQ Studio
+            WHY NexGravision Studio
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
-            The SHUBIQ Studio Advantage
+            The NexGravision Studio Advantage
           </h2>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
             A studio-grade operating model built for ambitious teams that need clarity, speed, and measurable outcomes.
@@ -105,3 +105,4 @@ export default function WhyChoose() {
     </section>
   )
 }
+

@@ -1,4 +1,4 @@
-# SHUBIQ Setup
+# NexGravision Setup
 
 ## Run locally
 ```bash
@@ -40,3 +40,4 @@ npm run dev
 ## Notes
 - If database tables or env vars are missing, admin shows a database-required status and blocks card CRUD until fixed.
 - Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only.
+

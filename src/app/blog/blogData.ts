@@ -125,7 +125,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "p",
         content:
-          "SHUBIQ Flow was designed to align tasks, habits, and focus in a single ritual-driven workspace. The system keeps your daily execution in one place so you are not switching between apps to stay on track.",
+          "NexGravision Flow was designed to align tasks, habits, and focus in a single ritual-driven workspace. The system keeps your daily execution in one place so you are not switching between apps to stay on track.",
       },
       { type: "h2", content: "Maintaining the System Long-Term" },
       {
@@ -391,7 +391,7 @@ const BLOG_POSTS: BlogPostBase[] = [
       {
         type: "p",
         content:
-          "SHUBIQ Studio builds AI workflows around existing tooling, so teams do not need to rebuild their entire stack. The best AI implementation is often invisible, just a smoother day.",
+          "NexGravision Studio builds AI workflows around existing tooling, so teams do not need to rebuild their entire stack. The best AI implementation is often invisible, just a smoother day.",
       },
       { type: "h2", content: "Building an AI-First Team Culture" },
       {
@@ -504,3 +504,4 @@ export function getBlogPosts(): BlogPost[] {
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return getBlogPosts().find((post) => post.slug === slug)
 }
+

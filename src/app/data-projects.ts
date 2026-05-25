@@ -1,4 +1,4 @@
-﻿export interface Project {
+export interface Project {
   id: string
   slug: string
   number: string
@@ -111,15 +111,15 @@ export const projects: Project[] = [
     id: "shubiq-os",
     slug: "shubiq-os",
     number: "03",
-    title: "SHUBIQ OS",
+    title: "NexGravision OS",
     subtitle: "A business operating system for founders, agencies, and small teams.",
     description:
-      "SHUBIQ OS is a business operating system for founders, agencies, and small teams. It replaces scattered spreadsheets, invoicing tools, and project trackers with one clean command center. It manages clients, projects, invoices, income, and expenses while providing business analytics across Studio and Labs. Document workflows handle quotations, proposals, and invoices with auto numbering and PDF export, while revenue and expense modules show real-time cashflow, profitability, and subscription trends. Admin settings manage business profile details, tax, currency, and banking configuration for invoicing.",
+      "NexGravision OS is a business operating system for founders, agencies, and small teams. It replaces scattered spreadsheets, invoicing tools, and project trackers with one clean command center. It manages clients, projects, invoices, income, and expenses while providing business analytics across Studio and Labs. Document workflows handle quotations, proposals, and invoices with auto numbering and PDF export, while revenue and expense modules show real-time cashflow, profitability, and subscription trends. Admin settings manage business profile details, tax, currency, and banking configuration for invoicing.",
     category: "Business",
     status: "Live",
     videoUrl: "https://drive.google.com/file/d/12XOuH7tOKqSKkYrZNqdcMjbuyh5j649a/preview",
-    videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/SHUBIQ%20OS.png",
-    liveUrl: "https://os.shubiq.com",
+    videoPoster: "https://cglzadzphyxgiqwwuwle.supabase.co/storage/v1/object/public/Thumbnails%20for%20Projects/NexGravision%20OS.png",
+    liveUrl: "https://os.NexGravision.com",
     githubUrl: "",
     techStack: [
       "HTML",
@@ -159,3 +159,4 @@ export function getProjectBySlug(slug: string): Project | undefined {
 export function getAllProjectSlugs(): string[] {
   return projects.map((project) => project.slug)
 }
+

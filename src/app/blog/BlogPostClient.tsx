@@ -43,7 +43,7 @@ function renderBlock(block: BlogBlock, index: number) {
 
 function ShareButtons({ title, slug }: { title: string; slug: string }) {
   const [copied, setCopied] = useState(false)
-  const url = `https://shubiq.com/blog/${slug}`
+  const url = `https://NexGravision.com/blog/${slug}`
   const shareLinks = [
     {
       label: "X / Twitter",
@@ -201,9 +201,9 @@ export default function BlogPostClient({ post, allPosts }: { post: BlogPost; all
               </div>
               <div>
                 <p className="font-semibold text-sm">Shubham</p>
-                <p className="text-cream/60 text-xs mb-2">Founder, SHUBIQ</p>
+                <p className="text-cream/60 text-xs mb-2">Founder, NexGravision</p>
                 <p className="text-cream/70 text-sm leading-relaxed font-cormorant">
-                  Building high-performance digital platforms and productivity systems at SHUBIQ.
+                  Building high-performance digital platforms and productivity systems at NexGravision.
                 </p>
                 <Link href="/founder" className="text-gold text-xs font-medium mt-2 inline-block hover:underline">
                   Learn more →
@@ -214,7 +214,7 @@ export default function BlogPostClient({ post, allPosts }: { post: BlogPost; all
 
           <ScrollReveal>
             <section className="mt-16 pt-12 border-t border-[rgb(var(--cream-rgb)/0.12)]">
-              <h2 className="text-xl font-bold mb-6 font-cinzel">More from SHUBIQ</h2>
+              <h2 className="text-xl font-bold mb-6 font-cinzel">More from NexGravision</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {relatedPosts.map((related) => (
                   <Link key={related.slug} href={`/blog/${related.slug}`}>
@@ -235,3 +235,4 @@ export default function BlogPostClient({ post, allPosts }: { post: BlogPost; all
     </main>
   )
 }
+

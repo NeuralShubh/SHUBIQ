@@ -1,342 +1,215 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
-import { motion, useReducedMotion } from "framer-motion"
-import { SOCIAL_LINKS } from "../data"
-import { useInViewOnce } from "../lib/gsap-hooks"
-import { DEFAULT_HOME_CONTENT, mergeHomeManagedContent } from "../content/managedContent"
 
-const EASE_PREMIUM = [0.25, 0.46, 0.45, 0.94] as const
+import Link from "next/link"
+import Image from "next/image"
+import { motion, useReducedMotion } from "framer-motion"
+import { ArrowUpRight, Gauge, Layers3, ShieldCheck, Smartphone, Sparkles } from "lucide-react"
+import { projects as featuredProjects } from "../data-projects"
+
+const stats = [
+  { value: "30+", label: "premium systems shipped" },
+  { value: "100%", label: "mobile-first by design" },
+  { value: "AI", label: "ready workflows and automation" },
+]
+
+const pillars = [
+  { icon: Smartphone, label: "Mobile-first", copy: "Layouts that feel native on small screens and effortless on desktop." },
+  { icon: Layers3, label: "Systems", copy: "Editorial interfaces, dashboards, and product surfaces with clear hierarchy." },
+  { icon: Gauge, label: "Performance", copy: "Fast loads, clean interactions, and motion used only where it adds value." },
+  { icon: ShieldCheck, label: "Trust", copy: "Premium presentation that makes the work feel more established instantly." },
+]
+
+const showcase = featuredProjects.slice(0, 3).map((project, index) => ({
+  title: project.title,
+  subtitle: project.subtitle,
+  image: project.videoPoster,
+  href: `/projects/${project.slug}`,
+  accent: index === 0 ? "Featured launch" : index === 1 ? "Operational clarity" : "Business OS",
+}))
 
 export default function Hero() {
-  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("120px 0px")
-  const ring1Ref = useRef<HTMLDivElement>(null)
-  const ring2Ref = useRef<HTMLDivElement>(null)
-  const ring3Ref = useRef<HTMLDivElement>(null)
   const prefersReduced = useReducedMotion()
-  const [ringsReady, setRingsReady] = useState(false)
-  const [wordmarkReady, setWordmarkReady] = useState(false)
-  const [taglineReady, setTaglineReady] = useState(false)
-  const [ctaReady, setCtaReady] = useState(false)
-  const [socialReady, setSocialReady] = useState(false)
-  const [homeContent, setHomeContent] = useState(DEFAULT_HOME_CONTENT)
-
-  // Ring rotation RAF
-  useEffect(() => {
-    let a1 = 0, a2 = 0, a3 = 0, rafId: number
-    const rotate = () => {
-      a1 += 0.0024; a2 -= 0.00144; a3 += 0.0008
-      if (ring1Ref.current) ring1Ref.current.style.rotate = `${a1}rad`
-      if (ring2Ref.current) ring2Ref.current.style.rotate = `${a2}rad`
-      if (ring3Ref.current) ring3Ref.current.style.rotate = `${a3}rad`
-      rafId = requestAnimationFrame(rotate)
-    }
-    rafId = requestAnimationFrame(rotate)
-    return () => cancelAnimationFrame(rafId)
-  }, [])
-
-  // Ring parallax on scroll
-  useEffect(() => {
-    if (!sectionRef.current) return
-    const handleScroll = () => {
-      const rect = sectionRef.current?.getBoundingClientRect()
-      if (!rect) return
-      const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)))
-      if (ring1Ref.current) ring1Ref.current.style.transform = `translateY(${-30 * progress}%)`
-      if (ring2Ref.current) ring2Ref.current.style.transform = `translateY(${-20 * progress}%)`
-    }
-    handleScroll()
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    window.addEventListener("resize", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleScroll)
-    }
-  }, [sectionRef])
-
-  // Allow hero CTAs to be clickable while the hero is active
-  useEffect(() => {
-    const updateHeroState = () => {
-      const active = window.scrollY < window.innerHeight * 0.65
-      document.body.classList.toggle("hero-active", active)
-    }
-    updateHeroState()
-    window.addEventListener("scroll", updateHeroState, { passive: true })
-    window.addEventListener("resize", updateHeroState)
-    return () => {
-      window.removeEventListener("scroll", updateHeroState)
-      window.removeEventListener("resize", updateHeroState)
-      document.body.classList.remove("hero-active")
-    }
-  }, [])
-
-  // Delay hero sequence until after loading screen exit
-  useEffect(() => {
-    let timeoutId: number | undefined
-    const saved = window.sessionStorage.getItem("shubiq-loaded")
-    const base = saved ? 220 : 2300
-    timeoutId = window.setTimeout(() => setRingsReady(true), base)
-    const t2 = window.setTimeout(() => setWordmarkReady(true), base + 700)
-    const t3 = window.setTimeout(() => setTaglineReady(true), base + 1050)
-    const t4 = window.setTimeout(() => setCtaReady(true), base + 1350)
-    const t5 = window.setTimeout(() => setSocialReady(true), base + 1550)
-    return () => {
-      if (timeoutId) window.clearTimeout(timeoutId)
-      window.clearTimeout(t2)
-      window.clearTimeout(t3)
-      window.clearTimeout(t4)
-      window.clearTimeout(t5)
-    }
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-    async function loadHomeContent() {
-      try {
-        const res = await fetch("/api/content?key=home_content", { cache: "no-store" })
-        if (!res.ok) return
-        const json = await res.json()
-        if (!cancelled) {
-          setHomeContent(mergeHomeManagedContent(json?.content))
-        }
-      } catch {
-        // keep defaults
-      }
-    }
-    loadHomeContent()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    if ((window as any).__lenis) {
-      ;(window as any).__lenis.scrollTo(el, { offset: -80 })
-    } else {
-      el.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
-  // Shared entrance transition factory
-  const fadeUp = (delay: number, duration = 0.5) =>
+  const enter = (delay = 0) =>
     prefersReduced
-      ? {}
+      ? { initial: false, animate: { opacity: 1, y: 0 } }
       : {
-          initial: { opacity: 0, y: 20 },
+          initial: { opacity: 0, y: 24 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration, delay, ease: "easeOut" as const },
+          transition: { duration: 0.75, delay, ease: "easeOut" as const },
         }
 
   return (
-    <section
-      id="home"
-      ref={sectionRef}
-      className="relative isolate min-h-screen max-[768px]:min-h-[66svh] flex items-center max-[768px]:items-start justify-center overflow-visible px-5 max-[768px]:px-[14px] sm:px-6 pt-[14vh] max-[768px]:pt-[24vh] pb-10 max-[768px]:pb-0 sm:pb-16"
-    >
-      {/* Background grid */}
-      <div
-        className="hero-bg hero-grid-overlay absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgb(var(--gold-rgb) / 0.05) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--gold-rgb) / 0.05) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      />
-      <motion.div
-        className="hero-bg hero-center-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] md:w-[1100px] md:h-[1100px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.09) 0%, transparent 65%)" }}
-        initial={prefersReduced ? false : { opacity: 0, scale: 0.92 }}
-        animate={ringsReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
-        transition={{ duration: 0.9, ease: EASE_PREMIUM }}
-      />
+    <section id="home" className="relative overflow-hidden px-4 pb-14 pt-24 sm:px-6 sm:pb-16 sm:pt-28 lg:px-8 lg:pt-32">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_65%_45%_at_50%_18%,rgb(var(--gold-rgb)/0.14),transparent_62%),radial-gradient(ellipse_38%_28%_at_10%_12%,rgb(var(--gold-rgb)/0.12),transparent_60%),radial-gradient(ellipse_35%_28%_at_90%_22%,rgb(var(--gold-rgb)/0.09),transparent_58%),linear-gradient(180deg,rgb(var(--surface-0-rgb)),rgb(var(--ink-rgb)))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 hero-grid-overlay opacity-50" />
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[46rem] w-[46rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgb(var(--gold-rgb)/0.12),transparent_68%)] blur-3xl" />
 
-      {/* Animated rings (CSS-based, keep existing) */}
-      <div
-        ref={ring1Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 max-[768px]:scale-[0.86] ${isInView && ringsReady ? "in-view" : ""}`}
-        style={{ width: 720, height: 720, marginLeft: -360, marginTop: -360, opacity: 0, animationDelay: "0.1s" }}
-      >
-        <div className="hero-ring-1-border absolute inset-0 rounded-full border border-[rgb(var(--gold-rgb)/0.14)]" />
-        <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-gold/80 -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-[8%] w-1 h-1 rounded-full bg-gold/25" />
-        <div className="absolute top-1/3 right-0 w-1.5 h-1.5 rounded-full bg-gold/15" />
-      </div>
-      <div
-        ref={ring2Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 max-[768px]:scale-[0.86] ${isInView && ringsReady ? "in-view" : ""}`}
-        style={{ width: 460, height: 460, marginLeft: -230, marginTop: -230, opacity: 0, animationDelay: "0.28s" }}
-      >
-        <div className="hero-ring-2-border absolute inset-0 rounded-full" style={{ border: "1px dashed rgb(var(--gold-rgb) / 0.12)" }} />
-        <div className="absolute top-0 left-1/2 w-1 h-1 rounded-full bg-gold/30 -translate-x-1/2" />
-      </div>
-      <div
-        ref={ring3Ref}
-        className={`hero-bg hero-ring absolute top-1/2 left-1/2 max-[768px]:scale-[0.86] ${isInView && ringsReady ? "in-view" : ""}`}
-        style={{ width: 270, height: 270, marginLeft: -135, marginTop: -135, opacity: 0, animationDelay: "0.46s" }}
-      >
-        <div className="hero-ring-3-border absolute inset-0 rounded-full" style={{ border: "1px solid rgb(var(--gold-rgb) / 0.1)" }} />
-      </div>
-
-      {/* Main content, cinematic entrance */}
-      <div className="hero-content relative z-20 text-center w-full mx-auto md:-translate-y-10 max-[768px]:translate-y-0 overflow-visible">
-
-        {/* SHUBIQ wordmark, blur + scale entrance */}
-        <div className="inline-block w-fit overflow-visible pb-[0.08em] md:pb-[0.12em] pr-[0.12em] md:pr-[0.18em] relative">
-          <div
-            className="absolute inset-0 -z-10 blur-2xl opacity-40"
-            style={{
-              background:
-                "radial-gradient(circle, rgb(var(--gold-rgb) / 0.22) 0%, transparent 70%)",
-              transform: "translateY(6px)",
-            }}
-          />
-        {(() => {
-          const letters = ["S", "H", "U", "B", "I", "Q"]
-          const offsets = [
-            { x: -90, y: -70, rotate: -14 },
-            { x: 80, y: -82, rotate: 12 },
-            { x: -64, y: 70, rotate: -11 },
-            { x: 72, y: 54, rotate: 13 },
-            { x: -88, y: -12, rotate: -9 },
-            { x: 96, y: 22, rotate: 10 },
-          ]
-          const containerVariants = {
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.12,
-                delayChildren: 0.05,
-              },
-            },
-          }
-          const letterVariants = {
-            hidden: (i: number) =>
-              prefersReduced
-                ? { opacity: 1 }
-                : {
-                    opacity: 0,
-                    x: offsets[i].x,
-                    y: offsets[i].y,
-                    rotate: offsets[i].rotate,
-                    scale: 0.92,
-                    filter: "blur(8px)",
-                  },
-            visible: {
-              opacity: 1,
-              x: 0,
-              y: 0,
-              rotate: 0,
-              scale: 1,
-              filter: "blur(0px)",
-              transition: { duration: 0.9, ease: EASE_PREMIUM },
-            },
-          }
-
-          return (
-            <motion.h1
-              className="font-cinzel font-normal text-[clamp(98px,20.1vw,206px)] max-[768px]:text-[clamp(72px,23vw,104px)] md:text-[clamp(108px,12.6vw,201px)] leading-[1.12] max-[768px]:leading-[1.04] md:leading-[1.15] tracking-[1.5px] max-[768px]:tracking-[0.9px] md:tracking-[1.6px] mb-0 perspective-1000 pb-[0.24em] md:pb-[0.3em] px-[0.22em] max-[768px]:px-[0.1em] md:px-[0.26em] inline-block overflow-visible whitespace-nowrap -mt-[10px]"
-              style={{ perspective: "800px", fontFamily: "'Algerian','Cinzel',serif" }}
-              variants={containerVariants}
-              initial="hidden"
-              animate={wordmarkReady ? "visible" : "hidden"}
-            >
-              {letters.map((letter, i) => (
-                <motion.span
-                  key={letter}
-                  custom={i}
-                  variants={letterVariants}
-                  className="inline-block text-gradient-gold"
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </motion.h1>
-          )
-        })()}
-        </div>
-
-        {/* Tagline with lines */}
+      <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-12 xl:gap-16">
         <motion.div
-          className="hero-tagline-row mb-2 max-[768px]:mb-1 md:mb-3 -mt-12 max-[768px]:mt-1 md:-mt-16"
-          initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
-          animate={taglineReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-          transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
+          className="relative z-10 flex flex-col justify-center"
+          {...enter(0)}
         >
-          <span className="hero-tagline-line" />
-          <span className="site-hero-tagline font-cormorant font-medium italic text-gold uppercase tracking-[3.6px] md:tracking-[7px]">
-            {homeContent.heroTagline}
-          </span>
-          <span className="hero-tagline-line" />
-        </motion.div>
-
-        {/* Spacing before CTAs */}
-        <div className="h-4 sm:h-10 max-[768px]:h-20" />
-
-        <div className="max-[768px]:mx-auto max-[768px]:w-full max-[768px]:max-w-[342px] max-[768px]:rounded-[16px] max-[768px]:bg-[linear-gradient(180deg,rgb(var(--gold-rgb)/0.06),rgb(var(--surface-1-rgb)/0.04))] max-[768px]:px-1 max-[768px]:pt-1 max-[768px]:pb-0">
-          {/* CTA Buttons */}
           <motion.div
-            className="hero-interactive relative z-30 flex gap-6 max-[768px]:gap-2.5 sm:gap-7 justify-center max-[768px]:flex-col max-[768px]:items-center max-[768px]:w-full max-[768px]:max-w-[360px] max-[768px]:mx-auto flex-wrap mt-8 max-[768px]:mt-0 sm:mt-14 mb-5 max-[768px]:mb-3 sm:mb-6"
-            initial={prefersReduced ? {} : { opacity: 0, y: 18 }}
-            animate={ctaReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-            transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
+            className="mb-6 inline-flex items-center gap-2 self-start rounded-full border border-[rgb(var(--gold-rgb)/0.22)] bg-[rgb(var(--surface-2-rgb)/0.55)] px-4 py-2 text-[10px] uppercase tracking-[0.42em] text-cream/72 backdrop-blur-md sm:text-[11px]"
+            {...enter(0)}
           >
-            <button
-              type="button"
-              onClick={() => scrollTo("projects")}
-              data-cursor="View"
-              className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[76%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[252px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[10px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
-            >
-              <span className="relative z-[1]">{homeContent.heroExploreCta}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollTo("contact")}
-              data-cursor="Hire"
-              className="hero-cta cta-ghost w-full sm:w-auto max-[768px]:w-[76%] min-w-0 sm:min-w-[220px] max-w-none max-[768px]:max-w-[252px] sm:max-w-[320px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 max-[768px]:py-[10px] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
-            >
-              <span className="relative z-[1]">{homeContent.heroHireCta}</span>
-            </button>
+            <Sparkles size={13} className="text-gold" />
+            NexGravision studio
           </motion.div>
 
-          {/* Social links */}
-          <motion.div
-            className="mx-auto w-full max-[768px]:max-w-[320px] sm:w-fit border-t border-gold/15 max-[768px]:border-t-0 pt-4 sm:pt-5 max-[768px]:pt-0 grid max-[768px]:grid-cols-3 grid-cols-2 sm:flex max-[768px]:gap-x-2 gap-x-5 sm:gap-x-7 max-[768px]:gap-y-2 gap-y-3 sm:gap-8 justify-center items-center mb-6 max-[768px]:mb-0 sm:mb-8 mt-6 max-[768px]:mt-14 sm:mt-8"
-            initial={prefersReduced ? {} : { opacity: 0, y: 16 }}
-            animate={socialReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            transition={{ duration: 0.55, delay: 0.05, ease: EASE_PREMIUM }}
+          <motion.h1
+            className="max-w-4xl font-cinzel text-[clamp(44px,10.5vw,112px)] leading-[0.9] tracking-[0.01em] text-cream sm:text-[clamp(56px,9vw,116px)] lg:text-[clamp(64px,6.7vw,106px)]"
+            {...enter(0.06)}
           >
-            {SOCIAL_LINKS.map((s) => (
-              <div key={s.label} className="flex items-center justify-center">
-                <a
-                  href={s.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="site-hero-social font-rajdhani text-[11px] sm:text-[13px] tracking-[1.2px] sm:tracking-[3.1px] text-cream/70 uppercase hover:text-gold transition-colors duration-300 text-center whitespace-nowrap"
-                >
-                  {s.label}
-                </a>
+            Premium digital systems
+            <span className="block text-gradient-gold">built to feel inevitable.</span>
+          </motion.h1>
+
+          <motion.p
+            className="mt-6 max-w-2xl text-[17px] leading-[1.8] text-cream/78 sm:text-[18px] lg:text-[19px]"
+            {...enter(0.14)}
+          >
+            We design and build polished websites, internal tools, and AI-enabled products for ambitious brands
+            that need a sharper first impression and a cleaner execution layer.
+          </motion.p>
+
+          <motion.div
+            className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4"
+            {...enter(0.22)}
+          >
+            <Link
+              href="#projects"
+              className="cta-premium inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.22)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[220px]"
+            >
+              Explore selected work
+              <ArrowUpRight size={16} />
+            </Link>
+            <Link
+              href="#contact"
+              className="cta-ghost inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.34)] px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[220px]"
+            >
+              Start a project
+              <ArrowUpRight size={16} />
+            </Link>
+          </motion.div>
+
+          <motion.div
+            className="mt-8 grid gap-3 sm:grid-cols-3"
+            {...enter(0.3)}
+          >
+            {stats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-[20px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--surface-2-rgb)/0.76),rgb(var(--surface-1-rgb)/0.66))] p-4 backdrop-blur-md"
+              >
+                <div className="font-cinzel text-[28px] leading-none text-gold">{stat.value}</div>
+                <div className="mt-2 text-[11px] uppercase tracking-[0.28em] text-cream/60">{stat.label}</div>
               </div>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
+
+        <motion.div
+          className="relative z-10"
+          {...enter(0.1)}
+        >
+          <div className="relative overflow-hidden rounded-[32px] border border-[rgb(var(--gold-rgb)/0.18)] bg-[linear-gradient(180deg,rgb(var(--surface-2-rgb)/0.9),rgb(var(--surface-1-rgb)/0.7))] p-3 shadow-[0_24px_80px_rgb(0_0_0/0.34)] backdrop-blur-xl sm:p-4">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgb(var(--gold-rgb)/0.16),transparent_32%),radial-gradient(circle_at_80%_12%,rgb(var(--gold-rgb)/0.08),transparent_24%),linear-gradient(135deg,transparent_40%,rgb(var(--gold-rgb)/0.05),transparent_72%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgb(var(--cream-rgb)/0.04)_1px,transparent_1px),linear-gradient(rgb(var(--cream-rgb)/0.04)_1px,transparent_1px)] bg-[size:36px_36px] opacity-30 [mask-image:radial-gradient(circle_at_center,black_40%,transparent_82%)]" />
+
+            <div className="relative grid gap-3 sm:gap-4">
+              <motion.div
+                className="group relative min-h-[320px] overflow-hidden rounded-[26px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--ink-rgb))]"
+                {...enter(0.08)}
+              >
+                <Image
+                  src={showcase[0].image}
+                  alt={showcase[0].title}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_12%,rgb(var(--ink-rgb)/0.18)_48%,rgb(var(--ink-rgb)/0.88)_100%)]" />
+                <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-3">
+                  <span className="inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgb(var(--ink-rgb)/0.44)] px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-cream/70 backdrop-blur">
+                    {showcase[0].accent}
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-[rgb(var(--gold-rgb)/0.22)] bg-[rgb(var(--surface-2-rgb)/0.72)] px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-gold">
+                    Live project
+                    <ArrowUpRight size={12} />
+                  </span>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                  <div className="max-w-lg">
+                    <p className="font-rajdhani text-[10px] uppercase tracking-[0.34em] text-cream/55">Featured build</p>
+                    <h2 className="mt-2 font-cinzel text-[clamp(26px,4vw,42px)] leading-[0.95] text-cream">
+                      {showcase[0].title}
+                    </h2>
+                    <p className="mt-3 max-w-xl text-[14px] leading-[1.7] text-cream/72 sm:text-[15px]">
+                      {showcase[0].subtitle}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {showcase.slice(1).map((item, index) => (
+                  <motion.div key={item.title} {...enter(0.16 + index * 0.08)}>
+                    <Link
+                      href={item.href}
+                      className="group relative block min-h-[190px] overflow-hidden rounded-[22px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.54)]"
+                    >
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 25vw"
+                        className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_8%,rgb(var(--ink-rgb)/0.18)_54%,rgb(var(--ink-rgb)/0.92)_100%)]" />
+                      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent opacity-80" />
+                      <div className="absolute left-4 top-4 inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgb(var(--ink-rgb)/0.4)] px-3 py-1 text-[9px] uppercase tracking-[0.3em] text-cream/60 backdrop-blur">
+                        {item.accent}
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <p className="font-rajdhani text-[10px] uppercase tracking-[0.26em] text-cream/55">Selected work</p>
+                        <h3 className="mt-1 font-cinzel text-[22px] leading-none text-cream">{item.title}</h3>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Scroll indicator with bounce */}
-        <motion.div
-          className="absolute bottom-1 sm:bottom-2 left-0 right-0 hidden sm:flex flex-col items-center gap-2 opacity-70"
-        {...fadeUp(1.1, 0.4)}
+      <motion.div
+        className="mx-auto mt-8 grid w-full max-w-7xl gap-3 sm:grid-cols-2 lg:grid-cols-4"
+        initial={prefersReduced ? false : { opacity: 0, y: 18 }}
+        whileInView={prefersReduced ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
-        <motion.span
-          className="font-rajdhani text-[14px] tracking-[5px] text-cream/60 uppercase"
-          animate={prefersReduced ? {} : { y: [0, 8, 0] }}
-          transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.5 }}
-        >
-          Scroll
-        </motion.span>
-        <div className="w-px h-12 overflow-hidden">
-          <div className="w-full h-full bg-gradient-to-b from-gold to-transparent animate-scroll-line" />
-        </div>
+        {pillars.map((pillar) => {
+          const Icon = pillar.icon
+          return (
+            <div
+              key={pillar.label}
+              className="rounded-[22px] border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-4 backdrop-blur-md"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgb(var(--gold-rgb)/0.08)] text-gold">
+                  <Icon size={18} />
+                </div>
+                <div>
+                  <h3 className="font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream/78">{pillar.label}</h3>
+                  <p className="mt-1 text-[13px] leading-[1.6] text-cream/65">{pillar.copy}</p>
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </motion.div>
     </section>
   )

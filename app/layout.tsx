@@ -16,18 +16,18 @@ const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cor
 const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", weight: ["300", "400", "500", "600", "700"] })
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", weight: ["500", "700", "900"] })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://NexGravision.com"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "SHUBIQ: Intelligence That Wins",
-    template: "%s | SHUBIQ",
+    default: "NexGravision: Intelligence That Wins",
+    template: "%s | NexGravision",
   },
-  description: "SHUBIQ builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
-  applicationName: "SHUBIQ",
+  description: "NexGravision builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
+  applicationName: "NexGravision",
   creator: "Shubham",
-  publisher: "SHUBIQ",
+  publisher: "NexGravision",
   alternates: {
     canonical: "/",
   },
@@ -59,22 +59,22 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "SHUBIQ",
-    title: "SHUBIQ: Intelligence That Wins",
-    description: "SHUBIQ builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
+    siteName: "NexGravision",
+    title: "NexGravision: Intelligence That Wins",
+    description: "NexGravision builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "SHUBIQ",
+        alt: "NexGravision",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SHUBIQ: Intelligence That Wins",
-    description: "SHUBIQ builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
+    title: "NexGravision: Intelligence That Wins",
+    description: "NexGravision builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
     images: ["/opengraph-image"],
   },
 }
@@ -83,24 +83,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "SHUBIQ",
+    name: "NexGravision",
     url: siteUrl,
     founder: {
       "@type": "Person",
       name: "Shubham",
     },
     sameAs: [
-      "https://github.com/shubiqofficial",
-      "https://x.com/shubiqofficial",
-      "https://instagram.com/shubiqofficial",
-      "https://linkedin.com/company/shubiqofficial",
+      "https://github.com/NexGravisionofficial",
+      "https://x.com/NexGravisionofficial",
+      "https://instagram.com/NexGravisionofficial",
+      "https://linkedin.com/company/NexGravisionofficial",
     ],
   }
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "SHUBIQ",
+    name: "NexGravision",
     url: siteUrl,
   }
 
@@ -122,3 +122,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
+

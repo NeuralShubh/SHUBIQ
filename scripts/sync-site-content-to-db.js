@@ -15,7 +15,7 @@ function readDatabaseUrl() {
 
 const MAIN_PROJECTS = [
   {
-    name: "SHUBIQ Studio",
+    name: "NexGravision Studio",
     tag: "Agency | Live",
     desc: "A modern business platform built with Next.js, Tailwind CSS, and Supabase, delivering fast, conversion-focused digital experiences for growing brands.",
     tech: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
@@ -90,9 +90,9 @@ const MAIN_SERVICES = [
 const MAIN_ECOSYSTEM = [
   {
     type: "agency",
-    title: "SHUBIQ Studio",
+    title: "NexGravision Studio",
     subtitle: "DIGITAL ENGINEERING AGENCY",
-    desc: "SHUBIQ Studio partners with brands and founders to design, build, and launch websites, web applications, and custom software. Each project is crafted with precision and aligned with clear business goals.",
+    desc: "NexGravision Studio partners with brands and founders to design, build, and launch websites, web applications, and custom software. Each project is crafted with precision and aligned with clear business goals.",
     icon: "?",
     color: "rgb(var(--gold-rgb))",
     status: "live",
@@ -102,9 +102,9 @@ const MAIN_ECOSYSTEM = [
   },
   {
     type: "app",
-    title: "SHUBIQ Labs",
+    title: "NexGravision Labs",
     subtitle: "OWNED PRODUCT DEVELOPMENT",
-    desc: "SHUBIQ Labs is where we design, build, and launch our own web and mobile applications under the SHUBIQ ecosystem. Every product is created in-house, driven by our vision, and engineered for clarity, performance, and long-term growth.",
+    desc: "NexGravision Labs is where we design, build, and launch our own web and mobile applications under the NexGravision ecosystem. Every product is created in-house, driven by our vision, and engineered for clarity, performance, and long-term growth.",
     icon: "?",
     color: "rgb(var(--gold-dark-rgb))",
     status: "in_dev",
@@ -116,7 +116,7 @@ const MAIN_ECOSYSTEM = [
 
 const STUDIO_PORTFOLIO = [
   {
-    name: "SHUBIQ",
+    name: "NexGravision",
     tag: "Personal Brand Ecosystem",
     desc: "A structured digital ecosystem integrating brand presence, engineered systems, and scalable product layers under a unified architecture.",
     impact: "Unified multiple digital systems into one cohesive brand infrastructure.",
@@ -430,3 +430,4 @@ main().catch((error) => {
   console.error("SYNC_FAILED", error.message)
   process.exit(1)
 })
+

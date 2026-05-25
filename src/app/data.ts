@@ -35,9 +35,9 @@ export const ECOSYSTEM_ITEMS = [
   {
     id: "1",
     type: "agency",
-    title: "SHUBIQ Studio",
+    title: "NexGravision Studio",
     subtitle: "DIGITAL ENGINEERING AGENCY",
-    desc: "SHUBIQ Studio partners with brands and founders to design, build, and launch websites, web applications, and custom software. Each project is crafted with precision and aligned with clear business goals.",
+    desc: "NexGravision Studio partners with brands and founders to design, build, and launch websites, web applications, and custom software. Each project is crafted with precision and aligned with clear business goals.",
     icon: "?",
     color: "rgb(var(--gold-rgb))",
     status: "live",
@@ -49,9 +49,9 @@ export const ECOSYSTEM_ITEMS = [
   {
     id: "2",
     type: "app",
-    title: "SHUBIQ Labs",
+    title: "NexGravision Labs",
     subtitle: "OWNED PRODUCT DEVELOPMENT",
-    desc: "SHUBIQ Labs is where we design, build, and launch our own web and mobile applications under the SHUBIQ ecosystem. Every product is created in-house, driven by our vision, and engineered for clarity, performance, and long-term growth.",
+    desc: "NexGravision Labs is where we design, build, and launch our own web and mobile applications under the NexGravision ecosystem. Every product is created in-house, driven by our vision, and engineered for clarity, performance, and long-term growth.",
     icon: "?",
     color: "rgb(var(--gold-dark-rgb))",
     status: "live",
@@ -63,12 +63,13 @@ export const ECOSYSTEM_ITEMS = [
 ];
 
 export const SOCIAL_LINKS = [
-  { label: "LinkedIn", url: "https://linkedin.com/company/shubiqofficial", handle: "shubiqofficial" },
-  { label: "GitHub", url: "https://github.com/shubiqofficial", handle: "shubiqofficial" },
-  { label: "Instagram", url: "https://instagram.com/shubiqofficial", handle: "@shubiqofficial" },
+  { label: "LinkedIn", url: "https://linkedin.com/company/NexGravisionofficial", handle: "NexGravisionofficial" },
+  { label: "GitHub", url: "https://github.com/NexGravisionofficial", handle: "NexGravisionofficial" },
+  { label: "Instagram", url: "https://instagram.com/NexGravisionofficial", handle: "@NexGravisionofficial" },
 ];
 
 export const NAV_LINKS = ["Home", "About", "Services", "Projects", "Ecosystem", "Studio", "Labs", "Contact"];
+
 
 
 

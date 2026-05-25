@@ -1,7 +1,7 @@
 // src/components/WhatsAppFloat.tsx
 'use client'
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919579266234'
-const MESSAGE = encodeURIComponent("Hello SHUBIQ Studio, I'm interested in starting a digital project.")
+const MESSAGE = encodeURIComponent("Hello NexGravision Studio, I'm interested in starting a digital project.")
 
 export default function WhatsAppFloat() {
   return (
@@ -18,3 +18,4 @@ export default function WhatsAppFloat() {
     </a>
   )
 }
+

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import {
@@ -19,8 +19,7 @@ import {
   Zap,
 } from "lucide-react"
 import { LAB_PRODUCTS } from "../data-labs"
-import SectionDivider from "../components/SectionDivider"
-import { DEFAULT_LABS_CONTENT, mergeLabsManagedContent } from "../content/managedContent"
+import LabsNavbar from "./LabsNavbar"
 
 function ProductIcon({ category }: { category: string }) {
   if (category === "Mobile App") return <Smartphone size={18} className="text-[rgb(var(--gold-rgb))]" />
@@ -56,26 +55,6 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export default function LabsPageClient() {
-  const [labsContent, setLabsContent] = useState(DEFAULT_LABS_CONTENT)
-
-  useEffect(() => {
-    let cancelled = false
-    async function loadLabsContent() {
-      try {
-        const res = await fetch("/api/content?key=labs_content", { cache: "no-store" })
-        if (!res.ok) return
-        const json = await res.json()
-        if (!cancelled) setLabsContent(mergeLabsManagedContent(json?.content))
-      } catch {
-        // fallback to defaults
-      }
-    }
-    loadLabsContent()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   const orderedProducts = useMemo(() => {
     const flow = LAB_PRODUCTS.find((product) => product.id === "shubiq-flow")
     const atlas = LAB_PRODUCTS.find((product) => product.id === "future-web")
@@ -185,7 +164,8 @@ export default function LabsPageClient() {
   ]
 
   return (
-    <main className="section-rhythm labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
+    <main className="labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
+      <LabsNavbar />
       <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
       <div className="labs-noise-layer pointer-events-none absolute inset-0" />
       <div className="labs-glow-orb pointer-events-none absolute -left-28 top-28 h-72 w-72 rounded-full" />
@@ -201,7 +181,7 @@ export default function LabsPageClient() {
           >
             <Sparkles size={14} className="text-[rgb(var(--gold-rgb))]" />
             <span className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">
-              {labsContent.badgeLabel}
+              NexGravision Labs Product Division
             </span>
           </motion.div>
 
@@ -211,8 +191,8 @@ export default function LabsPageClient() {
             transition={{ duration: 0.8, delay: 0.08 }}
             className="mt-6 max-w-5xl font-shubiq-heading text-[clamp(40px,7vw,92px)] leading-[0.92] text-cream"
           >
-            {labsContent.heroTitleLine1}
-            <span className="block text-[rgb(var(--gold-rgb))]">{labsContent.heroTitleLine2}</span>
+            Systems For
+            <span className="block text-[rgb(var(--gold-rgb))]">Elite Execution</span>
           </motion.h1>
 
           <motion.p
@@ -221,7 +201,8 @@ export default function LabsPageClient() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="mt-6 max-w-3xl font-cormorant text-[clamp(17px,2.1vw,25px)] leading-[1.48] text-cream/78"
           >
-            {labsContent.heroDescription}
+            NexGravision Labs builds precision products for people who treat performance as craft. Every app is engineered to remove noise,
+            accelerate decisions, and compound execution quality over time.
           </motion.p>
 
           <motion.div
@@ -234,14 +215,14 @@ export default function LabsPageClient() {
               href="/shubiq-labs/shubiq-flow"
               className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
             >
-              {labsContent.primaryCta}
+              Explore Flow Beta
               <ArrowRight size={14} />
             </Link>
             <a
-              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Early%20Access"
+              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Early%20Access"
               className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.24)] bg-[rgb(var(--cream-rgb)/0.02)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
             >
-              {labsContent.secondaryCta}
+              Join Early Access
               <ArrowUpRight size={14} />
             </a>
           </motion.div>
@@ -265,8 +246,6 @@ export default function LabsPageClient() {
           </div>
         </div>
       </section>
-
-      <SectionDivider />
 
       <section className="relative px-5 py-14 sm:px-8 sm:py-16">
         <div className="mx-auto max-w-6xl">
@@ -354,8 +333,6 @@ export default function LabsPageClient() {
         </div>
       </section>
 
-      <SectionDivider />
-
       <section className="relative px-5 pb-20 pt-10 sm:px-8 sm:pb-24">
         <div className="mx-auto mb-10 grid max-w-6xl gap-6 lg:grid-cols-2">
           <motion.div
@@ -409,7 +386,7 @@ export default function LabsPageClient() {
               ))}
             </div>
             <a
-              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Track%20Request"
+              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Track%20Request"
               className="labs-sheen-btn mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
             >
               Request Track Access
@@ -527,7 +504,7 @@ export default function LabsPageClient() {
             <table className="min-w-full border-collapse">
               <thead className="bg-[rgb(var(--cream-rgb)/0.04)]">
                 <tr>
-                  {["Category", "SHUBIQ Flow", "SHUBIQ Atlas", "SHUBIQ Pulse"].map((head) => (
+                  {["Category", "NexGravision Flow", "NexGravision Atlas", "NexGravision Pulse"].map((head) => (
                     <th
                       key={head}
                       className="border-b border-[rgb(var(--cream-rgb)/0.14)] px-4 py-3 text-left font-rajdhani text-[10px] uppercase tracking-[2.6px] text-cream/66"
@@ -610,14 +587,14 @@ export default function LabsPageClient() {
         >
           <p className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">Phase Access</p>
           <h3 className="mt-3 max-w-3xl font-shubiq-heading text-[clamp(32px,4.7vw,62px)] leading-[0.94]">
-            Want Direct Access To The Next SHUBIQ Labs Build?
+            Want Direct Access To The Next NexGravision Labs Build?
           </h3>
           <p className="mt-4 max-w-3xl font-cormorant text-[20px] leading-[1.45] text-cream/80">
             Join the private rollout and help shape features before public launch. Feedback loops are direct and implementation is fast.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <a
-              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Priority%20Access"
+              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Priority%20Access"
               className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
             >
               Request Priority Access
@@ -637,7 +614,7 @@ export default function LabsPageClient() {
       <div className="labs-mobile-dock md:hidden">
         <div className="labs-mobile-dock-inner">
           <a
-            href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Labs%20Priority%20Access"
+            href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Priority%20Access"
             className="labs-mobile-dock-btn labs-mobile-dock-btn-muted"
           >
             Join Beta
@@ -650,3 +627,4 @@ export default function LabsPageClient() {
     </main>
   )
 }
+

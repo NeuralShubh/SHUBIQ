@@ -60,9 +60,10 @@ export default function NotFound() {
           transition={{ delay: 0.8 }}
           className="mt-12 text-[10px] tracking-[3px] uppercase text-cream/50 font-rajdhani"
         >
-          SHUBIQ · Intelligence That Wins
+          NexGravision · Intelligence That Wins
         </motion.p>
       </div>
     </div>
   )
 }
+

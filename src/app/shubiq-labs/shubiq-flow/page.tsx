@@ -1,11 +1,12 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import ShubiqFlowClient from "./ShubiqFlowClient"
 
 export const metadata: Metadata = {
-  title: "SHUBIQ Flow | SHUBIQ Labs",
+  title: "NexGravision Flow | NexGravision Labs",
   description: "A unified personal productivity system for tasks, habits, focus sessions, and daily execution.",
 }
 
-export default function ShubiqFlowDownloadPage() {
+export default function NexGravisionFlowDownloadPage() {
   return <ShubiqFlowClient />
 }
+

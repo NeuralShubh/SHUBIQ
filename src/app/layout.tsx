@@ -23,18 +23,18 @@ const cormorant = Cormorant_Garamond({
 const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", weight: ["500", "600", "700"], display: "swap" })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shubiq.com"),
+  metadataBase: new URL("https://NexGravision.com"),
   title: {
-    default: "SHUBIQ | Intelligence That Wins",
-    template: "%s | SHUBIQ",
+    default: "NexGravision | Intelligence That Wins",
+    template: "%s | NexGravision",
   },
   description:
-    "SHUBIQ is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
-  keywords: ["web development", "digital engineering", "AI integration", "SHUBIQ", "Next.js", "premium web design"],
-  authors: [{ name: "Shubham", url: "https://shubiq.com/founder" }],
-  creator: "SHUBIQ",
+    "NexGravision is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
+  keywords: ["web development", "digital engineering", "AI integration", "NexGravision", "Next.js", "premium web design"],
+  authors: [{ name: "Shubham", url: "https://NexGravision.com/founder" }],
+  creator: "NexGravision",
   alternates: {
-    canonical: "https://shubiq.com",
+    canonical: "https://NexGravision.com",
   },
   icons: {
     icon: [
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://shubiq.com",
-    siteName: "SHUBIQ",
-    title: "SHUBIQ | Intelligence That Wins",
+    url: "https://NexGravision.com",
+    siteName: "NexGravision",
+    title: "NexGravision | Intelligence That Wins",
     description:
       "Premium digital engineering, web platforms, AI systems, and productivity apps.",
     images: [
@@ -63,15 +63,15 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "SHUBIQ, Intelligence That Wins",
+        alt: "NexGravision, Intelligence That Wins",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SHUBIQ | Intelligence That Wins",
+    title: "NexGravision | Intelligence That Wins",
     description: "Premium digital engineering, web platforms, AI systems, and productivity apps.",
-    creator: "@shubiqofficial",
+    creator: "@NexGravisionofficial",
     images: ["/og-image.png"],
   },
   robots: {
@@ -102,3 +102,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
+

@@ -2,12 +2,13 @@ import type { Metadata } from "next"
 import StudioPage from "./StudioPage"
 
 export const metadata: Metadata = {
-  title: "SHUBIQ Studio - Digital Engineering Agency",
+  title: "NexGravision Studio - Digital Engineering Agency",
   description:
-    "SHUBIQ Studio partners with brands and founders to design, build, and launch websites, web applications, and custom software. Engineered with precision for long-term impact.",
-  keywords: ["web agency", "digital studio", "Next.js development", "custom software", "SHUBIQ Studio"],
+    "NexGravision Studio partners with brands and founders to design, build, and launch websites, web applications, and custom software. Engineered with precision for long-term impact.",
+  keywords: ["web agency", "digital studio", "Next.js development", "custom software", "NexGravision Studio"],
 }
 
 export default function Page() {
   return <StudioPage />
 }
+

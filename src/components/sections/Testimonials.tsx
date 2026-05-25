@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { motion } from 'framer-motion'
 import { Quote, Star } from 'lucide-react'
 
@@ -6,21 +6,21 @@ const testimonials = [
   {
     name: 'Dr. Ramesh Kulkarni',
     role: 'Owner, CareFirst Clinic - Pune',
-    text: "SHUBIQ Studio delivered a high-trust digital experience for our clinic with clear patient pathways and fast performance. Results came quickly after launch.",
+    text: "NexGravision Studio delivered a high-trust digital experience for our clinic with clear patient pathways and fast performance. Results came quickly after launch.",
     avatar: 'R',
     bg: 'from-blue-700 to-blue-500',
   },
   {
     name: 'Priya Nair',
     role: 'Founder, Spice Garden Restaurant - Mumbai',
-    text: 'SHUBIQ Studio brought structure, speed, and design clarity to our digital presence. The improved customer flow had a direct impact on online orders.',
+    text: 'NexGravision Studio brought structure, speed, and design clarity to our digital presence. The improved customer flow had a direct impact on online orders.',
     avatar: 'P',
     bg: 'from-emerald-700 to-emerald-500',
   },
   {
     name: 'Advocate Sanjay Sharma',
     role: 'Managing Partner, Sharma & Associates - Delhi',
-    text: 'SHUBIQ Studio delivered a professional, confidence-led web system that improved how prospective clients understand our credibility before first contact.',
+    text: 'NexGravision Studio delivered a professional, confidence-led web system that improved how prospective clients understand our credibility before first contact.',
     avatar: 'S',
     bg: 'from-violet-700 to-violet-500',
   },
@@ -46,7 +46,7 @@ export default function Testimonials() {
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">Clients Who Love Their Websites</h2>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            Real feedback from brands that partnered with SHUBIQ Studio for digital execution.
+            Real feedback from brands that partnered with NexGravision Studio for digital execution.
           </p>
         </motion.div>
 
@@ -87,3 +87,4 @@ export default function Testimonials() {
     </section>
   )
 }
+

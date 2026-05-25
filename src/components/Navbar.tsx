@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useEffect, useState } from 'react'
 import { ArrowRight, Menu, X } from 'lucide-react'
 
@@ -29,7 +29,7 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6 h-[72px] flex items-center justify-between">
         <a href="#" className="text-[1.75rem] leading-none tracking-tight text-blue-900">
-          <span className="font-black">SHUBIQ</span> <span className="font-semibold">Studio</span>
+          <span className="font-black">NexGravision</span> <span className="font-semibold">Studio</span>
         </a>
 
         <ul className="hidden md:flex items-center gap-1.5 rounded-2xl border border-slate-200/80 bg-white/80 backdrop-blur px-2.5 py-1.5 shadow-sm">
@@ -88,3 +88,4 @@ export default function Navbar() {
     </nav>
   )
 }
+

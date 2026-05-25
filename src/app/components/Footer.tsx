@@ -22,7 +22,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto relative grid gap-6 md:grid-cols-3 md:items-center">
         <div className="flex flex-col items-center md:items-start gap-3 sm:gap-4">
           <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4">
-          <span className="font-cinzel font-black tracking-[6.5px] text-gold text-sm footer-brand-glow">SHUBIQ</span>
+          <span className="font-cinzel font-black tracking-[6.5px] text-gold text-sm footer-brand-glow">NexGravision</span>
           <span className="text-cream/55 text-sm">&middot;</span>
           <span className="font-rajdhani text-[11px] sm:text-[12px] tracking-[3.3px] uppercase text-cream/78">Intelligence That Wins</span>
         </div>
@@ -41,7 +41,7 @@ export default function Footer() {
         </div>
 
         <div className="text-center font-rajdhani text-[11px] sm:text-[12px] tracking-[3px] uppercase text-cream/68">
-          &copy; {year} SHUBIQ. All rights reserved.
+          &copy; {year} NexGravision. All rights reserved.
         </div>
 
         <div className="flex items-center justify-center md:justify-end gap-3 sm:gap-4">
@@ -71,3 +71,4 @@ export default function Footer() {
     </footer>
   )
 }
+

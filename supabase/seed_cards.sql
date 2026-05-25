@@ -1,9 +1,9 @@
--- SHUBIQ: Optional starter data for full card CMS tables.
+-- NexGravision: Optional starter data for full card CMS tables.
 -- Run after all_cards_schema.sql
 
 insert into public.projects (name, tag, "desc", tech, stars, link, live, featured, status, order_index)
 select
-  'SHUBIQ Studio',
+  'NexGravision Studio',
   'Agency | Live',
   'A modern freelance business platform.',
   array['Next.js', 'Supabase'],
@@ -50,7 +50,7 @@ where (select count(*) from public.services) = 1;
 insert into public.ecosystem (type, title, subtitle, "desc", icon, color, status, link, tags, featured, order_index)
 select
   'app',
-  'SHUBIQ Studio',
+  'NexGravision Studio',
   'Full-service digital agency',
   'End-to-end web and software solutions.',
   '*',
@@ -64,7 +64,7 @@ where not exists (select 1 from public.ecosystem);
 
 insert into public.studio_portfolio (name, tag, "desc", impact, tech, link, status, metric, order_index)
 select
-  'SHUBIQ',
+  'NexGravision',
   'Personal Brand Ecosystem',
   'A structured digital ecosystem integrating brand presence, engineered systems, and scalable product layers under a unified architecture.',
   'Unified multiple digital systems into one cohesive brand infrastructure.',
@@ -99,3 +99,4 @@ select
   'zap',
   0
 where not exists (select 1 from public.studio_pricing_plans);
+

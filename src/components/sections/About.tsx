@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 /* eslint-disable @next/next/no-img-element */
 import { useState } from 'react'
 import { motion } from 'framer-motion'
@@ -25,7 +25,7 @@ export default function About() {
               {!imgError ? (
                 <img
                   src={FOUNDER_IMAGE}
-                  alt="SHUBIQ Studio"
+                  alt="NexGravision Studio"
                   className="w-full h-full object-cover"
                   loading="eager"
                   onError={() => setImgError(true)}
@@ -51,11 +51,11 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <span className="text-xs font-bold tracking-widest uppercase text-blue-500 mb-3 block">About Studio</span>
-            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-2">SHUBIQ Studio</h2>
+            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-2">NexGravision Studio</h2>
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-widest mb-6">Web & Product Studio</p>
 
             <p className="text-gray-600 leading-relaxed mb-4">
-              SHUBIQ Studio is a performance-driven web and product studio focused on building modern digital systems
+              NexGravision Studio is a performance-driven web and product studio focused on building modern digital systems
               for ambitious brands.
             </p>
             <p className="text-gray-600 leading-relaxed mb-4">
@@ -63,7 +63,7 @@ export default function About() {
               platforms that do not just look good, but drive measurable results.
             </p>
             <p className="text-gray-600 leading-relaxed mb-8">
-              Operating under the SHUBIQ ecosystem, every build follows structured systems, scalable architecture, and
+              Operating under the NexGravision ecosystem, every build follows structured systems, scalable architecture, and
               a long-term product vision.
             </p>
 
@@ -93,3 +93,4 @@ export default function About() {
     </section>
   )
 }
+

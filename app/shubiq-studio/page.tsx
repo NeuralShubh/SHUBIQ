@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
-import ShubiqStudioPage from "../../src/app/shubiq-studio/page"
+import NexGravisionStudioPage from "../../src/app/shubiq-studio/page"
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shubiq.com"
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://NexGravision.com"
 
 export const metadata: Metadata = {
-  title: "SHUBIQ Studio",
-  description: "SHUBIQ Studio delivers conversion-focused websites, apps, and digital platforms for ambitious brands.",
+  title: "NexGravision Studio",
+  description: "NexGravision Studio delivers conversion-focused websites, apps, and digital platforms for ambitious brands.",
   alternates: {
     canonical: "/shubiq-studio",
   },
   openGraph: {
-    title: "SHUBIQ Studio",
-    description: "SHUBIQ Studio delivers conversion-focused websites, apps, and digital platforms for ambitious brands.",
+    title: "NexGravision Studio",
+    description: "NexGravision Studio delivers conversion-focused websites, apps, and digital platforms for ambitious brands.",
     url: `${siteUrl}/shubiq-studio`,
   },
 }
@@ -20,10 +20,10 @@ export default function Page() {
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "SHUBIQ Studio - Digital Engineering",
+    name: "NexGravision Studio - Digital Engineering",
     provider: {
       "@type": "Organization",
-      name: "SHUBIQ",
+      name: "NexGravision",
       url: siteUrl,
     },
     areaServed: "Worldwide",
@@ -40,7 +40,8 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
-      <ShubiqStudioPage />
+      <NexGravisionStudioPage />
     </>
   )
 }
+

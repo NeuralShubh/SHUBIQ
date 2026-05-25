@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle2, Clock3, Mail, MapPin, MessageCircle, PartyPopper, Rocket } from 'lucide-react'
@@ -15,7 +15,7 @@ const BUSINESS_TYPES = [
 ]
 
 const contactItems = [
-  { Icon: Mail, label: 'Email', value: 'studio@shubiq.com' },
+  { Icon: Mail, label: 'Email', value: 'studio@NexGravision.com' },
   { Icon: MessageCircle, label: 'WhatsApp', value: '+91 9579266234' },
   { Icon: MapPin, label: 'Location', value: 'Miraj, Maharashtra' },
   { Icon: Clock3, label: 'Response Time', value: 'Within 24 hours' },
@@ -113,7 +113,7 @@ export default function Contact() {
             </span>
 
             <h2 className="text-4xl xl:text-[54px] font-black text-slate-900 tracking-tight leading-[1.06] mb-4 max-w-xl">
-              Start Your Project With SHUBIQ Studio
+              Start Your Project With NexGravision Studio
             </h2>
 
             <p className="text-slate-600 leading-relaxed mb-6 text-[1.18rem] max-w-lg">
@@ -160,7 +160,7 @@ export default function Contact() {
                   <PartyPopper className="w-7 h-7" />
                 </div>
                 <h4 className="text-2xl font-extrabold text-slate-900 mb-2">Request Sent</h4>
-                <p className="text-slate-600">Thanks. SHUBIQ Studio will get back to you within 24 hours with a plan.</p>
+                <p className="text-slate-600">Thanks. NexGravision Studio will get back to you within 24 hours with a plan.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate>
@@ -279,3 +279,4 @@ export default function Contact() {
     </section>
   )
 }
+

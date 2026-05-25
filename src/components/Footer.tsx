@@ -1,4 +1,4 @@
-﻿import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
+import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
 
 const SOCIAL_LINKS = [
   { label: 'X', href: 'https://x.com/NeuralShubh', Icon: Twitter },
@@ -41,7 +41,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12 border-b border-white/15 mb-8">
           <div>
             <div className="text-3xl tracking-tight mb-3">
-              <span className="font-black">SHUBIQ</span> <span className="font-semibold">Studio</span>
+              <span className="font-black">NexGravision</span> <span className="font-semibold">Studio</span>
             </div>
             <p className="text-sm text-blue-100/90 leading-relaxed max-w-[260px] mb-6">
               Engineered Digital Systems for Modern Brands.
@@ -79,10 +79,11 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-white/65">
-          <span>© 2026 SHUBIQ Studio. All rights reserved.</span>
-          <span>Part of the SHUBIQ Ecosystem.</span>
+          <span>� 2026 NexGravision Studio. All rights reserved.</span>
+          <span>Part of the NexGravision Ecosystem.</span>
         </div>
       </div>
     </footer>
   )
 }
+

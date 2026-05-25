@@ -1,4 +1,4 @@
--- SHUBIQ: Contact submissions table for website lead form + admin panel
+-- NexGravision: Contact submissions table for website lead form + admin panel
 
 create extension if not exists pgcrypto;
 
@@ -7,7 +7,7 @@ create table if not exists public.contact_submissions (
   name text not null,
   email text not null,
   message text not null,
-  source text not null default 'shubiq',
+  source text not null default 'NexGravision',
   "read" boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -17,7 +17,7 @@ alter table public.contact_submissions
   add column if not exists name text,
   add column if not exists email text,
   add column if not exists message text,
-  add column if not exists source text default 'shubiq',
+  add column if not exists source text default 'NexGravision',
   add column if not exists "read" boolean default false,
   add column if not exists created_at timestamptz default now(),
   add column if not exists updated_at timestamptz default now();
@@ -51,3 +51,4 @@ alter table public.contact_submissions enable row level security;
 
 -- No public read policy by default.
 -- API routes in this project use SUPABASE_SERVICE_ROLE_KEY for admin operations.
+

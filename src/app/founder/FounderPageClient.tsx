@@ -27,22 +27,22 @@ const founderTimeline = [
   {
     year: "2024",
     title: "First Production Projects",
-    description: "Built and launched multiple web platforms. Established engineering standards that became SHUBIQ's foundation.",
+    description: "Built and launched multiple web platforms. Established engineering standards that became NexGravision's foundation.",
   },
   {
     year: "2025",
-    title: "SHUBIQ Brand Established",
-    description: "Founded SHUBIQ Studio and SHUBIQ Labs to deliver premium client systems and owned products.",
+    title: "NexGravision Brand Established",
+    description: "Founded NexGravision Studio and NexGravision Labs to deliver premium client systems and owned products.",
   },
   {
     year: "2026",
     title: "Product Ecosystem Growth",
-    description: "SHUBIQ Flow enters beta. Atlas and Pulse in development. Studio scales execution systems across brands.",
+    description: "NexGravision Flow enters beta. Atlas and Pulse in development. Studio scales execution systems across brands.",
   },
 ]
 
 const quickFacts = [
-  { label: "Brand", value: "SHUBIQ" },
+  { label: "Brand", value: "NexGravision" },
   { label: "Role", value: "Founder & Product Lead" },
   { label: "Focus", value: "Execution systems, AI workflows, premium UX" },
   { label: "Location", value: "India" },
@@ -133,7 +133,7 @@ export default function FounderPageClient() {
               <div className="aspect-[3/4] w-full overflow-hidden border border-gold/20">
                 <Image
                   src="https://res.cloudinary.com/dl1jueuj3/image/upload/v1772213832/Image_ky1fkg.png"
-                  alt="Shubham - Founder of SHUBIQ"
+                  alt="Shubham - Founder of NexGravision"
                   width={900}
                   height={1200}
                   className="w-full h-full object-cover object-center"
@@ -142,7 +142,7 @@ export default function FounderPageClient() {
               </div>
               <div className="mt-4 text-center">
                 <div className="font-cinzel text-[20px] text-gold">Shubham</div>
-                <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-cream/60">Founder | SHUBIQ</div>
+                <div className="font-rajdhani text-[10px] tracking-[3px] uppercase text-cream/60">Founder | NexGravision</div>
               </div>
             </motion.div>
           </ScrollReveal>
@@ -160,7 +160,7 @@ export default function FounderPageClient() {
                 className="font-cinzel font-black leading-[1.02] text-[clamp(32px,6vw,68px)] mb-4"
               >
                 Shubham
-                <span className="text-gold"> - Founder of SHUBIQ</span>
+                <span className="text-gold"> - Founder of NexGravision</span>
               </motion.h1>
               <motion.p
                 initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
@@ -169,7 +169,7 @@ export default function FounderPageClient() {
                 className="font-cormorant text-cream/78 leading-[1.7] max-w-[680px]"
                 style={{ fontSize: "clamp(16px,1.4vw,20px)" }}
               >
-                Shubham leads SHUBIQ Studio and SHUBIQ Labs, building high-performance digital platforms and productivity systems that help teams execute with clarity and speed.
+                Shubham leads NexGravision Studio and NexGravision Labs, building high-performance digital platforms and productivity systems that help teams execute with clarity and speed.
               </motion.p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
@@ -226,7 +226,7 @@ export default function FounderPageClient() {
           <SectionHeading
             label="Journey"
             title="Founder Timeline"
-            description="A condensed view of the SHUBIQ origin story and product ecosystem growth."
+            description="A condensed view of the NexGravision origin story and product ecosystem growth."
           />
 
           <div className="hidden md:flex items-start justify-between relative">
@@ -297,7 +297,7 @@ export default function FounderPageClient() {
 
       <section className="py-14 sm:py-16 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto">
-          <SectionHeading label="Quick Facts" title="Founder Snapshot" description="Key context on the SHUBIQ leadership." />
+          <SectionHeading label="Quick Facts" title="Founder Snapshot" description="Key context on the NexGravision leadership." />
           <ScrollReveal>
             <div className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] overflow-hidden">
               <div className="px-6 py-4 border-b border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.6)]">
@@ -386,3 +386,4 @@ export default function FounderPageClient() {
     </main>
   )
 }
+

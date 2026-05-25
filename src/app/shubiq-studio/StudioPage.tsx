@@ -159,7 +159,7 @@ function StudioHero() {
             className="mb-6 inline-flex items-center gap-2.5 border border-gold/20 bg-gold/[0.05] px-4 py-2"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-gold/75" />
-            <span className="font-rajdhani text-[10px] tracking-[3.2px] uppercase text-gold/75">SHUBIQ Studio - Digital Engineering</span>
+            <span className="font-rajdhani text-[10px] tracking-[3.2px] uppercase text-gold/75">NexGravision Studio - Digital Engineering</span>
           </motion.div>
 
           <motion.h1
@@ -180,7 +180,7 @@ function StudioHero() {
             className="mt-5 max-w-[660px] font-cormorant leading-[1.72] text-cream/80"
             style={{ fontSize: "clamp(16px, 1.32vw, 21px)" }}
           >
-            SHUBIQ Studio helps ambitious brands launch premium digital systems with speed and precision. We combine strategy, design,
+            NexGravision Studio helps ambitious brands launch premium digital systems with speed and precision. We combine strategy, design,
             and engineering into one outcome-driven build process.
           </motion.p>
 
@@ -635,7 +635,7 @@ function StudioPricing({ content }: { content: StudioContent }) {
                 <div className="mb-3.5 sm:mb-4">
                   <div className="flex items-end gap-1.5 min-h-[62px] sm:min-h-[80px]">
                     <span className="font-cinzel font-bold text-[2.25rem] sm:text-5xl leading-[0.94] text-gold">
-                      <NumberTicker key={`${pricingMode}-${plan.id}-${plan.price}`} value={plan.price} prefix="₹" suffix={plan.priceSuffix ?? ""} locale="en-IN" start />
+                      <NumberTicker key={`${pricingMode}-${plan.id}-${plan.price}`} value={plan.price} prefix="?" suffix={plan.priceSuffix ?? ""} locale="en-IN" start />
                     </span>
                   </div>
                   <div className={`font-cormorant text-[12px] sm:text-[13px] tracking-[0.5px] sm:tracking-[0.7px] mt-1 ${plan.highlighted ? "text-cream/84" : "text-cream/76"}`}>{plan.meta}</div>
@@ -776,7 +776,7 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
           name: form.name.trim(),
           email: form.email.trim(),
           phone: form.phone.trim(),
-          message: `[SHUBIQ Studio Inquiry]\nProject: ${form.project}\nBudget: ${form.budget}`,
+          message: `[NexGravision Studio Inquiry]\nProject: ${form.project}\nBudget: ${form.budget}`,
           source: "studio",
         }),
       })
@@ -795,11 +795,11 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
   }
 
   const budgetOptions = [
-    "Under ₹50,000",
-    "₹50,000 - ₹1,00,000",
-    "₹1,00,000 - ₹2,00,000",
-    "₹2,00,000 - ₹4,00,000",
-    "₹4,00,000+",
+    "Under ?50,000",
+    "?50,000 - ?1,00,000",
+    "?1,00,000 - ?2,00,000",
+    "?2,00,000 - ?4,00,000",
+    "?4,00,000+",
     "Not sure yet",
   ]
 
@@ -846,13 +846,13 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
 
           <div className="mb-6 flex flex-wrap justify-center gap-2">
             <a
-              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Studio%20Project%20Inquiry"
+              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Studio%20Project%20Inquiry"
               className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
             >
               Email Directly
             </a>
             <a
-              href="mailto:shubiqofficial@gmail.com?subject=SHUBIQ%20Studio%20Schedule%20Call"
+              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Studio%20Schedule%20Call"
               className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
             >
               Request Call
@@ -950,7 +950,7 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
                     Sending
                   </span>
                 )}
-                {submitState === "success" && "✓ Sent!"}
+                {submitState === "success" && "? Sent!"}
                 {submitState === "error" && "Try Again"}
                 {submitState === "idle" && <ArrowRight size={15} />}
               </motion.button>
@@ -1024,3 +1024,4 @@ export default function StudioPage() {
     </>
   )
 }
+
