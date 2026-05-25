@@ -25,7 +25,7 @@ export default function UnifiedNavbar() {
       <div className="mx-auto flex h-[68px] w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
         <Link href="/" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
           <Image
-            src="/android-chrome-512x512.png"
+            src="/nexgravision-logo.png"
             alt="NexGravision"
             width={44}
             height={44}
