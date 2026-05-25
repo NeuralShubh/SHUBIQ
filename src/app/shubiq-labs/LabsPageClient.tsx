@@ -126,8 +126,8 @@ function LabsHeroPremium() {
 
         <motion.div className="relative z-10" {...motionProps(0.12)}>
           <CinematicMediaFrame
-            imageSrc="/hero-workspace.jpg"
-            alt="Dark premium creative workspace for the Labs division"
+            imageSrc="/labs-visual.svg"
+            alt="Dark technical product composition for the Labs division"
             badge="Labs command"
             eyebrow="Product division"
             caption="Launch board"

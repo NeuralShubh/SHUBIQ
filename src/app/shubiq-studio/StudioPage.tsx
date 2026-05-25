@@ -409,8 +409,8 @@ function StudioHeroPremium() {
 
         <motion.div className="relative z-10" {...motionProps(0.12)}>
           <CinematicMediaFrame
-            imageSrc="/hero-workspace.jpg"
-            alt="Dark premium workspace with architectural lighting"
+            imageSrc="/studio-visual.svg"
+            alt="Dark cinematic studio composition with editorial layout"
             badge="Studio command"
             eyebrow="Launch ready"
             caption="Delivery standard"
