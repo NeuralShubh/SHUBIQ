@@ -23,7 +23,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto relative grid gap-6 md:grid-cols-3 md:items-center">
         <div className="flex flex-col items-center md:items-start gap-3 sm:gap-4">
           <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4">
-          <Image src="/nexgravision-logo.png" alt="NexGravision" width={44} height={44} className="h-10 w-10 object-contain" />
+          <Image src="/android-chrome-512x512.png" alt="NexGravision" width={44} height={44} className="h-10 w-10 object-contain" />
           <span className="font-cinzel font-black tracking-[6.5px] text-gold text-sm footer-brand-glow">NexGravision</span>
           <span className="text-cream/55 text-sm">&middot;</span>
           <span className="font-rajdhani text-[11px] sm:text-[12px] tracking-[3.3px] uppercase text-cream/78">Intelligence That Wins</span>

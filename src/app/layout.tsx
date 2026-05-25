@@ -37,9 +37,12 @@ export const metadata: Metadata = {
     canonical: "https://NexGravision.com",
   },
   icons: {
-    icon: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "512x512" }],
-    apple: [{ url: "/nexgravision-logo.png", sizes: "512x512", type: "image/png" }],
-    shortcut: ["/nexgravision-logo.png"],
+    icon: [
+      { url: "/android-chrome-192x192.png", type: "image/png", sizes: "192x192" },
+      { url: "/android-chrome-512x512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" }],
+    shortcut: ["/favicon.ico"],
   },
   manifest: "/site.webmanifest",
   openGraph: {

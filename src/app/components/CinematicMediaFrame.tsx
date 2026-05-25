@@ -50,7 +50,7 @@ export default function CinematicMediaFrame({
 
         <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-3">
           <div className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(8,10,14,0.44)] px-3 py-2 backdrop-blur-md">
-            <Image src="/nexgravision-logo.png" alt="NexGravision" width={44} height={44} className="h-7 w-7 object-contain" />
+            <Image src="/android-chrome-512x512.png" alt="NexGravision" width={44} height={44} className="h-7 w-7 object-contain" />
             <span className="font-rajdhani text-[10px] uppercase tracking-[0.28em] text-cream/74">{badge}</span>
           </div>
           {eyebrow ? (

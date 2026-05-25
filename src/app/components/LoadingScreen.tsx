@@ -54,7 +54,7 @@ export default function LoadingScreen() {
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-[30px] border border-[rgb(var(--gold-rgb)/0.2)] bg-[linear-gradient(180deg,rgb(var(--surface-2-rgb)/0.9),rgb(var(--surface-1-rgb)/0.72))] p-4 shadow-[0_24px_60px_rgb(0_0_0/0.35)]">
-                <Image src="/nexgravision-logo.png" alt="NexGravision" width={160} height={160} priority className="h-full w-full object-contain" />
+                <Image src="/android-chrome-512x512.png" alt="NexGravision" width={160} height={160} priority className="h-full w-full object-contain" />
               </div>
             </motion.div>
 
