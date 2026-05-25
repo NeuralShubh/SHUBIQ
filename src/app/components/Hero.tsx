@@ -36,7 +36,7 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="hidden object-cover object-center opacity-68 lg:block"
+          className="object-cover object-center opacity-[0.42] sm:opacity-[0.52] lg:opacity-68"
         />
       </div>
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_72%_58%_at_16%_18%,rgb(var(--gold-rgb)/0.16),transparent_56%),radial-gradient(ellipse_40%_34%_at_86%_22%,rgb(var(--gold-rgb)/0.08),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.98)_0%,rgba(5,6,9,0.84)_24%,rgba(5,6,9,0.18)_64%,rgba(5,6,9,0.72)_100%),linear-gradient(180deg,rgba(5,6,9,0.22)_0%,rgba(5,6,9,0.86)_100%)]" />
@@ -91,19 +91,7 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          <div className="relative z-10 lg:min-h-[calc(100svh-10rem)]">
-            <motion.div {...motionProps(0.12)} className="relative mt-10 aspect-[0.95/1.18] overflow-hidden lg:hidden">
-              <Image
-                src="/main-page-hero-section-image.png"
-                alt="NexGravision cinematic mountain grid"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.1)_0%,rgba(5,6,9,0.04)_44%,rgba(5,6,9,0.3)_100%),linear-gradient(180deg,rgba(5,6,9,0.05)_0%,rgba(5,6,9,0.64)_100%)]" />
-            </motion.div>
-          </div>
+          <div className="relative z-10 lg:min-h-[calc(100svh-10rem)]" />
         </div>
 
         <div className="pointer-events-none absolute inset-0 hidden lg:block">
