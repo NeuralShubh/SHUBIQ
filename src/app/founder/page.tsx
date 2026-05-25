@@ -4,10 +4,10 @@ import FounderPageClient from "./FounderPageClient"
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://NexGravision.com"
 
 export const metadata: Metadata = {
-  title: "Shubham | Founder of NexGravision",
+  title: "Shubham | Founder",
   description: "Shubham leads NexGravision Studio and NexGravision Labs, building high-performance digital platforms and productivity systems.",
   openGraph: {
-    title: "Shubham | Founder of NexGravision",
+    title: "Shubham | Founder",
     description: "Shubham leads NexGravision Studio and NexGravision Labs, building high-performance digital platforms and productivity systems.",
     url: `${siteUrl}/founder`,
   },

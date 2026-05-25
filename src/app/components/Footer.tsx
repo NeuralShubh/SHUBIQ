@@ -26,7 +26,7 @@ export default function Footer() {
           <Image src="/nexgravision-logo.png" alt="NexGravision" width={44} height={44} className="h-10 w-10 object-contain" />
           <span className="font-cinzel font-black tracking-[6.5px] text-gold text-sm footer-brand-glow">NexGravision</span>
           <span className="text-cream/55 text-sm">&middot;</span>
-          <span className="font-rajdhani text-[11px] sm:text-[12px] tracking-[3.3px] uppercase text-cream/78">Intelligence That Wins</span>
+          <span className="font-rajdhani text-[11px] sm:text-[12px] tracking-[3.3px] uppercase text-cream/78">Digital Engineering</span>
         </div>
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 text-[10px] sm:text-[11px] font-rajdhani tracking-[2.5px] uppercase text-cream/60">
             {[

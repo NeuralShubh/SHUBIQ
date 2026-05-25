@@ -21,7 +21,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://NexGravision.com"
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "NexGravision: Intelligence That Wins",
+    default: "NexGravision",
     template: "%s | NexGravision",
   },
   description: "NexGravision builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: "NexGravision",
-    title: "NexGravision: Intelligence That Wins",
+    title: "NexGravision",
     description: "NexGravision builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
     images: [
       {
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NexGravision: Intelligence That Wins",
+    title: "NexGravision",
     description: "NexGravision builds high-performance software, productivity apps, and intelligent digital platforms for ambitious brands and founders.",
     images: ["/opengraph-image"],
   },

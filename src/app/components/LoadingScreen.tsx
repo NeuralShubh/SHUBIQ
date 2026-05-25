@@ -64,7 +64,7 @@ export default function LoadingScreen() {
               transition={{ duration: 0.4, delay: 0.3 }}
               className="text-cream/60 text-[10px] tracking-[0.3em] uppercase font-rajdhani"
             >
-              Intelligence That Wins
+              NexGravision
             </motion.p>
 
             <motion.div

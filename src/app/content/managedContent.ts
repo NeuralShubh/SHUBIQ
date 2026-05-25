@@ -36,7 +36,7 @@ export type LabsManagedContent = {
 }
 
 export const DEFAULT_HOME_CONTENT: HomeManagedContent = {
-  heroTagline: "Intelligence That Wins",
+  heroTagline: "Premium Digital Engineering",
   heroExploreCta: "Explore Work",
   heroHireCta: "Hire Us",
   aboutHeadingPrefix: "About",

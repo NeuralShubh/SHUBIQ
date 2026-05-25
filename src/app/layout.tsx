@@ -25,7 +25,7 @@ const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", wei
 export const metadata: Metadata = {
   metadataBase: new URL("https://NexGravision.com"),
   title: {
-    default: "NexGravision | Intelligence That Wins",
+    default: "NexGravision",
     template: "%s | NexGravision",
   },
   description:
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://NexGravision.com",
     siteName: "NexGravision",
-    title: "NexGravision | Intelligence That Wins",
+    title: "NexGravision",
     description:
       "Premium digital engineering, web platforms, AI systems, and productivity apps.",
     images: [
@@ -55,13 +55,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "NexGravision, Intelligence That Wins",
+        alt: "NexGravision",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NexGravision | Intelligence That Wins",
+    title: "NexGravision",
     description: "Premium digital engineering, web platforms, AI systems, and productivity apps.",
     creator: "@neuralshubh",
     images: ["/og-image.png"],

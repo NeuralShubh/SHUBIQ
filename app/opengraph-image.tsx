@@ -25,7 +25,7 @@ export default function OpenGraphImage() {
       >
         <div style={{ fontSize: 56, letterSpacing: 2, marginBottom: 24 }}>NexGravision</div>
         <div style={{ fontSize: 30, lineHeight: 1.3, maxWidth: 900 }}>
-          Intelligence That Wins. High-performance software, productivity apps, and digital platforms.
+          High-performance software, productivity apps, and digital platforms.
         </div>
         <div style={{ marginTop: 40, fontSize: 20, letterSpacing: 3, color: "#c6a45a" }}>NexGravision.COM</div>
       </div>

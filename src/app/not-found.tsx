@@ -72,7 +72,7 @@ export default function NotFound() {
           transition={{ delay: 0.8 }}
           className="mt-16 text-xs text-cream/50 font-rajdhani tracking-[0.3em] uppercase"
         >
-          NexGravision · Intelligence That Wins
+          NexGravision
         </motion.p>
       </div>
     </div>

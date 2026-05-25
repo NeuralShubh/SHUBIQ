@@ -14,7 +14,7 @@ import { SERVICES, ECOSYSTEM_ITEMS } from "./data"
 import { projects } from "./data-projects"
 
 export const metadata: Metadata = {
-  title: "NexGravision | Intelligence That Wins",
+  title: "NexGravision",
   description:
     "NexGravision is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
 }
