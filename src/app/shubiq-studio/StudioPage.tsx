@@ -348,103 +348,116 @@ function StudioHeroPremium() {
   return (
     <section
       id="studio-hero"
-      className="relative isolate min-h-[calc(100svh-6.5rem)] overflow-hidden px-5 pb-10 pt-[7rem] sm:px-6 sm:pb-12 lg:px-8 lg:pt-[7.2rem]"
+      className="relative isolate overflow-hidden px-5 pb-10 pt-[7rem] sm:px-6 sm:pb-12 lg:px-8 lg:pt-[7.2rem]"
     >
       <div className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgb(var(--surface-0-rgb)),rgb(var(--ink-rgb)))]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_54%_40%_at_18%_16%,rgb(var(--gold-rgb)/0.12),transparent_58%),radial-gradient(ellipse_38%_34%_at_86%_18%,rgb(var(--gold-rgb)/0.06),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.94)_0%,rgba(5,6,9,0.7)_28%,rgba(5,6,9,0.18)_66%,rgba(5,6,9,0.62)_100%),linear-gradient(180deg,rgba(8,10,14,0.12)_0%,rgba(8,10,14,0.48)_56%,rgba(8,10,14,0.94)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.14] studio-grid-overlay" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_56%_42%_at_18%_16%,rgb(var(--gold-rgb)/0.12),transparent_58%),radial-gradient(ellipse_38%_34%_at_86%_18%,rgb(var(--gold-rgb)/0.06),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.95)_0%,rgba(5,6,9,0.76)_28%,rgba(5,6,9,0.16)_66%,rgba(5,6,9,0.62)_100%),linear-gradient(180deg,rgba(8,10,14,0.12)_0%,rgba(8,10,14,0.5)_56%,rgba(8,10,14,0.94)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.12] studio-grid-overlay" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-end gap-10 lg:grid-cols-[0.98fr_1.02fr] lg:gap-12">
-        <motion.div className="relative z-10 max-w-2xl" {...motionProps(0)}>
-          <motion.div
-            {...motionProps(0.02)}
-            className="inline-flex items-center gap-2.5 border border-[rgb(var(--gold-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.44)] px-4 py-2 text-[10px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-gold/75" />
-            NexGravision Studio
+      <div className="relative mx-auto min-h-[calc(100svh-6.5rem)] w-full max-w-7xl pb-10 lg:min-h-[calc(100svh-7.25rem)] lg:pb-14">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-6">
+          <motion.div className="relative z-20 max-w-[720px]" {...motionProps(0)}>
+            <motion.div
+              {...motionProps(0.02)}
+              className="inline-flex items-center gap-2.5 border border-[rgb(var(--gold-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.28)] px-4 py-2 text-[10px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-gold/75" />
+              NexGravision Studio
+            </motion.div>
+
+            <h1 className="mt-6 max-w-[11ch] font-cinzel text-[clamp(58px,8vw,112px)] leading-[0.84] tracking-[0.01em] text-cream">
+              <span className="block">We Build</span>
+              <span className="block">Digital</span>
+              <span className="block text-gradient-gold">Solutions</span>
+            </h1>
+
+            <p className="mt-5 max-w-[40rem] text-[16px] leading-[1.82] text-cream/82 sm:text-[17px] lg:text-[19px]">
+              We partner with ambitious companies and startups to design, build and scale digital products that drive impact.
+            </p>
+
+            <div className="mt-7 grid max-w-[38rem] grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
+              {[
+                ["Web", "Development"],
+                ["Mobile", "Apps"],
+                ["UI/UX", "Design"],
+                ["Product", "Engineering"],
+              ].map(([line1, line2], index) => (
+                <motion.div
+                  key={line1}
+                  {...motionProps(0.08 + index * 0.04)}
+                  className="border-l border-[rgb(var(--gold-rgb)/0.16)] pl-4 sm:pl-5"
+                >
+                  <p className="font-rajdhani text-[11px] uppercase tracking-[0.3em] text-gold/74">{line1}</p>
+                  <p className="mt-1 font-rajdhani text-[11px] uppercase tracking-[0.3em] text-cream/74">{line2}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+              <MagneticButton
+                onClick={() => scrollTo("studio-pricing-anchor")}
+                data-cursor="View"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.16)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[240px]"
+              >
+                Start a Project
+                <ArrowRight size={14} />
+              </MagneticButton>
+              <MagneticButton
+                onClick={() => scrollTo("studio-portfolio")}
+                data-cursor="Work"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.12)] px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[240px]"
+              >
+                View Our Work
+                <ArrowRight size={14} />
+              </MagneticButton>
+            </div>
           </motion.div>
 
-          <h1 className="mt-6 max-w-xl font-cinzel text-[clamp(44px,8vw,96px)] leading-[0.9] tracking-[0.01em] text-cream sm:text-[clamp(54px,7vw,98px)] lg:text-[clamp(58px,5vw,92px)]">
-            We build
-            <span className="block text-gradient-gold">Digital Solutions</span>
-          </h1>
-
-          <p className="mt-5 max-w-xl text-[16px] leading-[1.8] text-cream/78 sm:text-[17px] lg:text-[18px]">
-            We partner with ambitious companies and startups to design, build, and scale digital products that drive impact.
-          </p>
-
-          <div className="mt-7 grid max-w-[36rem] grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
-            {[
-              ["Web", "Development"],
-              ["Mobile", "Apps"],
-              ["UI/UX", "Design"],
-              ["Product", "Engineering"],
-            ].map(([line1, line2], index) => (
-              <motion.div
-                key={line1}
-                {...motionProps(0.08 + index * 0.04)}
-                className="border-l border-[rgb(var(--gold-rgb)/0.16)] pl-4 sm:pl-5"
-              >
-                <p className="font-rajdhani text-[11px] uppercase tracking-[0.3em] text-gold/74">{line1}</p>
-                <p className="mt-1 font-rajdhani text-[11px] uppercase tracking-[0.3em] text-cream/74">{line2}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-            <MagneticButton
-              onClick={() => scrollTo("studio-pricing-anchor")}
-              data-cursor="View"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.16)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[210px]"
+          <div className="relative z-10 lg:min-h-[calc(100svh-10rem)]">
+            <motion.div
+              {...motionProps(0.12)}
+              className="relative hidden h-full min-h-[700px] lg:block"
             >
-              Start a Project
-              <ArrowRight size={14} />
-            </MagneticButton>
-            <MagneticButton
-              onClick={() => scrollTo("studio-portfolio")}
-              data-cursor="Work"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.26)] px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[210px]"
-            >
-              View Our Work
-              <ArrowRight size={14} />
-            </MagneticButton>
-          </div>
-        </motion.div>
+              <div className="absolute inset-0">
+                <Image
+                  src="/studio-page-hero-section-image.png"
+                  alt="Dark cinematic studio workspace with city lights"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  className="object-cover object-center opacity-95"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.08)_0%,rgba(5,6,9,0.02)_44%,rgba(5,6,9,0.22)_100%),linear-gradient(180deg,rgba(5,6,9,0.04)_0%,rgba(5,6,9,0.56)_100%)]" />
+                <div className="absolute inset-0 opacity-[0.12] studio-grid-overlay" />
+              </div>
 
-        <motion.div className="relative z-10" {...motionProps(0.12)}>
-          <div className="relative ml-auto w-full max-w-[780px]">
-            <div className="absolute inset-0 -z-10 rounded-[30px] bg-[radial-gradient(circle_at_50%_42%,rgb(var(--gold-rgb)/0.1),transparent_45%)] blur-3xl" />
-            <div className="relative aspect-[0.98/1] overflow-hidden rounded-[30px] border border-[rgb(var(--gold-rgb)/0.12)] bg-[rgba(5,6,9,0.28)] shadow-[0_30px_90px_rgb(0_0_0/0.42)]">
+              <div className="absolute left-[8%] top-[19%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                Web development
+              </div>
+              <div className="absolute left-[22%] bottom-[28%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                Product engineering
+              </div>
+              <div className="absolute right-[14%] top-[30%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                UI/UX design
+              </div>
+              <div className="absolute right-[8%] bottom-[18%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                Mobile apps
+              </div>
+            </motion.div>
+
+            <motion.div {...motionProps(0.12)} className="relative mt-10 aspect-[0.95/1.18] overflow-hidden lg:hidden">
               <Image
                 src="/studio-page-hero-section-image.png"
                 alt="Dark cinematic studio workspace with city lights"
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 56vw"
+                sizes="100vw"
                 className="object-cover object-center"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.14)_0%,rgba(5,6,9,0.04)_45%,rgba(5,6,9,0.28)_100%),linear-gradient(180deg,rgba(5,6,9,0.08)_0%,rgba(5,6,9,0.68)_100%)]" />
-              <div className="absolute inset-0 opacity-[0.12] studio-grid-overlay" />
-
-              <div className="absolute left-[8%] top-[18%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.68)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                Web development
-              </div>
-              <div className="absolute left-[13%] bottom-[30%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.68)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                Product engineering
-              </div>
-              <div className="absolute right-[14%] top-[26%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.68)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                UI/UX design
-              </div>
-              <div className="absolute right-[10%] bottom-[18%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.68)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                Mobile apps
-              </div>
-
-              <div className="absolute inset-x-0 bottom-0 h-36 bg-[linear-gradient(180deg,transparent,rgba(5,6,9,0.74))]" />
-              <div className="absolute left-[46%] bottom-[14%] hidden h-16 w-px bg-gradient-to-b from-[rgb(var(--gold-rgb)/0.8)] to-transparent lg:block" />
-              <div className="absolute left-[46%] bottom-[14%] hidden h-3 w-3 -translate-x-1/2 rounded-full bg-[rgb(var(--gold-rgb))] shadow-[0_0_0_12px_rgb(var(--gold-rgb)/0.12)] lg:block" />
-            </div>
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.08)_0%,rgba(5,6,9,0.02)_44%,rgba(5,6,9,0.24)_100%),linear-gradient(180deg,rgba(5,6,9,0.04)_0%,rgba(5,6,9,0.58)_100%)]" />
+            </motion.div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

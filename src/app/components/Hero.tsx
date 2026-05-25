@@ -36,15 +36,15 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-78"
+          className="object-cover object-center opacity-70"
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_76%_58%_at_16%_20%,rgb(var(--gold-rgb)/0.14),transparent_54%),radial-gradient(ellipse_44%_34%_at_84%_24%,rgb(var(--gold-rgb)/0.08),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.98)_0%,rgba(5,6,9,0.76)_30%,rgba(5,6,9,0.16)_72%,rgba(5,6,9,0.72)_100%),linear-gradient(180deg,rgba(5,6,9,0.28)_0%,rgba(5,6,9,0.8)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.14] hero-grid-overlay" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_72%_58%_at_16%_18%,rgb(var(--gold-rgb)/0.16),transparent_56%),radial-gradient(ellipse_40%_34%_at_86%_22%,rgb(var(--gold-rgb)/0.08),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.98)_0%,rgba(5,6,9,0.78)_28%,rgba(5,6,9,0.16)_66%,rgba(5,6,9,0.68)_100%),linear-gradient(180deg,rgba(5,6,9,0.24)_0%,rgba(5,6,9,0.82)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] hero-grid-overlay" />
 
-      <div className="mx-auto grid min-h-[calc(100svh-6.5rem)] w-full max-w-7xl items-end lg:min-h-[calc(100svh-7.25rem)]">
-        <div className="grid gap-10 pb-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-end lg:gap-8 lg:pb-14">
-          <motion.div className="relative z-10 max-w-[780px]" {...motionProps(0)}>
+      <div className="relative mx-auto min-h-[calc(100svh-6.5rem)] w-full max-w-7xl pb-10 lg:min-h-[calc(100svh-7.25rem)] lg:pb-14">
+        <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-end lg:gap-6">
+          <motion.div className="relative z-20 max-w-[740px]" {...motionProps(0)}>
             <div className="flex items-center gap-3">
               <span className="h-px w-14 bg-gradient-to-r from-[rgb(var(--gold-rgb))] to-transparent" />
               <p className="font-rajdhani text-[10px] uppercase tracking-[0.5em] text-gold/78">
@@ -52,12 +52,12 @@ export default function Hero() {
               </p>
             </div>
 
-            <h1 className="mt-6 max-w-[12ch] font-cinzel text-[clamp(52px,9vw,118px)] leading-[0.86] tracking-[0.01em] text-cream">
-              Systems we
-              <span className="block text-gradient-gold">Engineer</span>
+            <h1 className="mt-6 max-w-[11ch] font-cinzel text-[clamp(60px,9vw,126px)] leading-[0.84] tracking-[0.01em] text-cream">
+              <span className="block">SYSTEMS WE</span>
+              <span className="block text-gradient-gold">ENGINEER</span>
             </h1>
 
-            <p className="mt-7 max-w-[36rem] text-[16px] leading-[1.8] text-cream/82 sm:text-[17px] lg:text-[20px]">
+            <p className="mt-7 max-w-[38rem] text-[16px] leading-[1.82] text-cream/84 sm:text-[17px] lg:text-[19px]">
               A technology studio building digital systems, products, and experiences that feel premium, stay fast, and scale with the
               business.
             </p>
@@ -65,14 +65,14 @@ export default function Hero() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
               <Link
                 href="#contact"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.32em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.16)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[210px]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.32em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.16)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[240px]"
               >
                 Start a project
                 <ArrowUpRight size={16} />
               </Link>
               <Link
                 href="#projects"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.18)] px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.32em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[210px]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.12)] px-7 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.32em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[240px]"
               >
                 Explore our work
                 <ArrowUpRight size={16} />
@@ -83,7 +83,7 @@ export default function Hero() {
               {features.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.18)] px-3.5 py-2 font-rajdhani text-[10px] uppercase tracking-[0.26em] text-cream/68 backdrop-blur-md"
+                  className="rounded-full border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.12)] px-3.5 py-2 font-rajdhani text-[10px] uppercase tracking-[0.26em] text-cream/68 backdrop-blur-md"
                 >
                   {item}
                 </span>
@@ -91,41 +91,55 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          <motion.div className="relative z-10 lg:pb-2" {...motionProps(0.12)}>
-            <div className="relative ml-auto w-full max-w-[740px]">
-              <div className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(circle_at_50%_50%,rgb(var(--gold-rgb)/0.08),transparent_50%)] blur-2xl" />
-              <div className="relative aspect-[0.97/1] overflow-hidden rounded-[28px] border border-[rgb(var(--gold-rgb)/0.14)] bg-[rgba(5,6,9,0.38)] shadow-[0_28px_80px_rgb(0_0_0/0.38)]">
+          <div className="relative z-10 lg:min-h-[calc(100svh-10rem)]">
+            <motion.div
+              {...motionProps(0.12)}
+              className="relative hidden h-full min-h-[700px] lg:block"
+            >
+              <div className="absolute inset-0">
                 <Image
                   src="/main-page-hero-section-image.png"
                   alt="NexGravision cinematic mountain grid"
                   fill
                   priority
-                  sizes="(max-width: 1024px) 100vw, 52vw"
-                  className="object-cover object-center opacity-88"
+                  sizes="(max-width: 1024px) 100vw, 58vw"
+                  className="object-cover object-center opacity-92"
                 />
-                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.42)_0%,rgba(5,6,9,0.06)_48%,rgba(5,6,9,0.24)_100%),linear-gradient(180deg,rgba(5,6,9,0.1)_0%,rgba(5,6,9,0.72)_100%)]" />
-                <div className="absolute inset-0 opacity-[0.16] hero-grid-overlay" />
-
-                <div className="absolute left-[8%] top-[16%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.7)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                  Software engineering
-                </div>
-                <div className="absolute right-[11%] top-[28%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.7)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                  Product design
-                </div>
-                <div className="absolute left-[15%] bottom-[29%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.7)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                  Cloud architecture
-                </div>
-                <div className="absolute right-[28%] bottom-[20%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.7)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                  AI integration
-                </div>
-                <div className="absolute left-[44%] bottom-[11%] hidden rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.7)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-gold/78 backdrop-blur-md lg:block">
-                  Scalable systems
-                </div>
-                <div className="absolute left-[50%] top-[54%] hidden h-14 w-px bg-gradient-to-b from-[rgb(var(--gold-rgb)/0.84)] to-transparent lg:block" />
-                <div className="absolute left-[50%] top-[54%] hidden h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[rgb(var(--gold-rgb))] shadow-[0_0_0_10px_rgb(var(--gold-rgb)/0.12)] lg:block" />
+                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.08)_0%,rgba(5,6,9,0.02)_42%,rgba(5,6,9,0.26)_100%),linear-gradient(180deg,rgba(5,6,9,0.04)_0%,rgba(5,6,9,0.58)_100%)]" />
+                <div className="absolute inset-0 opacity-[0.15] hero-grid-overlay" />
               </div>
-            </div>
-          </motion.div>
+
+              <div className="absolute left-[7%] top-[16%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                Software engineering
+              </div>
+              <div className="absolute right-[10%] top-[26%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                Product design
+              </div>
+              <div className="absolute left-[23%] top-[44%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                Cloud architecture
+              </div>
+              <div className="absolute right-[18%] top-[58%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                AI integration
+              </div>
+              <div className="absolute left-[40%] bottom-[8%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+                Scalable systems
+              </div>
+              <div className="absolute left-[44%] top-[43%] hidden h-14 w-px bg-gradient-to-b from-[rgb(var(--gold-rgb)/0.84)] to-transparent lg:block" />
+              <div className="absolute left-[44%] top-[43%] hidden h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[rgb(var(--gold-rgb))] shadow-[0_0_0_10px_rgb(var(--gold-rgb)/0.12)] lg:block" />
+            </motion.div>
+
+            <motion.div {...motionProps(0.12)} className="relative mt-10 aspect-[0.95/1.18] overflow-hidden lg:hidden">
+              <Image
+                src="/main-page-hero-section-image.png"
+                alt="NexGravision cinematic mountain grid"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.1)_0%,rgba(5,6,9,0.04)_44%,rgba(5,6,9,0.3)_100%),linear-gradient(180deg,rgba(5,6,9,0.05)_0%,rgba(5,6,9,0.64)_100%)]" />
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
