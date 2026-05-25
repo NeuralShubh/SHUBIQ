@@ -1,101 +1,136 @@
 "use client"
-import { useInViewOnce } from "../lib/gsap-hooks"
-import StaggerContainer, { StaggerItem } from "./StaggerContainer"
+
+import Link from "next/link"
+import { motion, useReducedMotion } from "framer-motion"
+import { ArrowUpRight, Sparkles } from "lucide-react"
 import SectionLabel from "./SectionLabel"
+import CinematicMediaFrame from "./CinematicMediaFrame"
+
+const pillars = [
+  {
+    title: "Precision Engineering",
+    text: "High-performance web systems shaped for speed, clarity, and dependable scale.",
+  },
+  {
+    title: "Premium UX",
+    text: "Interfaces designed to feel calm, credible, and conversion-aware on every screen.",
+  },
+  {
+    title: "AI-Ready Architecture",
+    text: "Product foundations that support automation, intelligence, and future expansion.",
+  },
+]
+
+const metrics = [
+  { label: "Focus", value: "Strategy" },
+  { label: "Delivery", value: "Lean" },
+  { label: "Outcome", value: "Growth" },
+]
 
 export default function About() {
-  const [sectionRef, isInView] = useInViewOnce<HTMLElement>("120px 0px")
+  const prefersReduced = useReducedMotion()
+
+  const motionProps = (delay = 0) =>
+    prefersReduced
+      ? { initial: false, animate: { opacity: 1, y: 0 } }
+      : {
+          initial: { opacity: 0, y: 18 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.65, delay, ease: "easeOut" as const },
+        }
 
   return (
-    <section id="about" ref={sectionRef} className="cv-auto pt-[96px] pb-[120px] px-4 sm:px-6 relative overflow-hidden">
-      <div
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.03) 0%, transparent 70%)" }}
-      />
-      <div
-        className="absolute -left-28 top-24 w-72 h-72 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgb(var(--gold-rgb) / 0.02) 0%, transparent 72%)" }}
-      />
+    <section
+      id="about"
+      className="relative isolate overflow-hidden px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+    >
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgb(var(--surface-0-rgb)),rgb(var(--ink-rgb)))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_45%_at_12%_18%,rgb(var(--gold-rgb)/0.08),transparent_60%),radial-gradient(ellipse_50%_38%_at_86%_12%,rgb(var(--gold-rgb)/0.06),transparent_60%),linear-gradient(180deg,rgba(8,10,14,0.16)_0%,rgba(8,10,14,0.42)_60%,rgba(8,10,14,0.94)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.18] studio-grid-overlay" />
 
-      <div className="about-container">
-        <div className="sm:hidden mb-5">
-          <SectionLabel label="About" centered />
-        </div>
+      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-12">
+        <motion.div className="relative z-10 max-w-2xl" {...motionProps(0)}>
+          <SectionLabel label="About" />
 
-        <div className="hidden sm:flex items-center gap-2.5 sm:gap-3 mb-5">
-          <span className="w-1 h-1 rounded-full bg-gold/80" />
-          <div className="font-rajdhani text-[14px] tracking-[7px] text-gold/85 uppercase">About</div>
-          <span className="w-14 h-px bg-gradient-to-r from-gold/60 to-transparent" />
-        </div>
+          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.48)] px-4 py-2 text-[10px] uppercase tracking-[0.34em] text-cream/65 backdrop-blur-md">
+            <Sparkles size={13} className="text-gold" />
+            NexGravision brand story
+          </div>
 
-        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 sm:gap-16 lg:gap-28 xl:gap-32 items-start">
-          <div>
-            <h2
-              className={`reveal ${isInView ? "in-view" : ""} about-mobile-heading font-cinzel font-normal mb-4 sm:mb-6 md:mb-8 leading-[0.92] md:leading-[0.89] tracking-[0.35px] md:tracking-[0.5px]`}
-              style={{ fontSize: "clamp(32px, 10vw, 78px)", animationDelay: "0.1s" }}
+          <h2 className="mt-6 max-w-xl font-cinzel text-[clamp(42px,8vw,92px)] leading-[0.9] tracking-[0.01em] text-cream sm:text-[clamp(52px,7vw,96px)] lg:text-[clamp(58px,5.2vw,86px)]">
+            Built for trust.
+            <span className="block text-gradient-gold">Designed to move.</span>
+          </h2>
+
+          <p className="mt-5 max-w-xl text-[16px] leading-[1.78] text-cream/78 sm:text-[17px] lg:text-[18px]">
+            NexGravision is a premium digital studio creating sharp websites, polished product systems, and
+            intelligent experiences for founders who want a stronger first impression.
+          </p>
+
+          <p className="mt-4 max-w-xl text-[15px] leading-[1.74] text-cream/68 sm:text-[16px] lg:text-[17px]">
+            We blend strategy, design, and engineering into a single operating system so the result feels
+            premium, stays fast, and scales without losing clarity.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            <Link
+              href="/founder"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.16)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[190px]"
             >
-              <span className="text-cream/92 text-[0.9em]">About </span>
-              <span className="text-gold tracking-[1.4px] md:tracking-[1.8px]">NexGravision</span>
-            </h2>
-
-            <div className="about-mobile-copy-wrap mt-6 sm:mt-7 md:mt-0 space-y-4 sm:space-y-5 md:space-y-5 max-w-[580px]">
-              <p
-                className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left`}
-                style={{ fontSize: "clamp(17px, 4.6vw, 22px)", animationDelay: "0.25s" }}
-              >
-                <span className="font-semibold text-cream">NexGravision</span> is a premium digital engineering brand crafting high-performance web platforms, productivity
-                apps, and intelligent systems for ambitious founders and teams.
-              </p>
-
-              <p
-                className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/86 leading-[1.82] tracking-[0.1px] text-left`}
-                style={{ fontSize: "clamp(17px, 4.6vw, 22px)", animationDelay: "0.38s" }}
-              >
-                We deliver conversion-first websites and AI-integrated product systems built for clarity, speed, and long-term scale, not just a good launch.
-              </p>
-
-              <p
-                className={`reveal ${isInView ? "in-view" : ""} about-mobile-copy font-cormorant text-cream/82 leading-[1.75] tracking-[0.1px] text-left`}
-                style={{ fontSize: "clamp(15.5px, 4.2vw, 20px)", animationDelay: "0.5s" }}
-              >
-                The NexGravision system blends strategy, engineering, and premium design to turn ambitious ideas into durable platforms that earn trust and compound value.
-              </p>
-
-              <div className="mt-[104px] max-[768px]:mt-12 max-[768px]:flex max-[768px]:justify-center">
-                <a
-                  href="/founder"
-                  data-cursor="View"
-                  className="hero-cta cta-ghost inline-flex items-center justify-center min-w-[220px] font-rajdhani text-[13px] sm:text-[15px] tracking-[2.8px] sm:tracking-[3.6px] uppercase px-8 sm:px-10 py-[14px] sm:py-3.5 font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 border border-gold/30 text-cream"
-                >
-                  <span className="relative z-[1]">Meet the Founder</span>
-                </a>
-              </div>
-            </div>
+              Meet the Founder
+              <ArrowUpRight size={16} />
+            </Link>
+            <Link
+              href="#contact"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.3)] px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[190px]"
+            >
+              Start a Project
+              <ArrowUpRight size={16} />
+            </Link>
           </div>
 
-          <div className="w-full max-w-[520px] ml-auto">
-            <div className="border border-[rgb(var(--cream-rgb)/0.14)] bg-card-soft rounded-sm p-5 sm:p-6">
-              <div className="font-rajdhani text-[11px] tracking-[3px] uppercase text-gold/70 mb-4">Brand Foundations</div>
-              <StaggerContainer staggerDelay={0.1} className="grid sm:grid-cols-2 gap-4 items-stretch">
-                {[
-                  { title: "Precision Engineering", desc: "High-performance systems designed for speed, stability, and scale." },
-                  { title: "Product Intelligence", desc: "AI-integrated workflows that elevate outcomes, not noise." },
-                  { title: "Premium UX", desc: "Design systems built to convert attention into action." },
-                  { title: "Long-Term Architecture", desc: "Durable infrastructure that grows with your business." },
-                ].map((item) => (
-                  <StaggerItem key={item.title} className="h-full">
-                    <div className="h-full border border-[rgb(var(--cream-rgb)/0.12)] bg-[rgb(var(--surface-2-rgb)/0.5)] p-4 flex flex-col">
-                      <div className="font-cinzel text-[16px] text-cream/90">{item.title}</div>
-                      <div className="font-cormorant text-cream/70 mt-2 text-[15px] leading-[1.55]">{item.desc}</div>
-                    </div>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </div>
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {pillars.map((pillar, index) => (
+              <motion.div
+                key={pillar.title}
+                {...motionProps(0.08 + index * 0.06)}
+                className="rounded-[22px] border border-[rgb(var(--cream-rgb)/0.1)] bg-[rgb(var(--surface-2-rgb)/0.24)] p-4 backdrop-blur-md"
+              >
+                <p className="font-cinzel text-[18px] leading-[1.08] text-cream">{pillar.title}</p>
+                <p className="mt-2 text-[15px] leading-[1.6] text-cream/66">{pillar.text}</p>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
+
+        <motion.div className="relative z-10" {...motionProps(0.12)}>
+          <CinematicMediaFrame
+            imageSrc="/hero-workspace.jpg"
+            alt="Premium dark workspace and creative setup"
+            badge="Digital studio"
+            eyebrow="Premium minimal"
+            caption="Brand foundations"
+            metrics={metrics}
+            objectPosition="center"
+          />
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {[
+              ["Mobile-first", "Every layout starts with the smallest screen."],
+              ["Luxury finish", "Soft contrast, strong spacing, confident details."],
+              ["Fast systems", "Design decisions stay tightly tied to performance."],
+            ].map(([title, text], index) => (
+              <motion.div
+                key={title}
+                {...motionProps(0.2 + index * 0.05)}
+                className="rounded-[18px] border border-[rgb(var(--cream-rgb)/0.1)] bg-[rgb(var(--surface-2-rgb)/0.22)] p-4"
+              >
+                <p className="font-rajdhani text-[10px] uppercase tracking-[0.28em] text-gold/78">{title}</p>
+                <p className="mt-2 text-[15px] leading-[1.55] text-cream/68">{text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )
 }
-

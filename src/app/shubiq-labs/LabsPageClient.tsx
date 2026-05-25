@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import {
   ArrowRight,
   ArrowUpRight,
@@ -13,11 +13,9 @@ import {
   MonitorSmartphone,
   Sparkles,
   Smartphone,
-  Target,
   Timer,
-  TrendingUp,
-  Zap,
 } from "lucide-react"
+import CinematicMediaFrame from "../components/CinematicMediaFrame"
 import { LAB_PRODUCTS } from "../data-labs"
 import LabsNavbar from "./LabsNavbar"
 
@@ -54,6 +52,98 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
+function LabsHeroPremium() {
+  const prefersReduced = !!useReducedMotion()
+
+  const motionProps = (delay = 0) =>
+    prefersReduced
+      ? { initial: false, animate: { opacity: 1, y: 0 } }
+      : {
+          initial: { opacity: 0, y: 18 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.65, delay, ease: "easeOut" as const },
+        }
+
+  return (
+    <section className="relative isolate min-h-[calc(100svh-6.5rem)] overflow-hidden px-5 pb-10 pt-[7.2rem] sm:px-6 sm:pb-12 lg:px-8">
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgb(var(--surface-0-rgb)),rgb(var(--ink-rgb)))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_42%_at_14%_16%,rgb(var(--gold-rgb)/0.08),transparent_60%),radial-gradient(ellipse_48%_36%_at_88%_14%,rgb(var(--gold-rgb)/0.06),transparent_62%),linear-gradient(180deg,rgba(8,10,14,0.16)_0%,rgba(8,10,14,0.42)_58%,rgba(8,10,14,0.96)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] studio-grid-overlay" />
+
+      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-12">
+        <motion.div className="relative z-10 max-w-2xl" {...motionProps(0)}>
+          <motion.div
+            {...motionProps(0.02)}
+            className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.44)] px-4 py-2 text-[10px] uppercase tracking-[0.34em] text-cream/65 backdrop-blur-md"
+          >
+            <Sparkles size={13} className="text-gold" />
+            NexGravision Labs
+          </motion.div>
+
+          <h1 className="mt-6 max-w-xl font-cinzel text-[clamp(44px,8vw,92px)] leading-[0.9] tracking-[0.01em] text-cream sm:text-[clamp(54px,7vw,96px)] lg:text-[clamp(58px,5.1vw,88px)]">
+            Product systems for
+            <span className="block text-gradient-gold">elite execution.</span>
+          </h1>
+
+          <p className="mt-5 max-w-xl text-[16px] leading-[1.78] text-cream/78 sm:text-[17px] lg:text-[18px]">
+            NexGravision Labs builds focused products for people who want cleaner workflows, stronger habits, and a more premium way to ship.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            <Link
+              href="/shubiq-labs/shubiq-flow"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.16)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[190px]"
+            >
+              Explore Flow Beta
+              <ArrowRight size={14} />
+            </Link>
+            <a
+              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Early%20Access"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.3)] px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[190px]"
+            >
+              Join Early Access
+              <ArrowUpRight size={14} />
+            </a>
+          </div>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {[
+              ["Products", "3 focused systems in the lab."],
+              ["Stage", "Beta-first development."],
+              ["Direction", "Ritual-driven UX."],
+            ].map(([title, text], index) => (
+              <motion.div
+                key={title}
+                {...motionProps(0.1 + index * 0.06)}
+                className="rounded-[20px] border border-[rgb(var(--cream-rgb)/0.1)] bg-[rgb(var(--surface-2-rgb)/0.22)] p-4 backdrop-blur-md"
+              >
+                <p className="font-rajdhani text-[10px] uppercase tracking-[0.28em] text-gold/78">{title}</p>
+                <p className="mt-2 text-[15px] leading-[1.55] text-cream/68">{text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div className="relative z-10" {...motionProps(0.12)}>
+          <CinematicMediaFrame
+            imageSrc="/hero-workspace.jpg"
+            alt="Dark premium creative workspace for the Labs division"
+            badge="Labs command"
+            eyebrow="Product division"
+            caption="Launch board"
+            metrics={[
+              { label: "Beta", value: "Live" },
+              { label: "Mode", value: "Focus" },
+              { label: "Scale", value: "Ready" },
+            ]}
+            objectPosition="center left"
+          />
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 export default function LabsPageClient() {
   const orderedProducts = useMemo(() => {
     const flow = LAB_PRODUCTS.find((product) => product.id === "shubiq-flow")
@@ -87,12 +177,6 @@ export default function LabsPageClient() {
       description: "Play Store launch, premium sync layer, and polished onboarding release.",
       state: "Next",
     },
-  ]
-
-  const metrics = [
-    { label: "Products", value: "03", icon: Target },
-    { label: "Current Stage", value: "Beta", icon: TrendingUp },
-    { label: "Build Focus", value: "Speed", icon: Zap },
   ]
 
   const pillars = [
@@ -166,86 +250,7 @@ export default function LabsPageClient() {
   return (
     <main className="labs-premium-bg labs-dock-spacer relative min-h-screen overflow-hidden text-cream">
       <LabsNavbar />
-      <div className="labs-grid-overlay pointer-events-none absolute inset-0" />
-      <div className="labs-noise-layer pointer-events-none absolute inset-0" />
-      <div className="labs-glow-orb pointer-events-none absolute -left-28 top-28 h-72 w-72 rounded-full" />
-      <div className="labs-glow-orb-2 pointer-events-none absolute right-[-110px] top-[420px] h-96 w-96 rounded-full" />
-
-      <section className="relative px-5 pb-14 pt-[120px] sm:px-8 sm:pt-[140px]">
-        <div className="mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.35)] bg-[rgb(var(--gold-rgb)/0.1)] px-4 py-2"
-          >
-            <Sparkles size={14} className="text-[rgb(var(--gold-rgb))]" />
-            <span className="font-rajdhani text-[11px] uppercase tracking-[3px] text-[rgb(var(--gold-light-rgb))]">
-              NexGravision Labs Product Division
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 26 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.08 }}
-            className="mt-6 max-w-5xl font-shubiq-heading text-[clamp(40px,7vw,92px)] leading-[0.92] text-cream"
-          >
-            Systems For
-            <span className="block text-[rgb(var(--gold-rgb))]">Elite Execution</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-6 max-w-3xl font-cormorant text-[clamp(17px,2.1vw,25px)] leading-[1.48] text-cream/78"
-          >
-            NexGravision Labs builds precision products for people who treat performance as craft. Every app is engineered to remove noise,
-            accelerate decisions, and compound execution quality over time.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-9 flex flex-wrap items-center gap-3"
-          >
-            <Link
-              href="/shubiq-labs/shubiq-flow"
-              className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              Explore Flow Beta
-              <ArrowRight size={14} />
-            </Link>
-            <a
-              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Early%20Access"
-              className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.24)] bg-[rgb(var(--cream-rgb)/0.02)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
-            >
-              Join Early Access
-              <ArrowUpRight size={14} />
-            </a>
-          </motion.div>
-
-          <div className="mt-11 grid gap-3 sm:grid-cols-3">
-            {metrics.map((metric, index) => (
-              <motion.div
-                key={metric.label}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.35 + index * 0.08 }}
-                className="rounded-2xl border border-[rgb(var(--cream-rgb)/0.16)] bg-[linear-gradient(150deg,rgb(var(--cream-rgb)/0.08),rgb(var(--surface-1-rgb)/0.2))] px-4 py-4 backdrop-blur"
-              >
-                <div className="flex items-center justify-between">
-                  <p className="font-rajdhani text-[10px] uppercase tracking-[2.8px] text-cream/60">{metric.label}</p>
-                  <metric.icon size={15} className="text-[rgb(var(--gold-rgb))]" />
-                </div>
-                <p className="mt-2 font-cinzel text-2xl text-cream">{metric.value}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <LabsHeroPremium />
 
       <section className="relative px-5 py-14 sm:px-8 sm:py-16">
         <div className="mx-auto max-w-6xl">

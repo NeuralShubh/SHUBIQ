@@ -9,6 +9,7 @@ import FloatingInput from "../components/FloatingInput"
 import FloatingSelect from "../components/FloatingSelect"
 import MagneticButton from "../components/MagneticButton"
 import NumberTicker from "../components/NumberTicker"
+import CinematicMediaFrame from "../components/CinematicMediaFrame"
 import { DEFAULT_STUDIO_CONTENT, type StudioContent } from "./studioContent"
 import { projects, type Project } from "../data-projects"
 import ProjectCardShowcase from "../components/ProjectCardShowcase"
@@ -325,6 +326,103 @@ function StudioHero() {
         </motion.div>
       </div>
 
+    </section>
+  )
+}
+
+function StudioHeroPremium() {
+  const prefersReduced = !!useReducedMotion()
+  const motionProps = (delay = 0) =>
+    prefersReduced
+      ? { initial: false, animate: { opacity: 1, y: 0 } }
+      : {
+          initial: { opacity: 0, y: 18 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.65, delay, ease: "easeOut" as const },
+        }
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  return (
+    <section id="studio-hero" className="relative isolate min-h-[calc(100svh-6.5rem)] overflow-hidden px-5 pb-10 pt-[7rem] sm:px-6 sm:pb-12 lg:px-8 lg:pt-[7.2rem]">
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgb(var(--surface-0-rgb)),rgb(var(--ink-rgb)))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_58%_44%_at_15%_18%,rgb(var(--gold-rgb)/0.08),transparent_60%),radial-gradient(ellipse_48%_36%_at_86%_14%,rgb(var(--gold-rgb)/0.06),transparent_62%),linear-gradient(180deg,rgba(8,10,14,0.18)_0%,rgba(8,10,14,0.42)_58%,rgba(8,10,14,0.96)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.18] studio-grid-overlay" />
+
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[1.03fr_0.97fr] lg:gap-12">
+        <motion.div className="relative z-10 max-w-2xl" {...motionProps(0)}>
+          <motion.div
+            {...motionProps(0.02)}
+            className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.16)] bg-[rgb(var(--surface-2-rgb)/0.44)] px-4 py-2 text-[10px] uppercase tracking-[0.34em] text-cream/65 backdrop-blur-md"
+          >
+            NexGravision Studio
+          </motion.div>
+
+          <h1 className="mt-6 max-w-xl font-cinzel text-[clamp(44px,8vw,92px)] leading-[0.9] tracking-[0.01em] text-cream sm:text-[clamp(54px,7vw,96px)] lg:text-[clamp(58px,5.1vw,88px)]">
+            Design that feels premium.
+            <span className="block text-gradient-gold">Systems that drive growth.</span>
+          </h1>
+
+          <p className="mt-5 max-w-xl text-[16px] leading-[1.78] text-cream/78 sm:text-[17px] lg:text-[18px]">
+            We shape websites and product systems with calm hierarchy, sharp execution, and a cinematic first impression that still performs
+            like a serious growth tool.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            <MagneticButton
+              onClick={() => scrollTo("studio-pricing-anchor")}
+              data-cursor="View"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 bg-gold px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-[rgb(var(--ink-rgb))] shadow-[0_18px_40px_rgb(var(--gold-rgb)/0.16)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[190px]"
+            >
+              View Pricing
+              <ArrowRight size={14} />
+            </MagneticButton>
+            <MagneticButton
+              onClick={() => scrollTo("studio-contact-anchor")}
+              data-cursor="Start"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.3)] px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[190px]"
+            >
+              Start a Project
+              <ArrowRight size={14} />
+            </MagneticButton>
+          </div>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {[
+              ["Strategy", "Clear scope before design starts."],
+              ["Design", "Editorial polish with strong hierarchy."],
+              ["Build", "Performance-first implementation."],
+            ].map(([title, text], index) => (
+              <motion.div
+                key={title}
+                {...motionProps(0.1 + index * 0.06)}
+                className="rounded-[20px] border border-[rgb(var(--cream-rgb)/0.1)] bg-[rgb(var(--surface-2-rgb)/0.22)] p-4 backdrop-blur-md"
+              >
+                <p className="font-rajdhani text-[10px] uppercase tracking-[0.28em] text-gold/78">{title}</p>
+                <p className="mt-2 text-[15px] leading-[1.55] text-cream/68">{text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div className="relative z-10" {...motionProps(0.12)}>
+          <CinematicMediaFrame
+            imageSrc="/hero-workspace.jpg"
+            alt="Dark premium workspace with architectural lighting"
+            badge="Studio command"
+            eyebrow="Launch ready"
+            caption="Delivery standard"
+            metrics={[
+              { label: "Speed", value: "Weekly" },
+              { label: "Quality", value: "Premium" },
+              { label: "Focus", value: "Conversion" },
+            ]}
+            objectPosition="center right"
+          />
+        </motion.div>
+      </div>
     </section>
   )
 }
@@ -1003,7 +1101,7 @@ export default function StudioPage() {
         <div className="studio-grid-overlay pointer-events-none absolute inset-0" />
         <div className="studio-glow-orb pointer-events-none absolute -left-20 top-28 h-72 w-72 rounded-full" />
         <div className="studio-glow-orb-2 pointer-events-none absolute right-[-100px] top-[420px] h-96 w-96 rounded-full" />
-        <StudioHero />
+        <StudioHeroPremium />
         <StudioTransitionRibbon />
         <StudioExecutionGrid />
         <div id="studio-services-anchor" className="block h-0 scroll-mt-20" aria-hidden="true" />
