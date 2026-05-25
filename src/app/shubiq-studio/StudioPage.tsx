@@ -358,7 +358,7 @@ function StudioHeroPremium() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-80"
+          className="object-cover object-[center_28%] opacity-80 lg:scale-[0.96] lg:origin-center"
         />
       </div>
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_56%_42%_at_18%_16%,rgb(var(--gold-rgb)/0.12),transparent_58%),radial-gradient(ellipse_38%_34%_at_86%_18%,rgb(var(--gold-rgb)/0.06),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.94)_0%,rgba(5,6,9,0.76)_30%,rgba(5,6,9,0.16)_66%,rgba(5,6,9,0.7)_100%),linear-gradient(180deg,rgba(8,10,14,0.16)_0%,rgba(8,10,14,0.48)_56%,rgba(8,10,14,0.94)_100%)]" />
@@ -424,20 +424,6 @@ function StudioHeroPremium() {
           </motion.div>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 hidden lg:block">
-          <div className="absolute right-[6%] top-[21%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-            Web development
-          </div>
-          <div className="absolute right-[16%] top-[42%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-            UI/UX design
-          </div>
-          <div className="absolute right-[22%] bottom-[26%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-            Product engineering
-          </div>
-          <div className="absolute right-[10%] bottom-[10%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-            Mobile apps
-          </div>
-        </div>
       </div>
     </section>
   )
