@@ -36,14 +36,14 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-70"
+          className="object-cover object-center opacity-68"
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_72%_58%_at_16%_18%,rgb(var(--gold-rgb)/0.16),transparent_56%),radial-gradient(ellipse_40%_34%_at_86%_22%,rgb(var(--gold-rgb)/0.08),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.98)_0%,rgba(5,6,9,0.78)_28%,rgba(5,6,9,0.16)_66%,rgba(5,6,9,0.68)_100%),linear-gradient(180deg,rgba(5,6,9,0.24)_0%,rgba(5,6,9,0.82)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_72%_58%_at_16%_18%,rgb(var(--gold-rgb)/0.16),transparent_56%),radial-gradient(ellipse_40%_34%_at_86%_22%,rgb(var(--gold-rgb)/0.08),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.98)_0%,rgba(5,6,9,0.84)_24%,rgba(5,6,9,0.18)_64%,rgba(5,6,9,0.72)_100%),linear-gradient(180deg,rgba(5,6,9,0.22)_0%,rgba(5,6,9,0.86)_100%)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] hero-grid-overlay" />
 
       <div className="relative mx-auto min-h-[calc(100svh-6.5rem)] w-full max-w-7xl pb-10 lg:min-h-[calc(100svh-7.25rem)] lg:pb-14">
-        <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-end lg:gap-6">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-6">
           <motion.div className="relative z-20 max-w-[740px]" {...motionProps(0)}>
             <div className="flex items-center gap-3">
               <span className="h-px w-14 bg-gradient-to-r from-[rgb(var(--gold-rgb))] to-transparent" />
@@ -92,42 +92,6 @@ export default function Hero() {
           </motion.div>
 
           <div className="relative z-10 lg:min-h-[calc(100svh-10rem)]">
-            <motion.div
-              {...motionProps(0.12)}
-              className="relative hidden h-full min-h-[700px] lg:block"
-            >
-              <div className="absolute inset-0">
-                <Image
-                  src="/main-page-hero-section-image.png"
-                  alt="NexGravision cinematic mountain grid"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 58vw"
-                  className="object-cover object-center opacity-92"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.08)_0%,rgba(5,6,9,0.02)_42%,rgba(5,6,9,0.26)_100%),linear-gradient(180deg,rgba(5,6,9,0.04)_0%,rgba(5,6,9,0.58)_100%)]" />
-                <div className="absolute inset-0 opacity-[0.15] hero-grid-overlay" />
-              </div>
-
-              <div className="absolute left-[7%] top-[16%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                Software engineering
-              </div>
-              <div className="absolute right-[10%] top-[26%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                Product design
-              </div>
-              <div className="absolute left-[23%] top-[44%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                Cloud architecture
-              </div>
-              <div className="absolute right-[18%] top-[58%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                AI integration
-              </div>
-              <div className="absolute left-[40%] bottom-[8%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.62)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                Scalable systems
-              </div>
-              <div className="absolute left-[44%] top-[43%] hidden h-14 w-px bg-gradient-to-b from-[rgb(var(--gold-rgb)/0.84)] to-transparent lg:block" />
-              <div className="absolute left-[44%] top-[43%] hidden h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[rgb(var(--gold-rgb))] shadow-[0_0_0_10px_rgb(var(--gold-rgb)/0.12)] lg:block" />
-            </motion.div>
-
             <motion.div {...motionProps(0.12)} className="relative mt-10 aspect-[0.95/1.18] overflow-hidden lg:hidden">
               <Image
                 src="/main-page-hero-section-image.png"
@@ -139,6 +103,24 @@ export default function Hero() {
               />
               <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.1)_0%,rgba(5,6,9,0.04)_44%,rgba(5,6,9,0.3)_100%),linear-gradient(180deg,rgba(5,6,9,0.05)_0%,rgba(5,6,9,0.64)_100%)]" />
             </motion.div>
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 hidden lg:block">
+          <div className="absolute right-[8%] top-[18%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            Software engineering
+          </div>
+          <div className="absolute left-[55%] top-[38%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            Product design
+          </div>
+          <div className="absolute right-[16%] top-[48%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            Cloud architecture
+          </div>
+          <div className="absolute left-[61%] bottom-[24%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            AI integration
+          </div>
+          <div className="absolute right-[26%] bottom-[14%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            Scalable systems
           </div>
         </div>
       </div>

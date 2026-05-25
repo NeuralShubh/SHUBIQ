@@ -351,7 +351,17 @@ function StudioHeroPremium() {
       className="relative isolate overflow-hidden px-5 pb-10 pt-[7rem] sm:px-6 sm:pb-12 lg:px-8 lg:pt-[7.2rem]"
     >
       <div className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgb(var(--surface-0-rgb)),rgb(var(--ink-rgb)))]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_56%_42%_at_18%_16%,rgb(var(--gold-rgb)/0.12),transparent_58%),radial-gradient(ellipse_38%_34%_at_86%_18%,rgb(var(--gold-rgb)/0.06),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.95)_0%,rgba(5,6,9,0.76)_28%,rgba(5,6,9,0.16)_66%,rgba(5,6,9,0.62)_100%),linear-gradient(180deg,rgba(8,10,14,0.12)_0%,rgba(8,10,14,0.5)_56%,rgba(8,10,14,0.94)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-20">
+        <Image
+          src="/studio-page-hero-section-image.png"
+          alt="Dark cinematic studio workspace with city lights"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-80"
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_56%_42%_at_18%_16%,rgb(var(--gold-rgb)/0.12),transparent_58%),radial-gradient(ellipse_38%_34%_at_86%_18%,rgb(var(--gold-rgb)/0.06),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.94)_0%,rgba(5,6,9,0.76)_30%,rgba(5,6,9,0.16)_66%,rgba(5,6,9,0.7)_100%),linear-gradient(180deg,rgba(8,10,14,0.16)_0%,rgba(8,10,14,0.48)_56%,rgba(8,10,14,0.94)_100%)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.12] studio-grid-overlay" />
 
       <div className="relative mx-auto min-h-[calc(100svh-6.5rem)] w-full max-w-7xl pb-10 lg:min-h-[calc(100svh-7.25rem)] lg:pb-14">
@@ -412,50 +422,20 @@ function StudioHeroPremium() {
               </MagneticButton>
             </div>
           </motion.div>
+        </div>
 
-          <div className="relative z-10 lg:min-h-[calc(100svh-10rem)]">
-            <motion.div
-              {...motionProps(0.12)}
-              className="relative hidden h-full min-h-[700px] lg:block"
-            >
-              <div className="absolute inset-0">
-                <Image
-                  src="/studio-page-hero-section-image.png"
-                  alt="Dark cinematic studio workspace with city lights"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                  className="object-cover object-center opacity-95"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.08)_0%,rgba(5,6,9,0.02)_44%,rgba(5,6,9,0.22)_100%),linear-gradient(180deg,rgba(5,6,9,0.04)_0%,rgba(5,6,9,0.56)_100%)]" />
-                <div className="absolute inset-0 opacity-[0.12] studio-grid-overlay" />
-              </div>
-
-              <div className="absolute left-[8%] top-[19%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                Web development
-              </div>
-              <div className="absolute left-[22%] bottom-[28%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                Product engineering
-              </div>
-              <div className="absolute right-[14%] top-[30%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                UI/UX design
-              </div>
-              <div className="absolute right-[8%] bottom-[18%] rounded-full border border-[rgb(var(--gold-rgb)/0.2)] bg-[rgba(5,6,9,0.64)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
-                Mobile apps
-              </div>
-            </motion.div>
-
-            <motion.div {...motionProps(0.12)} className="relative mt-10 aspect-[0.95/1.18] overflow-hidden lg:hidden">
-              <Image
-                src="/studio-page-hero-section-image.png"
-                alt="Dark cinematic studio workspace with city lights"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,9,0.08)_0%,rgba(5,6,9,0.02)_44%,rgba(5,6,9,0.24)_100%),linear-gradient(180deg,rgba(5,6,9,0.04)_0%,rgba(5,6,9,0.58)_100%)]" />
-            </motion.div>
+        <div className="pointer-events-none absolute inset-0 hidden lg:block">
+          <div className="absolute right-[6%] top-[21%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            Web development
+          </div>
+          <div className="absolute right-[16%] top-[42%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            UI/UX design
+          </div>
+          <div className="absolute right-[22%] bottom-[26%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            Product engineering
+          </div>
+          <div className="absolute right-[10%] bottom-[10%] rounded-full border border-[rgb(var(--gold-rgb)/0.18)] bg-[rgba(5,6,9,0.58)] px-4 py-2 font-rajdhani text-[9px] uppercase tracking-[0.34em] text-cream/78 backdrop-blur-md">
+            Mobile apps
           </div>
         </div>
       </div>
