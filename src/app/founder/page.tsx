@@ -27,7 +27,6 @@ export default function FounderPage() {
     url: `${siteUrl}/founder`,
     sameAs: [
       "https://github.com/NeuralShubh",
-      "https://x.com/NeuralShubh",
       "https://www.instagram.com/shubham.bnb/",
       "https://www.linkedin.com/in/neuralshubh/",
     ],

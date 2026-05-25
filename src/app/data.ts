@@ -63,9 +63,9 @@ export const ECOSYSTEM_ITEMS = [
 ];
 
 export const SOCIAL_LINKS = [
-  { label: "LinkedIn", url: "https://linkedin.com/company/NexGravisionofficial", handle: "NexGravisionofficial" },
-  { label: "GitHub", url: "https://github.com/NexGravisionofficial", handle: "NexGravisionofficial" },
-  { label: "Instagram", url: "https://instagram.com/NexGravisionofficial", handle: "@NexGravisionofficial" },
+  { label: "LinkedIn", url: "https://www.linkedin.com/in/neuralshubh/", handle: "neuralshubh" },
+  { label: "GitHub", url: "https://github.com/NeuralShubh", handle: "NeuralShubh" },
+  { label: "Instagram", url: "https://www.instagram.com/shubham.bnb/", handle: "shubham.bnb" },
 ];
 
 export const NAV_LINKS = ["Home", "About", "Services", "Projects", "Ecosystem", "Studio", "Labs", "Contact"];

@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "512x512" }],
-    apple: [{ url: "/nexgravision-logo.png", sizes: "512x512", type: "image/png" }],
-    shortcut: ["/nexgravision-logo.png"],
+    icon: [{ url: "/shubiq-icons/themes/shubiq-signature-gold.svg", type: "image/svg+xml", sizes: "any" }],
+    apple: [{ url: "/shubiq-icons/sizes/shubiq-gold-200.svg", type: "image/svg+xml", sizes: "any" }],
+    shortcut: ["/shubiq-icons/themes/shubiq-signature-gold.svg"],
   },
   manifest: "/site.webmanifest",
   robots: {
@@ -82,10 +82,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       name: "Shubham",
     },
     sameAs: [
-      "https://github.com/NexGravisionofficial",
-      "https://x.com/NexGravisionofficial",
-      "https://instagram.com/NexGravisionofficial",
-      "https://linkedin.com/company/NexGravisionofficial",
+      "https://github.com/NeuralShubh",
+      "https://www.instagram.com/shubham.bnb/",
+      "https://www.linkedin.com/in/neuralshubh/",
     ],
   }
 

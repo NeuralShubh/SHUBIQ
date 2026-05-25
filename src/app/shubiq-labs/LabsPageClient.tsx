@@ -98,7 +98,7 @@ function LabsHeroPremium() {
               <ArrowRight size={14} />
             </Link>
             <a
-              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Early%20Access"
+              href="mailto:nexgravision@gmail.com?subject=NexGravision%20Labs%20Early%20Access"
               className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.24)] bg-[rgb(var(--surface-2-rgb)/0.3)] px-6 py-3.5 font-rajdhani text-[11px] uppercase tracking-[0.28em] text-cream backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto sm:min-w-[190px]"
             >
               Join Early Access
@@ -391,7 +391,7 @@ export default function LabsPageClient() {
               ))}
             </div>
             <a
-              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Track%20Request"
+              href="mailto:nexgravision@gmail.com?subject=NexGravision%20Labs%20Track%20Request"
               className="labs-sheen-btn mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
             >
               Request Track Access
@@ -599,7 +599,7 @@ export default function LabsPageClient() {
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <a
-              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Priority%20Access"
+              href="mailto:nexgravision@gmail.com?subject=NexGravision%20Labs%20Priority%20Access"
               className="labs-sheen-btn inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.72)] bg-[rgb(var(--gold-rgb))] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-[rgb(var(--ink-rgb))] transition-transform duration-300 hover:-translate-y-0.5"
             >
               Request Priority Access
@@ -619,7 +619,7 @@ export default function LabsPageClient() {
       <div className="labs-mobile-dock md:hidden">
         <div className="labs-mobile-dock-inner">
           <a
-            href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Labs%20Priority%20Access"
+            href="mailto:nexgravision@gmail.com?subject=NexGravision%20Labs%20Priority%20Access"
             className="labs-mobile-dock-btn labs-mobile-dock-btn-muted"
           >
             Join Beta
@@ -632,4 +632,5 @@ export default function LabsPageClient() {
     </main>
   )
 }
+
 

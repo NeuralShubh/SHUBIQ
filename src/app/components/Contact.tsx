@@ -176,8 +176,8 @@ export default function Contact() {
                 style={{ background: "linear-gradient(160deg, rgb(var(--gold-rgb) / 0.06), transparent 35%, transparent 78%, rgb(var(--gold-rgb) / 0.06))" }}
               />
               <div className="font-rajdhani text-[12px] tracking-[4px] uppercase text-gold/85 mb-3">Email</div>
-              <a href="mailto:shubiqofficial@gmail.com" className="font-cormorant text-xl text-cream hover:text-gold transition-colors duration-300">
-                shubiqofficial@gmail.com
+              <a href="mailto:nexgravision@gmail.com" className="font-cormorant text-xl text-cream hover:text-gold transition-colors duration-300">
+                nexgravision@gmail.com
               </a>
             </div>
 

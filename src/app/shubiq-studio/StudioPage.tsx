@@ -945,17 +945,17 @@ function StudioContactCTA({ content }: { content: StudioContent }) {
           </div>
 
           <div className="mb-6 flex flex-wrap justify-center gap-2">
-            <a
-              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Studio%20Project%20Inquiry"
-              className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
-            >
-              Email Directly
-            </a>
-            <a
-              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Studio%20Schedule%20Call"
-              className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
-            >
-              Request Call
+          <a
+            href="mailto:nexgravision@gmail.com?subject=NexGravision%20Studio%20Project%20Inquiry"
+            className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
+          >
+            Email Directly
+          </a>
+          <a
+            href="mailto:nexgravision@gmail.com?subject=NexGravision%20Studio%20Schedule%20Call"
+            className="rounded-full border border-[rgb(var(--gold-rgb)/0.42)] px-4 py-1.5 font-rajdhani text-[9px] tracking-[2.1px] uppercase text-gold/78 hover:bg-[rgb(var(--gold-rgb)/0.1)] transition-colors"
+          >
+            Request Call
             </a>
           </div>
 

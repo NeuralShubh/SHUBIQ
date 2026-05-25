@@ -32,14 +32,14 @@ export const metadata: Metadata = {
     "NexGravision is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
   keywords: ["web development", "digital engineering", "AI integration", "NexGravision", "Next.js", "premium web design"],
   authors: [{ name: "Shubham", url: "https://NexGravision.com/founder" }],
-  creator: "NexGravision",
+  creator: "Shubham",
   alternates: {
     canonical: "https://NexGravision.com",
   },
   icons: {
-    icon: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "512x512" }],
-    apple: [{ url: "/nexgravision-logo.png", sizes: "512x512", type: "image/png" }],
-    shortcut: ["/nexgravision-logo.png"],
+    icon: [{ url: "/shubiq-icons/themes/shubiq-signature-gold.svg", type: "image/svg+xml", sizes: "any" }],
+    apple: [{ url: "/shubiq-icons/sizes/shubiq-gold-200.svg", type: "image/svg+xml", sizes: "any" }],
+    shortcut: ["/shubiq-icons/themes/shubiq-signature-gold.svg"],
   },
   manifest: "/site.webmanifest",
   openGraph: {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NexGravision | Intelligence That Wins",
     description: "Premium digital engineering, web platforms, AI systems, and productivity apps.",
-    creator: "@NexGravisionofficial",
+    creator: "@neuralshubh",
     images: ["/og-image.png"],
   },
   robots: {

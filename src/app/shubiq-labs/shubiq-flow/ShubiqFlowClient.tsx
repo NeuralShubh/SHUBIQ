@@ -301,7 +301,7 @@ export default function NexGravisionFlowDownloadPage() {
             </ul>
 
             <a
-              href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Flow%20Beta%20Feedback"
+              href="mailto:nexgravision@gmail.com?subject=NexGravision%20Flow%20Beta%20Feedback"
               className="labs-sheen-btn mt-6 inline-flex items-center gap-2 rounded-full border border-[rgb(var(--gold-rgb)/0.62)] px-5 py-2.5 font-rajdhani text-[11px] uppercase tracking-[2.8px] text-[rgb(var(--gold-light-rgb))] transition-colors duration-300 hover:bg-[rgb(var(--gold-rgb)/0.14)]"
             >
               Send Beta Feedback
@@ -360,7 +360,7 @@ export default function NexGravisionFlowDownloadPage() {
                 Download Latest APK
               </a>
               <a
-                href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Flow%20Priority%20Beta"
+                href="mailto:nexgravision@gmail.com?subject=NexGravision%20Flow%20Priority%20Beta"
                 className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--cream-rgb)/0.28)] px-6 py-3 font-rajdhani text-[12px] uppercase tracking-[3px] text-cream/84 transition-colors duration-300 hover:border-[rgb(var(--gold-rgb)/0.5)] hover:text-[rgb(var(--gold-light-rgb))]"
               >
                 Request Priority Invite
@@ -461,7 +461,7 @@ export default function NexGravisionFlowDownloadPage() {
 
       <div className="labs-mobile-dock md:hidden">
         <div className="labs-mobile-dock-inner">
-          <a href="mailto:NexGravisionofficial@gmail.com?subject=NexGravision%20Flow%20Priority%20Beta" className="labs-mobile-dock-btn labs-mobile-dock-btn-muted">
+          <a href="mailto:nexgravision@gmail.com?subject=NexGravision%20Flow%20Priority%20Beta" className="labs-mobile-dock-btn labs-mobile-dock-btn-muted">
             Priority Invite
           </a>
           <a href={APK_URL} className="labs-mobile-dock-btn labs-mobile-dock-btn-primary">
@@ -472,4 +472,5 @@ export default function NexGravisionFlowDownloadPage() {
     </main>
   )
 }
+
 
