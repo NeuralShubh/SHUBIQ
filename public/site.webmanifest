@@ -3,21 +3,21 @@
   "short_name": "NexGravision",
   "icons": [
     {
-      "src": "/shubiq-icons/themes/shubiq-signature-gold.svg",
+      "src": "/nexgravision-logo.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/shubiq-icons/themes/shubiq-signature-gold.svg",
+      "src": "/nexgravision-logo.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/shubiq-icons/themes/shubiq-signature-gold.svg",
+      "src": "/nexgravision-logo.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],

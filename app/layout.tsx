@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: [{ url: "/shubiq-icons/themes/shubiq-signature-gold.svg", type: "image/svg+xml", sizes: "any" }],
-    apple: [{ url: "/shubiq-icons/sizes/shubiq-gold-200.svg", type: "image/svg+xml", sizes: "any" }],
-    shortcut: ["/shubiq-icons/themes/shubiq-signature-gold.svg"],
+    icon: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "any" }],
+    apple: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "any" }],
+    shortcut: ["/nexgravision-logo.png"],
   },
   manifest: "/site.webmanifest",
   robots: {
