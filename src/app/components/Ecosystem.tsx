@@ -102,7 +102,7 @@ function EcoCard({ item }: { item: typeof ECOSYSTEM_ITEMS[0] }) {
     return (
       <div
         ref={cardRef}
-        className="eco-card relative group min-h-[360px] p-6 sm:p-7 transition-all duration-500 overflow-hidden hover:-translate-y-1 flex flex-col border border-[rgb(var(--cream-rgb)/0.14)] rounded-sm bg-card-soft hover:bg-card-soft-hover"
+        className="eco-card h-full relative group min-h-[420px] sm:min-h-[460px] p-6 sm:p-7 transition-all duration-500 overflow-hidden hover:-translate-y-1 flex flex-col border border-[rgb(var(--cream-rgb)/0.14)] rounded-sm bg-card-soft hover:bg-card-soft-hover"
         onMouseMove={handleMouseMove}
         style={
           {
@@ -158,7 +158,7 @@ function EcoCard({ item }: { item: typeof ECOSYSTEM_ITEMS[0] }) {
   return (
     <div
       ref={cardRef}
-      className="eco-card relative group min-h-[380px] sm:min-h-[420px] bg-card-soft p-6 sm:p-8 transition-all duration-[400ms] overflow-hidden hover:-translate-y-1.5 flex flex-col border border-[rgb(var(--cream-rgb)/0.16)] hover:border-[rgb(var(--cream-rgb)/0.34)] rounded-sm hover:bg-card-soft-hover hover:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.16)_inset,0_24px_48px_rgb(0_0_0_/_0.3)] transform-gpu"
+      className="eco-card h-full relative group min-h-[420px] sm:min-h-[460px] bg-card-soft p-6 sm:p-8 transition-all duration-[400ms] overflow-hidden hover:-translate-y-1.5 flex flex-col border border-[rgb(var(--cream-rgb)/0.16)] hover:border-[rgb(var(--cream-rgb)/0.34)] rounded-sm hover:bg-card-soft-hover hover:shadow-[0_0_0_1px_rgb(var(--gold-rgb)_/_0.16)_inset,0_24px_48px_rgb(0_0_0_/_0.3)] transform-gpu"
       onMouseMove={handleMouseMove}
       style={{
         "--gx": "50%",
@@ -331,7 +331,7 @@ export default function Ecosystem({ initialEcosystem }: EcosystemProps = {}) {
 
         <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 gap-4 sm:gap-6">
           {filtered.map((item) => (
-            <StaggerItem key={item.id}>
+            <StaggerItem key={item.id} className="h-full">
               <EcoCard item={item} />
             </StaggerItem>
           ))}

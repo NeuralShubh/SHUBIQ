@@ -51,7 +51,7 @@ export const ECOSYSTEM_ITEMS = [
     type: "app",
     title: "NexGravision Labs",
     subtitle: "OWNED PRODUCT DEVELOPMENT",
-    desc: "NexGravision Labs is where we design, build, and launch our own web and mobile applications under the NexGravision ecosystem. Every product is created in-house, driven by our vision, and engineered for clarity, performance, and long-term growth.",
+    desc: "NexGravision Labs is where we design, build, and launch our own web and mobile applications under the NexGravision ecosystem. Each product is created in-house for clarity, performance, and long-term growth.",
     icon: "?",
     color: "rgb(var(--gold-dark-rgb))",
     status: "live",
