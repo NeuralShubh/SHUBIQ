@@ -37,17 +37,9 @@ export const metadata: Metadata = {
     canonical: "https://NexGravision.com",
   },
   icons: {
-    icon: [
-      { url: "/shubiq-icons/sizes/shubiq-gold-16.svg", type: "image/svg+xml", sizes: "16x16" },
-      { url: "/shubiq-icons/sizes/shubiq-gold-32.svg", type: "image/svg+xml", sizes: "32x32" },
-      { url: "/shubiq-icons/sizes/shubiq-gold-48.svg", type: "image/svg+xml", sizes: "48x48" },
-      { url: "/shubiq-icons/sizes/shubiq-gold-64.svg", type: "image/svg+xml", sizes: "64x64" },
-      { url: "/shubiq-icons/sizes/shubiq-gold-96.svg", type: "image/svg+xml", sizes: "96x96" },
-      { url: "/shubiq-icons/sizes/shubiq-gold-256.svg", type: "image/svg+xml", sizes: "256x256" },
-      { url: "/shubiq-icons/sizes/shubiq-gold-512.svg", type: "image/svg+xml", sizes: "512x512" },
-    ],
-    apple: [{ url: "/shubiq-icons/sizes/shubiq-gold-200.svg", sizes: "200x200", type: "image/svg+xml" }],
-    shortcut: ["/shubiq-icons/sizes/shubiq-gold-32.svg"],
+    icon: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "512x512" }],
+    apple: [{ url: "/nexgravision-logo.png", sizes: "512x512", type: "image/png" }],
+    shortcut: ["/nexgravision-logo.png"],
   },
   manifest: "/site.webmanifest",
   openGraph: {

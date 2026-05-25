@@ -16,7 +16,7 @@ export default function BackLink({ href, label, className = "" }: BackLinkProps)
   const handleNavigate = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
     event.preventDefault()
-    window.dispatchEvent(new Event("shubiq-nav-loading"))
+    window.dispatchEvent(new Event("nexgravision-nav-loading"))
     window.setTimeout(() => {
       router.push(href)
     }, 110)
