@@ -16,7 +16,7 @@ import { projects } from "./data-projects"
 export const metadata: Metadata = {
   title: "NexGravision",
   description:
-    "NexGravision is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
+    "NexGravision builds high-performance web platforms, productivity apps, and intelligent systems.",
 }
 
 export default function Home() {

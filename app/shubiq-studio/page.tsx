@@ -20,7 +20,7 @@ export default function Page() {
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "NexGravision Studio - Digital Engineering",
+    name: "NexGravision Studio",
     provider: {
       "@type": "Organization",
       name: "NexGravision",

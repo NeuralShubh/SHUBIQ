@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     template: "%s | NexGravision",
   },
   description:
-    "NexGravision is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems.",
-  keywords: ["web development", "digital engineering", "AI integration", "NexGravision", "Next.js", "premium web design"],
+    "NexGravision builds high-performance web platforms, productivity apps, and intelligent systems.",
+  keywords: ["web development", "AI integration", "NexGravision", "Next.js", "premium web design"],
   authors: [{ name: "Shubham", url: "https://NexGravision.com/founder" }],
   creator: "Shubham",
   alternates: {
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     siteName: "NexGravision",
     title: "NexGravision",
     description:
-      "Premium digital engineering, web platforms, AI systems, and productivity apps.",
+      "High-performance web platforms, AI systems, and productivity apps.",
     images: [
       {
         url: "/og-image.png",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "NexGravision",
-    description: "Premium digital engineering, web platforms, AI systems, and productivity apps.",
+    description: "High-performance web platforms, AI systems, and productivity apps.",
     creator: "@neuralshubh",
     images: ["/og-image.png"],
   },

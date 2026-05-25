@@ -160,7 +160,7 @@ function StudioHero() {
             className="mb-6 inline-flex items-center gap-2.5 border border-gold/20 bg-gold/[0.05] px-4 py-2"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-gold/75" />
-            <span className="font-rajdhani text-[10px] tracking-[3.2px] uppercase text-gold/75">NexGravision Studio - Digital Engineering</span>
+            <span className="font-rajdhani text-[10px] tracking-[3.2px] uppercase text-gold/75">NexGravision Studio</span>
           </motion.div>
 
           <motion.h1

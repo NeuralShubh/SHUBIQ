@@ -36,7 +36,7 @@ export const ECOSYSTEM_ITEMS = [
     id: "1",
     type: "agency",
     title: "NexGravision Studio",
-    subtitle: "DIGITAL ENGINEERING AGENCY",
+    subtitle: "",
     desc: "NexGravision Studio partners with brands and founders to design, build, and launch websites, web applications, and custom software. Each project is crafted with precision and aligned with clear business goals.",
     icon: "?",
     color: "rgb(var(--gold-rgb))",

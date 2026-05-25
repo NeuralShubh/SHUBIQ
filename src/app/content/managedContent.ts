@@ -36,13 +36,13 @@ export type LabsManagedContent = {
 }
 
 export const DEFAULT_HOME_CONTENT: HomeManagedContent = {
-  heroTagline: "Premium Digital Engineering",
+  heroTagline: "",
   heroExploreCta: "Explore Work",
   heroHireCta: "Hire Us",
   aboutHeadingPrefix: "About",
   aboutHeadingAccent: "SHUBIQ",
   aboutParagraph1:
-    "SHUBIQ is a premium digital engineering brand crafting high-performance web platforms, productivity apps, and intelligent systems for ambitious founders and teams.",
+    "SHUBIQ builds high-performance web platforms, productivity apps, and intelligent systems for ambitious founders and teams.",
   aboutParagraph2:
     "We deliver conversion-first websites and AI-integrated product systems built for clarity, speed, and long-term scale, not just a good launch.",
   aboutParagraph3:
