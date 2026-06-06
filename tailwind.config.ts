@@ -12,9 +12,10 @@ const config: Config = {
         cream: "rgb(var(--cream-rgb) / <alpha-value>)",
       },
       fontFamily: {
-        cinzel: ["var(--font-cinzel-decorative)", "var(--font-cinzel)", "serif"],
-        cormorant: ["var(--font-cormorant)", "serif"],
-        rajdhani: ["var(--font-rajdhani)", "sans-serif"],
+        sans: ["var(--font-inter)", "var(--font-roboto)", "sans-serif"],
+        serif: ["var(--font-playfair)", "serif"],
+        heading: ["var(--font-playfair)", "serif"],
+        body: ["var(--font-inter)", "sans-serif"],
       },
     },
   },

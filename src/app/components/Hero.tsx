@@ -31,16 +31,16 @@ export default function Hero() {
       <div className="pointer-events-none absolute inset-0 -z-30 bg-[linear-gradient(180deg,rgb(var(--surface-0-rgb)),rgb(var(--ink-rgb)))]" />
       <div className="pointer-events-none absolute inset-0 -z-20">
         <Image
-          src="/main-page-hero-section-image.png"
+          src="/downloads/baground.jfif"
           alt="NexGravision cinematic hero background"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-[0.42] sm:opacity-[0.52] lg:opacity-68"
+          className="object-cover object-center opacity-[0.85] sm:opacity-[0.90] lg:opacity-95"
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_72%_58%_at_16%_18%,rgb(var(--gold-rgb)/0.16),transparent_56%),radial-gradient(ellipse_40%_34%_at_86%_22%,rgb(var(--gold-rgb)/0.08),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.98)_0%,rgba(5,6,9,0.84)_24%,rgba(5,6,9,0.18)_64%,rgba(5,6,9,0.72)_100%),linear-gradient(180deg,rgba(5,6,9,0.22)_0%,rgba(5,6,9,0.86)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] hero-grid-overlay" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_72%_58%_at_16%_18%,rgb(var(--gold-rgb)/0.08),transparent_56%),radial-gradient(ellipse_40%_34%_at_86%_22%,rgb(var(--gold-rgb)/0.04),transparent_62%),linear-gradient(90deg,rgba(5,6,9,0.5)_0%,rgba(5,6,9,0.3)_24%,rgba(5,6,9,0.1)_64%,rgba(5,6,9,0.4)_100%),linear-gradient(180deg,rgba(5,6,9,0.1)_0%,rgba(5,6,9,0.4)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.05] hero-grid-overlay" />
 
       <div className="relative mx-auto min-h-[calc(100svh-6.5rem)] w-full max-w-7xl pb-10 lg:min-h-[calc(100svh-7.25rem)] lg:pb-14">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-6">
@@ -52,9 +52,23 @@ export default function Hero() {
               </p>
             </div>
 
-            <h1 className="mt-6 max-w-[11ch] font-cinzel text-[clamp(60px,9vw,126px)] leading-[0.84] tracking-[0.01em] text-cream">
-              <span className="block">SYSTEMS WE</span>
-              <span className="block text-gradient-gold">ENGINEER</span>
+            <h1 className="mt-6 max-w-[11ch] font-heading text-[clamp(60px,9vw,126px)] leading-[0.84] tracking-[0.01em] text-cream">
+              <motion.span
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+                className="block"
+              >
+                SYSTEMS WE
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+                className="block text-gradient-gold"
+              >
+                ENGINEER
+              </motion.span>
             </h1>
 
             <p className="mt-7 max-w-[38rem] text-[16px] leading-[1.82] text-cream/84 sm:text-[17px] lg:text-[19px]">

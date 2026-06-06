@@ -95,16 +95,29 @@
   }
 
   :root[data-theme="shubh-blue"] {
-    --gold-rgb: 20 71 230;
-    --gold-light-rgb: 21 93 252;
-    --gold-dark-rgb: 28 57 142;
-    --ink-rgb: 15 23 43;
-    --cream-rgb: 15 23 43;
-    --muted-rgb: 69 85 108;
+    --gold-rgb: 30 64 175;
+    --gold-light-rgb: 59 130 246;
+    --gold-dark-rgb: 23 37 84;
+    --ink-rgb: 15 23 42;
+    --cream-rgb: 248 250 252;
+    --muted-rgb: 100 116 139;
     --surface-0-rgb: 255 255 255;
     --surface-1-rgb: 248 250 252;
     --surface-2-rgb: 241 245 249;
     --surface-3-rgb: 226 232 240;
+  }
+
+  :root[data-theme="shubh-blue"][data-mode="dark"] {
+    --gold-rgb: 59 130 246;
+    --gold-light-rgb: 96 165 250;
+    --gold-dark-rgb: 30 64 175;
+    --ink-rgb: 15 23 42;
+    --cream-rgb: 226 232 240;
+    --muted-rgb: 148 163 184;
+    --surface-0-rgb: 15 23 42;
+    --surface-1-rgb: 30 41 59;
+    --surface-2-rgb: 51 65 85;
+    --surface-3-rgb: 71 85 105;
   }
 
   :root[data-theme="shubh-blue"] body {
@@ -115,11 +128,25 @@
     color: rgb(15 23 43);
   }
 
+  :root[data-theme="shubh-blue"][data-mode="dark"] body {
+    background:
+      radial-gradient(ellipse 70% 50% at 70% 35%, rgb(37 99 235 / 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 35% at 25% 80%, rgb(16 185 129 / 0.12) 0%, transparent 55%),
+      linear-gradient(180deg, rgb(15 23 42), rgb(30 41 59));
+    color: rgb(226 232 240);
+  }
+
   :root[data-theme="shubh-blue"] .site-navbar {
     background: linear-gradient(to bottom, rgb(255 255 255 / 0.92), rgb(241 245 249 / 0.88)) !important;
     backdrop-filter: blur(14px) !important;
     border-bottom: 1px solid rgb(28 57 142 / 0.14) !important;
     box-shadow: 0 10px 28px rgb(15 23 43 / 0.09) !important;
+  }
+
+  :root[data-theme="shubh-blue"][data-mode="dark"] .site-navbar {
+    background: linear-gradient(to bottom, rgb(15 23 42 / 0.92), rgb(30 41 59 / 0.88)) !important;
+    border-bottom: 1px solid rgb(59 130 246 / 0.2) !important;
+    box-shadow: 0 10px 28px rgb(0 0 0 / 0.3) !important;
   }
 
   :root[data-theme="shubh-blue"] .site-nav-link {
@@ -259,11 +286,66 @@
     --muted-rgb: 107 132 145;
   }
 
+  :root[data-theme="shubiq-purple"] {
+    --gold-rgb: 147 51 234;
+    --gold-light-rgb: 192 132 252;
+    --gold-dark-rgb: 88 28 135;
+    --ink-rgb: 15 3 30;
+    --cream-rgb: 243 232 255;
+    --muted-rgb: 167 139 250;
+    --surface-0-rgb: 20 5 35;
+    --surface-1-rgb: 30 10 50;
+    --surface-2-rgb: 45 15 70;
+    --surface-3-rgb: 60 20 90;
+  }
+
+  :root[data-theme="shubiq-purple"] body {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgb(147 51 234 / 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgb(88 28 135 / 0.12) 0%, transparent 60%),
+      linear-gradient(180deg, rgb(20 5 35), rgb(15 3 30));
+    color: rgb(243 232 255);
+  }
+
+  :root[data-theme="shubiq-purple"] .site-navbar {
+    background: linear-gradient(to bottom, rgb(20 5 35 / 0.95), rgb(30 10 50 / 0.9)) !important;
+    backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgb(147 51 234 / 0.25) !important;
+    box-shadow: 0 8px 32px rgb(147 51 234 / 0.15), 0 0 0 1px rgb(192 132 252 / 0.1) inset !important;
+  }
+
+  :root[data-theme="shubiq-purple"] .hero-grid-overlay {
+    background-image:
+      linear-gradient(rgb(147 51 234 / 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(147 51 234 / 0.08) 1px, transparent 1px) !important;
+  }
+
+  :root[data-theme="shubiq-purple"] .hero-center-glow {
+    background: radial-gradient(circle, rgb(147 51 234 / 0.12) 0%, transparent 70%) !important;
+  }
+
+  :root[data-theme="shubiq-purple"] .text-gold {
+    text-shadow: 0 0 20px rgb(147 51 234 / 0.5), 0 0 40px rgb(147 51 234 / 0.3);
+  }
+
+  :root[data-theme="shubiq-purple"] .bg-gold {
+    box-shadow: 0 0 30px rgb(147 51 234 / 0.4), 0 0 60px rgb(147 51 234 / 0.2);
+  }
+
+  :root[data-theme="shubiq-purple"] .service-card:hover {
+    box-shadow: 0 20px 40px rgb(147 51 234 / 0.2), 0 0 0 1px rgb(192 132 252 / 0.2) inset !important;
+  }
+
+  :root[data-theme="shubiq-purple"] .project-card:hover,
+  :root[data-theme="shubiq-purple"] .eco-card:hover {
+    box-shadow: 0 20px 40px rgb(147 51 234 / 0.2), 0 0 0 1px rgb(192 132 252 / 0.2) inset !important;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html {
     scroll-behavior: smooth;
-    font-size: 18px;
+    font-size: 16px;
   }
 
   body {
@@ -272,12 +354,12 @@
       linear-gradient(180deg, rgb(var(--surface-0-rgb)), rgb(var(--ink-rgb)));
     color: rgb(var(--cream-rgb));
     -webkit-font-smoothing: antialiased;
-    line-height: 1.55;
-    font-size: 20px;
+    line-height: 1.6;
+    font-size: 16px;
   }
 
   p {
-    font-size: 19px !important;
+    font-size: 16px !important;
   }
 
   ::-webkit-scrollbar { width: 2px; }
@@ -422,10 +504,10 @@
 }
 
 @layer utilities {
-  .font-cinzel    { font-family: var(--font-cinzel), serif; }
-  .font-cormorant { font-family: var(--font-cormorant), serif; }
-  .font-rajdhani  { font-family: var(--font-rajdhani), sans-serif; }
-  .font-orbitron  { font-family: var(--font-orbitron), sans-serif; }
+  .font-sans      { font-family: var(--font-inter), var(--font-roboto), sans-serif; }
+  .font-serif     { font-family: var(--font-playfair), serif; }
+  .font-heading   { font-family: var(--font-playfair), serif; }
+  .font-body      { font-family: var(--font-inter), sans-serif; }
 
   .cv-auto {
     content-visibility: auto;

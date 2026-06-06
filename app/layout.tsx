@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Cinzel, Cinzel_Decorative, Cormorant_Garamond, Orbitron, Rajdhani } from "next/font/google"
+import { Inter, Roboto, Playfair_Display } from "next/font/google"
 import "../src/app/globals.css"
 import SmoothScroll from "../src/app/components/SmoothScroll"
 import ThemeInit from "../src/app/components/ThemeInit"
@@ -10,11 +10,9 @@ import BackToTop from "../src/app/components/BackToTop"
 import AnimationGate from "../src/app/components/AnimationGate"
 import Navbar from "../src/app/components/Navbar"
 
-const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "700", "900"] })
-const cinzelDecorative = Cinzel_Decorative({ subsets: ["latin"], variable: "--font-cinzel-decorative", weight: ["400", "700", "900"] })
-const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cormorant", weight: ["300", "400", "500", "600"], style: ["normal", "italic"] })
-const rajdhani = Rajdhani({ subsets: ["latin"], variable: "--font-rajdhani", weight: ["300", "400", "500", "600", "700"] })
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", weight: ["500", "700", "900"] })
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["300", "400", "500", "600", "700", "800"] })
+const roboto = Roboto({ subsets: ["latin"], variable: "--font-roboto", weight: ["300", "400", "500", "700", "900"] })
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", weight: ["400", "500", "600", "700", "900"] })
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://NexGravision.com"
 
@@ -32,9 +30,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "any" }],
-    apple: [{ url: "/nexgravision-logo.png", type: "image/png", sizes: "any" }],
-    shortcut: ["/nexgravision-logo.png"],
+    icon: [{ url: "/logo/logo.png", type: "image/png", sizes: "any" }],
+    apple: [{ url: "/logo/logo.png", type: "image/png", sizes: "any" }],
+    shortcut: ["/logo/logo.png"],
   },
   manifest: "/site.webmanifest",
   robots: {
@@ -97,7 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en">
-      <body className={`${cinzel.variable} ${cinzelDecorative.variable} ${cormorant.variable} ${rajdhani.variable} ${orbitron.variable} bg-[rgb(var(--ink-rgb))] text-cream`}>
+      <body className={`${inter.variable} ${roboto.variable} ${playfair.variable} bg-[rgb(var(--ink-rgb))] text-cream`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <ThemeInit />

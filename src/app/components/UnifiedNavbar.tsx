@@ -23,18 +23,15 @@ export default function UnifiedNavbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-[rgb(var(--gold-rgb)/0.18)] bg-[linear-gradient(to_bottom,rgb(var(--surface-2-rgb)/0.94),rgb(var(--surface-1-rgb)/0.86))] backdrop-blur-xl">
       <div className="mx-auto flex h-[68px] w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
-        <Link href="/" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+        <Link href="/" className="group flex items-center" onClick={() => setMenuOpen(false)}>
           <Image
-            src="/nexgravision-logo.png"
+            src="/logo/logo.png"
             alt="NexGravision"
-            width={44}
-            height={44}
+            width={55}
+            height={55}
             priority
-            className="h-9 w-9 object-contain transition-transform duration-200 group-hover:scale-[1.03]"
+            className="h-12 w-12 object-contain transition-transform duration-200 group-hover:scale-[1.03]"
           />
-          <span className="font-cinzel text-[21px] tracking-[1px] text-cream/92 transition-colors group-hover:text-[rgb(var(--gold-light-rgb))]">
-            NexGravision
-          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
@@ -44,7 +41,7 @@ export default function UnifiedNavbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-rajdhani text-[12px] uppercase tracking-[2.6px] transition-colors ${
+                className={`font-sans text-[12px] font-medium tracking-wide transition-colors ${
                   active ? "text-[rgb(var(--gold-light-rgb))]" : "text-cream/72 hover:text-[rgb(var(--gold-light-rgb))]"
                 }`}
               >
@@ -55,7 +52,6 @@ export default function UnifiedNavbar() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <ThemeToggle />
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
@@ -70,7 +66,7 @@ export default function UnifiedNavbar() {
           </button>
           <Link
             href="/#contact"
-            className="labs-sheen-btn hidden lg:inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-3 sm:px-4 py-2 font-rajdhani text-[9px] sm:text-[10px] uppercase tracking-[2.1px] sm:tracking-[2.4px] text-[rgb(var(--ink-rgb))] transition-colors hover:bg-[rgb(var(--gold-light-rgb))]"
+            className="labs-sheen-btn hidden lg:inline-flex items-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-5 sm:px-6 py-2.5 font-sans text-[12px] sm:text-[13px] font-semibold tracking-wide text-[rgb(var(--ink-rgb))] transition-colors hover:bg-[rgb(var(--gold-light-rgb))]"
             onClick={() => setMenuOpen(false)}
           >
             Start Project
@@ -95,7 +91,7 @@ export default function UnifiedNavbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`rounded-lg border px-3 py-2 text-center font-rajdhani text-[11px] uppercase tracking-[2px] ${
+                    className={`rounded-lg border px-3 py-2 text-center font-sans text-[11px] font-medium tracking-wide ${
                       active
                         ? "border-[rgb(var(--gold-rgb)/0.5)] bg-[rgb(var(--gold-rgb)/0.14)] text-[rgb(var(--gold-light-rgb))]"
                         : "border-[rgb(var(--cream-rgb)/0.14)] text-cream/74"
@@ -109,7 +105,7 @@ export default function UnifiedNavbar() {
             <Link
               href="/#contact"
               onClick={() => setMenuOpen(false)}
-              className="mt-2 inline-flex w-full items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-4 py-2.5 font-rajdhani text-[10px] uppercase tracking-[2.2px] text-[rgb(var(--ink-rgb))]"
+              className="mt-2 inline-flex w-full items-center justify-center rounded-full border border-[rgb(var(--gold-rgb)/0.68)] bg-[rgb(var(--gold-rgb))] px-4 py-2.5 font-sans text-[12px] font-semibold tracking-wide text-[rgb(var(--ink-rgb))]"
             >
               Start Project
             </Link>

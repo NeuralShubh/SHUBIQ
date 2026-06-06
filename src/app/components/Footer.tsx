@@ -23,8 +23,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto relative grid gap-6 md:grid-cols-3 md:items-center">
         <div className="flex flex-col items-center md:items-start gap-3 sm:gap-4">
           <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4">
-          <Image src="/nexgravision-logo.png" alt="NexGravision" width={44} height={44} className="h-10 w-10 object-contain" />
-          <span className="font-cinzel font-black tracking-[6.5px] text-gold text-sm footer-brand-glow">NexGravision</span>
+          <Image src="/logo/logo.png" alt="NexGravision" width={44} height={44} className="h-10 w-10 object-contain" />
+          <span className="font-heading font-bold tracking-[2px] text-gold text-sm footer-brand-glow">NexGravision</span>
           <span className="text-cream/55 text-sm">&middot;</span>
         </div>
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 text-[10px] sm:text-[11px] font-rajdhani tracking-[2.5px] uppercase text-cream/60">
@@ -41,7 +41,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="text-center font-rajdhani text-[11px] sm:text-[12px] tracking-[3px] uppercase text-cream/68">
+        <div className="text-center font-sans text-[11px] sm:text-[12px] tracking-[2px] uppercase text-cream/68">
           &copy; {year} NexGravision. All rights reserved.
         </div>
 

@@ -1,11 +1,15 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 
-export type Theme = "gold" | "cobalt" | "emerald" | "violet" | "crimson" | "silver" | "amber"
+export type Theme = "gold" | "cobalt" | "emerald" | "violet" | "crimson" | "silver" | "amber" | "shubh-blue" | "shubiq-purple"
+export type Mode = "light" | "dark"
 
 export const STORAGE_KEY = "shubiq-theme"
+export const MODE_KEY = "shubiq-mode"
 
 export const THEMES: { id: Theme; label: string }[] = [
+  { id: "shubiq-purple", label: "SHUBIQ Purple" },
+  { id: "shubh-blue", label: "SHUBIQ Blue" },
   { id: "gold", label: "Signature Gold" },
   { id: "cobalt", label: "Cobalt Noir" },
   { id: "emerald", label: "Emerald Core" },
@@ -25,17 +29,32 @@ export function applyTheme(theme: Theme, withTransition = false) {
   else root.setAttribute("data-theme", theme)
 }
 
+export function applyMode(mode: Mode, withTransition = false) {
+  const root = document.documentElement
+  if (withTransition) {
+    root.classList.add("theme-transitioning")
+    window.setTimeout(() => root.classList.remove("theme-transitioning"), 520)
+  }
+  root.setAttribute("data-mode", mode)
+}
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("gold")
+  const [theme, setTheme] = useState<Theme>("shubiq-purple")
+  const [mode, setMode] = useState<Mode>("light")
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
     const migrated = saved === "cyan" ? "cobalt" : saved
-    const initial: Theme = THEMES.some((t) => t.id === migrated) ? (migrated as Theme) : "gold"
+    const initial: Theme = THEMES.some((t) => t.id === migrated) ? (migrated as Theme) : "shubiq-purple"
     setTheme(initial)
     applyTheme(initial)
+
+    const savedMode = localStorage.getItem(MODE_KEY) as Mode
+    const initialMode: Mode = (savedMode === "light" || savedMode === "dark") ? savedMode : "light"
+    setMode(initialMode)
+    applyMode(initialMode)
   }, [])
 
   useEffect(() => {
@@ -72,8 +91,17 @@ export default function ThemeToggle() {
     setOpen(false)
   }
 
+  const setModeAndPersist = (next: Mode) => {
+    setMode(next)
+    applyMode(next, true)
+    localStorage.setItem(MODE_KEY, next)
+    window.dispatchEvent(new Event("shubiq-mode-change"))
+  }
+
   const activeLabel = THEMES.find((t) => t.id === theme)?.label ?? "Appearance"
   const swatches: Record<Theme, string[]> = {
+    "shubiq-purple": ["rgb(147, 51, 234)", "rgb(15, 3, 30)", "rgb(243, 232, 255)"],
+    "shubh-blue": ["rgb(30, 64, 175)", "rgb(15, 23, 42)", "rgb(248, 250, 252)"],
     gold: ["rgb(196, 164, 88)", "rgb(8, 10, 14)", "rgb(233, 230, 222)"],
     cobalt: ["rgb(94, 154, 233)", "rgb(8, 10, 14)", "rgb(229, 236, 247)"],
     emerald: ["rgb(34, 180, 146)", "rgb(8, 10, 14)", "rgb(220, 235, 230)"],
@@ -112,7 +140,7 @@ export default function ThemeToggle() {
         </svg>
       </button>
 
-      
+
       {open && (
         <div className="theme-toggle-menu absolute right-0 mt-2 w-72 border border-[rgb(var(--cream-rgb)/0.2)] bg-ink/95 backdrop-blur-md p-2 z-[1000] shadow-[0_8px_22px_rgb(0_0_0_/_0.28)] animate-fade-in">
           {THEMES.map((t) => {
